@@ -1,0 +1,40 @@
+<div class="page-header">
+  <h1>Servant List</h1>
+</div>
+
+<table class="table table-hover">
+  <thead>
+  <tr>
+    <th class="hidden-xs">#</th>
+    <th class="">Race</th>
+    <th class="">Cost</th>
+    <th class="hidden-xs">Type</th>
+    <th class="">Servant Name</th>
+    <th class="hidden-xs hidden-sm">HP</th>
+    <th class="hidden-xs hidden-sm">AP</th>
+    <th class="hidden-xs hidden-sm">ATK</th>
+    <th class="hidden-xs hidden-sm">POW</th>
+    <th class="hidden-xs hidden-sm">DEF</th>
+    <th class="hidden-xs hidden-sm">RES</th>
+    <th class="hidden-xs hidden-sm">MS</th>
+    <th class="hidden-xs hidden-sm">AS</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr ng-repeat="servant in servants" ng-click="showServant(servant)">
+    <th class="hidden-xs" scope="row">{{ servant.id }}</th>
+    <td class="">{{ servant.race }}-{{ servant.race_id|pad:3:'0' }}</td>
+    <td class="">{{ servant.cost }}</td>
+    <td class="hidden-xs">{{ servant.type }}</td>
+    <td class="">{{ servant.name }}</td>
+    <td class="hidden-xs hidden-sm">{{ servant.statuses[1].hp }}</td>
+    <td class="hidden-xs hidden-sm">{{ servant.statuses[1].ap }}</td>
+    <td class="hidden-xs hidden-sm">{{ servant.statuses[1].atk }}</td>
+    <td class="hidden-xs hidden-sm">{{ servant.statuses[1].pow }}</td>
+    <td class="hidden-xs hidden-sm">{{ servant.statuses[1].def }}</td>
+    <td class="hidden-xs hidden-sm">{{ servant.statuses[1].res }}</td>
+    <td class="hidden-xs hidden-sm">{{ servant.statuses[1].ms }}</td>
+    <td class="hidden-xs hidden-sm">{{ servant.statuses[1].as|number:2 }}</td>
+  </tr>
+  </tbody>
+</table>

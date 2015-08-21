@@ -1,40 +1,27 @@
 'use strict';
 
 var app = angular.module('app', [
-  //'ngAnimate',
+  'ngRoute',
   'controllers',
-  //'directives',
-  //'filters',
+  'directives',
+  'filters',
   'services'
 ]);
 
-var controllers = angular.module('controllers', []);
-
-controllers.controller('ListCtrl', ['$scope', '$window', 'ServantService', function($scope, $window, ServantService) {
-  $scope.servants = [];
-  $scope.isFirstLoading = true;
-  $scope.canMoreLoad = false;
-
-  $scope.init = function() {
-    $scope.load();
-  };
-
-  $scope.load = function() {
-    ServantService.load()
-      .then(function(res) {
-        $scope.servants = res.data;
+app.config(['$locationProvider', '$routeProvider',
+  function($locationProvider, $routeProvider) {
+    $locationProvider.html5Mode(true);
+    $routeProvider.
+      when('/', {
+        templateUrl: 'partials/list.html',
+        controller: 'ServantListCtrl'
+      }).
+      when('/servants/:id/', {
+        templateUrl: 'partials/detail.html',
+        controller: 'ServantDetailCtrl'
+      }).
+      otherwise({
+        redirectTo: '/'
       });
-  };
-
-  $scope.init();
-}]);
-
-var services = angular.module('services', []);
-
-services.service('ServantService', ['$http', function($http) {
-  this.url = './assets/data/servant.json';
-
-  this.load = function() {
-    return $http.get(this.url);
-  };
-}]);
+  }
+]);

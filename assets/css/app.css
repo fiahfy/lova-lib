@@ -16,6 +16,11 @@ body {
     height: 60px;
     background-color: #f5f5f5;
 }
+.footer p {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
 
 /* Custom page CSS
@@ -23,7 +28,7 @@ body {
 /* Not required for template or sticky footer method. */
 
 body > .container {
-    padding: 60px 15px 0;
+    *padding: 60px 15px 0;
 }
 .container .text-muted {
     margin: 20px 0;
@@ -36,4 +41,17 @@ body > .container {
 
 code {
     font-size: 80%;
+}
+
+
+/* Custom */
+[ng-click] {
+    cursor: pointer;
+}
+
+/* List */
+td:not(:nth-child(5)) {
+    white-space: nowrap;
+    /*overflow: hidden;*/
+    /*text-overflow: ellipsis;*/
 }

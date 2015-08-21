@@ -2,28 +2,36 @@
 <html ng-app="app">
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <base href="/lova-scraper/">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flat-ui/2.2.2/css/flat-ui.css">
   <link rel="stylesheet" href="./assets/css/app.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.4/angular.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.4/angular-route.js"></script>
   <script src="./assets/js/app.js"></script>
+  <script src="./assets/js/controllers.js"></script>
+  <script src="./assets/js/directives.js"></script>
+  <script src="./assets/js/filters.js"></script>
+  <script src="./assets/js/services.js"></script>
 </head>
-<body ng-controller="ListCtrl">
+<body ng-controller="MainCtrl">
 
 <!-- Fixed navbar -->
-<nav class="navbar navbar-default navbar-fixed-top">
+<nav class="navbar navbar-default">
   <div class="container">
-    <div class="navbar-header">
+    <div class="navbar-header"><!--
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
         <span class="sr-only">Toggle navigation</span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="#">Project name</a>
+      </button>-->
+      <a class="navbar-brand" href=".">Home</a>
     </div>
+    <!--
     <div id="navbar" class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
         <li class="active"><a href="#">Home</a></li>
@@ -42,61 +50,17 @@
           </ul>
         </li>
       </ul>
-    </div><!--/.nav-collapse -->
+    </div>--><!--/.nav-collapse -->
   </div>
 </nav>
 
-<!-- Begin page content -->
-<div class="container">
-  <div class="page-header">
-    <h1>Sticky footer with fixed navbar</h1>
-  </div>
-  <p class="lead">Pin a fixed-height footer to the bottom of the viewport in desktop browsers with this custom HTML and CSS. A fixed navbar has been added with <code>padding-top: 60px;</code> on the <code>body &gt; .container</code>.</p>
-  <p>Back to <a href="../sticky-footer">the default sticky footer</a> minus the navbar.</p>
-
-  <table class="table">
-    <caption>Optional table caption.</caption>
-    <thead>
-    <tr>
-      <th>#</th>
-      <th>Race</th>
-      <th>Race ID</th>
-      <th>Type</th>
-      <th>Servant Name</th>
-      <th>Cost</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr ng-repeat="servant in servants">
-      <th scope="row">{{ servant.id }}</th>
-      <td>{{ servant.race }}</td>
-      <td>{{ servant.race_id }}</td>
-      <td>{{ servant.type }}</td>
-      <td>{{ servant.name }}</td>
-      <td>{{ servant.cost }}</td>
-    </tr>
-    </tbody>
-  </table>
-</div>
+<div class="container" ng-view></div>
 
 <footer class="footer">
   <div class="container">
-    <p class="text-muted">Place sticky footer content here.</p>
+    <p class="text-center text-muted">© 2014-{{ now|date:'yyyy' }} SQUARE ENIX CO., LTD. All Rights Reserved.</p>
   </div>
 </footer>
-
-
-<!-- Bootstrap core JavaScript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
-<!--
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script src="../../dist/js/bootstrap.min.js"></script>
--->
-<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-<!--
-<script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
--->
 
 </body>
 </html>
