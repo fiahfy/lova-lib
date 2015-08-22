@@ -48,6 +48,9 @@ code {
 body {
     font-size: 16px;
 }
+body > .container {
+    margin-bottom: 120px;
+}
 [ng-click] {
     cursor: pointer;
 }
@@ -91,9 +94,6 @@ dd > div, dd > div > small {
 #servant dd {
     padding: 0!important;
 }
-#servant {
-    margin-bottom: 20px;
-}
 #servant-skill {
-    margin-bottom: 30px;
+    margin-top: 20px;
 }
