@@ -38,8 +38,8 @@ services.service('ServantService', ['$http', '$q',
       this.load()
         .then(function() {
           me.servants.forEach(function(servant) {
-            if (servant.id === id) {
-              deferrd.resolve({servants: servant});
+            if (servant.id == id) {
+              deferrd.resolve({servant: servant});
             }
           });
         });

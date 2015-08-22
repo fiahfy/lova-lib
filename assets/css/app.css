@@ -45,6 +45,9 @@ code {
 
 
 /* Custom */
+body {
+    font-size: 16px;
+}
 [ng-click] {
     cursor: pointer;
 }
@@ -54,4 +57,43 @@ td:not(:nth-child(5)) {
     white-space: nowrap;
     /*overflow: hidden;*/
     /*text-overflow: ellipsis;*/
+}
+
+/* Detail */
+img {
+    margin-bottom: 15px;
+}
+.table > thead > tr > th {
+    vertical-align: top;
+}
+.table {
+    margin-bottom: 0;
+}
+dl {
+    margin-bottom: 5px;
+}
+dt {
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 30px;
+    color: #c0c1c2;
+}
+dd {
+}
+dd > div, dd > div > small {
+    line-height: 20px;
+}
+.well {
+    margin-bottom: 10px;
+}
+#servant dl,
+#servant dt,
+#servant dd {
+    padding: 0!important;
+}
+#servant {
+    margin-bottom: 20px;
+}
+#servant-skill {
+    margin-bottom: 30px;
 }

@@ -1,3 +1,151 @@
 <div class="page-header">
   <h1>Servant</h1>
 </div>
+
+<div id="servant" class="clearfix">
+  <div class="col-md-4">
+    <img src="./assets/img/{{ servant.id }}.jpg" class="img-rounded img-responsive" />
+  </div>
+  <div class="col-md-8">
+    <div>
+      <dl class="col-sm-6 clearfix">
+        <dt class="col-xs-2">Race</dt>
+        <dd class="col-xs-10">{{ servant.race }}-{{ servant.race_id|pad:3:'0' }}</dd>
+      </dl>
+      <dl class="col-sm-6 clearfix">
+        <dt class="col-xs-2">Cost</dt>
+        <dd class="col-xs-10">{{ servant.cost }}</dd>
+      </dl>
+    </div>
+    <div>
+      <dl class="col-sm-6 clearfix">
+        <dt class="col-xs-2">Type</dt>
+        <dd class="col-xs-10">{{ servant.type }}</dd>
+      </dl>
+      <dl class="col-sm-6 clearfix">
+        <dt class="col-xs-2">Name</dt>
+        <dd class="col-xs-10">{{ servant.name }}</dd>
+      </dl>
+    </div>
+    <dl class="clearfix">
+      <dt class="col-md-12">Oral</dt>
+      <dd class="col-md-12">
+        <div class="well well-sm">
+          <small></small>
+        </div>
+      </dd>
+    </dl>
+    <div>
+      <dl class="col-sm-6 clearfix">
+        <dt class="col-xs-2">Illust</dt>
+        <dd class="col-xs-10">{{ servant.illust }}</dd>
+      </dl>
+      <dl class="col-sm-6 clearfix">
+        <dt class="col-xs-2">CV</dt>
+        <dd class="col-xs-10">{{ servant.cv }}</dd>
+      </dl>
+    </div>
+    <dl class="clearfix">
+      <dt class="col-md-12">Status</dt>
+      <dd class="col-md-12">
+        <table class="table table-hover visible-md visible-lg">
+          <thead>
+          <tr>
+            <th class="">Level</th>
+            <th class="">HP</th>
+            <th class="">AP</th>
+            <th class="">ATK</th>
+            <th class="">POW</th>
+            <th class="">DEF</th>
+            <th class="">RES</th>
+            <th class="">MS</th>
+            <th class="">AS</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr ng-repeat="status in servant.statuses">
+            <td class="">{{ status.level }}</td>
+            <td class="">{{ status.hp }}</td>
+            <td class="">{{ status.ap }}</td>
+            <td class="">{{ status.atk }}</td>
+            <td class="">{{ status.pow }}</td>
+            <td class="">{{ status.def }}</td>
+            <td class="">{{ status.res }}</td>
+            <td class="">{{ status.ms }}</td>
+            <td class="">{{ status.as|number:2 }}</td>
+          </tr>
+          </tbody>
+        </table>
+        <table class="table table-hover hidden-md hidden-lg">
+          <thead>
+          <tr>
+            <th rowspan="2">Level</th>
+            <th class="">HP</th>
+            <th class="">ATK</th>
+            <th class="">DEF</th>
+            <th class="">MS</th>
+          </tr>
+          <tr>
+            <th class="">AP</th>
+            <th class="">POW</th>
+            <th class="">RES</th>
+            <th class="">AS</th>
+          </tr>
+          </thead>
+          <tbody ng-repeat="status in servant.statuses">
+          <tr>
+            <td rowspan="2">{{ status.level }}</td>
+            <td class="">{{ status.hp }}</td>
+            <td class="">{{ status.atk }}</td>
+            <td class="">{{ status.def }}</td>
+            <td class="">{{ status.ms }}</td>
+          </tr>
+          <tr>
+            <td class="">{{ status.ap }}</td>
+            <td class="">{{ status.pow }}</td>
+            <td class="">{{ status.res }}</td>
+            <td class="">{{ status.as|number:2 }}</td>
+          </tr>
+          </tbody>
+        </table>
+      </dd>
+    </dl>
+  </div>
+</div>
+
+<div id="servant-skill" class="clearfix">
+  <dl class="col-md-6">
+    <dt>Active Skill</dt>
+    <dd>
+      <dl class="clearfix">
+        <dt class="col-xs-2">Name</dt>
+        <dd class="col-xs-10">{{ servant.skills.active.name }}</dd>
+      </dl>
+      <dl class="clearfix">
+        <dt class="col-md-12">Description</dt>
+        <dd class="col-md-12">
+          <div class="well well-sm">
+            <small ng-bind-html="servant.skills.active.description|convert"></small>
+          </div>
+        </dd>
+      </dl>
+    </dd>
+  </dl>
+  <dl class="col-md-6">
+    <dt>Passive Skill</dt>
+    <dd>
+      <dl class="clearfix">
+        <dt class="col-xs-2">Name</dt>
+        <dd class="col-xs-10">{{ servant.skills.passive.name }}</dd>
+      </dl>
+      <dl class="clearfix">
+        <dt class="col-md-12">Description</dt>
+        <dd class="col-md-12">
+          <div class="well well-sm">
+            <small ng-bind-html="servant.skills.passive.description|convert"></small>
+          </div>
+        </dd>
+      </dl>
+    </dd>
+  </dl>
+</div>
