@@ -12,7 +12,7 @@ services.service('ServantService', ['$http', '$q',
     this.load = function() {
       var deferrd = $q.defer();
       var me = this;
-      $http.get(this.url)
+      $http.get(this.url, {cache: true})
         .then(function(res) {
           me.servants = res.data;
           deferrd.resolve();
