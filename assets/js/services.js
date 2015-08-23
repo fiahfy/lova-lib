@@ -9,12 +9,19 @@ services.service('ServantService', ['$http', '$q',
     this.url = './assets/data/servant.json';
     this.servants = [];
 
+    var getRaceCode = function(servant) {
+      return [, '人獣', '神族', '魔種', '海種', '不死'].indexOf(servant.race);
+    };
+
     this.load = function() {
       var deferrd = $q.defer();
       var me = this;
       $http.get(this.url, {cache: true})
         .then(function(res) {
           me.servants = res.data;
+          me.servants.forEach(function(servant) {
+            servant.race_code = getRaceCode(servant);
+          });
           deferrd.resolve();
         }, function() {
           deferrd.reject();

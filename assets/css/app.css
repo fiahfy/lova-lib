@@ -54,6 +54,9 @@ body > .container {
 [ng-click] {
     cursor: pointer;
 }
+.select2-results {
+    max-height: none;
+}
 
 /* List */
 td:not(:nth-child(5)) {
