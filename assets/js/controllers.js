@@ -61,7 +61,7 @@ controllers.controller('ServantListCtrl', ['$scope', '$location', 'ServantServic
     };
 
     $scope.showServant = function(servant) {
-      $location.path('/servants/' + servant.id + '/');
+      $location.url('/servants/' + servant.id + '/');
     };
 
     $scope.init();
