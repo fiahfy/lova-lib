@@ -17,7 +17,7 @@
   </div>
 </div>
 
-<div ng-hide="view">
+<div ng-if="!view">
   <table class="table table-hover">
     <thead>
     <tr>
@@ -56,10 +56,10 @@
   </table>
 </div>
 
-<div ng-show="view">
+<div ng-if="view">
   <div class="col-md-2 col-sm-3 col-xs-6" ng-repeat="servant in servants | filter:filter | orderBy:predicate:reverse">
     <a ng-click="showServant(servant)">
-      <img src="./assets/img/{{ servant.id }}.jpg" class="img-rounded img-responsive" />
+      <img ng-src="./assets/img/{{ servant.id }}.jpg" class="img-rounded img-responsive" />
     </a>
   </div>
 </div>
