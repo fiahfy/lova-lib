@@ -36,16 +36,21 @@ controllers.controller('MainCtrl', ['$scope', '$location', '$timeout',
 controllers.controller('ServantListCtrl', ['$scope', '$location', 'ServantService',
   function($scope, $location, ServantService) {
     $scope.servants = [];
-    $scope.selectOptionRaces = [
-      {race_code: null, race: 'Select Race...'},
-      {race_code: 1, race: '人獣'},
-      {race_code: 2, race: '神族'},
-      {race_code: 3, race: '魔種'},
-      {race_code: 4, race: '海種'},
-      {race_code: 5, race: '不死'}
+    $scope.viewOptions = [
+      {key: null, icon: 'fui-list-columned'},
+      {key: 1,    icon: 'fui-list-large-thumbnails'}
     ];
+    $scope.raceCodeOptions = [
+      {key: null, value: 'Select Race...'},
+      {key: 1,    value: '人獣'},
+      {key: 2,    value: '神族'},
+      {key: 3,    value: '魔種'},
+      {key: 4,    value: '海種'},
+      {key: 5,    value: '不死'}
+    ];
+    $scope.view = $location.search().view;
     $scope.race_code = $location.search().race_code;
-    $scope.filter = {};
+    $scope.filter = $scope.race_code ? {race_code: $scope.race_code} : {};
     $scope.predicate = ['race_code', 'race_id'];
     $scope.reverse = false;
 
@@ -64,12 +69,19 @@ controllers.controller('ServantListCtrl', ['$scope', '$location', 'ServantServic
       $location.url('/servants/' + servant.id + '/');
     };
 
+    $scope.selectView = function(view) {
+      $scope.view = view;
+      $location.search('view', view).replace();
+    };
+
     $scope.init();
 
-    $scope.$watch('race_code', function () {
-      var param = $scope.race_code ? {race_code: $scope.race_code} : {};
-      $scope.filter = param;
-      $location.search(param).replace();
+    $scope.$watch('race_code', function (newValue, oldValue) {
+      if (typeof newValue === 'undefined' || typeof oldValue === 'undefined' || newValue == oldValue) {
+        return;
+      }
+      $scope.filter = $scope.race_code ? {race_code: $scope.race_code} : {};
+      $location.search('race_code', $scope.race_code).replace();
     }, true);
 
     angular.element(document).ready(function() {

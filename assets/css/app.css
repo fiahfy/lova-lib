@@ -64,6 +64,17 @@ td:not(:nth-child(5)) {
     /*overflow: hidden;*/
     /*text-overflow: ellipsis;*/
 }
+[ng-click] img:hover {
+    opacity: 0.5;
+    transition: 0.2s;
+}
+[ng-click] img {
+    opacity: 1;
+    transition: 0.2s;
+}
+.btn-toolbar {
+    margin-bottom: 20px;
+}
 
 /* Detail */
 img {
