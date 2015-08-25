@@ -2,34 +2,34 @@
   <h1>Servant</h1>
 </div>
 
-<div id="servant" class="clearfix">
+<div id="servant" class="row">
   <div class="col-md-4">
     <a href="./assets/img/{{ servant.id }}.jpg" target="_self">
-      <img src="./assets/img/{{ servant.id }}.jpg" class="img-rounded img-responsive" />
+      <img src="./assets/img/{{ servant.id }}.jpg" class="center-block img-rounded img-responsive" />
     </a>
   </div>
   <div class="col-md-8">
-    <div>
-      <dl class="col-sm-6 clearfix">
+    <div class="row">
+      <dl class="col-sm-6 row">
         <dt class="col-xs-2">Race</dt>
         <dd class="col-xs-10">{{ servant.race }}-{{ servant.race_id|pad:3:'0' }}</dd>
       </dl>
-      <dl class="col-sm-6 clearfix">
+      <dl class="col-sm-6 row">
         <dt class="col-xs-2">Cost</dt>
         <dd class="col-xs-10">{{ servant.cost }}</dd>
       </dl>
     </div>
-    <div>
-      <dl class="col-sm-6 clearfix">
+    <div class="row">
+      <dl class="col-sm-6 row">
         <dt class="col-xs-2">Type</dt>
         <dd class="col-xs-10">{{ servant.type }}</dd>
       </dl>
-      <dl class="col-sm-6 clearfix">
+      <dl class="col-sm-6 row">
         <dt class="col-xs-2">Name</dt>
         <dd class="col-xs-10">{{ servant.name }}</dd>
       </dl>
     </div>
-    <dl class="clearfix">
+    <dl class="row">
       <dt class="col-md-12">Oral Tradition</dt>
       <dd class="col-md-12">
         <div class="well well-sm">
@@ -37,19 +37,19 @@
         </div>
       </dd>
     </dl>
-    <div>
-      <dl class="col-sm-6 clearfix">
+    <div class="row">
+      <dl class="col-sm-6 row">
         <dt class="col-xs-2">Illust</dt>
         <dd class="col-xs-10">{{ servant.illust }}</dd>
       </dl>
-      <dl class="col-sm-6 clearfix">
+      <dl class="col-sm-6 row">
         <dt class="col-xs-2">CV</dt>
         <dd class="col-xs-10">{{ servant.cv }}</dd>
       </dl>
     </div>
-    <dl class="clearfix">
-      <dt class="col-md-12">Status</dt>
-      <dd class="col-md-12">
+    <dl>
+      <dt><h3>Status</h3></dt>
+      <dd>
         <table class="table table-hover visible-md visible-lg">
           <thead>
           <tr>
@@ -115,15 +115,15 @@
   </div>
 </div>
 
-<div id="servant-skill" class="clearfix">
+<div id="servant-skill" class="row">
   <dl class="col-md-6">
-    <dt>Active Skill</dt>
+    <dt><h3>Active Skill</h3></dt>
     <dd>
-      <dl class="clearfix">
+      <dl class="row">
         <dt class="col-xs-2">Name</dt>
         <dd class="col-xs-10">{{ servant.skills.active.name }}</dd>
       </dl>
-      <dl class="clearfix">
+      <dl class="row">
         <dt class="col-md-12">Description</dt>
         <dd class="col-md-12">
           <div class="well well-sm">
@@ -134,13 +134,13 @@
     </dd>
   </dl>
   <dl class="col-md-6">
-    <dt>Passive Skill</dt>
+    <dt><h3>Passive Skill</h3></dt>
     <dd>
-      <dl class="clearfix">
+      <dl class="row">
         <dt class="col-xs-2">Name</dt>
         <dd class="col-xs-10">{{ servant.skills.passive.name }}</dd>
       </dl>
-      <dl class="clearfix">
+      <dl class="row">
         <dt class="col-md-12">Description</dt>
         <dd class="col-md-12">
           <div class="well well-sm">
