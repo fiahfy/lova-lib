@@ -3,6 +3,7 @@
 var app = angular.module('app', [
   'ngRoute',
   'ui',
+  'angulartics', 'angulartics.google.analytics',
   'controllers',
   'directives',
   'filters',
