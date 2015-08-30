@@ -4,8 +4,8 @@
 
 <div class="clearfix">
   <div class="pull-left">
-    <select class="form-control select select-primary select-block mbl" ui-select2 ng-model="race_code">
-      <option ng-repeat="option in raceCodeOptions" value="{{ option.key }}">{{ option.value }}</option>
+    <select class="form-control select select-primary select-block mbl" ui-select2 ng-model="race_id">
+      <option ng-repeat="option in raceIdOptions" value="{{ option.key }}">{{ option.value }}</option>
     </select>
   </div>
   <div class="btn-toolbar pull-right">
@@ -39,7 +39,7 @@
     <tbody>
     <tr ng-repeat="servant in servants | filter:filter | orderBy:predicate:reverse" ng-click="showServant(servant)">
       <th class="hidden-xs" scope="row">{{ servant.id }}</th>
-      <td class="">{{ servant.race }}-{{ servant.race_id|pad:3:'0' }}</td>
+      <td class="">{{ servant.race_name }}-{{ servant.race_code|pad:3:'0' }}</td>
       <td class="">{{ servant.cost }}</td>
       <td class="hidden-xs">{{ servant.type }}</td>
       <td class="">{{ servant.name }}</td>
@@ -59,7 +59,7 @@
 <div ng-if="view">
   <div class="col-md-2 col-sm-3 col-xs-6" ng-repeat="servant in servants | filter:filter | orderBy:predicate:reverse">
     <a ng-click="showServant(servant)">
-      <img ng-src="./assets/img/{{ servant.id }}.jpg" class="img-rounded img-responsive" />
+      <img ng-src="./assets/img/m/{{ servant.id }}.jpg" class="img-rounded img-responsive" />
     </a>
   </div>
 </div>

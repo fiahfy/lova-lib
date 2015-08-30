@@ -40,7 +40,7 @@ controllers.controller('ServantListCtrl', ['$scope', '$location', 'ServantServic
       {key: null, icon: 'fui-list-columned'},
       {key: 1,    icon: 'fui-list-large-thumbnails'}
     ];
-    $scope.raceCodeOptions = [
+    $scope.raceIdOptions = [
       {key: null, value: 'Select Race...'},
       {key: 1,    value: '人獣'},
       {key: 2,    value: '神族'},
@@ -49,9 +49,9 @@ controllers.controller('ServantListCtrl', ['$scope', '$location', 'ServantServic
       {key: 5,    value: '不死'}
     ];
     $scope.view = $location.search().view;
-    $scope.race_code = $location.search().race_code;
-    $scope.filter = $scope.race_code ? {race_code: $scope.race_code} : {};
-    $scope.predicate = ['race_code', 'race_id'];
+    $scope.race_id = $location.search().race_id;
+    $scope.filter = $scope.race_id ? {race_id: $scope.race_id} : {};
+    $scope.predicate = ['race_id', 'race_code'];
     $scope.reverse = false;
 
     $scope.init = function() {
@@ -76,12 +76,12 @@ controllers.controller('ServantListCtrl', ['$scope', '$location', 'ServantServic
 
     $scope.init();
 
-    $scope.$watch('race_code', function (newValue, oldValue) {
+    $scope.$watch('race_id', function (newValue, oldValue) {
       if (typeof newValue === 'undefined' || typeof oldValue === 'undefined' || newValue == oldValue) {
         return;
       }
-      $scope.filter = $scope.race_code ? {race_code: $scope.race_code} : {};
-      $location.search('race_code', $scope.race_code).replace();
+      $scope.filter = $scope.race_id ? {race_id: $scope.race_id} : {};
+      $location.search('race_id', $scope.race_id).replace();
     }, true);
 
     angular.element(document).ready(function() {
