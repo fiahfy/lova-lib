@@ -50,7 +50,15 @@ controllers.controller('ServantListCtrl', ['$scope', '$location', 'ServantServic
     ];
     $scope.view = $location.search().view;
     $scope.race_id = $location.search().race_id;
-    $scope.filter = $scope.race_id ? {race_id: $scope.race_id} : {};
+    //$scope.q = $location.search().q;
+    var filter = {};
+    if ($scope.race_id) {
+      filter.race_id = $scope.race_id;
+    }
+    //if ($scope.q) {
+    //  filter.name = $scope.q;
+    //}
+    $scope.filter = filter;
     $scope.predicate = ['race_id', 'race_code'];
     $scope.reverse = false;
 
@@ -72,6 +80,11 @@ controllers.controller('ServantListCtrl', ['$scope', '$location', 'ServantServic
     $scope.selectView = function(view) {
       $scope.view = view;
       $location.search('view', view).replace();
+    };
+
+    $scope.changeQuery = function() {
+      $scope.filter.name = $scope.q;
+      //$location.search('q', $scope.q).replace();
     };
 
     $scope.init();
