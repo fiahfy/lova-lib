@@ -3,7 +3,7 @@
 module lova {
     'use strict';
 
-    export interface MainScope extends angular.IScope {
+    export interface MainScope extends ng.IScope {
         now: Date;
         scrollPos: any;
         scrollClear: any;
@@ -18,8 +18,8 @@ module lova {
 
         constructor(
             $scope: MainScope,
-            $location: angular.ILocationService,
-            $timeout: angular.ITimeoutService
+            $location: ng.ILocationService,
+            $timeout: ng.ITimeoutService
         ) {
             $scope.now = new Date();
 
@@ -48,7 +48,7 @@ module lova {
         }
     }
 
-    export interface ServantListScope extends angular.IScope {
+    export interface ServantListScope extends ng.IScope {
         servants: any;
         viewOptions: any;
         raceIdOptions: any;
@@ -73,7 +73,7 @@ module lova {
 
         constructor(
             $scope: ServantListScope,
-            $location: angular.ILocationService,
+            $location: ng.ILocationService,
             servantService: ServantService
         ) {
             $scope.servants = [];
@@ -144,12 +144,12 @@ module lova {
         }
     }
 
-    export interface ServantDetailScope extends angular.IScope {
+    export interface ServantDetailScope extends ng.IScope {
         servant: any;
         init: any;
         load: any;
     }
-    export interface ServantDetailParams extends angular.route.IRouteParamsService {
+    export interface ServantDetailParams extends ng.route.IRouteParamsService {
         id: number;
     }
     export class ServantDetailController {

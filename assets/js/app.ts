@@ -12,8 +12,12 @@ module lova {
     ]);
 
     class Router {
+        public static $inject = [
+            '$routeProvider'
+        ];
+
         constructor(
-            routerProvider: angular.route.IRouteProvider
+            routerProvider: ng.route.IRouteProvider
         ) {
             routerProvider.
                 when('/', {
@@ -30,7 +34,7 @@ module lova {
         }
     }
 
-    app.config(['$routeProvider', Router]);
+    app.config(Router);
     app.controller('MainController', MainController);
     app.controller('ServantListController', ServantListController);
     app.controller('ServantDetailController', ServantDetailController);

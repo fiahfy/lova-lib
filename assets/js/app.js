@@ -24,9 +24,12 @@ var lova;
                 redirectTo: '/'
             });
         }
+        Router.$inject = [
+            '$routeProvider'
+        ];
         return Router;
     })();
-    app.config(['$routeProvider', Router]);
+    app.config(Router);
     app.controller('MainController', lova.MainController);
     app.controller('ServantListController', lova.ServantListController);
     app.controller('ServantDetailController', lova.ServantDetailController);

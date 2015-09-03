@@ -13,12 +13,12 @@ module lova {
         ];
 
         constructor(
-            private $http: angular.IHttpService,
-            private $q: angular.IQService
+            private $http: ng.IHttpService,
+            private $q: ng.IQService
         ) {
         }
 
-        public load() {
+        public load(): ng.IPromise<any> {
             var deferrd = this.$q.defer();
             var me = this;
             this.$http.get(this.url, {cache: true})
@@ -31,7 +31,7 @@ module lova {
             return deferrd.promise;
         }
 
-        public loadServants() {
+        public loadServants(): ng.IPromise<any> {
             var deferrd = this.$q.defer();
             var me = this;
             this.load()
@@ -41,7 +41,7 @@ module lova {
             return deferrd.promise;
         }
 
-        public loadServant(id) {
+        public loadServant(id): ng.IPromise<any> {
             var deferrd = this.$q.defer();
             var me = this;
             this.load()
