@@ -1,29 +1,35 @@
-'use strict';
-
-var app = angular.module('app', [
-  'ngRoute',
-  'ui',
-  'angulartics', 'angulartics.google.analytics',
-  'controllers',
-  'directives',
-  'filters',
-  'services'
-]);
-
-app.config(['$locationProvider', '$routeProvider',
-  function($locationProvider, $routeProvider) {
-    //$locationProvider.html5Mode(true);
-    $routeProvider.
-      when('/', {
-        templateUrl: 'partials/list.html',
-        controller: 'ServantListCtrl'
-      }).
-      when('/servants/:id/', {
-        templateUrl: 'partials/detail.html',
-        controller: 'ServantDetailCtrl'
-      }).
-      otherwise({
-        redirectTo: '/'
-      });
-  }
-]);
+/// <reference path="_all.ts" />
+var lova;
+(function (lova) {
+    'use strict';
+    var app = angular.module('app', [
+        'ngRoute',
+        'ui',
+        'angulartics', 'angulartics.google.analytics',
+        'directives',
+        'filters'
+    ]);
+    var Router = (function () {
+        function Router(routerProvider) {
+            routerProvider.
+                when('/', {
+                templateUrl: 'partials/list.html',
+                controller: 'ServantListController'
+            }).
+                when('/servants/:id/', {
+                templateUrl: 'partials/detail.html',
+                controller: 'ServantDetailController'
+            }).
+                otherwise({
+                redirectTo: '/'
+            });
+        }
+        return Router;
+    })();
+    app.config(['$routeProvider', Router]);
+    app.controller('MainController', lova.MainController);
+    app.controller('ServantListController', lova.ServantListController);
+    app.controller('ServantDetailController', lova.ServantDetailController);
+    app.service('ServantService', lova.ServantService);
+})(lova || (lova = {}));
+//# sourceMappingURL=app.js.map

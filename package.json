@@ -1,0 +1,20 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "compile": "tsc -m commonjs -t es5 --emitDecoratorMetaData --experimentalDecorators --out assets/js/_all.js assets/js/_all.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fiahfy/lova-scraper.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fiahfy/lova-scraper/issues"
+  },
+  "homepage": "https://github.com/fiahfy/lova-scraper#readme"
+}
