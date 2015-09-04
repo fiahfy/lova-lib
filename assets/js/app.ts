@@ -6,9 +6,7 @@ module lova {
     var app = angular.module('app', [
         'ngRoute',
         'ui',
-        'angulartics', 'angulartics.google.analytics',
-        'directives',
-        'filters'
+        'angulartics', 'angulartics.google.analytics'
     ]);
 
     class Router {
@@ -22,11 +20,13 @@ module lova {
             routerProvider.
                 when('/', {
                     templateUrl: 'partials/list.html',
-                    controller: 'ServantListController'
+                    controller: 'ServantListController',
+                    controllerAs: 'slc'
                 }).
                 when('/servants/:id/', {
                     templateUrl: 'partials/detail.html',
-                    controller: 'ServantDetailController'
+                    controller: 'ServantDetailController',
+                    controllerAs: 'sdc'
                 }).
                 otherwise({
                     redirectTo: '/'
@@ -38,5 +38,9 @@ module lova {
     app.controller('MainController', MainController);
     app.controller('ServantListController', ServantListController);
     app.controller('ServantDetailController', ServantDetailController);
+    app.filter('pad', pad);
+    app.filter('default', def);
+    app.filter('replace', replace);
+    app.filter('skillDescription', skillDescription);
     app.service('ServantService', ServantService);
 }

@@ -1,50 +1,50 @@
 <div class="page-header">
-  <h2>{{ servant.name }}</h2>
+  <h2>{{ sdc.servant.name }}</h2>
 </div>
 
 <div id="servant" class="row">
   <div class="col-md-4">
-    <a href="./assets/img/l/{{ servant.id }}.jpg" target="_self">
-      <img src="./assets/img/l/{{ servant.id }}.jpg" class="center-block img-rounded img-responsive" />
+    <a href="./assets/img/l/{{ sdc.servant.id }}.jpg" target="_self">
+      <img src="./assets/img/l/{{ sdc.servant.id }}.jpg" class="center-block img-rounded img-responsive" />
     </a>
   </div>
   <div class="col-md-8">
     <div class="row">
       <dl class="col-sm-6 row">
         <dt class="col-xs-2">Race</dt>
-        <dd class="col-xs-10">{{ servant.race_name }}-{{ servant.race_code|pad:3:'0' }}</dd>
+        <dd class="col-xs-10">{{ sdc.servant.race_name }}-{{ sdc.servant.race_code|pad:3:'0' }}</dd>
       </dl>
       <dl class="col-sm-6 row">
         <dt class="col-xs-2">Cost</dt>
-        <dd class="col-xs-10">{{ servant.cost }}</dd>
+        <dd class="col-xs-10">{{ sdc.servant.cost }}</dd>
       </dl>
     </div>
     <div class="row">
       <dl class="col-sm-6 row">
         <dt class="col-xs-2">Type</dt>
-        <dd class="col-xs-10">{{ servant.type }}</dd>
+        <dd class="col-xs-10">{{ sdc.servant.type }}</dd>
       </dl>
       <dl class="col-sm-6 row">
         <dt class="col-xs-2">Range</dt>
-        <dd class="col-xs-10">{{ servant.range }}</dd>
+        <dd class="col-xs-10">{{ sdc.servant.range }}</dd>
       </dl>
     </div>
     <dl class="row">
       <dt class="col-md-12">Oral Tradition</dt>
       <dd class="col-md-12">
         <div class="well well-sm">
-          <small>{{ servant.oral_tradition }}</small>
+          <small>{{ sdc.servant.oral_tradition }}</small>
         </div>
       </dd>
     </dl>
     <div class="row">
       <dl class="col-sm-6 row">
         <dt class="col-xs-2">Illust</dt>
-        <dd class="col-xs-10">{{ servant.illust }}</dd>
+        <dd class="col-xs-10">{{ sdc.servant.illust }}</dd>
       </dl>
       <dl class="col-sm-6 row">
         <dt class="col-xs-2">CV</dt>
-        <dd class="col-xs-10">{{ servant.cv }}</dd>
+        <dd class="col-xs-10">{{ sdc.servant.cv }}</dd>
       </dl>
     </div>
     <dl>
@@ -65,7 +65,7 @@
           </tr>
           </thead>
           <tbody>
-          <tr ng-repeat="status in servant.statuses">
+          <tr ng-repeat="status in sdc.servant.statuses">
             <td class="">{{ status.level }}</td>
             <td class="">{{ status.hp }}</td>
             <td class="">{{ status.ap }}</td>
@@ -94,7 +94,7 @@
             <th class="">AS</th>
           </tr>
           </thead>
-          <tbody ng-repeat="status in servant.statuses">
+          <tbody ng-repeat="status in sdc.servant.statuses">
           <tr>
             <td rowspan="2">{{ status.level }}</td>
             <td class="">{{ status.hp }}</td>
@@ -118,29 +118,29 @@
 <div id="servant-skill" class="row">
   <dl class="col-md-6">
     <dt><h3>Active Skill</h3></dt>
-    <dd ng-if="servant.skills.active">
+    <dd ng-if="sdc.servant.skills.active">
       <dl class="row">
         <dt class="col-xs-2">Name</dt>
-        <dd class="col-xs-10">{{ servant.skills.active.name }}</dd>
+        <dd class="col-xs-10">{{ sdc.servant.skills.active.name }}</dd>
       </dl>
       <dl class="row">
         <dt class="col-xs-2">Designation</dt>
-        <dd class="col-xs-10">{{ servant.skills.active.designation|replace:',':'・'|default:'-' }}</dd>
+        <dd class="col-xs-10">{{ sdc.servant.skills.active.designation|replace:',':'・'|default:'-' }}</dd>
       </dl>
       <dl class="row">
         <dt class="col-xs-2">Effect</dt>
-        <dd class="col-xs-10">{{ servant.skills.active.effect|replace:',':'・'|default:'-' }}</dd>
+        <dd class="col-xs-10">{{ sdc.servant.skills.active.effect|replace:',':'・'|default:'-' }}</dd>
       </dl>
       <dl class="row">
         <dt class="col-md-12">Description</dt>
         <dd class="col-md-12">
           <div class="well well-sm">
-            <small ng-bind-html="servant.skills.active|skillDescription"></small>
+            <small ng-bind-html="sdc.servant.skills.active|skillDescription"></small>
           </div>
         </dd>
       </dl>
     </dd>
-    <dd ng-if="!servant.skills.active">
+    <dd ng-if="!sdc.servant.skills.active">
       <div class="well well-sm">
         <small>None</small>
       </div>
@@ -148,29 +148,29 @@
   </dl>
   <dl class="col-md-6">
     <dt><h3>Passive Skill</h3></dt>
-    <dd ng-if="servant.skills.passive">
+    <dd ng-if="sdc.servant.skills.passive">
       <dl class="row">
         <dt class="col-xs-2">Name</dt>
-        <dd class="col-xs-10">{{ servant.skills.passive.name }}</dd>
+        <dd class="col-xs-10">{{ sdc.servant.skills.passive.name }}</dd>
       </dl>
       <dl class="row">
         <dt class="col-xs-2">Designation</dt>
-        <dd class="col-xs-10">{{ servant.skills.passive.designation|replace:',':'・'|default:'-' }}</dd>
+        <dd class="col-xs-10">{{ sdc.servant.skills.passive.designation|replace:',':'・'|default:'-' }}</dd>
       </dl>
       <dl class="row">
         <dt class="col-xs-2">Effect</dt>
-        <dd class="col-xs-10">{{ servant.skills.passive.effect|replace:',':'・'|default:'-' }}</dd>
+        <dd class="col-xs-10">{{ sdc.servant.skills.passive.effect|replace:',':'・'|default:'-' }}</dd>
       </dl>
       <dl class="row">
         <dt class="col-md-12">Description</dt>
         <dd class="col-md-12">
           <div class="well well-sm">
-            <small ng-bind-html="servant.skills.passive|skillDescription"></small>
+            <small ng-bind-html="sdc.servant.skills.passive|skillDescription"></small>
           </div>
         </dd>
       </dl>
     </dd>
-    <dd ng-if="!servant.skills.passive">
+    <dd ng-if="!sdc.servant.skills.passive">
       <div class="well well-sm">
         <small>None</small>
       </div>

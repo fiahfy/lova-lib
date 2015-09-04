@@ -3,12 +3,6 @@
 module lova {
     'use strict';
 
-    export interface MainScope extends ng.IScope {
-        now: Date;
-        scrollPos: any;
-        scrollClear: any;
-        okSaveScroll: boolean;
-    }
     export class MainController {
         public static $inject = [
             '$scope',
@@ -16,165 +10,151 @@ module lova {
             '$timeout'
         ];
 
+        public now: Date;
+
+        private scrollPos: any;
+
+        private okSaveScroll: boolean;
+
         constructor(
-            $scope: MainScope,
-            $location: ng.ILocationService,
-            $timeout: ng.ITimeoutService
+            private $scope: ng.IScope,
+            private $location: ng.ILocationService,
+            private $timeout: ng.ITimeoutService
         ) {
-            $scope.now = new Date();
+            this.now = new Date();
 
-            $scope.scrollPos = {}; // scroll position of each view
+            this.scrollPos = {}; // scroll position of each view
 
-            $(window).on('scroll', function() {
-                if ($scope.okSaveScroll) { // false between $routeChangeStart and $routeChangeSuccess
-                    $scope.scrollPos[$location.path()] = $(window).scrollTop();
+            $(window).on('scroll', () => {
+                if (this.okSaveScroll) { // false between $routeChangeStart and $routeChangeSuccess
+                    this.scrollPos[$location.path()] = $(window).scrollTop();
                 }
             });
 
-            $scope.scrollClear = function(path) {
-                $scope.scrollPos[path] = 0;
-            };
+            //$scope.scrollClear = function(path) {
+            //    $scope.scrollPos[path] = 0;
+            //};
 
-            $scope.$on('$routeChangeStart', function() {
-                $scope.okSaveScroll = false;
+            $scope.$on('$routeChangeStart', () => {
+                this.okSaveScroll = false;
             });
 
-            $scope.$on('$routeChangeSuccess', function() {
-                $timeout(function() { // wait for DOM, then restore scroll position
-                    $(window).scrollTop($scope.scrollPos[$location.path()] ? $scope.scrollPos[$location.path()] : 0);
-                    $scope.okSaveScroll = true;
+            $scope.$on('$routeChangeSuccess', () => {
+                $timeout(() => { // wait for DOM, then restore scroll position
+                    $(window).scrollTop(this.scrollPos[$location.path()] ? this.scrollPos[$location.path()] : 0);
+                    this.okSaveScroll = true;
                 }, 0);
             });
         }
     }
 
-    export interface ServantListScope extends ng.IScope {
-        servants: any;
-        viewOptions: any;
-        raceIdOptions: any;
+    interface ServantListParams extends ng.route.IRouteParamsService {
         view: number;
         race_id: number;
-        filter: any;
-        predicate: any;
-        reverse: boolean;
-        init: any;
-        load: any;
-        showServant: any;
-        selectView: any;
-        changeQuery: any;
-        q: string;
     }
     export class ServantListController {
         public static $inject = [
             '$scope',
             '$location',
+            '$routeParams',
             'ServantService'
         ];
 
+        public servants: any[] = [];
+
+        public viewOptions: any[] = [
+            {key: null, icon: 'fui-list-columned'},
+            {key: 1,    icon: 'fui-list-large-thumbnails'}
+        ];
+
+        public raceIdOptions: any[] = [
+            {key: null, value: 'Select Race...'},
+            {key: 1,    value: '人獣'},
+            {key: 2,    value: '神族'},
+            {key: 3,    value: '魔種'},
+            {key: 4,    value: '海種'},
+            {key: 5,    value: '不死'}
+        ];
+
+        public view: number;
+
+        public raceId: number;
+
+        public q: string;
+
+        public filter: any;
+
+        public predicate: string[] = ['race_id', 'race_code'];
+
+        public reverse: boolean = false;
+
         constructor(
-            $scope: ServantListScope,
-            $location: ng.ILocationService,
-            servantService: ServantService
+            private $scope: ng.IScope,
+            private $location: ng.ILocationService,
+            private $routeParams: ServantListParams,
+            private servantService: ServantService
         ) {
-            $scope.servants = [];
-            $scope.viewOptions = [
-                {key: null, icon: 'fui-list-columned'},
-                {key: 1,    icon: 'fui-list-large-thumbnails'}
-            ];
-            $scope.raceIdOptions = [
-                {key: null, value: 'Select Race...'},
-                {key: 1,    value: '人獣'},
-                {key: 2,    value: '神族'},
-                {key: 3,    value: '魔種'},
-                {key: 4,    value: '海種'},
-                {key: 5,    value: '不死'}
-            ];
-            $scope.view = $location.search().view;
-            $scope.race_id = $location.search().race_id;
-            //$scope.q = $location.search().q;
+            this.view = $routeParams.view;
+            this.raceId = $routeParams.race_id;
             var filter: any = {};
-            if ($scope.race_id) {
-                filter.race_id = $scope.race_id;
+            if (this.raceId) {
+                filter.race_id = this.raceId;
             }
-            //if ($scope.q) {
-            //  filter.name = $scope.q;
-            //}
-            $scope.filter = filter;
-            $scope.predicate = ['race_id', 'race_code'];
-            $scope.reverse = false;
+            this.filter = filter;
 
-            $scope.init = function() {
-                $scope.load();
-            };
+            servantService.loadServants()
+                .then((reason: any) => {
+                    this.servants = reason.servants;
+                });
 
-            $scope.load = function() {
-                servantService.loadServants()
-                    .then(function(reason: any) {
-                        $scope.servants = reason.servants;
-                    });
-            };
-
-            $scope.showServant = function(servant) {
-                $location.url('/servants/' + servant.id + '/');
-            };
-
-            $scope.selectView = function(view) {
-                $scope.view = view;
-                $location.search('view', view).replace();
-            };
-
-            $scope.changeQuery = function() {
-                $scope.filter.name = $scope.q;
-                //$location.search('q', $scope.q).replace();
-            };
-
-            $scope.init();
-
-            $scope.$watch('race_id', function (newValue, oldValue) {
+            $scope.$watch(() => this.raceId, (newValue, oldValue) => {
                 if (typeof newValue === 'undefined' || typeof oldValue === 'undefined' || newValue == oldValue) {
                     return;
                 }
-                $scope.filter = $scope.race_id ? {race_id: $scope.race_id} : {};
-                $location.search('race_id', $scope.race_id).replace();
+                this.filter = this.raceId ? {race_id: this.raceId} : {};
+                $location.search('race_id', this.raceId).replace();
             }, true);
 
             angular.element(document).ready(function() {
                 //$('select').select2();
             });
         }
+
+        public showServant(servant) {
+            this.$location.url('/servants/' + servant.id + '/');
+        }
+
+        public selectView(view) {
+            this.view = view;
+            this.$location.search('view', view).replace();
+        }
+
+        public changeQuery() {
+            this.filter.name = this.q;
+        }
     }
 
-    export interface ServantDetailScope extends ng.IScope {
-        servant: any;
-        init: any;
-        load: any;
-    }
-    export interface ServantDetailParams extends ng.route.IRouteParamsService {
+    interface ServantDetailParams extends ng.route.IRouteParamsService {
         id: number;
     }
     export class ServantDetailController {
         public static $inject = [
-            '$scope',
             '$routeParams',
             'ServantService'
         ];
-        constructor($scope: ServantDetailScope,
-                    $routeParams: ServantDetailParams,
-                    servantService: ServantService) {
-            $scope.servant = null;
 
-            $scope.init = function () {
-                $scope.load();
-            };
+        public servant: any[];
 
-            $scope.load = function () {
-                servantService.loadServant($routeParams.id)
-                    .then(function (reason: any) {
-                        $scope.servant = reason.servant;
-                    });
-            };
+        constructor(
+            private $routeParams: ServantDetailParams,
+            private servantService: ServantService
+        ) {
+            this.servant = null;
 
-            $scope.init();
+            servantService.loadServant($routeParams.id)
+                .then((reason: any) => {
+                    this.servant = reason.servant;
+                });
         }
     }
 }

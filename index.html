@@ -23,7 +23,7 @@
   <script src="./assets/js/app.js"></script>
   <script src="./assets/js/analytics.js"></script>
 </head>
-<body ng-controller="MainController">
+<body ng-controller="MainController as mc">
 
 <!-- Fixed navbar -->
 <nav class="navbar navbar-default">
@@ -51,7 +51,7 @@
 <footer class="footer">
   <div class="container">
     <p class="text-center text-muted">
-      © 2014-{{ now|date:'yyyy' }} SQUARE ENIX CO., LTD. All Rights Reserved.
+      © 2014-{{ mc.now|date:'yyyy' }} SQUARE ENIX CO., LTD. All Rights Reserved.
     </p>
   </div>
 </footer>

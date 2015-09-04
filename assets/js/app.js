@@ -5,20 +5,20 @@ var lova;
     var app = angular.module('app', [
         'ngRoute',
         'ui',
-        'angulartics', 'angulartics.google.analytics',
-        'directives',
-        'filters'
+        'angulartics', 'angulartics.google.analytics'
     ]);
     var Router = (function () {
         function Router(routerProvider) {
             routerProvider.
                 when('/', {
                 templateUrl: 'partials/list.html',
-                controller: 'ServantListController'
+                controller: 'ServantListController',
+                controllerAs: 'slc'
             }).
                 when('/servants/:id/', {
                 templateUrl: 'partials/detail.html',
-                controller: 'ServantDetailController'
+                controller: 'ServantDetailController',
+                controllerAs: 'sdc'
             }).
                 otherwise({
                 redirectTo: '/'
@@ -33,6 +33,10 @@ var lova;
     app.controller('MainController', lova.MainController);
     app.controller('ServantListController', lova.ServantListController);
     app.controller('ServantDetailController', lova.ServantDetailController);
+    app.filter('pad', lova.pad);
+    app.filter('default', lova.def);
+    app.filter('replace', lova.replace);
+    app.filter('skillDescription', lova.skillDescription);
     app.service('ServantService', lova.ServantService);
 })(lova || (lova = {}));
 //# sourceMappingURL=app.js.map

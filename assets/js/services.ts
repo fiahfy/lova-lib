@@ -4,8 +4,8 @@ module lova {
     'use strict';
 
     export class ServantService {
-        private url = './assets/data/servant.json';
-        private servants = [];
+        private url: string = './assets/data/servant.json';
+        private servants: any[] = [];
 
         public static $inject = [
             '$http',
