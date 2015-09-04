@@ -1,123 +1,121 @@
-'use strict';
-
-/* Controllers */
-
-var controllers = angular.module('controllers', []);
-
-controllers.controller('MainCtrl', ['$scope', '$location', '$timeout',
-  function($scope, $location, $timeout) {
-    $scope.now = new Date();
-
-    $scope.scrollPos = {}; // scroll position of each view
-
-    $(window).on('scroll', function() {
-      if ($scope.okSaveScroll) { // false between $routeChangeStart and $routeChangeSuccess
-        $scope.scrollPos[$location.path()] = $(window).scrollTop();
-      }
-    });
-
-    $scope.scrollClear = function(path) {
-      $scope.scrollPos[path] = 0;
-    };
-
-    $scope.$on('$routeChangeStart', function() {
-      $scope.okSaveScroll = false;
-    });
-
-    $scope.$on('$routeChangeSuccess', function() {
-      $timeout(function() { // wait for DOM, then restore scroll position
-        $(window).scrollTop($scope.scrollPos[$location.path()] ? $scope.scrollPos[$location.path()] : 0);
-        $scope.okSaveScroll = true;
-      }, 0);
-    });
-  }
-]);
-
-controllers.controller('ServantListCtrl', ['$scope', '$location', 'ServantService',
-  function($scope, $location, ServantService) {
-    $scope.servants = [];
-    $scope.viewOptions = [
-      {key: null, icon: 'fui-list-columned'},
-      {key: 1,    icon: 'fui-list-large-thumbnails'}
-    ];
-    $scope.raceIdOptions = [
-      {key: null, value: 'Select Race...'},
-      {key: 1,    value: '人獣'},
-      {key: 2,    value: '神族'},
-      {key: 3,    value: '魔種'},
-      {key: 4,    value: '海種'},
-      {key: 5,    value: '不死'}
-    ];
-    $scope.view = $location.search().view;
-    $scope.race_id = $location.search().race_id;
-    //$scope.q = $location.search().q;
-    var filter = {};
-    if ($scope.race_id) {
-      filter.race_id = $scope.race_id;
-    }
-    //if ($scope.q) {
-    //  filter.name = $scope.q;
-    //}
-    $scope.filter = filter;
-    $scope.predicate = ['race_id', 'race_code'];
-    $scope.reverse = false;
-
-    $scope.init = function() {
-      $scope.load();
-    };
-
-    $scope.load = function() {
-      ServantService.loadServants()
-        .then(function(reason) {
-          $scope.servants = reason.servants;
-        });
-    };
-
-    $scope.showServant = function(servant) {
-      $location.url('/servants/' + servant.id + '/');
-    };
-
-    $scope.selectView = function(view) {
-      $scope.view = view;
-      $location.search('view', view).replace();
-    };
-
-    $scope.changeQuery = function() {
-      $scope.filter.name = $scope.q;
-      //$location.search('q', $scope.q).replace();
-    };
-
-    $scope.init();
-
-    $scope.$watch('race_id', function (newValue, oldValue) {
-      if (typeof newValue === 'undefined' || typeof oldValue === 'undefined' || newValue == oldValue) {
-        return;
-      }
-      $scope.filter = $scope.race_id ? {race_id: $scope.race_id} : {};
-      $location.search('race_id', $scope.race_id).replace();
-    }, true);
-
-    angular.element(document).ready(function() {
-      //$('select').select2();
-    });
-  }
-]);
-
-controllers.controller('ServantDetailCtrl', ['$scope', '$routeParams', 'ServantService',
-  function($scope, $routeParams, ServantService) {
-    $scope.servant = null;
-
-    $scope.init = function() {
-      $scope.load();
-    };
-
-    $scope.load = function() {
-      ServantService.loadServant($routeParams.id)
-        .then(function(reason) {
-          $scope.servant = reason.servant;
-        });
-    };
-
-    $scope.init();
-  }
-]);
+/// <reference path="_all.ts" />
+var lova;
+(function (lova) {
+    'use strict';
+    var MainController = (function () {
+        function MainController($scope, $location, $timeout) {
+            var _this = this;
+            this.$scope = $scope;
+            this.$location = $location;
+            this.$timeout = $timeout;
+            this.now = new Date();
+            this.scrollPos = {}; // scroll position of each view
+            $(window).on('scroll', function () {
+                if (_this.okSaveScroll) {
+                    _this.scrollPos[$location.path()] = $(window).scrollTop();
+                }
+            });
+            //$scope.scrollClear = function(path) {
+            //    $scope.scrollPos[path] = 0;
+            //};
+            $scope.$on('$routeChangeStart', function () {
+                _this.okSaveScroll = false;
+            });
+            $scope.$on('$routeChangeSuccess', function () {
+                $timeout(function () {
+                    $(window).scrollTop(_this.scrollPos[$location.path()] ? _this.scrollPos[$location.path()] : 0);
+                    _this.okSaveScroll = true;
+                }, 0);
+            });
+        }
+        MainController.$inject = [
+            '$scope',
+            '$location',
+            '$timeout'
+        ];
+        return MainController;
+    })();
+    lova.MainController = MainController;
+    var ServantListController = (function () {
+        function ServantListController($scope, $location, $routeParams, servantService) {
+            var _this = this;
+            this.$scope = $scope;
+            this.$location = $location;
+            this.$routeParams = $routeParams;
+            this.servantService = servantService;
+            this.servants = [];
+            this.viewOptions = [
+                { key: null, icon: 'fui-list-columned' },
+                { key: 1, icon: 'fui-list-large-thumbnails' }
+            ];
+            this.raceIdOptions = [
+                { key: null, value: 'Select Race...' },
+                { key: 1, value: '人獣' },
+                { key: 2, value: '神族' },
+                { key: 3, value: '魔種' },
+                { key: 4, value: '海種' },
+                { key: 5, value: '不死' }
+            ];
+            this.predicate = ['race_id', 'race_code'];
+            this.reverse = false;
+            this.view = $routeParams.view;
+            this.raceId = $routeParams.race_id;
+            var filter = {};
+            if (this.raceId) {
+                filter.race_id = this.raceId;
+            }
+            this.filter = filter;
+            servantService.loadServants()
+                .then(function (reason) {
+                _this.servants = reason.servants;
+            });
+            $scope.$watch(function () { return _this.raceId; }, function (newValue, oldValue) {
+                if (typeof newValue === 'undefined' || typeof oldValue === 'undefined' || newValue == oldValue) {
+                    return;
+                }
+                _this.filter = _this.raceId ? { race_id: _this.raceId } : {};
+                $location.search('race_id', _this.raceId).replace();
+            }, true);
+            angular.element(document).ready(function () {
+                //$('select').select2();
+            });
+        }
+        ServantListController.prototype.showServant = function (servant) {
+            this.$location.url('/servants/' + servant.id + '/');
+        };
+        ServantListController.prototype.selectView = function (view) {
+            this.view = view;
+            this.$location.search('view', view).replace();
+        };
+        ServantListController.prototype.changeQuery = function () {
+            this.filter.name = this.q;
+        };
+        ServantListController.$inject = [
+            '$scope',
+            '$location',
+            '$routeParams',
+            'ServantService'
+        ];
+        return ServantListController;
+    })();
+    lova.ServantListController = ServantListController;
+    var ServantDetailController = (function () {
+        function ServantDetailController($routeParams, servantService) {
+            var _this = this;
+            this.$routeParams = $routeParams;
+            this.servantService = servantService;
+            this.servant = null;
+            servantService.loadServant($routeParams.id)
+                .then(function (reason) {
+                _this.servant = reason.servant;
+            });
+        }
+        ServantDetailController.$inject = [
+            '$routeParams',
+            'ServantService'
+        ];
+        return ServantDetailController;
+    })();
+    lova.ServantDetailController = ServantDetailController;
+})(lova || (lova = {}));
+//# sourceMappingURL=controllers.js.map

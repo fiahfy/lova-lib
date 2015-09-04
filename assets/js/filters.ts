@@ -1,21 +1,22 @@
 /// <reference path="_all.ts" />
-var lova;
-(function (lova) {
+
+module lova {
     'use strict';
-    function pad() {
-        return function (input, length, str) {
-            return ((new Array(length + 1)).join(str) + input).slice(-length);
+
+    export function pad() {
+        return (input: string, length: number, str: string) => {
+            return ((new Array(length+1)).join(str) + input).slice(-length);
         };
     }
-    lova.pad = pad;
-    function def() {
-        return function (input, value) {
+
+    export function def() {
+        return (input: string, value: any) => {
             return (typeof input === 'undefined' || input == null) ? value : input;
         };
     }
-    lova.def = def;
-    function replace() {
-        return function (input, regexp, newSubStr) {
+
+    export function replace() {
+        return (input: string, regexp: string, newSubStr: string) => {
             if (!input) {
                 return input;
             }
@@ -23,9 +24,9 @@ var lova;
             return input.replace(reg, newSubStr);
         };
     }
-    lova.replace = replace;
-    function skillDescription($sce) {
-        return function (skill) {
+
+    export function skillDescription($sce: ng.ISCEService) {
+        return (skill: any) => {
             var desc = skill.description;
             if (!desc) {
                 return desc;
@@ -35,19 +36,20 @@ var lova;
                 .replace(/\n/g, '<br/><br/>')
                 .replace(/［([^］]+)］/g, '<br/>&nbsp;&nbsp;<b>- $1</b>')
                 .replace(/：/g, ' : ');
+
             var cd = skill.cd;
             if (cd) {
                 cd = '- クールダウン : ' + cd.replace(/,/g, ' / ');
                 desc = desc.replace(/<br\/>/, '<br/>&nbsp;&nbsp;<b>' + cd + '</b><br/>');
             }
+
             var ap = skill.ap;
             if (ap) {
                 ap = '- 消費AP : ' + ap.replace(/,/g, ' / ');
                 desc = desc.replace(/<br\/>/, '<br/>&nbsp;&nbsp;<b>' + ap + '</b><br/>');
             }
+
             return $sce.trustAsHtml(desc);
-        };
+        }
     }
-    lova.skillDescription = skillDescription;
-})(lova || (lova = {}));
-//# sourceMappingURL=filters.js.map
+}
