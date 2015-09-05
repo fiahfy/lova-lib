@@ -3,6 +3,16 @@
 </div>
 
 <div id="servant" class="row">
+  <div class="col-md-4"></div>
+  <div class="col-md-8">
+    <div class="row">
+      <dl class="col-md-6 col-sm-0 row"></dl>
+      <dl class="col-md-6 col-sm-12 row">
+        <dt class="col-xs-3">Updated</dt>
+        <dd class="col-xs-9">{{ sdc.servant.date|date:'yyyy-MM-dd' }}</dd>
+      </dl>
+    </div>
+  </div>
   <div class="col-md-4">
     <a href="./assets/img/l/{{ sdc.servant.id }}.jpg" target="_self">
       <img src="./assets/img/l/{{ sdc.servant.id }}.jpg" class="center-block img-rounded img-responsive" />
@@ -11,22 +21,22 @@
   <div class="col-md-8">
     <div class="row">
       <dl class="col-sm-6 row">
-        <dt class="col-xs-2">Race</dt>
-        <dd class="col-xs-10">{{ sdc.servant.race_name }}-{{ sdc.servant.race_code|pad:3:'0' }}</dd>
+        <dt class="col-xs-3">Race</dt>
+        <dd class="col-xs-9">{{ sdc.servant.race_name }}-{{ sdc.servant.race_code|pad:3:'0' }}</dd>
       </dl>
       <dl class="col-sm-6 row">
-        <dt class="col-xs-2">Cost</dt>
-        <dd class="col-xs-10">{{ sdc.servant.cost }}</dd>
+        <dt class="col-xs-3">Cost</dt>
+        <dd class="col-xs-9">{{ sdc.servant.cost }}</dd>
       </dl>
     </div>
     <div class="row">
       <dl class="col-sm-6 row">
-        <dt class="col-xs-2">Type</dt>
-        <dd class="col-xs-10">{{ sdc.servant.type }}</dd>
+        <dt class="col-xs-3">Type</dt>
+        <dd class="col-xs-9">{{ sdc.servant.type }}</dd>
       </dl>
       <dl class="col-sm-6 row">
-        <dt class="col-xs-2">Range</dt>
-        <dd class="col-xs-10">{{ sdc.servant.range }}</dd>
+        <dt class="col-xs-3">Range</dt>
+        <dd class="col-xs-9">{{ sdc.servant.range }}</dd>
       </dl>
     </div>
     <dl class="row">
@@ -39,16 +49,16 @@
     </dl>
     <div class="row">
       <dl class="col-sm-6 row">
-        <dt class="col-xs-2">Illust</dt>
-        <dd class="col-xs-10">{{ sdc.servant.illust }}</dd>
+        <dt class="col-xs-3">Illust</dt>
+        <dd class="col-xs-9">{{ sdc.servant.illust }}</dd>
       </dl>
       <dl class="col-sm-6 row">
-        <dt class="col-xs-2">CV</dt>
-        <dd class="col-xs-10">{{ sdc.servant.cv }}</dd>
+        <dt class="col-xs-3">CV</dt>
+        <dd class="col-xs-9">{{ sdc.servant.cv }}</dd>
       </dl>
     </div>
-    <dl>
-      <dt><h3>Status</h3></dt>
+    <dl id="servant-status">
+      <dt><b>Status</b></dt>
       <dd>
         <table class="table table-hover visible-md visible-lg">
           <thead>
@@ -117,7 +127,7 @@
 
 <div id="servant-skill" class="row">
   <dl class="col-md-6">
-    <dt><h3>Active Skill</h3></dt>
+    <dt><b>Active Skill</b></dt>
     <dd ng-if="sdc.servant.skills.active">
       <dl class="row">
         <dt class="col-xs-2">Name</dt>
@@ -147,7 +157,7 @@
     </dd>
   </dl>
   <dl class="col-md-6">
-    <dt><h3>Passive Skill</h3></dt>
+    <dt><b>Passive Skill</b></dt>
     <dd ng-if="sdc.servant.skills.passive">
       <dl class="row">
         <dt class="col-xs-2">Name</dt>

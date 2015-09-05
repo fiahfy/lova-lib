@@ -35,7 +35,11 @@ body > .container {
 }
 
 /* Custom */
+html {
+    overflow-x: hidden;
+}
 body {
+    overflow-x: hidden;
     font-size: 15px;
     font-family: Lato, "游ゴシック", YuGothic, "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", "メイリオ", Meiryo, sans-serif;
 }
@@ -45,6 +49,9 @@ body > .container {
 [ng-click] {
     cursor: pointer;
 }
+.select.form-control {
+    height: 41px;
+}
 .select2-results {
     max-height: none;
 }
@@ -53,6 +60,9 @@ body > .container {
 }
 .navbar-nav>li>a {
     font-size: 15px;
+}
+h2 {
+    font-size: 200%;
 }
 
 /* List */
@@ -92,7 +102,7 @@ dt {
     line-height: 30px;
     color: #c0c1c2;
 }
-dt > h3 {
+dt > b {
     font-size: 130%;
 }
 dd > div, dd > div > small {
@@ -100,4 +110,7 @@ dd > div, dd > div > small {
 }
 .well {
     margin-bottom: 10px;
+}
+#servant-skill, #servant-status {
+    margin-top: 30px;
 }
