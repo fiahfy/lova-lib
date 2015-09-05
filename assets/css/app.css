@@ -51,6 +51,9 @@ h2 {
 [ng-drag] {
     cursor: move;
 }
+.dragging img {
+    opacity: 0.8;
+}
 
 /* Servant */
 td:not(:nth-child(5)) {
@@ -101,35 +104,54 @@ dd > div, dd > div > small {
 }
 
 /* Deck */
+#deck-link {
+    margin-bottom: 15px;
+}
 #deck-wrapper {
     width: 100%;
     z-index: 1;
     background: #fff;
     padding: 0;
 }
-#deck-wrapper > div > div > div {
-    *height: 200px;
+#deck-wrapper .container > div {
+    width: 12.5%;
+    float: left;
+    padding: 15px 3px;
 }
-#deck-wrapper .col-md-3 {
-    padding: 15px 0;
-}
-#deck-wrapper .col-md-3 div {
-    padding: 0 5px;
-}
-#deck-wrapper .col-md-3:last-child {
-    background-color: lightgray;
-}
+/*#deck-wrapper .container > div:not(:first-child) {*/
+    /*padding-left: 5px;*/
+/*}*/
+/*#deck-wrapper .container > div:not(:last-child) {*/
+    /*padding-right: 5px;*/
+/*}*/
+/*#deck-wrapper > div > div > div {*/
+    /**height: 200px;*/
+/*}*/
+/*#deck-wrapper .col-md-3 {*/
+    /*padding: 15px 0;*/
+/*}*/
+/*#deck-wrapper .col-md-3 > div {*/
+    /*padding: 0 5px;*/
+/*}*/
+/*#deck-wrapper .col-md-3:last-child {*/
+    /*background-color: lightgray;*/
+/*}*/
 #deck-wrapper img {
     margin-bottom: 0;
 }
+#deck-wrapper .img-dummy {
+    background-color: lightgray;
+}
 #deck-servants {
     margin-top: 15px;
+}
+#deck-servants > div > div {
+    width: 12.5%;
+    float: left;
+    padding: 0 3px;
 }
 .input-group-btn .btn {
     color: #fff;
     background-color: #1abc9c;
     border-color: #1abc9c;
-}
-#deck-link {
-    margin-bottom: 15px;
 }

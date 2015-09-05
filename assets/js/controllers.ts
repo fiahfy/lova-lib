@@ -85,10 +85,6 @@ module lova {
                 this.filter = this.raceId ? {race_id: this.raceId} : {};
                 $location.search('race_id', this.raceId).replace();
             }, true);
-
-            angular.element(document).ready(function() {
-                //$('select').select2();
-            });
         }
 
         public showServant(servant) {
@@ -148,7 +144,7 @@ module lova {
 
         public link: string;
 
-        public decks: number[] = '11111111'.split('').map(Number);
+        public decks: number[] = '11110111'.split('').map(Number);
 
         public static $inject = [
             '$scope',
@@ -166,31 +162,66 @@ module lova {
             private servantService: ServantService
         ) {
             if ($routeParams.hash) {
-                this.link = this.getLink($routeParams.hash);
-                this.decks = JSON.parse(decodeURIComponent( escape(window.atob($routeParams.hash))));
+                this.link = this.getLinkFromHash($routeParams.hash);
+                try {
+                    this.decks = JSON.parse($window.atob($routeParams.hash));
+                } catch (e) {}
             }
 
             servantService.loadServants()
                 .then((reason:any) => {
                     this.servants = reason.servants;
                 });
+
+            angular.element(document).ready(function() {
+                let button = angular.element('.copy-clipboard');
+                let clip = new ZeroClipboard(button);
+                clip.on('ready', () => {
+                    clip.on('aftercopy', () => {
+                        button
+                            .attr('data-original-title', 'Copied')
+                            .tooltip('show');
+                        $window.setTimeout(() => {
+                            button
+                                .tooltip('hide')
+                                .attr('data-original-title', '');
+                        }, 1000);
+                    });
+                });
+                button
+                    .on('mouseout', () => {
+                        button.tooltip('hide');
+                    })
+                    .tooltip({
+                        trigger: 'manual',
+                        container: 'body'
+                    });
+            });
         }
 
-        public drop(index: number, data: any, event: any) {
+        public setServant(index: number, data: any, event: any) {
+            let oldIndex = this.decks.indexOf(data);
+            console.log(data, this.decks);
+            if (oldIndex > -1) {
+                this.decks[oldIndex] = this.decks[index];
+            }
             this.decks[index] = data;
+
+            let hash = this.$window.btoa(JSON.stringify(this.decks));
+            this.link = this.getLinkFromHash(hash);
+            this.$scope.$apply(() => {
+                this.link = this.getLinkFromHash(hash);
+            });
         }
 
-        public createLink() {
+        private getLinkFromHash(hash: string): string {
             let a = this.$window.document.createElement('a');
             a.href = this.$window.location.href;
-            //console.log(a.scheme);
-            this.link = this.getLink(window.btoa(unescape(encodeURIComponent(JSON.stringify(this.decks)))));
+            return a.protocol + '//' + a.hostname + a.pathname + '#/decks/' + hash + '/';
         }
 
-        private getLink(hash: string): string {
-            let a = this.$window.document.createElement('a');
-            a.href = this.$window.location.href;
-            return a.protocol + '//' + a.hostname + a.pathname + '#/decks/' + hash;
+        public clearServant(index: number) {
+            this.decks[index] = 0;
         }
     }
 }

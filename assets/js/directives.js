@@ -14,8 +14,6 @@ var lova;
                 var elementTop = element.offset().top;
                 var dummyWrapper = $('<div>');
                 $(window).on('scroll', function () {
-                    console.log($(window).scrollTop());
-                    console.log(element.offset().top);
                     if ($(window).scrollTop() >= elementTop) {
                         var h = element.height();
                         element.css({

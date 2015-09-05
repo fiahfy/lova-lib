@@ -52,9 +52,6 @@ var lova;
                 _this.filter = _this.raceId ? { race_id: _this.raceId } : {};
                 $location.search('race_id', _this.raceId).replace();
             }, true);
-            angular.element(document).ready(function () {
-                //$('select').select2();
-            });
         }
         ServantListController.prototype.showServant = function (servant) {
             this.$location.url('/servants/' + servant.id + '/');
@@ -109,29 +106,64 @@ var lova;
             this.filter = {};
             this.predicate = ['race_id', 'race_code'];
             this.reverse = false;
-            this.decks = '11111111'.split('').map(Number);
+            this.decks = '11110111'.split('').map(Number);
             if ($routeParams.hash) {
-                this.link = this.getLink($routeParams.hash);
-                this.decks = JSON.parse(decodeURIComponent(escape(window.atob($routeParams.hash))));
+                this.link = this.getLinkFromHash($routeParams.hash);
+                try {
+                    this.decks = JSON.parse($window.atob($routeParams.hash));
+                }
+                catch (e) { }
             }
             servantService.loadServants()
                 .then(function (reason) {
                 _this.servants = reason.servants;
             });
+            angular.element(document).ready(function () {
+                var button = angular.element('.copy-clipboard');
+                var clip = new ZeroClipboard(button);
+                clip.on('ready', function () {
+                    clip.on('aftercopy', function () {
+                        button
+                            .attr('data-original-title', 'Copied')
+                            .tooltip('show');
+                        $window.setTimeout(function () {
+                            button
+                                .tooltip('hide')
+                                .attr('data-original-title', '');
+                        }, 1000);
+                    });
+                });
+                button
+                    .on('mouseout', function () {
+                    button.tooltip('hide');
+                })
+                    .tooltip({
+                    trigger: 'manual',
+                    container: 'body'
+                });
+            });
         }
-        DeckController.prototype.drop = function (index, data, event) {
+        DeckController.prototype.setServant = function (index, data, event) {
+            var _this = this;
+            var oldIndex = this.decks.indexOf(data);
+            console.log(data, this.decks);
+            if (oldIndex > -1) {
+                this.decks[oldIndex] = this.decks[index];
+            }
             this.decks[index] = data;
+            var hash = this.$window.btoa(JSON.stringify(this.decks));
+            this.link = this.getLinkFromHash(hash);
+            this.$scope.$apply(function () {
+                _this.link = _this.getLinkFromHash(hash);
+            });
         };
-        DeckController.prototype.createLink = function () {
+        DeckController.prototype.getLinkFromHash = function (hash) {
             var a = this.$window.document.createElement('a');
             a.href = this.$window.location.href;
-            //console.log(a.scheme);
-            this.link = this.getLink(window.btoa(unescape(encodeURIComponent(JSON.stringify(this.decks)))));
+            return a.protocol + '//' + a.hostname + a.pathname + '#/decks/' + hash + '/';
         };
-        DeckController.prototype.getLink = function (hash) {
-            var a = this.$window.document.createElement('a');
-            a.href = this.$window.location.href;
-            return a.protocol + '//' + a.hostname + a.pathname + '#/decks/' + hash;
+        DeckController.prototype.clearServant = function (index) {
+            this.decks[index] = 0;
         };
         DeckController.$inject = [
             '$scope',

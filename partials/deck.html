@@ -1,61 +1,74 @@
-<div class="container">
+<div class="container"　ng-drop="true" ng-drop-success="c.setServant(0, $data, $event)">
   <div class="page-header">
     <h2>Deck</h2>
   </div>
 
-  <div id="deck-link" class="col-lg-12">
+  <div id="deck-link">
     <div class="input-group">
-          <span class="input-group-btn">
-            <button class="btn btn-primary" type="button" ng-click="c.createLink()">Create Link</button>
-          </span>
-      <input type="text" class="form-control" placeholder="" value="{{ c.link }}">
+      <input type="text" class="form-control" placeholder="" ng-model="c.link">
+      <span class="input-group-btn">
+        <button class="btn btn-primary copy-clipboard"
+                data-toggle="tooltip" data-placement="bottom"
+                title="" data-clipboard-text="{{ c.link }}">Copy</button>
+      </span>
     </div>
   </div>
 </div>
 
 <div id="deck-wrapper" fittable>
   <div class="container">
-      <div class="col-md-3 clearfix">
-        <div class="col-xs-6" ng-drop="true" ng-drop-success="c.drop(0, $data, $event)">
-          <img src="assets/img/l/{{ c.decks[0] }}.jpg" class="img-rounded img-responsive" />
-        </div>
-        <div class="col-xs-6" ng-drop="true" ng-drop-success="c.drop(1, $data, $event)">
-          <img src="assets/img/l/{{ c.decks[1] }}.jpg" class="img-rounded img-responsive" />
-        </div>
+    <div class="" ng-drop="true" ng-drop-success="c.setServant($index, $data, $event)" ng-repeat="servantId in c.decks track by $index">
+      <div ng-drag="servantId" ng-drag-data="servantId" ng-drag-stop="c.clearServant($index)">
+        <img ng-if="servantId" ng-src="assets/img/m/{{ servantId }}.jpg" class="img-rounded img-responsive" />
+        <img ng-if="!servantId" ng-src="assets/img/m/dummy.png" class="img-rounded img-responsive img-dummy" />
       </div>
-      <div class="col-md-3 clearfix">
-        <div class="col-xs-6" ng-drop="true" ng-drop-success="c.drop(2, $data, $event)">
-          <img src="assets/img/l/{{ c.decks[2] }}.jpg" class="img-rounded img-responsive" />
-        </div>
-        <div class="col-xs-6" ng-drop="true" ng-drop-success="c.drop(3, $data, $event)">
-          <img src="assets/img/l/{{ c.decks[3] }}.jpg" class="img-rounded img-responsive" />
-        </div>
-      </div>
-      <div class="col-md-3 clearfix">
-        <div class="col-xs-6" ng-drop="true" ng-drop-success="c.drop(4, $data, $event)">
-          <img src="assets/img/l/{{ c.decks[4] }}.jpg" class="img-rounded img-responsive" />
-        </div>
-        <div class="col-xs-6" ng-drop="true" ng-drop-success="c.drop(5, $data, $event)">
-          <img src="assets/img/l/{{ c.decks[5] }}.jpg" class="img-rounded img-responsive" />
-        </div>
-      </div>
-      <div class="col-md-3 clearfix">
-        <div class="col-xs-6" ng-drop="true" ng-drop-success="c.drop(6, $data, $event)">
-          <img src="assets/img/l/{{ c.decks[6] }}.jpg" class="img-rounded img-responsive" />
-        </div>
-        <div class="col-xs-6" ng-drop="true" ng-drop-success="c.drop(7, $data, $event)">
-          <img src="assets/img/l/{{ c.decks[7] }}.jpg" class="img-rounded img-responsive" />
-        </div>
-      </div>
+    </div>
   </div>
+  <!--<div class="container">-->
+      <!--<div class="col-md-3 clearfix">-->
+        <!--<div class="col-xs-6" ng-drop="true" ng-drop-success="c.setServant(0, $data, $event)">-->
+          <!--<div ng-drag="true" ng-drag-data="c.decks[0]">-->
+            <!--<img src="assets/img/l/{{ c.decks[0] }}.jpg" class="img-rounded img-responsive" />-->
+          <!--</div>-->
+        <!--</div>-->
+        <!--<div class="col-xs-6" ng-drop="true" ng-drop-success="c.setServant(1, $data, $event)">-->
+          <!--<div ng-drag="true" ng-drag-data="c.decks[1]">-->
+            <!--<img src="assets/img/l/{{ c.decks[1] }}.jpg" class="img-rounded img-responsive" />-->
+          <!--</div>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="col-md-3 clearfix">-->
+        <!--<div class="col-xs-6" ng-drop="true" ng-drop-success="c.setServant(2, $data, $event)">-->
+          <!--<img src="assets/img/l/{{ c.decks[2] }}.jpg" class="img-rounded img-responsive" />-->
+        <!--</div>-->
+        <!--<div class="col-xs-6" ng-drop="true" ng-drop-success="c.setServant(3, $data, $event)">-->
+          <!--<img src="assets/img/l/{{ c.decks[3] }}.jpg" class="img-rounded img-responsive" />-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="col-md-3 clearfix">-->
+        <!--<div class="col-xs-6" ng-drop="true" ng-drop-success="c.setServant(4, $data, $event)">-->
+          <!--<img src="assets/img/l/{{ c.decks[4] }}.jpg" class="img-rounded img-responsive" />-->
+        <!--</div>-->
+        <!--<div class="col-xs-6" ng-drop="true" ng-drop-success="c.setServant(5, $data, $event)">-->
+          <!--<img src="assets/img/l/{{ c.decks[5] }}.jpg" class="img-rounded img-responsive" />-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="col-md-3 clearfix">-->
+        <!--<div class="col-xs-6" ng-drop="true" ng-drop-success="c.setServant(6, $data, $event)">-->
+          <!--<img src="assets/img/l/{{ c.decks[6] }}.jpg" class="img-rounded img-responsive" />-->
+        <!--</div>-->
+        <!--<div class="col-xs-6" ng-drop="true" ng-drop-success="c.setServant(7, $data, $event)">-->
+          <!--<img src="assets/img/l/{{ c.decks[7] }}.jpg" class="img-rounded img-responsive" />-->
+        <!--</div>-->
+      <!--</div>-->
+  <!--</div>-->
 </div>
 
 <div id="deck-servants" class="container">
   <div>
-    <div ng-drag="true" ng-drag-data="servant.id" class="col-md-2 col-sm-3 col-xs-6" ng-repeat="servant in c.servants | filter:c.filter | orderBy:c.predicate:c.reverse">
-      <a>
-        <img ng-src="./assets/img/m/{{ servant.id }}.jpg" class="img-rounded img-responsive" />
-      </a>
+    <div class="" ng-repeat="servant in c.servants | filter:c.filter | orderBy:c.predicate:c.reverse"
+         ng-drag="true" ng-drag-data="servant.id" >
+      <img ng-src="./assets/img/m/{{ servant.id }}.jpg" class="img-rounded img-responsive" />
     </div>
   </div>
 </div>

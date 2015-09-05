@@ -15,8 +15,6 @@ module lova {
                 let elementTop = element.offset().top;
                 let dummyWrapper = $('<div>');
                 $(window).on('scroll', () => {
-                    console.log($(window).scrollTop());
-                    console.log(element.offset().top);
                     if ($(window).scrollTop() >= elementTop) {
                         let h = element.height();
                         element.css({
