@@ -50,5 +50,23 @@ var lova;
         return ServantService;
     })();
     lova.ServantService = ServantService;
+    var ScrollService = (function () {
+        function ScrollService($location) {
+            var _this = this;
+            this.$location = $location;
+            this.positions = {};
+            $(window).on('scroll', function () {
+                _this.positions[_this.$location.path()] = $(window).scrollTop();
+            });
+        }
+        ScrollService.prototype.restore = function () {
+            $(window).scrollTop(this.positions[this.$location.path()] || 0);
+        };
+        ScrollService.$inject = [
+            '$location'
+        ];
+        return ScrollService;
+    })();
+    lova.ScrollService = ScrollService;
 })(lova || (lova = {}));
 //# sourceMappingURL=services.js.map

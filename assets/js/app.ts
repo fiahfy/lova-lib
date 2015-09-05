@@ -5,6 +5,7 @@ module lova {
 
     var app = angular.module('app', [
         'ngRoute',
+        'ngTouch',
         'ui',
         'angulartics', 'angulartics.google.analytics'
     ]);
@@ -43,4 +44,5 @@ module lova {
     app.filter('replace', replace);
     app.filter('skillDescription', skillDescription);
     app.service('ServantService', ServantService);
+    app.service('ScrollService', ScrollService);
 }

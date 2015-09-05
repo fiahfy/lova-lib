@@ -4,6 +4,7 @@ var lova;
     'use strict';
     var app = angular.module('app', [
         'ngRoute',
+        'ngTouch',
         'ui',
         'angulartics', 'angulartics.google.analytics'
     ]);
@@ -38,5 +39,6 @@ var lova;
     app.filter('replace', lova.replace);
     app.filter('skillDescription', lova.skillDescription);
     app.service('ServantService', lova.ServantService);
+    app.service('ScrollService', lova.ScrollService);
 })(lova || (lova = {}));
 //# sourceMappingURL=app.js.map

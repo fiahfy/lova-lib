@@ -5,46 +5,13 @@ module lova {
 
     export class MainController {
         public static $inject = [
-            '$scope',
-            '$location',
-            '$timeout'
         ];
 
         public now: Date;
 
-        private scrollPos: any;
-
-        private okSaveScroll: boolean;
-
         constructor(
-            private $scope: ng.IScope,
-            private $location: ng.ILocationService,
-            private $timeout: ng.ITimeoutService
         ) {
             this.now = new Date();
-
-            this.scrollPos = {}; // scroll position of each view
-
-            $(window).on('scroll', () => {
-                if (this.okSaveScroll) { // false between $routeChangeStart and $routeChangeSuccess
-                    this.scrollPos[$location.path()] = $(window).scrollTop();
-                }
-            });
-
-            //$scope.scrollClear = function(path) {
-            //    $scope.scrollPos[path] = 0;
-            //};
-
-            $scope.$on('$routeChangeStart', () => {
-                this.okSaveScroll = false;
-            });
-
-            $scope.$on('$routeChangeSuccess', () => {
-                $timeout(() => { // wait for DOM, then restore scroll position
-                    $(window).scrollTop(this.scrollPos[$location.path()] ? this.scrollPos[$location.path()] : 0);
-                    this.okSaveScroll = true;
-                }, 0);
-            });
         }
     }
 
@@ -52,12 +19,14 @@ module lova {
         view: number;
         race_id: number;
     }
+
     export class ServantListController {
         public static $inject = [
             '$scope',
             '$location',
             '$routeParams',
-            'ServantService'
+            'ServantService',
+            'ScrollService'
         ];
 
         public servants: any[] = [];
@@ -92,7 +61,8 @@ module lova {
             private $scope: ng.IScope,
             private $location: ng.ILocationService,
             private $routeParams: ServantListParams,
-            private servantService: ServantService
+            private servantService: ServantService,
+            private scrollService: ScrollService
         ) {
             this.view = $routeParams.view;
             this.raceId = $routeParams.race_id;
@@ -105,6 +75,7 @@ module lova {
             servantService.loadServants()
                 .then((reason: any) => {
                     this.servants = reason.servants;
+                    this.scrollService.restore();
                 });
 
             $scope.$watch(() => this.raceId, (newValue, oldValue) => {
@@ -137,23 +108,27 @@ module lova {
     interface ServantDetailParams extends ng.route.IRouteParamsService {
         id: number;
     }
+
     export class ServantDetailController {
         public static $inject = [
             '$routeParams',
-            'ServantService'
+            'ServantService',
+            'ScrollService'
         ];
 
         public servant: any[];
 
         constructor(
             private $routeParams: ServantDetailParams,
-            private servantService: ServantService
+            private servantService: ServantService,
+            private scrollService: ScrollService
         ) {
             this.servant = null;
 
             servantService.loadServant($routeParams.id)
                 .then((reason: any) => {
                     this.servant = reason.servant;
+                    this.scrollService.restore();
                 });
         }
     }

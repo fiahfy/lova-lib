@@ -55,4 +55,24 @@ module lova {
             return deferrd.promise;
         }
     }
+
+    export class ScrollService {
+        private positions: any = {};
+
+        public static $inject = [
+            '$location'
+        ];
+
+        constructor(
+            private $location: ng.ILocationService
+        ) {
+            $(window).on('scroll', () => {
+                this.positions[this.$location.path()] = $(window).scrollTop();
+            });
+        }
+
+        public restore(): void {
+            $(window).scrollTop(this.positions[this.$location.path()] || 0);
+        }
+    }
 }

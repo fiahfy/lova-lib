@@ -3,46 +3,21 @@ var lova;
 (function (lova) {
     'use strict';
     var MainController = (function () {
-        function MainController($scope, $location, $timeout) {
-            var _this = this;
-            this.$scope = $scope;
-            this.$location = $location;
-            this.$timeout = $timeout;
+        function MainController() {
             this.now = new Date();
-            this.scrollPos = {}; // scroll position of each view
-            $(window).on('scroll', function () {
-                if (_this.okSaveScroll) {
-                    _this.scrollPos[$location.path()] = $(window).scrollTop();
-                }
-            });
-            //$scope.scrollClear = function(path) {
-            //    $scope.scrollPos[path] = 0;
-            //};
-            $scope.$on('$routeChangeStart', function () {
-                _this.okSaveScroll = false;
-            });
-            $scope.$on('$routeChangeSuccess', function () {
-                $timeout(function () {
-                    $(window).scrollTop(_this.scrollPos[$location.path()] ? _this.scrollPos[$location.path()] : 0);
-                    _this.okSaveScroll = true;
-                }, 0);
-            });
         }
-        MainController.$inject = [
-            '$scope',
-            '$location',
-            '$timeout'
-        ];
+        MainController.$inject = [];
         return MainController;
     })();
     lova.MainController = MainController;
     var ServantListController = (function () {
-        function ServantListController($scope, $location, $routeParams, servantService) {
+        function ServantListController($scope, $location, $routeParams, servantService, scrollService) {
             var _this = this;
             this.$scope = $scope;
             this.$location = $location;
             this.$routeParams = $routeParams;
             this.servantService = servantService;
+            this.scrollService = scrollService;
             this.servants = [];
             this.viewOptions = [
                 { key: null, icon: 'fui-list-columned' },
@@ -68,6 +43,7 @@ var lova;
             servantService.loadServants()
                 .then(function (reason) {
                 _this.servants = reason.servants;
+                _this.scrollService.restore();
             });
             $scope.$watch(function () { return _this.raceId; }, function (newValue, oldValue) {
                 if (typeof newValue === 'undefined' || typeof oldValue === 'undefined' || newValue == oldValue) {
@@ -94,25 +70,29 @@ var lova;
             '$scope',
             '$location',
             '$routeParams',
-            'ServantService'
+            'ServantService',
+            'ScrollService'
         ];
         return ServantListController;
     })();
     lova.ServantListController = ServantListController;
     var ServantDetailController = (function () {
-        function ServantDetailController($routeParams, servantService) {
+        function ServantDetailController($routeParams, servantService, scrollService) {
             var _this = this;
             this.$routeParams = $routeParams;
             this.servantService = servantService;
+            this.scrollService = scrollService;
             this.servant = null;
             servantService.loadServant($routeParams.id)
                 .then(function (reason) {
                 _this.servant = reason.servant;
+                _this.scrollService.restore();
             });
         }
         ServantDetailController.$inject = [
             '$routeParams',
-            'ServantService'
+            'ServantService',
+            'ScrollService'
         ];
         return ServantDetailController;
     })();
