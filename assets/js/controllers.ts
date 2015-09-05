@@ -144,7 +144,7 @@ module lova {
 
         public link: string;
 
-        public decks: number[] = '11110111'.split('').map(Number);
+        public decks: number[] = new Array(8);
 
         public static $inject = [
             '$scope',
@@ -164,7 +164,7 @@ module lova {
             if ($routeParams.hash) {
                 this.link = this.getLinkFromHash($routeParams.hash);
                 try {
-                    this.decks = JSON.parse($window.atob($routeParams.hash));
+                    this.decks = this.decode($routeParams.hash);
                 } catch (e) {}
             }
 
@@ -200,18 +200,22 @@ module lova {
         }
 
         public setServant(index: number, data: any, event: any) {
-            let oldIndex = this.decks.indexOf(data);
-            console.log(data, this.decks);
-            if (oldIndex > -1) {
+            let servantId = data.servantId;
+            let oldIndex = data.index;
+            if (oldIndex !== null) {
                 this.decks[oldIndex] = this.decks[index];
             }
-            this.decks[index] = data;
+            this.decks[index] = servantId;
+            this.updateLink();
+        }
 
-            let hash = this.$window.btoa(JSON.stringify(this.decks));
-            this.link = this.getLinkFromHash(hash);
-            this.$scope.$apply(() => {
-                this.link = this.getLinkFromHash(hash);
-            });
+        public clearServant(index: number) {
+            this.decks[index] = 0;
+            this.updateLink();
+        }
+
+        private updateLink() {
+            this.link = this.getLinkFromHash(this.encode(this.decks));
         }
 
         private getLinkFromHash(hash: string): string {
@@ -220,8 +224,12 @@ module lova {
             return a.protocol + '//' + a.hostname + a.pathname + '#/decks/' + hash + '/';
         }
 
-        public clearServant(index: number) {
-            this.decks[index] = 0;
+        private encode(data: number[]): string {
+            return this.$window.btoa(JSON.stringify(data));
+        }
+
+        private decode(encodedString: string): number[] {
+            return JSON.parse(this.$window.atob(encodedString));
         }
     }
 }

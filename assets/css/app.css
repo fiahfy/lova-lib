@@ -51,6 +51,9 @@ h2 {
 [ng-drag] {
     cursor: move;
 }
+.dragging {
+    position: relative;
+}
 .dragging img {
     opacity: 0.8;
 }

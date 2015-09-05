@@ -106,11 +106,11 @@ var lova;
             this.filter = {};
             this.predicate = ['race_id', 'race_code'];
             this.reverse = false;
-            this.decks = '11110111'.split('').map(Number);
+            this.decks = new Array(8);
             if ($routeParams.hash) {
                 this.link = this.getLinkFromHash($routeParams.hash);
                 try {
-                    this.decks = JSON.parse($window.atob($routeParams.hash));
+                    this.decks = this.decode($routeParams.hash);
                 }
                 catch (e) { }
             }
@@ -144,26 +144,31 @@ var lova;
             });
         }
         DeckController.prototype.setServant = function (index, data, event) {
-            var _this = this;
-            var oldIndex = this.decks.indexOf(data);
-            console.log(data, this.decks);
-            if (oldIndex > -1) {
+            var servantId = data.servantId;
+            var oldIndex = data.index;
+            if (oldIndex !== null) {
                 this.decks[oldIndex] = this.decks[index];
             }
-            this.decks[index] = data;
-            var hash = this.$window.btoa(JSON.stringify(this.decks));
-            this.link = this.getLinkFromHash(hash);
-            this.$scope.$apply(function () {
-                _this.link = _this.getLinkFromHash(hash);
-            });
+            this.decks[index] = servantId;
+            this.updateLink();
+        };
+        DeckController.prototype.clearServant = function (index) {
+            this.decks[index] = 0;
+            this.updateLink();
+        };
+        DeckController.prototype.updateLink = function () {
+            this.link = this.getLinkFromHash(this.encode(this.decks));
         };
         DeckController.prototype.getLinkFromHash = function (hash) {
             var a = this.$window.document.createElement('a');
             a.href = this.$window.location.href;
             return a.protocol + '//' + a.hostname + a.pathname + '#/decks/' + hash + '/';
         };
-        DeckController.prototype.clearServant = function (index) {
-            this.decks[index] = 0;
+        DeckController.prototype.encode = function (data) {
+            return this.$window.btoa(JSON.stringify(data));
+        };
+        DeckController.prototype.decode = function (encodedString) {
+            return JSON.parse(this.$window.atob(encodedString));
         };
         DeckController.$inject = [
             '$scope',
