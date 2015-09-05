@@ -45,6 +45,9 @@ body {
 h2 {
     font-size: 200%;
 }
+h2 > small {
+    margin-left: 15px;
+}
 [ng-click] {
     cursor: pointer;
 }
@@ -143,7 +146,7 @@ dd > div, dd > div > small {
     margin-bottom: 0;
 }
 #deck-wrapper .img-dummy {
-    background-color: lightgray;
+    background-color: #d6d9dc;
 }
 #deck-servants {
     margin-top: 15px;
