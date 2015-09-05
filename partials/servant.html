@@ -1,0 +1,73 @@
+<div class="container">
+  <div class="page-header">
+    <h2>Servant</h2>
+  </div>
+
+  <div class="clearfix">
+    <div class="pull-left">
+      <select class="form-control select select-primary select-block mbl" ui-select2 ng-model="c.raceId">
+        <option ng-repeat="option in c.raceIdOptions" value="{{ option.key }}">{{ option.value }}</option>
+      </select>
+    </div>
+    <div class="btn-toolbar pull-right">
+      <div class="btn-group">
+        <a ng-repeat="option in c.viewOptions" class="btn btn-primary" ng-class="{active: option.key == c.view}" ng-click="c.selectView(option.key)">
+          <span class="{{ option.icon }}"></span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <input type="text" value="{{ c.q }}" placeholder="Search Servant..." class="form-control" ng-model="c.q" ng-change="c.changeQuery()">
+  </div>
+
+  <div ng-if="!c.view">
+    <table class="table table-hover">
+      <thead>
+      <tr>
+        <th class="hidden-xs">#</th>
+        <th class="">Race</th>
+        <th class="">Cost</th>
+        <th class="hidden-xs">Type</th>
+        <th class="">Servant Name</th>
+        <th class="hidden-xs hidden-sm">Range</th>
+        <th class="hidden-xs hidden-sm">HP</th>
+        <th class="hidden-xs hidden-sm">AP</th>
+        <th class="hidden-xs hidden-sm">ATK</th>
+        <th class="hidden-xs hidden-sm">POW</th>
+        <th class="hidden-xs hidden-sm">DEF</th>
+        <th class="hidden-xs hidden-sm">RES</th>
+        <th class="hidden-xs hidden-sm">MS</th>
+        <th class="hidden-xs hidden-sm">AS</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr ng-repeat="servant in c.servants | filter:c.filter | orderBy:c.predicate:c.reverse" ng-click="c.showServant(servant)">
+        <th class="hidden-xs" scope="row">{{ servant.id }}</th>
+        <td class="">{{ servant.race_name }}-{{ servant.race_code|pad:3:'0' }}</td>
+        <td class="">{{ servant.cost }}</td>
+        <td class="hidden-xs">{{ servant.type }}</td>
+        <td class="">{{ servant.name }}</td>
+        <td class="hidden-xs hidden-sm">{{ servant.range }}</td>
+        <td class="hidden-xs hidden-sm">{{ servant.statuses[1].hp }}</td>
+        <td class="hidden-xs hidden-sm">{{ servant.statuses[1].ap }}</td>
+        <td class="hidden-xs hidden-sm">{{ servant.statuses[1].atk }}</td>
+        <td class="hidden-xs hidden-sm">{{ servant.statuses[1].pow }}</td>
+        <td class="hidden-xs hidden-sm">{{ servant.statuses[1].def }}</td>
+        <td class="hidden-xs hidden-sm">{{ servant.statuses[1].res }}</td>
+        <td class="hidden-xs hidden-sm">{{ servant.statuses[1].ms }}</td>
+        <td class="hidden-xs hidden-sm">{{ servant.statuses[1].as|number:2 }}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div ng-if="c.view">
+    <div class="col-md-2 col-sm-3 col-xs-6" ng-repeat="servant in c.servants | filter:c.filter | orderBy:c.predicate:c.reverse">
+      <a ng-click="c.showServant(servant)">
+        <img ng-src="./assets/img/m/{{ servant.id }}.jpg" class="img-rounded img-responsive" />
+      </a>
+    </div>
+  </div>
+</div>

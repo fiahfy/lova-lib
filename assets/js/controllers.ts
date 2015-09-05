@@ -4,10 +4,10 @@ module lova {
     'use strict';
 
     export class MainController {
+        public now: Date;
+
         public static $inject = [
         ];
-
-        public now: Date;
 
         constructor(
         ) {
@@ -21,14 +21,6 @@ module lova {
     }
 
     export class ServantListController {
-        public static $inject = [
-            '$scope',
-            '$location',
-            '$routeParams',
-            'ServantService',
-            'ScrollService'
-        ];
-
         public servants: any[] = [];
 
         public viewOptions: any[] = [
@@ -56,6 +48,14 @@ module lova {
         public predicate: string[] = ['race_id', 'race_code'];
 
         public reverse: boolean = false;
+
+        public static $inject = [
+            '$scope',
+            '$location',
+            '$routeParams',
+            'ServantService',
+            'ScrollService'
+        ];
 
         constructor(
             private $scope: ng.IScope,
@@ -110,13 +110,13 @@ module lova {
     }
 
     export class ServantDetailController {
+        public servant: any[];
+
         public static $inject = [
             '$routeParams',
             'ServantService',
             'ScrollService'
         ];
-
-        public servant: any[];
 
         constructor(
             private $routeParams: ServantDetailParams,
@@ -130,6 +130,67 @@ module lova {
                     this.servant = reason.servant;
                     this.scrollService.restore();
                 });
+        }
+    }
+
+    interface DeckParams extends ng.route.IRouteParamsService {
+        hash: string;
+    }
+
+    export class DeckController {
+        public servants: any[] = [];
+
+        public filter: any = {};
+
+        public predicate: string[] = ['race_id', 'race_code'];
+
+        public reverse: boolean = false;
+
+        public link: string;
+
+        public decks: number[] = '11111111'.split('').map(Number);
+
+        public static $inject = [
+            '$scope',
+            '$window',
+            '$location',
+            '$routeParams',
+            'ServantService'
+        ];
+
+        constructor(
+            private $scope: ng.IScope,
+            private $window: ng.IWindowService,
+            private $location: ng.ILocationService,
+            private $routeParams: DeckParams,
+            private servantService: ServantService
+        ) {
+            if ($routeParams.hash) {
+                this.link = this.getLink($routeParams.hash);
+                this.decks = JSON.parse(decodeURIComponent( escape(window.atob($routeParams.hash))));
+            }
+
+            servantService.loadServants()
+                .then((reason:any) => {
+                    this.servants = reason.servants;
+                });
+        }
+
+        public drop(index: number, data: any, event: any) {
+            this.decks[index] = data;
+        }
+
+        public createLink() {
+            let a = this.$window.document.createElement('a');
+            a.href = this.$window.location.href;
+            //console.log(a.scheme);
+            this.link = this.getLink(window.btoa(unescape(encodeURIComponent(JSON.stringify(this.decks)))));
+        }
+
+        private getLink(hash: string): string {
+            let a = this.$window.document.createElement('a');
+            a.href = this.$window.location.href;
+            return a.protocol + '//' + a.hostname + a.pathname + '#/decks/' + hash;
         }
     }
 }

@@ -97,5 +97,51 @@ var lova;
         return ServantDetailController;
     })();
     lova.ServantDetailController = ServantDetailController;
+    var DeckController = (function () {
+        function DeckController($scope, $window, $location, $routeParams, servantService) {
+            var _this = this;
+            this.$scope = $scope;
+            this.$window = $window;
+            this.$location = $location;
+            this.$routeParams = $routeParams;
+            this.servantService = servantService;
+            this.servants = [];
+            this.filter = {};
+            this.predicate = ['race_id', 'race_code'];
+            this.reverse = false;
+            this.decks = '11111111'.split('').map(Number);
+            if ($routeParams.hash) {
+                this.link = this.getLink($routeParams.hash);
+                this.decks = JSON.parse(decodeURIComponent(escape(window.atob($routeParams.hash))));
+            }
+            servantService.loadServants()
+                .then(function (reason) {
+                _this.servants = reason.servants;
+            });
+        }
+        DeckController.prototype.drop = function (index, data, event) {
+            this.decks[index] = data;
+        };
+        DeckController.prototype.createLink = function () {
+            var a = this.$window.document.createElement('a');
+            a.href = this.$window.location.href;
+            //console.log(a.scheme);
+            this.link = this.getLink(window.btoa(unescape(encodeURIComponent(JSON.stringify(this.decks)))));
+        };
+        DeckController.prototype.getLink = function (hash) {
+            var a = this.$window.document.createElement('a');
+            a.href = this.$window.location.href;
+            return a.protocol + '//' + a.hostname + a.pathname + '#/decks/' + hash;
+        };
+        DeckController.$inject = [
+            '$scope',
+            '$window',
+            '$location',
+            '$routeParams',
+            'ServantService'
+        ];
+        return DeckController;
+    })();
+    lova.DeckController = DeckController;
 })(lova || (lova = {}));
 //# sourceMappingURL=controllers.js.map

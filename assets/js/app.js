@@ -5,24 +5,35 @@ var lova;
     var app = angular.module('app', [
         'ngRoute',
         'ngTouch',
+        'ngDraggable',
         'ui',
         'angulartics', 'angulartics.google.analytics'
     ]);
     var Router = (function () {
         function Router(routerProvider) {
             routerProvider.
-                when('/', {
-                templateUrl: 'partials/list.html',
+                when('/servants/', {
+                templateUrl: 'partials/servant.html',
                 controller: 'ServantListController',
-                controllerAs: 'slc'
+                controllerAs: 'c'
             }).
                 when('/servants/:id/', {
-                templateUrl: 'partials/detail.html',
+                templateUrl: 'partials/servant/detail.html',
                 controller: 'ServantDetailController',
-                controllerAs: 'sdc'
+                controllerAs: 'c'
+            }).
+                when('/decks/', {
+                templateUrl: 'partials/deck.html',
+                controller: 'DeckController',
+                controllerAs: 'c'
+            }).
+                when('/decks/:hash/', {
+                templateUrl: 'partials/deck.html',
+                controller: 'DeckController',
+                controllerAs: 'c'
             }).
                 otherwise({
-                redirectTo: '/'
+                redirectTo: '/servants/'
             });
         }
         Router.$inject = [
@@ -34,6 +45,8 @@ var lova;
     app.controller('MainController', lova.MainController);
     app.controller('ServantListController', lova.ServantListController);
     app.controller('ServantDetailController', lova.ServantDetailController);
+    app.controller('DeckController', lova.DeckController);
+    app.directive('fittable', lova.fittable);
     app.filter('pad', lova.pad);
     app.filter('default', lova.def);
     app.filter('replace', lova.replace);

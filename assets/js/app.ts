@@ -6,6 +6,7 @@ module lova {
     var app = angular.module('app', [
         'ngRoute',
         'ngTouch',
+        'ngDraggable',
         'ui',
         'angulartics', 'angulartics.google.analytics'
     ]);
@@ -19,18 +20,28 @@ module lova {
             routerProvider: ng.route.IRouteProvider
         ) {
             routerProvider.
-                when('/', {
-                    templateUrl: 'partials/list.html',
+                when('/servants/', {
+                    templateUrl: 'partials/servant.html',
                     controller: 'ServantListController',
-                    controllerAs: 'slc'
+                    controllerAs: 'c'
                 }).
                 when('/servants/:id/', {
-                    templateUrl: 'partials/detail.html',
+                    templateUrl: 'partials/servant/detail.html',
                     controller: 'ServantDetailController',
-                    controllerAs: 'sdc'
+                    controllerAs: 'c'
+                }).
+                when('/decks/', {
+                    templateUrl: 'partials/deck.html',
+                    controller: 'DeckController',
+                    controllerAs: 'c'
+                }).
+                when('/decks/:hash/', {
+                    templateUrl: 'partials/deck.html',
+                    controller: 'DeckController',
+                    controllerAs: 'c'
                 }).
                 otherwise({
-                    redirectTo: '/'
+                    redirectTo: '/servants/'
                 });
         }
     }
@@ -39,6 +50,8 @@ module lova {
     app.controller('MainController', MainController);
     app.controller('ServantListController', ServantListController);
     app.controller('ServantDetailController', ServantDetailController);
+    app.controller('DeckController', DeckController);
+    app.directive('fittable', fittable);
     app.filter('pad', pad);
     app.filter('default', def);
     app.filter('replace', replace);

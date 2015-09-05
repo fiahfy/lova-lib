@@ -17,6 +17,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui/0.4.0/angular-ui.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angulartics/0.19.3/angulartics.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angulartics/0.19.3/angulartics-ga.min.js"></script>
+  <script src="./assets/js/lib/ngDraggable.js"></script>
   <script src="./assets/js/controllers.js"></script>
   <script src="./assets/js/directives.js"></script>
   <script src="./assets/js/filters.js"></script>
@@ -24,7 +25,7 @@
   <script src="./assets/js/app.js"></script>
   <script src="./assets/js/analytics.js"></script>
 </head>
-<body ng-controller="MainController as mc">
+<body ng-controller="MainController as c">
 
 <!-- Fixed navbar -->
 <nav class="navbar navbar-default">
@@ -40,20 +41,22 @@
     </div>
     <div id="navbar" class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="#/">Servant</a></li>
-        <li class="disabled"><a href="#/">Deck</a></li>
+        <li class="active"><a href="#/servants/">Servant</a></li>
+        <li class="disabled"><a href="#/" onclick="void(0);">Deck</a></li>
       </ul>
     </div><!--/.nav-collapse -->
   </div>
 </nav>
 
-<div class="container" ng-view></div>
+<ng-view></ng-view>
 
 <footer class="footer">
+  <div>
   <div class="container">
     <p class="text-center text-muted">
-      © 2014-{{ mc.now|date:'yyyy' }} SQUARE ENIX CO., LTD. All Rights Reserved.
+      © 2014-{{ c.now|date:'yyyy' }} SQUARE ENIX CO., LTD. All Rights Reserved.
     </p>
+  </div>
   </div>
 </footer>
 

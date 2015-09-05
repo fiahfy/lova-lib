@@ -1,53 +1,34 @@
-/* Sticky footer styles
--------------------------------------------------- */
 html {
+    overflow-x: hidden;
     position: relative;
     min-height: 100%;
 }
 body {
+    overflow-x: hidden;
+    font-size: 15px;
+    font-family: Lato, "游ゴシック", YuGothic, "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", "メイリオ", Meiryo, sans-serif;
     /* Margin bottom by footer height */
-    margin-bottom: 60px;
+    margin-bottom: 150px;
 }
 .footer {
     position: absolute;
     bottom: 0;
     width: 100%;
     /* Set the fixed height of the footer here */
-    height: 60px;
+    height: 150px;
+    background-color: transparent;
+}
+.footer > div {
+    margin-top:  90px;
     background-color: #f5f5f5;
+}
+.footer > div > .container > .text-muted {
+    margin: 20px 0;
 }
 .footer p {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-}
-
-
-/* Custom page CSS
--------------------------------------------------- */
-/* Not required for template or sticky footer method. */
-
-body > .container {
-    *padding: 60px 15px 0;
-}
-.footer > .container > .text-muted {
-    margin: 20px 0;
-}
-
-/* Custom */
-html {
-    overflow-x: hidden;
-}
-body {
-    overflow-x: hidden;
-    font-size: 15px;
-    font-family: Lato, "游ゴシック", YuGothic, "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", "メイリオ", Meiryo, sans-serif;
-}
-body > .container {
-    margin-bottom: 90px;
-}
-[ng-click] {
-    cursor: pointer;
 }
 .select.form-control {
     height: 41px;
@@ -64,12 +45,16 @@ body > .container {
 h2 {
     font-size: 200%;
 }
+[ng-click] {
+    cursor: pointer;
+}
+[ng-drag] {
+    cursor: move;
+}
 
-/* List */
+/* Servant */
 td:not(:nth-child(5)) {
     white-space: nowrap;
-    /*overflow: hidden;*/
-    /*text-overflow: ellipsis;*/
 }
 [ng-click] img:hover {
     opacity: 0.5;
@@ -83,7 +68,7 @@ td:not(:nth-child(5)) {
     margin-bottom: 20px;
 }
 
-/* Detail */
+/* Servant Detail */
 img {
     margin-bottom: 15px;
 }
@@ -113,4 +98,38 @@ dd > div, dd > div > small {
 }
 #servant-skill, #servant-status {
     margin-top: 30px;
+}
+
+/* Deck */
+#deck-wrapper {
+    width: 100%;
+    z-index: 1;
+    background: #fff;
+    padding: 0;
+}
+#deck-wrapper > div > div > div {
+    *height: 200px;
+}
+#deck-wrapper .col-md-3 {
+    padding: 15px 0;
+}
+#deck-wrapper .col-md-3 div {
+    padding: 0 5px;
+}
+#deck-wrapper .col-md-3:last-child {
+    background-color: lightgray;
+}
+#deck-wrapper img {
+    margin-bottom: 0;
+}
+#deck-servants {
+    margin-top: 15px;
+}
+.input-group-btn .btn {
+    color: #fff;
+    background-color: #1abc9c;
+    border-color: #1abc9c;
+}
+#deck-link {
+    margin-bottom: 15px;
 }
