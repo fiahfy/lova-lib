@@ -328,7 +328,7 @@ angular.module("ngDraggable", [])
 
           // don't listen to drop events if this is the element being dragged
           // only update the styles and return
-          if (!_dropEnabled || _myid === obj.uid) {
+          if (!_dropEnabled /*|| _myid === obj.uid*/) {
             updateDragStyles(false, obj.element);
             return;
           }
