@@ -10,19 +10,33 @@ body {
     /* Margin bottom by footer height */
     margin-bottom: 150px;
 }
+h2 {
+    font-size: 200%;
+}
+h2>small {
+    margin-left: 15px;
+}
+img:hover {
+    opacity: 0.5;
+    transition: 0.2s;
+}
+img {
+    opacity: 1;
+    transition: 0.2s;
+}
 .footer {
     position: absolute;
     bottom: 0;
     width: 100%;
+    background-color: transparent;
     /* Set the fixed height of the footer here */
     height: 150px;
-    background-color: transparent;
 }
-.footer > div {
-    margin-top:  90px;
+.footer>div {
+    margin-top: 90px;
     background-color: #f5f5f5;
 }
-.footer > div > .container > .text-muted {
+.footer>div>.container>.text-muted {
     margin: 20px 0;
 }
 .footer p {
@@ -30,23 +44,20 @@ body {
     overflow: hidden;
     text-overflow: ellipsis;
 }
-.select.form-control {
-    height: 41px;
-}
-.select2-results {
-    max-height: none;
-}
 .navbar-brand {
     font-size: 22px;
 }
 .navbar-nav>li>a {
     font-size: 15px;
 }
-h2 {
-    font-size: 200%;
+.select.form-control {
+    height: 41px;
 }
-h2 > small {
-    margin-left: 15px;
+.select2-results {
+    max-height: none;
+}
+.dragging {
+    position: relative;
 }
 [ng-click] {
     cursor: pointer;
@@ -54,110 +65,120 @@ h2 > small {
 [ng-drag] {
     cursor: move;
 }
-.dragging {
-    position: relative;
-}
-.dragging img {
-    opacity: 0.8;
-}
 
 /* Servant */
-td:not(:nth-child(5)) {
+#servant td:not(:nth-child(5)) {
     white-space: nowrap;
 }
-[ng-click] img:hover {
-    opacity: 0.5;
-    transition: 0.2s;
-}
-[ng-click] img {
-    opacity: 1;
-    transition: 0.2s;
-}
-.btn-toolbar {
+#servant .btn-toolbar {
     margin-bottom: 20px;
+}
+#servant div>div {
+    padding-bottom: 15px;
 }
 
 /* Servant Detail */
-img {
-    margin-bottom: 15px;
-}
-.table > thead > tr > th {
+#servant-detail .table>thead>tr>th {
     vertical-align: top;
 }
-.table {
+#servant-detail .table {
     margin-bottom: 0;
 }
-dl {
-    margin-bottom: 5px;
+#servant-detail dl {
+    margin: 5px 0 0;
 }
-dt {
+#servant-detail dt {
     font-size: 90%;
     font-weight: 400;
-    line-height: 30px;
+    line-height: 25px;
     color: #c0c1c2;
 }
-dt > b {
+#servant-detail dt>b {
     font-size: 130%;
 }
-dd > div, dd > div > small {
+#servant-detail dd>div,
+#servant-detail dd>div>small {
     line-height: 20px;
 }
-.well {
+#servant-detail dd>.well {
     margin-bottom: 10px;
 }
-#servant-skill, #servant-status {
+#servant-detail-logo {
+    margin-top: 5px;
+}
+#servant-detail-status,
+#servant-detail-skill {
     margin-top: 30px;
 }
 
 /* Deck */
-#deck-link {
-    margin-bottom: 15px;
+#deck .input-group-btn .btn {
+    color: #fff;
+    background-color: #1abc9c;
+    border-color: #1abc9c;
 }
-#deck-wrapper {
+#deck-container {
     width: 100%;
     z-index: 1;
     background: #fff;
-    padding: 0;
+    padding: 15px 0;
+    border-bottom: 1px solid #e7e9ec;
 }
-#deck-wrapper .container > div {
+#deck-container.fitted {
+    position: fixed;
+    top: 0;
+    box-shadow: 0 2px 2px 0 #e7e9ec;
+    border-bottom: 0;
+}
+#deck-container .container>div {
     width: 12.5%;
     float: left;
-    padding: 15px 3px;
+    padding: 1px 3px;
+    border-color: #1abc9c;
+    border-style: solid;
+    border-width: 2px 0;
 }
-/*#deck-wrapper .container > div:not(:first-child) {*/
-    /*padding-left: 5px;*/
-/*}*/
-/*#deck-wrapper .container > div:not(:last-child) {*/
-    /*padding-right: 5px;*/
-/*}*/
-/*#deck-wrapper > div > div > div {*/
-    /**height: 200px;*/
-/*}*/
-/*#deck-wrapper .col-md-3 {*/
-    /*padding: 15px 0;*/
-/*}*/
-/*#deck-wrapper .col-md-3 > div {*/
-    /*padding: 0 5px;*/
-/*}*/
-/*#deck-wrapper .col-md-3:last-child {*/
-    /*background-color: lightgray;*/
-/*}*/
-#deck-wrapper img {
+#deck-container .container>div:nth-child(1) {
+    border-left-width: 2px;
+    padding: 1px 3px 1px 1px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+#deck-container .container>div:nth-child(6) {
+    border-right-width: 2px;
+    padding: 1px 1px 1px 3px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+#deck-container .container>div:nth-child(7),
+#deck-container .container>div:nth-child(8) {
+    border-color: transparent;
+}
+#deck-container img {
     margin-bottom: 0;
 }
-#deck-wrapper .img-dummy {
+#deck-container .img-dummy {
     background-color: #d6d9dc;
 }
 #deck-servants {
     margin-top: 15px;
 }
-#deck-servants > div > div {
+#deck-servants>div>div {
     width: 12.5%;
     float: left;
-    padding: 0 3px;
+    padding: 3px 3px;
+    position: relative;
 }
-.input-group-btn .btn {
-    color: #fff;
-    background-color: #1abc9c;
-    border-color: #1abc9c;
+#deck-servants>div>div.setted>img {
+    opacity: 0.5;
+}
+#deck-servants>div>div.setted:after {
+    *content: "Setted";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 0 7px;
 }
