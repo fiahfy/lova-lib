@@ -4,24 +4,24 @@
   </div>
 
   <div class="row">
-    <div class="col-md-4"></div>
-    <div class="col-md-8">
+    <div class="col-lg-4 col-md-5 col-sm-6"></div>
+    <div class="col-lg-8 col-md-7 col-sm-6">
       <div class="row">
-        <dl class="col-md-6 col-sm-0 row"></dl>
-        <dl class="col-md-6 col-sm-12 row">
+        <dl class="col-sm-6 col-sm-0 row"></dl>
+        <dl class="col-sm-6 col-sm-12 row">
           <dt class="col-xs-3">Updated</dt>
           <dd class="col-xs-9">{{ c.servant.date|date:'yyyy-MM-dd' }}</dd>
         </dl>
       </div>
     </div>
-    <div class="col-md-4">
-      <div class="col-md-12" id="servant-detail-logo">
+    <div class="col-lg-4 col-md-5 col-sm-6">
+      <div class="col-sm-12" id="servant-detail-logo">
         <a href="./assets/img/l/{{ c.servant.id }}.jpg" target="_self">
           <img src="./assets/img/l/{{ c.servant.id }}.jpg" class="center-block img-rounded img-responsive" />
         </a>
       </div>
     </div>
-    <div class="col-md-8">
+    <div class="col-lg-8 col-md-7 col-sm-6">
       <div class="row">
         <dl class="col-sm-6 row">
           <dt class="col-xs-3">Race</dt>
@@ -43,8 +43,8 @@
         </dl>
       </div>
       <dl class="row">
-        <dt class="col-md-12">Oral Tradition</dt>
-        <dd class="col-md-12">
+        <dt class="col-sm-12">Oral Tradition</dt>
+        <dd class="col-sm-12">
           <div class="well well-sm">
             <small>{{ c.servant.oral_tradition }}</small>
           </div>
@@ -64,7 +64,7 @@
         <dl>
           <dt><b>Status</b></dt>
           <dd>
-            <table class="table table-hover visible-md visible-lg">
+            <table class="table visible-md visible-lg">
               <thead>
               <tr>
                 <th class="">Level</th>
@@ -92,7 +92,7 @@
               </tr>
               </tbody>
             </table>
-            <table class="table table-hover hidden-md hidden-lg">
+            <table class="table hidden-md hidden-lg">
               <thead>
               <tr>
                 <th rowspan="2">Level</th>
@@ -131,7 +131,7 @@
   </div>
 
   <div id="servant-detail-skill" class="row">
-    <dl class="col-md-6">
+    <dl class="col-sm-6">
       <dt><b>Active Skill</b></dt>
       <dd ng-if="c.servant.skills.active">
         <dl class="row">
@@ -147,8 +147,8 @@
           <dd class="col-xs-9">{{ c.servant.skills.active.effect|replace:',':'・'|default:'-' }}</dd>
         </dl>
         <dl class="row">
-          <dt class="col-md-12">Description</dt>
-          <dd class="col-md-12">
+          <dt class="col-sm-12">Description</dt>
+          <dd class="col-sm-12">
             <div class="well well-sm">
               <small ng-bind-html="c.servant.skills.active|skillDescription"></small>
             </div>
@@ -161,7 +161,7 @@
         </div>
       </dd>
     </dl>
-    <dl class="col-md-6">
+    <dl class="col-sm-6">
       <dt><b>Passive Skill</b></dt>
       <dd ng-if="c.servant.skills.passive">
         <dl class="row">
@@ -177,8 +177,8 @@
           <dd class="col-xs-9">{{ c.servant.skills.passive.effect|replace:',':'・'|default:'-' }}</dd>
         </dl>
         <dl class="row">
-          <dt class="col-md-12">Description</dt>
-          <dd class="col-md-12">
+          <dt class="col-sm-12">Description</dt>
+          <dd class="col-sm-12">
             <div class="well well-sm">
               <small ng-bind-html="c.servant.skills.passive|skillDescription"></small>
             </div>
