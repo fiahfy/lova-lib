@@ -134,9 +134,6 @@ var lova;
                     });
                 });
                 button
-                    .on('mouseout', function () {
-                    button.tooltip('hide');
-                })
                     .tooltip({
                     trigger: 'manual',
                     container: 'body'

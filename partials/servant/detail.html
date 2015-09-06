@@ -1,9 +1,9 @@
-<div class="container">
+<div class="container" id="servant-detail">
   <div class="page-header">
     <h2>{{ c.servant.name }}</h2>
   </div>
 
-  <div id="servant" class="row">
+  <div class="row">
     <div class="col-md-4"></div>
     <div class="col-md-8">
       <div class="row">
@@ -15,9 +15,11 @@
       </div>
     </div>
     <div class="col-md-4">
-      <a href="./assets/img/l/{{ c.servant.id }}.jpg" target="_self">
-        <img src="./assets/img/l/{{ c.servant.id }}.jpg" class="center-block img-rounded img-responsive" />
-      </a>
+      <div class="col-md-12" id="servant-detail-logo">
+        <a href="./assets/img/l/{{ c.servant.id }}.jpg" target="_self">
+          <img src="./assets/img/l/{{ c.servant.id }}.jpg" class="center-block img-rounded img-responsive" />
+        </a>
+      </div>
     </div>
     <div class="col-md-8">
       <div class="row">
@@ -58,75 +60,77 @@
           <dd class="col-xs-9">{{ c.servant.cv }}</dd>
         </dl>
       </div>
-      <dl id="servant-status">
-        <dt><b>Status</b></dt>
-        <dd>
-          <table class="table table-hover visible-md visible-lg">
-            <thead>
-            <tr>
-              <th class="">Level</th>
-              <th class="">HP</th>
-              <th class="">AP</th>
-              <th class="">ATK</th>
-              <th class="">POW</th>
-              <th class="">DEF</th>
-              <th class="">RES</th>
-              <th class="">MS</th>
-              <th class="">AS</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr ng-repeat="status in c.servant.statuses">
-              <td class="">{{ status.level }}</td>
-              <td class="">{{ status.hp }}</td>
-              <td class="">{{ status.ap }}</td>
-              <td class="">{{ status.atk }}</td>
-              <td class="">{{ status.pow }}</td>
-              <td class="">{{ status.def }}</td>
-              <td class="">{{ status.res }}</td>
-              <td class="">{{ status.ms }}</td>
-              <td class="">{{ status.as|number:2 }}</td>
-            </tr>
-            </tbody>
-          </table>
-          <table class="table table-hover hidden-md hidden-lg">
-            <thead>
-            <tr>
-              <th rowspan="2">Level</th>
-              <th class="">HP</th>
-              <th class="">ATK</th>
-              <th class="">DEF</th>
-              <th class="">MS</th>
-            </tr>
-            <tr>
-              <th class="">AP</th>
-              <th class="">POW</th>
-              <th class="">RES</th>
-              <th class="">AS</th>
-            </tr>
-            </thead>
-            <tbody ng-repeat="status in c.servant.statuses">
-            <tr>
-              <td rowspan="2">{{ status.level }}</td>
-              <td class="">{{ status.hp }}</td>
-              <td class="">{{ status.atk }}</td>
-              <td class="">{{ status.def }}</td>
-              <td class="">{{ status.ms }}</td>
-            </tr>
-            <tr>
-              <td class="">{{ status.ap }}</td>
-              <td class="">{{ status.pow }}</td>
-              <td class="">{{ status.res }}</td>
-              <td class="">{{ status.as|number:2 }}</td>
-            </tr>
-            </tbody>
-          </table>
-        </dd>
-      </dl>
+      <div id="servant-detail-status">
+        <dl>
+          <dt><b>Status</b></dt>
+          <dd>
+            <table class="table table-hover visible-md visible-lg">
+              <thead>
+              <tr>
+                <th class="">Level</th>
+                <th class="">HP</th>
+                <th class="">AP</th>
+                <th class="">ATK</th>
+                <th class="">POW</th>
+                <th class="">DEF</th>
+                <th class="">RES</th>
+                <th class="">MS</th>
+                <th class="">AS</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr ng-repeat="status in c.servant.statuses">
+                <td class="">{{ status.level }}</td>
+                <td class="">{{ status.hp }}</td>
+                <td class="">{{ status.ap }}</td>
+                <td class="">{{ status.atk }}</td>
+                <td class="">{{ status.pow }}</td>
+                <td class="">{{ status.def }}</td>
+                <td class="">{{ status.res }}</td>
+                <td class="">{{ status.ms }}</td>
+                <td class="">{{ status.as|number:2 }}</td>
+              </tr>
+              </tbody>
+            </table>
+            <table class="table table-hover hidden-md hidden-lg">
+              <thead>
+              <tr>
+                <th rowspan="2">Level</th>
+                <th class="">HP</th>
+                <th class="">ATK</th>
+                <th class="">DEF</th>
+                <th class="">MS</th>
+              </tr>
+              <tr>
+                <th class="">AP</th>
+                <th class="">POW</th>
+                <th class="">RES</th>
+                <th class="">AS</th>
+              </tr>
+              </thead>
+              <tbody ng-repeat="status in c.servant.statuses">
+              <tr>
+                <td rowspan="2">{{ status.level }}</td>
+                <td class="">{{ status.hp }}</td>
+                <td class="">{{ status.atk }}</td>
+                <td class="">{{ status.def }}</td>
+                <td class="">{{ status.ms }}</td>
+              </tr>
+              <tr>
+                <td class="">{{ status.ap }}</td>
+                <td class="">{{ status.pow }}</td>
+                <td class="">{{ status.res }}</td>
+                <td class="">{{ status.as|number:2 }}</td>
+              </tr>
+              </tbody>
+            </table>
+          </dd>
+        </dl>
+      </div>
     </div>
   </div>
 
-  <div id="servant-skill" class="row">
+  <div id="servant-detail-skill" class="row">
     <dl class="col-md-6">
       <dt><b>Active Skill</b></dt>
       <dd ng-if="c.servant.skills.active">

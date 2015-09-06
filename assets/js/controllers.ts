@@ -189,9 +189,6 @@ module lova {
                     });
                 });
                 button
-                    .on('mouseout', () => {
-                        button.tooltip('hide');
-                    })
                     .tooltip({
                         trigger: 'manual',
                         container: 'body'
