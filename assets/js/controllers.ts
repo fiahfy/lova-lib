@@ -161,16 +161,16 @@ module lova {
             private $routeParams: DeckParams,
             private servantService: ServantService
         ) {
-            if ($routeParams.hash) {
-                this.link = this.getLinkFromHash($routeParams.hash);
-                try {
-                    this.decks = this.decode($routeParams.hash);
-                } catch (e) {}
-            }
+            try {
+                this.decks = this.decode($routeParams.hash);
+            } catch (e) {}
+
+            this.link = this.getLinkFromHash(this.encode(this.decks));
 
             servantService.loadServants()
                 .then((reason:any) => {
                     this.servants = reason.servants;
+                    this.updateServants();
                 });
 
             angular.element(document).ready(function() {
@@ -203,12 +203,20 @@ module lova {
                 this.decks[oldIndex] = this.decks[index];
             }
             this.decks[index] = servantId;
+            this.updateServants();
             this.updateLink();
         }
 
         public clearServant(index: number) {
             this.decks[index] = 0;
+            this.updateServants();
             this.updateLink();
+        }
+
+        private updateServants() {
+            this.servants.forEach((servant) => {
+                servant.setted = this.decks.indexOf(servant.id) > -1;
+            });
         }
 
         private updateLink() {

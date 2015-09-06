@@ -107,16 +107,15 @@ var lova;
             this.predicate = ['race_id', 'race_code'];
             this.reverse = false;
             this.decks = new Array(8);
-            if ($routeParams.hash) {
-                this.link = this.getLinkFromHash($routeParams.hash);
-                try {
-                    this.decks = this.decode($routeParams.hash);
-                }
-                catch (e) { }
+            try {
+                this.decks = this.decode($routeParams.hash);
             }
+            catch (e) { }
+            this.link = this.getLinkFromHash(this.encode(this.decks));
             servantService.loadServants()
                 .then(function (reason) {
                 _this.servants = reason.servants;
+                _this.updateServants();
             });
             angular.element(document).ready(function () {
                 var button = angular.element('.copy-clipboard');
@@ -147,11 +146,19 @@ var lova;
                 this.decks[oldIndex] = this.decks[index];
             }
             this.decks[index] = servantId;
+            this.updateServants();
             this.updateLink();
         };
         DeckController.prototype.clearServant = function (index) {
             this.decks[index] = 0;
+            this.updateServants();
             this.updateLink();
+        };
+        DeckController.prototype.updateServants = function () {
+            var _this = this;
+            this.servants.forEach(function (servant) {
+                servant.setted = _this.decks.indexOf(servant.id) > -1;
+            });
         };
         DeckController.prototype.updateLink = function () {
             this.link = this.getLinkFromHash(this.encode(this.decks));

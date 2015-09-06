@@ -1,9 +1,9 @@
-<div class="container"　ng-drop="true" ng-drop-success="c.setServant(0, $data, $event)">
+<div class="container" id="deck">
   <div class="page-header">
     <h2>Deck<small>under development</small></h2>
   </div>
 
-  <div id="deck-link">
+  <div>
     <div class="input-group">
       <input type="text" class="form-control" placeholder="" ng-model="c.link">
       <span class="input-group-btn">
@@ -15,7 +15,7 @@
   </div>
 </div>
 
-<div id="deck-wrapper" fittable>
+<div id="deck-container" fittable="fitted">
   <div class="container">
     <div class="" ng-drop="true" ng-drop-success="c.setServant($index, $data, $event)" ng-repeat="servantId in c.decks track by $index">
       <div ng-drag="servantId" ng-drag-data="{index: $index, servantId: servantId}" ng-drag-stop="c.clearServant($index)">
@@ -28,7 +28,7 @@
 
 <div id="deck-servants" class="container">
   <div>
-    <div class="" ng-repeat="servant in c.servants | filter:c.filter | orderBy:c.predicate:c.reverse"
+    <div ng-class="{'setted': servant.setted}" ng-repeat="servant in c.servants | filter:c.filter | orderBy:c.predicate:c.reverse"
          ng-drag="true" ng-drag-data="{index: null, servantId: servant.id}">
       <img ng-src="./assets/img/m/{{ servant.id }}.jpg" class="img-rounded img-responsive" />
     </div>

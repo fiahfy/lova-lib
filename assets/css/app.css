@@ -112,36 +112,73 @@ img {
 }
 
 /* Deck */
-#deck-link {
-    margin-bottom: 15px;
+#deck .input-group-btn .btn {
+    color: #fff;
+    background-color: #1abc9c;
+    border-color: #1abc9c;
 }
-#deck-wrapper {
+#deck-container {
     width: 100%;
     z-index: 1;
     background: #fff;
-    padding: 0;
+    padding: 15px 0;
+    border-bottom: 1px solid #e7e9ec;
 }
-#deck-wrapper .container > div {
+#deck-container.fitted {
+    position: fixed;
+    top: 0;
+    box-shadow: 0 2px 2px 0 #e7e9ec;
+    border-bottom: 0;
+}
+#deck-container .container>div {
     width: 12.5%;
     float: left;
-    padding: 15px 3px;
+    padding: 1px 3px;
+    border-color: #1abc9c;
+    border-style: solid;
+    border-width: 2px 0;
 }
-#deck-wrapper img {
+#deck-container .container>div:nth-child(1) {
+    border-left-width: 2px;
+    padding: 1px 3px 1px 1px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+#deck-container .container>div:nth-child(6) {
+    border-right-width: 2px;
+    padding: 1px 1px 1px 3px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+#deck-container .container>div:nth-child(7),
+#deck-container .container>div:nth-child(8) {
+    border-color: transparent;
+}
+#deck-container img {
     margin-bottom: 0;
 }
-#deck-wrapper .img-dummy {
+#deck-container .img-dummy {
     background-color: #d6d9dc;
 }
 #deck-servants {
     margin-top: 15px;
 }
-#deck-servants > div > div {
+#deck-servants>div>div {
     width: 12.5%;
     float: left;
-    padding: 0 3px;
+    padding: 3px 3px;
+    position: relative;
 }
-.input-group-btn .btn {
-    color: #fff;
-    background-color: #1abc9c;
-    border-color: #1abc9c;
+#deck-servants>div>div.setted>img {
+    opacity: 0.5;
+}
+#deck-servants>div>div.setted:after {
+    *content: "Setted";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 0 7px;
 }
