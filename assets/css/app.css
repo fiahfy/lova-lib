@@ -73,8 +73,9 @@ img {
 #servant .btn-toolbar {
     margin-bottom: 20px;
 }
-#servant div>div {
-    padding-bottom: 15px;
+#servant-thumbnails div {
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 /* Servant Detail */
@@ -166,7 +167,7 @@ img {
 #deck-servants>div>div {
     width: 12.5%;
     float: left;
-    padding: 3px 3px;
+    padding: 3px;
     position: relative;
 }
 #deck-servants>div>div.setted>img {
