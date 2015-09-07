@@ -144,7 +144,9 @@ module lova {
 
         public link: string;
 
-        public decks: number[] = new Array(8);
+        public deckIds: number[] = new Array(8);
+
+        public decks: number[];
 
         public static $inject = [
             '$scope',
@@ -162,15 +164,15 @@ module lova {
             private servantService: ServantService
         ) {
             try {
-                this.decks = this.decode($routeParams.hash);
+                this.deckIds = this.decode($routeParams.hash);
             } catch (e) {}
-
-            this.link = this.getLinkFromHash(this.encode(this.decks));
 
             servantService.loadServants()
                 .then((reason:any) => {
                     this.servants = reason.servants;
                     this.updateServants();
+                    this.updateDecks();
+                    this.updateLink();
                 });
 
             angular.element(document).ready(function() {
@@ -200,27 +202,41 @@ module lova {
             let servantId = data.servantId;
             let oldIndex = data.index;
             if (oldIndex !== null) {
-                this.decks[oldIndex] = this.decks[index];
+                this.deckIds[oldIndex] = this.deckIds[index];
             }
-            this.decks[index] = servantId;
+            this.deckIds[index] = servantId;
             this.updateServants();
+            this.updateDecks();
             this.updateLink();
         }
 
         public clearServant(index: number) {
-            this.decks[index] = 0;
+            this.deckIds[index] = 0;
             this.updateServants();
+            this.updateDecks();
             this.updateLink();
         }
 
         private updateServants() {
             this.servants.forEach((servant) => {
-                servant.setted = this.decks.indexOf(servant.id) > -1;
+                servant.setted = this.deckIds.indexOf(servant.id) > -1;
+            });
+        }
+
+        private updateDecks() {
+            this.decks = this.deckIds.map((deckId) => {
+                for (let i = 0; i < this.servants.length; i++) {
+                    let servant = this.servants[i];
+                    if (deckId == servant.id) {
+                        return servant;
+                    }
+                }
+                return null;
             });
         }
 
         private updateLink() {
-            this.link = this.getLinkFromHash(this.encode(this.decks));
+            this.link = this.getLinkFromHash(this.encode(this.deckIds));
         }
 
         private getLinkFromHash(hash: string): string {

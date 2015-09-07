@@ -12,7 +12,7 @@ module lova {
                 let dummyWrapper = $('<div>');
                 $(window).on('scroll', () => {
                     if ($(window).scrollTop() >= elementTop) {
-                        let h = element.height();
+                        let h = element.outerHeight();
                         element.addClass(cls);
                         element.after(dummyWrapper.height(h));
                         return;
