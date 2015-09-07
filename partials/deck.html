@@ -16,8 +16,28 @@
 </div>
 
 <div id="deck-container" fittable="fitted">
-  <div class="container">
+  <div class="container hidden-xs">
     <div class="deck" ng-repeat="($index, deck) in c.decks track by $index"
+         ng-class="'race-' + deck.race_id"
+         ng-drop="true" ng-drop-success="c.setServant($index, $data, $event)">
+      <div ng-drag="deck" ng-drag-data="{index: $index, servantId: deck.id}" ng-drag-stop="c.clearServant($index)">
+        <img ng-if="deck" ng-src="assets/img/m/{{ deck.id }}.jpg" class="img-rounded img-responsive" />
+        <span ng-if="deck">Cost {{ deck.cost }}</span>
+        <img ng-if="!deck" ng-src="assets/img/m/dummy.png" class="img-rounded img-responsive img-dummy" />
+      </div>
+    </div>
+  </div>
+  <div class="container visible-xs">
+    <div class="deck" ng-repeat="($index, deck) in c.decks track by $index" ng-if="[0, 1, 2, 6].indexOf($index) > -1"
+         ng-class="'race-' + deck.race_id"
+         ng-drop="true" ng-drop-success="c.setServant($index, $data, $event)">
+      <div ng-drag="deck" ng-drag-data="{index: $index, servantId: deck.id}" ng-drag-stop="c.clearServant($index)">
+        <img ng-if="deck" ng-src="assets/img/m/{{ deck.id }}.jpg" class="img-rounded img-responsive" />
+        <span ng-if="deck">Cost {{ deck.cost }}</span>
+        <img ng-if="!deck" ng-src="assets/img/m/dummy.png" class="img-rounded img-responsive img-dummy" />
+      </div>
+    </div>
+    <div class="deck" ng-repeat="($index, deck) in c.decks track by $index" ng-if="[3, 4, 5, 7].indexOf($index) > -1"
          ng-class="'race-' + deck.race_id"
          ng-drop="true" ng-drop-success="c.setServant($index, $data, $event)">
       <div ng-drag="deck" ng-drag-data="{index: $index, servantId: deck.id}" ng-drag-stop="c.clearServant($index)">
