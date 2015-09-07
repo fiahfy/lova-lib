@@ -131,49 +131,38 @@ img {
     box-shadow: 0 2px 2px 0 #e7e9ec;
     border-bottom: 0;
 }
-#deck-container .container>div {
-    width: 12.5%;
-    float: left;
+#deck-container .deck {
     padding: 1px 3px;
     border-color: #1abc9c;
     border-style: solid;
     border-width: 2px 0;
 }
-#deck-container .container>div:nth-child(1) {
+#deck-container .deck:nth-child(1) {
     border-left-width: 2px;
     padding: 1px 3px 1px 1px;
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
 }
-#deck-container .container>div:nth-child(6) {
+#deck-container .deck:nth-child(6) {
     border-right-width: 2px;
     padding: 1px 1px 1px 3px;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
 }
-#deck-container .container>div:nth-child(7),
-#deck-container .container>div:nth-child(8) {
+#deck-container .deck:nth-child(7),
+#deck-container .deck:nth-child(8) {
     border-color: transparent;
 }
-#deck-container img {
-    margin-bottom: 0;
-}
-#deck-container .img-dummy {
+#deck-container .deck>div>img.img-dummy {
     background-color: #d6d9dc;
 }
 #deck-servants {
     margin-top: 15px;
 }
-#deck-servants>div>div {
-    width: 12.5%;
-    float: left;
-    padding: 3px;
-    position: relative;
-}
-#deck-servants>div>div.setted>img {
+#deck-servants .deck.setted>div>img {
     opacity: 0.5;
 }
-#deck-servants>div>div.setted:after {
+#deck-servants .deck.setted>div:after {
     *content: "Setted";
     display: block;
     position: absolute;
@@ -182,4 +171,48 @@ img {
     right: 0;
     bottom: 0;
     padding: 0 7px;
+}
+
+.deck {
+    width: 12.5%;
+    float: left;
+    padding: 3px;
+    position: relative;
+}
+.deck>div {
+    position: relative;
+}
+.deck>div>img {
+    border: 2px solid transparent;
+}
+.deck>div>span {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    color: #fff;
+    text-align: center;
+    text-shadow: 0 0 3px #000;
+    font-style: italic;
+    font-family: "Tamil MN", sans-serif;
+}
+.deck.race-1>div>img {
+    border-color: #a26821;
+    box-shadow: 0 0 2px #a26821;
+}
+.deck.race-2>div>img {
+    border-color: #9d9075;
+    box-shadow: 0 0 2px #9d9075;
+}
+.deck.race-3>div>img {
+    border-color: #554e86;
+    box-shadow: 0 0 2px #554e86;
+}
+.deck.race-4>div>img {
+    border-color: #558c9e;
+    box-shadow: 0 0 2px #558c9e;
+}
+.deck.race-5>div>img {
+    border-color: #7f4a83;
+    box-shadow: 0 0 2px #7f4a83;
 }

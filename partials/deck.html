@@ -9,7 +9,7 @@
       <span class="input-group-btn">
         <button class="btn btn-primary copy-clipboard"
                 data-toggle="tooltip" data-placement="bottom"
-                title="" data-clipboard-text="{{ c.link }}">Copy</button>
+                data-clipboard-text="{{ c.link }}">Copy</button>
       </span>
     </div>
   </div>
@@ -17,10 +17,13 @@
 
 <div id="deck-container" fittable="fitted">
   <div class="container">
-    <div class="" ng-drop="true" ng-drop-success="c.setServant($index, $data, $event)" ng-repeat="servantId in c.decks track by $index">
-      <div ng-drag="servantId" ng-drag-data="{index: $index, servantId: servantId}" ng-drag-stop="c.clearServant($index)">
-        <img ng-if="servantId" ng-src="assets/img/m/{{ servantId }}.jpg" class="img-rounded img-responsive" />
-        <img ng-if="!servantId" ng-src="assets/img/m/dummy.png" class="img-rounded img-responsive img-dummy" />
+    <div class="deck" ng-repeat="($index, deck) in c.decks track by $index"
+         ng-class="'race-' + deck.race_id"
+         ng-drop="true" ng-drop-success="c.setServant($index, $data, $event)">
+      <div ng-drag="deck" ng-drag-data="{index: $index, servantId: deck.id}" ng-drag-stop="c.clearServant($index)">
+        <img ng-if="deck" ng-src="assets/img/m/{{ deck.id }}.jpg" class="img-rounded img-responsive" />
+        <span ng-if="deck">Cost {{ deck.cost }}</span>
+        <img ng-if="!deck" ng-src="assets/img/m/dummy.png" class="img-rounded img-responsive img-dummy" />
       </div>
     </div>
   </div>
@@ -28,9 +31,12 @@
 
 <div id="deck-servants" class="container">
   <div>
-    <div ng-class="{'setted': servant.setted}" ng-repeat="servant in c.servants | filter:c.filter | orderBy:c.predicate:c.reverse"
-         ng-drag="true" ng-drag-data="{index: null, servantId: servant.id}">
-      <img ng-src="./assets/img/m/{{ servant.id }}.jpg" class="img-rounded img-responsive" />
+    <div class="deck" ng-repeat="servant in c.servants | filter:c.filter | orderBy:c.predicate:c.reverse"
+         ng-class="['race-' + servant.race_id, {'setted': servant.setted}]">
+      <div ng-drag="true" ng-drag-data="{index: null, servantId: servant.id}">
+        <img ng-src="./assets/img/m/{{ servant.id }}.jpg" class="img-rounded img-responsive" />
+        <span>Cost {{ servant.cost }}</span>
+      </div>
     </div>
   </div>
 </div>

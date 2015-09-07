@@ -11,7 +11,7 @@ var lova;
                 var dummyWrapper = $('<div>');
                 $(window).on('scroll', function () {
                     if ($(window).scrollTop() >= elementTop) {
-                        var h = element.height();
+                        var h = element.outerHeight();
                         element.addClass(cls);
                         element.after(dummyWrapper.height(h));
                         return;
