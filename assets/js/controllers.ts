@@ -51,6 +51,7 @@ module lova {
 
         public static $inject = [
             '$scope',
+            '$window',
             '$location',
             '$routeParams',
             'ServantService',
@@ -59,6 +60,7 @@ module lova {
 
         constructor(
             private $scope: ng.IScope,
+            private $window: ng.IWindowService,
             private $location: ng.ILocationService,
             private $routeParams: ServantListParams,
             private servantService: ServantService,
@@ -76,6 +78,12 @@ module lova {
                 .then((reason: any) => {
                     this.servants = reason.servants;
                     this.scrollService.restore();
+                    $window.setTimeout(() => {
+                        //noinspection TaskProblemsInspection
+                        angular.element('img.lazy').lazyload({
+                            effect : 'fadeIn'
+                        });
+                    }, 0);
                 });
 
             $scope.$watch(() => this.raceId, (newValue, oldValue) => {
@@ -173,9 +181,15 @@ module lova {
                     this.updateServants();
                     this.updateDecks();
                     this.updateLink();
+                    $window.setTimeout(() => {
+                        //noinspection TaskProblemsInspection
+                        angular.element('img.lazy').lazyload({
+                            effect : 'fadeIn'
+                        });
+                    }, 0);
                 });
 
-            angular.element(document).ready(function() {
+            angular.element(document).ready(() => {
                 let button = angular.element('.copy-clipboard');
                 let clip = new ZeroClipboard(button);
                 clip.on('ready', () => {

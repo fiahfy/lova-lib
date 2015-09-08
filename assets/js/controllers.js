@@ -11,9 +11,10 @@ var lova;
     })();
     lova.MainController = MainController;
     var ServantListController = (function () {
-        function ServantListController($scope, $location, $routeParams, servantService, scrollService) {
+        function ServantListController($scope, $window, $location, $routeParams, servantService, scrollService) {
             var _this = this;
             this.$scope = $scope;
+            this.$window = $window;
             this.$location = $location;
             this.$routeParams = $routeParams;
             this.servantService = servantService;
@@ -44,6 +45,12 @@ var lova;
                 .then(function (reason) {
                 _this.servants = reason.servants;
                 _this.scrollService.restore();
+                $window.setTimeout(function () {
+                    //noinspection TaskProblemsInspection
+                    angular.element('img.lazy').lazyload({
+                        effect: 'fadeIn'
+                    });
+                }, 0);
             });
             $scope.$watch(function () { return _this.raceId; }, function (newValue, oldValue) {
                 if (typeof newValue === 'undefined' || typeof oldValue === 'undefined' || newValue == oldValue) {
@@ -65,6 +72,7 @@ var lova;
         };
         ServantListController.$inject = [
             '$scope',
+            '$window',
             '$location',
             '$routeParams',
             'ServantService',
@@ -117,6 +125,12 @@ var lova;
                 _this.updateServants();
                 _this.updateDecks();
                 _this.updateLink();
+                $window.setTimeout(function () {
+                    //noinspection TaskProblemsInspection
+                    angular.element('img.lazy').lazyload({
+                        effect: 'fadeIn'
+                    });
+                }, 0);
             });
             angular.element(document).ready(function () {
                 var button = angular.element('.copy-clipboard');
