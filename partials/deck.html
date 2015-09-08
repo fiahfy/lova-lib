@@ -54,7 +54,8 @@
     <div class="deck" ng-repeat="servant in c.servants | filter:c.filter | orderBy:c.predicate:c.reverse"
          ng-class="['race-' + servant.race_id, {'setted': servant.setted}]">
       <div ng-drag="true" ng-drag-data="{index: null, servantId: servant.id}">
-        <img ng-src="./assets/img/m/{{ servant.id }}.jpg" class="img-rounded img-responsive" />
+        <img data-original="./assets/img/m/{{ servant.id }}.jpg"
+             src="./assets/img/m/blank.png" class="img-rounded img-responsive lazy" />
         <span>Cost {{ servant.cost }}</span>
       </div>
     </div>

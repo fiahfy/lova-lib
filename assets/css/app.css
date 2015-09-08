@@ -128,7 +128,7 @@ img {
 #deck-container.fitted {
     position: fixed;
     top: 0;
-    box-shadow: 0 2px 2px 0 #e7e9ec;
+    box-shadow: 0 1px 1px 0 #e7e9ec;
     border-bottom: 0;
 }
 #deck-container .deck {
@@ -239,7 +239,7 @@ img {
     text-shadow: 0 0 3px #000;
     font-style: italic;
     font-family: "Tamil MN", sans-serif;
-    font-size: 50%;
+    font-size: 60%;
 }
 .deck.race-1>div>img {
     border-color: #a26821;
@@ -266,7 +266,7 @@ img {
         width: 12.5%;
     }
     .deck>div>span {
-        font-size: 70%;
+        font-size: 60%;
     }
 }
 @media (min-width: 992px) {
