@@ -9,7 +9,7 @@ var lova;
                 var cls = attributes.fittable;
                 var elementTop = element.offset().top;
                 var dummyWrapper = $('<div>');
-                $(window).on('scroll, touchmove', function () {
+                $(window).on('scroll touchmove', function () {
                     if ($(window).scrollTop() >= elementTop) {
                         var h = element.outerHeight();
                         element.addClass(cls);
