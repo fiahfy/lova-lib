@@ -81,7 +81,7 @@ module lova {
                     $window.setTimeout(() => {
                         //noinspection TaskProblemsInspection
                         angular.element('img.lazy').lazyload({
-                            effect : 'fadeIn'
+                            effect: 'fadeIn'
                         });
                     }, 0);
                 });
@@ -106,6 +106,12 @@ module lova {
 
         public changeQuery() {
             this.filter.name = this.q;
+            this.$window.setTimeout(() => {
+                //noinspection TaskProblemsInspection
+                angular.element('img.lazy').lazyload({
+                    effect: 'fadeIn'
+                });
+            }, 1);
         }
     }
 
@@ -143,6 +149,19 @@ module lova {
 
     export class DeckController {
         public servants: any[] = [];
+
+        public raceIdOptions: any[] = [
+            {key: null, value: 'Select Race...'},
+            {key: 1,    value: '人獣'},
+            {key: 2,    value: '神族'},
+            {key: 3,    value: '魔種'},
+            {key: 4,    value: '海種'},
+            {key: 5,    value: '不死'}
+        ];
+
+        public raceId: number;
+
+        public raceName: string = 'Select Race...';
 
         public filter: any = {};
 
@@ -184,7 +203,7 @@ module lova {
                     $window.setTimeout(() => {
                         //noinspection TaskProblemsInspection
                         angular.element('img.lazy').lazyload({
-                            effect : 'fadeIn'
+                            effect: 'fadeIn'
                         });
                     }, 0);
                 });
@@ -229,6 +248,18 @@ module lova {
             this.updateServants();
             this.updateDecks();
             this.updateLink();
+        }
+
+        public selectRaceId(raceId: number, raceName: string) {
+            this.raceId = raceId;
+            this.raceName = raceName;
+            this.filter = this.raceId ? {race_id: this.raceId} : {};
+            this.$window.setTimeout(() => {
+                //noinspection TaskProblemsInspection
+                angular.element('img.lazy').lazyload({
+                    effect: 'fadeIn'
+                });
+            }, 1);
         }
 
         private updateServants() {

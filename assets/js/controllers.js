@@ -69,6 +69,12 @@ var lova;
         };
         ServantListController.prototype.changeQuery = function () {
             this.filter.name = this.q;
+            this.$window.setTimeout(function () {
+                //noinspection TaskProblemsInspection
+                angular.element('img.lazy').lazyload({
+                    effect: 'fadeIn'
+                });
+            }, 1);
         };
         ServantListController.$inject = [
             '$scope',
@@ -111,6 +117,15 @@ var lova;
             this.$routeParams = $routeParams;
             this.servantService = servantService;
             this.servants = [];
+            this.raceIdOptions = [
+                { key: null, value: 'Select Race...' },
+                { key: 1, value: '人獣' },
+                { key: 2, value: '神族' },
+                { key: 3, value: '魔種' },
+                { key: 4, value: '海種' },
+                { key: 5, value: '不死' }
+            ];
+            this.raceName = 'Select Race...';
             this.filter = {};
             this.predicate = ['race_id', 'race_code'];
             this.reverse = false;
@@ -170,6 +185,17 @@ var lova;
             this.updateServants();
             this.updateDecks();
             this.updateLink();
+        };
+        DeckController.prototype.selectRaceId = function (raceId, raceName) {
+            this.raceId = raceId;
+            this.raceName = raceName;
+            this.filter = this.raceId ? { race_id: this.raceId } : {};
+            this.$window.setTimeout(function () {
+                //noinspection TaskProblemsInspection
+                angular.element('img.lazy').lazyload({
+                    effect: 'fadeIn'
+                });
+            }, 1);
         };
         DeckController.prototype.updateServants = function () {
             var _this = this;
