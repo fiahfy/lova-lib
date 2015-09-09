@@ -45,18 +45,13 @@ var lova;
                 .then(function (reason) {
                 _this.servants = reason.servants;
                 _this.scrollService.restore();
-                $window.setTimeout(function () {
-                    //noinspection TaskProblemsInspection
-                    angular.element('img.lazy').lazyload({
-                        effect: 'fadeIn'
-                    });
-                }, 0);
+                _this.showServants();
             });
             $scope.$watch(function () { return _this.raceId; }, function (newValue, oldValue) {
                 if (typeof newValue === 'undefined' || typeof oldValue === 'undefined' || newValue == oldValue) {
                     return;
                 }
-                _this.filter = _this.raceId ? { race_id: _this.raceId } : {};
+                _this.filter.race_id = _this.raceId ? _this.raceId : '';
                 $location.search('race_id', _this.raceId).replace();
             }, true);
         }
@@ -69,6 +64,9 @@ var lova;
         };
         ServantListController.prototype.changeQuery = function () {
             this.filter.name = this.q;
+            this.showServants();
+        };
+        ServantListController.prototype.showServants = function () {
             this.$window.setTimeout(function () {
                 //noinspection TaskProblemsInspection
                 angular.element('img.lazy').lazyload({
@@ -140,12 +138,7 @@ var lova;
                 _this.updateServants();
                 _this.updateDecks();
                 _this.updateLink();
-                $window.setTimeout(function () {
-                    //noinspection TaskProblemsInspection
-                    angular.element('img.lazy').lazyload({
-                        effect: 'fadeIn'
-                    });
-                }, 0);
+                _this.showServants();
             });
             angular.element(document).ready(function () {
                 var button = angular.element('.copy-clipboard');
@@ -189,7 +182,14 @@ var lova;
         DeckController.prototype.selectRaceId = function (raceId, raceName) {
             this.raceId = raceId;
             this.raceName = raceName;
-            this.filter = this.raceId ? { race_id: this.raceId } : {};
+            this.filter.race_id = this.raceId ? this.raceId : '';
+            this.showServants();
+        };
+        DeckController.prototype.changeQuery = function () {
+            this.filter.name = this.q;
+            this.showServants();
+        };
+        DeckController.prototype.showServants = function () {
             this.$window.setTimeout(function () {
                 //noinspection TaskProblemsInspection
                 angular.element('img.lazy').lazyload({

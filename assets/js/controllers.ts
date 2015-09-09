@@ -78,19 +78,14 @@ module lova {
                 .then((reason: any) => {
                     this.servants = reason.servants;
                     this.scrollService.restore();
-                    $window.setTimeout(() => {
-                        //noinspection TaskProblemsInspection
-                        angular.element('img.lazy').lazyload({
-                            effect: 'fadeIn'
-                        });
-                    }, 0);
+                    this.showServants();
                 });
 
             $scope.$watch(() => this.raceId, (newValue, oldValue) => {
                 if (typeof newValue === 'undefined' || typeof oldValue === 'undefined' || newValue == oldValue) {
                     return;
                 }
-                this.filter = this.raceId ? {race_id: this.raceId} : {};
+                this.filter.race_id =  this.raceId ? this.raceId : '';
                 $location.search('race_id', this.raceId).replace();
             }, true);
         }
@@ -106,6 +101,10 @@ module lova {
 
         public changeQuery() {
             this.filter.name = this.q;
+            this.showServants();
+        }
+
+        private showServants() {
             this.$window.setTimeout(() => {
                 //noinspection TaskProblemsInspection
                 angular.element('img.lazy').lazyload({
@@ -163,6 +162,8 @@ module lova {
 
         public raceName: string = 'Select Race...';
 
+        public q: string;
+
         public filter: any = {};
 
         public predicate: string[] = ['race_id', 'race_code'];
@@ -200,12 +201,7 @@ module lova {
                     this.updateServants();
                     this.updateDecks();
                     this.updateLink();
-                    $window.setTimeout(() => {
-                        //noinspection TaskProblemsInspection
-                        angular.element('img.lazy').lazyload({
-                            effect: 'fadeIn'
-                        });
-                    }, 0);
+                    this.showServants();
                 });
 
             angular.element(document).ready(() => {
@@ -253,7 +249,16 @@ module lova {
         public selectRaceId(raceId: number, raceName: string) {
             this.raceId = raceId;
             this.raceName = raceName;
-            this.filter = this.raceId ? {race_id: this.raceId} : {};
+            this.filter.race_id = this.raceId ? this.raceId : '';
+            this.showServants();
+        }
+
+        public changeQuery() {
+            this.filter.name = this.q;
+            this.showServants();
+        }
+
+        private showServants() {
             this.$window.setTimeout(() => {
                 //noinspection TaskProblemsInspection
                 angular.element('img.lazy').lazyload({

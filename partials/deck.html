@@ -59,7 +59,8 @@
         </li>
       </ul>
     </div><!-- /btn-group -->
-    <input type="text" class="form-control" aria-label="Text input with dropdown button">
+    <input type="text" value="{{ c.q }}" placeholder="Search Servant..." class="form-control"
+           ng-model="c.q" ng-change="c.changeQuery()" />
   </div>
 </div>
 
