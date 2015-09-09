@@ -10,7 +10,7 @@ module lova {
                 let cls = attributes.fittable;
                 let elementTop = element.offset().top;
                 let dummyWrapper = $('<div>');
-                $(window).on('scroll, touchmove', () => {
+                $(window).on('scroll touchmove', () => {
                     if ($(window).scrollTop() >= elementTop) {
                         let h = element.outerHeight();
                         element.addClass(cls);
