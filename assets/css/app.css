@@ -50,6 +50,34 @@ img {
 .navbar-nav>li>a {
     font-size: 15px;
 }
+.dropdown-toggle.btn-primary,
+.open>.dropdown-toggle.btn-primary {
+    color: #fff;
+    background-color: #1abc9c;
+    border-color: #1abc9c;
+}
+.dropdown-toggle.btn-primary:hover,
+.open>.dropdown-toggle.btn-primary:hover {
+    color: #fff;
+    background-color: #48c9b0;
+    border-color: #48c9b0;
+}
+.dropdown-toggle.btn-primary:focus,
+.open>.dropdown-toggle.btn-primary:focus {
+    color: #fff;
+    background-color: #16a085;
+    border-color: #16a085;
+}
+.input-group-btn .btn.btn-primary {
+    color: #fff;
+    background-color: #1abc9c;
+    border-color: #1abc9c;
+}
+.input-group-btn .btn.btn-primary.zeroclipboard-is-hover {
+    color: #fff;
+    background-color: #48c9b0;
+    border-color: #48c9b0;
+}
 .select.form-control {
     height: 41px;
 }
@@ -113,11 +141,6 @@ img {
 }
 
 /* Deck */
-#deck .input-group-btn .btn {
-    color: #fff;
-    background-color: #1abc9c;
-    border-color: #1abc9c;
-}
 #deck-container {
     width: 100%;
     z-index: 1;
@@ -197,6 +220,9 @@ img {
         border-radius: 0;
     }
 }
+#deck-container .input-group {
+    margin-top: 15px;
+}
 #deck-servants {
     margin-top: 15px;
 }
@@ -238,8 +264,8 @@ img {
     text-align: center;
     text-shadow: 0 0 3px #000;
     font-style: italic;
-    font-family: "Tamil MN", sans-serif;
     font-size: 60%;
+    font-weight: bold;
 }
 .deck.race-1>div>img {
     border-color: #a26821;

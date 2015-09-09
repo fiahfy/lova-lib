@@ -47,6 +47,21 @@
       </div>
     </div>
   </div>
+  <div class="container input-group hidden-xs">
+    <div class="input-group-btn">
+      <button type="button" class="btn btn-primary dropdown-toggle"
+              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        {{ c.raceName }} <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu">
+        <li ng-repeat="option in c.raceIdOptions">
+          <a ng-click="c.selectRaceId(option.key, option.value)">{{ option.value }}</a>
+        </li>
+      </ul>
+    </div><!-- /btn-group -->
+    <input type="text" value="{{ c.q }}" placeholder="Search Servant..." class="form-control"
+           ng-model="c.q" ng-change="c.changeQuery()" />
+  </div>
 </div>
 
 <div id="deck-servants" class="container">

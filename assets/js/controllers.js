@@ -45,18 +45,13 @@ var lova;
                 .then(function (reason) {
                 _this.servants = reason.servants;
                 _this.scrollService.restore();
-                $window.setTimeout(function () {
-                    //noinspection TaskProblemsInspection
-                    angular.element('img.lazy').lazyload({
-                        effect: 'fadeIn'
-                    });
-                }, 0);
+                _this.showServants();
             });
             $scope.$watch(function () { return _this.raceId; }, function (newValue, oldValue) {
                 if (typeof newValue === 'undefined' || typeof oldValue === 'undefined' || newValue == oldValue) {
                     return;
                 }
-                _this.filter = _this.raceId ? { race_id: _this.raceId } : {};
+                _this.filter.race_id = _this.raceId ? _this.raceId : '';
                 $location.search('race_id', _this.raceId).replace();
             }, true);
         }
@@ -69,6 +64,15 @@ var lova;
         };
         ServantListController.prototype.changeQuery = function () {
             this.filter.name = this.q;
+            this.showServants();
+        };
+        ServantListController.prototype.showServants = function () {
+            this.$window.setTimeout(function () {
+                //noinspection TaskProblemsInspection
+                angular.element('img.lazy').lazyload({
+                    effect: 'fadeIn'
+                });
+            }, 1);
         };
         ServantListController.$inject = [
             '$scope',
@@ -111,6 +115,15 @@ var lova;
             this.$routeParams = $routeParams;
             this.servantService = servantService;
             this.servants = [];
+            this.raceIdOptions = [
+                { key: null, value: 'Select Race...' },
+                { key: 1, value: '人獣' },
+                { key: 2, value: '神族' },
+                { key: 3, value: '魔種' },
+                { key: 4, value: '海種' },
+                { key: 5, value: '不死' }
+            ];
+            this.raceName = 'Select Race...';
             this.filter = {};
             this.predicate = ['race_id', 'race_code'];
             this.reverse = false;
@@ -125,12 +138,7 @@ var lova;
                 _this.updateServants();
                 _this.updateDecks();
                 _this.updateLink();
-                $window.setTimeout(function () {
-                    //noinspection TaskProblemsInspection
-                    angular.element('img.lazy').lazyload({
-                        effect: 'fadeIn'
-                    });
-                }, 0);
+                _this.showServants();
             });
             angular.element(document).ready(function () {
                 var button = angular.element('.copy-clipboard');
@@ -170,6 +178,24 @@ var lova;
             this.updateServants();
             this.updateDecks();
             this.updateLink();
+        };
+        DeckController.prototype.selectRaceId = function (raceId, raceName) {
+            this.raceId = raceId;
+            this.raceName = raceName;
+            this.filter.race_id = this.raceId ? this.raceId : '';
+            this.showServants();
+        };
+        DeckController.prototype.changeQuery = function () {
+            this.filter.name = this.q;
+            this.showServants();
+        };
+        DeckController.prototype.showServants = function () {
+            this.$window.setTimeout(function () {
+                //noinspection TaskProblemsInspection
+                angular.element('img.lazy').lazyload({
+                    effect: 'fadeIn'
+                });
+            }, 1);
         };
         DeckController.prototype.updateServants = function () {
             var _this = this;
