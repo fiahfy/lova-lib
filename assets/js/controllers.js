@@ -242,11 +242,5 @@ var lova;
         return DeckController;
     })();
     lova.DeckController = DeckController;
-    var AboutController = (function () {
-        function AboutController() {
-        }
-        return AboutController;
-    })();
-    lova.AboutController = AboutController;
 })(lova || (lova = {}));
 //# sourceMappingURL=controllers.js.map

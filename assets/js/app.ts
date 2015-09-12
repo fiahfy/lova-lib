@@ -41,9 +41,7 @@ module lova {
                     controllerAs: 'c'
                 }).
                 when('/about/', {
-                    templateUrl: 'partials/about.html',
-                    controller: 'AboutController',
-                    controllerAs: 'c'
+                    templateUrl: 'partials/about.html'
                 }).
                 otherwise({
                     redirectTo: '/servants/'
