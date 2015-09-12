@@ -138,6 +138,7 @@ var lova;
                 _this.updateServants();
                 _this.updateDecks();
                 _this.updateLink();
+                _this.updateEvent();
                 _this.showServants();
             });
             angular.element(document).ready(function () {
@@ -172,12 +173,14 @@ var lova;
             this.updateServants();
             this.updateDecks();
             this.updateLink();
+            this.updateEvent();
         };
         DeckController.prototype.clearServant = function (index) {
             this.deckIds[index] = 0;
             this.updateServants();
             this.updateDecks();
             this.updateLink();
+            this.updateEvent();
         };
         DeckController.prototype.selectRaceId = function (raceId, raceName) {
             this.raceId = raceId;
@@ -197,6 +200,28 @@ var lova;
                 //noinspection TaskProblemsInspection
                 angular.element('img.lazy').lazyload({
                     effect: 'fadeIn'
+                });
+            }, 1);
+        };
+        DeckController.prototype.updateEvent = function () {
+            this.$window.setTimeout(function () {
+                angular.element('.deck').each(function () {
+                    var deck = this;
+                    angular.element(this).find('span').popover({
+                        html: true,
+                        placement: function (context, source) {
+                            var top = angular.element(deck).find('span').offset().top;
+                            if (top - angular.element(window).scrollTop() < angular.element(window).height() / 2) {
+                                return 'bottom';
+                            }
+                            return 'top';
+                        },
+                        container: 'body',
+                        trigger: 'hover',
+                        content: function () {
+                            return angular.element(deck).find('.skill-popover-wrapper').html();
+                        }
+                    });
                 });
             }, 1);
         };

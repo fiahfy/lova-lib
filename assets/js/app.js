@@ -50,6 +50,7 @@ var lova;
     app.controller('ServantDetailController', lova.ServantDetailController);
     app.controller('DeckController', lova.DeckController);
     app.directive('fittable', lova.fittable);
+    app.directive('skillPopover', lova.skillPopover);
     app.filter('pad', lova.pad);
     app.filter('default', lova.def);
     app.filter('replace', lova.replace);

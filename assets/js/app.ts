@@ -55,6 +55,7 @@ module lova {
     app.controller('ServantDetailController', ServantDetailController);
     app.controller('DeckController', DeckController);
     app.directive('fittable', fittable);
+    app.directive('skillPopover', skillPopover);
     app.filter('pad', pad);
     app.filter('default', def);
     app.filter('replace', replace);

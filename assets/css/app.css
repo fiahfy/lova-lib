@@ -87,6 +87,10 @@ img {
 .dragging {
     position: relative;
 }
+.popover{
+    max-width: 100%;
+    width: 80%;
+}
 [ng-click] {
     cursor: pointer;
 }
@@ -241,6 +245,13 @@ img {
     padding: 0 7px;
 }
 
+/* About */
+#about > pre {
+    font-family: IPAMonaPGothic, 'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif;
+    font-size: 16px;
+    line-height: 18px;
+}
+
 /* Deck Class */
 .deck {
     width: 25%;
@@ -321,8 +332,21 @@ img {
     }
 }
 
-#about > pre {
-    font-family: IPAMonaPGothic, 'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif;
-    font-size: 16px;
-    line-height: 18px;
+/* Skill Popover Class */
+.skill-popover-wrapper {
+    display: none;
+}
+.skill-popover>dl {
+    margin: 0;
+    padding: 0;
+}
+.skill-popover dl {
+    margin: 5px 0 0;
+
+}
+.skill-popover dt {
+    font-size: 90%;
+    font-weight: 400;
+    line-height: 25px;
+    color: #c0c1c2;
 }
