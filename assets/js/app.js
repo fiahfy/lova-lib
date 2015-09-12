@@ -32,6 +32,11 @@ var lova;
                 controller: 'DeckController',
                 controllerAs: 'c'
             }).
+                when('/about/', {
+                templateUrl: 'partials/about.html',
+                controller: 'AboutController',
+                controllerAs: 'c'
+            }).
                 otherwise({
                 redirectTo: '/servants/'
             });

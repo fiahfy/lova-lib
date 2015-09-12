@@ -189,6 +189,9 @@ var lova;
             this.filter.name = this.q;
             this.showServants();
         };
+        DeckController.prototype.showServant = function (servantId) {
+            this.$window.open('/lova-tool/#/servants/' + servantId + '/', '_blank');
+        };
         DeckController.prototype.showServants = function () {
             this.$window.setTimeout(function () {
                 //noinspection TaskProblemsInspection
@@ -239,5 +242,11 @@ var lova;
         return DeckController;
     })();
     lova.DeckController = DeckController;
+    var AboutController = (function () {
+        function AboutController() {
+        }
+        return AboutController;
+    })();
+    lova.AboutController = AboutController;
 })(lova || (lova = {}));
 //# sourceMappingURL=controllers.js.map
