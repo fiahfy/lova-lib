@@ -258,6 +258,10 @@ module lova {
             this.showServants();
         }
 
+        public showServant(servantId: number) {
+            this.$window.open('/lova-tool/#/servants/' + servantId + '/', '_blank');
+        }
+
         private showServants() {
             this.$window.setTimeout(() => {
                 //noinspection TaskProblemsInspection
@@ -302,5 +306,9 @@ module lova {
         private decode(encodedString: string): number[] {
             return JSON.parse(this.$window.atob(encodedString));
         }
+    }
+
+    export class AboutController {
+
     }
 }
