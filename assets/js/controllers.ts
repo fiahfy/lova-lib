@@ -307,8 +307,4 @@ module lova {
             return JSON.parse(this.$window.atob(encodedString));
         }
     }
-
-    export class AboutController {
-
-    }
 }
