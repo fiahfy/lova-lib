@@ -23,5 +23,17 @@ var lova;
         };
     }
     lova.fittable = fittable;
+    function skillPopover() {
+        return {
+            restrict: 'E',
+            templateUrl: 'partials/elements/skill-popover.html',
+            transclude: true,
+            replace: true,
+            scope: {
+                servant: '='
+            }
+        };
+    }
+    lova.skillPopover = skillPopover;
 })(lova || (lova = {}));
 //# sourceMappingURL=directives.js.map

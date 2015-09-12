@@ -87,6 +87,10 @@ img {
 .dragging {
     position: relative;
 }
+.popover{
+    max-width: 100%;
+    width: 80%;
+}
 [ng-click] {
     cursor: pointer;
 }
@@ -192,9 +196,6 @@ img {
     padding: 3px 1px 1px 3px;
     border-radius: 0 0 5px 0;
 }
-#deck-container .deck>div>img.img-dummy {
-    background-color: #d6d9dc;
-}
 @media (min-width: 768px) {
     #deck-container {
         padding: 15px 0;
@@ -230,10 +231,10 @@ img {
 #deck-servants {
     margin-top: 15px;
 }
-#deck-servants .deck.setted>div>img {
+#deck-servants .deck.setted>div.content>img {
     opacity: 0.5;
 }
-#deck-servants .deck.setted>div:after {
+#deck-servants .deck.setted>div.content:after {
     *content: 'Setted';
     display: block;
     position: absolute;
@@ -242,6 +243,13 @@ img {
     right: 0;
     bottom: 0;
     padding: 0 7px;
+}
+
+/* About */
+#about > pre {
+    font-family: IPAMonaPGothic, 'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif;
+    font-size: 16px;
+    line-height: 18px;
 }
 
 /* Deck Class */
@@ -254,12 +262,12 @@ img {
 .deck>div {
     position: relative;
 }
-.deck>div>img {
+.deck>div.content>img {
     border: 2px solid transparent;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
 }
-.deck>div>span {
+.deck>div.content>span {
     position: absolute;
     bottom: 0;
     left: 0;
@@ -271,23 +279,37 @@ img {
     font-size: 60%;
     font-weight: bold;
 }
-.deck.race-1>div>img {
+.deck>div.background {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 2px;
+}
+.deck>div.background>img {
+    width: 100%;
+    height: 100%;
+    background-color: lightgray;
+}
+.deck.race-1>div.content>img {
     border-color: #a26821;
     box-shadow: 0 0 2px #a26821;
 }
-.deck.race-2>div>img {
+.deck.race-2>div.content>img {
     border-color: #9d9075;
     box-shadow: 0 0 2px #9d9075;
 }
-.deck.race-3>div>img {
+.deck.race-3>div.content>img {
     border-color: #554e86;
     box-shadow: 0 0 2px #554e86;
 }
-.deck.race-4>div>img {
+.deck.race-4>div.content>img {
     border-color: #558c9e;
     box-shadow: 0 0 2px #558c9e;
 }
-.deck.race-5>div>img {
+.deck.race-5>div.content>img {
     border-color: #7f4a83;
     box-shadow: 0 0 2px #7f4a83;
 }
@@ -295,23 +317,36 @@ img {
     .deck {
         width: 12.5%;
     }
-    .deck>div>span {
+    .deck>div.content>span {
         font-size: 60%;
     }
 }
 @media (min-width: 992px) {
-    .deck>div>span {
+    .deck>div.content>span {
         font-size: 90%;
     }
 }
 @media (min-width: 1200px) {
-    .deck>div>span {
+    .deck>div.content>span {
         font-size: 100%;
     }
 }
 
-#about > pre {
-    font-family: IPAMonaPGothic, 'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif;
-    font-size: 16px;
-    line-height: 18px;
+/* Skill Popover Class */
+.skill-popover-wrapper {
+    display: none;
+}
+.skill-popover>dl {
+    margin: 0;
+    padding: 0;
+}
+.skill-popover dl {
+    margin: 5px 0 0;
+
+}
+.skill-popover dt {
+    font-size: 90%;
+    font-weight: 400;
+    line-height: 25px;
+    color: #c0c1c2;
 }

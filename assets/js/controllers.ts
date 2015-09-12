@@ -201,6 +201,7 @@ module lova {
                     this.updateServants();
                     this.updateDecks();
                     this.updateLink();
+                    this.updateEvent();
                     this.showServants();
                 });
 
@@ -237,6 +238,7 @@ module lova {
             this.updateServants();
             this.updateDecks();
             this.updateLink();
+            this.updateEvent();
         }
 
         public clearServant(index: number) {
@@ -244,6 +246,7 @@ module lova {
             this.updateServants();
             this.updateDecks();
             this.updateLink();
+            this.updateEvent();
         }
 
         public selectRaceId(raceId: number, raceName: string) {
@@ -267,6 +270,29 @@ module lova {
                 //noinspection TaskProblemsInspection
                 angular.element('img.lazy').lazyload({
                     effect: 'fadeIn'
+                });
+            }, 1);
+        }
+
+        private updateEvent() {
+            this.$window.setTimeout(() => {
+                 angular.element('.deck').each(function() {
+                    let deck = this;
+                    angular.element(this).find('span').popover({
+                        html : true,
+                        placement: function(context, source) {
+                            var top = angular.element(deck).find('span').offset().top;
+                            if (top - angular.element(window).scrollTop() < angular.element(window).height() / 2) {
+                                return 'bottom';
+                            }
+                            return 'top';
+                        },
+                        container: 'body',
+                        trigger: 'hover',
+                        content: function() {
+                            return angular.element(deck).find('.skill-popover-wrapper').html();
+                        }
+                    });
                 });
             }, 1);
         }

@@ -17,38 +17,21 @@
 </div>
 
 <div id="deck-container" fittable="fitted">
+  <!-- .hidden-xs -->
   <div class="container hidden-xs">
     <div class="deck" ng-repeat="($index, deck) in c.decks track by $index"
          ng-class="'race-' + deck.race_id"
          ng-drop="true" ng-drop-success="c.setServant($index, $data, $event)">
-      <div ng-drag="deck" ng-drag-data="{index: $index, servantId: deck.id}" ng-drag-stop="c.clearServant($index)"
-           ng-dblclick="c.showServant(deck.id)">
-        <img ng-if="deck" ng-src="assets/img/m/{{ deck.id }}.jpg" class="img-rounded img-responsive" />
-        <span ng-if="deck">Cost {{ deck.cost }}</span>
-        <img ng-if="!deck" ng-src="assets/img/m/dummy.png" class="img-rounded img-responsive img-dummy" />
+      <div class="background">
+        <img ng-if="[0, 1, 2, 3, 4, 5].indexOf($index) > -1" src="assets/img/m/deck.png" class="img-rounded img-responsive" />
+        <img ng-if="[6, 7].indexOf($index) > -1" src="assets/img/m/side-board.png" class="img-rounded img-responsive" />
       </div>
-    </div>
-  </div>
-  <div class="container visible-xs">
-    <div class="deck" ng-repeat="($index, deck) in c.decks track by $index" ng-if="[0, 1, 2, 6].indexOf($index) > -1"
-         ng-class="'race-' + deck.race_id"
-         ng-drop="true" ng-drop-success="c.setServant($index, $data, $event)">
-      <div ng-drag="deck" ng-drag-data="{index: $index, servantId: deck.id}" ng-drag-stop="c.clearServant($index)"
+      <div class="content" ng-drag="deck" ng-drag-data="{index: $index, servantId: deck.id}" ng-drag-stop="c.clearServant($index)"
            ng-dblclick="c.showServant(deck.id)">
-        <img ng-if="deck" ng-src="assets/img/m/{{ deck.id }}.jpg" class="img-rounded img-responsive" />
+        <img ng-src="assets/img/m/{{ deck ? deck.id + '.jpg' : 'blank.png' }}" class="img-rounded img-responsive" />
         <span ng-if="deck">Cost {{ deck.cost }}</span>
-        <img ng-if="!deck" ng-src="assets/img/m/dummy.png" class="img-rounded img-responsive img-dummy" />
       </div>
-    </div>
-    <div class="deck" ng-repeat="($index, deck) in c.decks track by $index" ng-if="[3, 4, 5, 7].indexOf($index) > -1"
-         ng-class="'race-' + deck.race_id"
-         ng-drop="true" ng-drop-success="c.setServant($index, $data, $event)">
-      <div ng-drag="deck" ng-drag-data="{index: $index, servantId: deck.id}" ng-drag-stop="c.clearServant($index)"
-           ng-dblclick="c.showServant(deck.id)">
-        <img ng-if="deck" ng-src="assets/img/m/{{ deck.id }}.jpg" class="img-rounded img-responsive" />
-        <span ng-if="deck">Cost {{ deck.cost }}</span>
-        <img ng-if="!deck" ng-src="assets/img/m/dummy.png" class="img-rounded img-responsive img-dummy" />
-      </div>
+      <skill-popover servant="deck"></skill-popover>
     </div>
   </div>
   <div class="container input-group hidden-xs">
@@ -62,22 +45,59 @@
           <a ng-click="c.selectRaceId(option.key, option.value)">{{ option.value }}</a>
         </li>
       </ul>
-    </div><!-- /btn-group -->
+    </div>
     <input type="text" value="{{ c.q }}" placeholder="Search Servant..." class="form-control"
            ng-model="c.q" ng-change="c.changeQuery()" />
   </div>
+  <!-- /.hidden-xs -->
+  <!-- .visible-xs -->
+  <div class="container visible-xs">
+    <div class="deck" ng-repeat="($index, deck) in c.decks track by $index" ng-if="[0, 1, 2, 6].indexOf($index) > -1"
+         ng-class="'race-' + deck.race_id"
+         ng-drop="true" ng-drop-success="c.setServant($index, $data, $event)">
+      <div class="background">
+        <img ng-if="[0, 1, 2].indexOf($index) > -1" src="assets/img/m/deck.png" class="img-rounded img-responsive" />
+        <img ng-if="[6].indexOf($index) > -1" src="assets/img/m/side-board.png" class="img-rounded img-responsive" />
+      </div>
+      <div class="content" ng-drag="deck" ng-drag-data="{index: $index, servantId: deck.id}" ng-drag-stop="c.clearServant($index)"
+           ng-dblclick="c.showServant(deck.id)">
+        <img ng-src="assets/img/m/{{ deck ? deck.id + '.jpg' : 'blank.png' }}" class="img-rounded img-responsive" />
+        <span ng-if="deck">Cost {{ deck.cost }}</span>
+      </div>
+      <skill-popover servant="deck"></skill-popover>
+    </div>
+    <div class="deck" ng-repeat="($index, deck) in c.decks track by $index" ng-if="[3, 4, 5, 7].indexOf($index) > -1"
+         ng-class="'race-' + deck.race_id"
+         ng-drop="true" ng-drop-success="c.setServant($index, $data, $event)">
+      <div class="background">
+        <img ng-if="[3, 4, 5].indexOf($index) > -1" src="assets/img/m/deck.png" class="img-rounded img-responsive" />
+        <img ng-if="[7].indexOf($index) > -1" src="assets/img/m/side-board.png" class="img-rounded img-responsive" />
+      </div>
+      <div class="content" ng-drag="deck" ng-drag-data="{index: $index, servantId: deck.id}" ng-drag-stop="c.clearServant($index)"
+           ng-dblclick="c.showServant(deck.id)">
+        <img ng-src="assets/img/m/{{ deck ? deck.id + '.jpg' : 'blank.png' }}" class="img-rounded img-responsive" />
+        <span ng-if="deck">Cost {{ deck.cost }}</span>
+      </div>
+      <skill-popover servant="deck"></skill-popover>
+    </div>
+  </div>
+  <!-- /.visible-xs -->
 </div>
 
 <div id="deck-servants" class="container">
   <div>
     <div class="deck" ng-repeat="servant in c.servants | filter:c.filter | orderBy:c.predicate:c.reverse"
          ng-class="['race-' + servant.race_id, {'setted': servant.setted}]">
-      <div ng-drag="true" ng-drag-data="{index: null, servantId: servant.id}"
+      <div class="background">
+        <img src="assets/img/m/blank.png" class="img-rounded img-responsive" />
+      </div>
+      <div class="content" ng-drag="true" ng-drag-data="{index: null, servantId: servant.id}"
            ng-dblclick="c.showServant(servant.id)">
         <img data-original="./assets/img/m/{{ servant.id }}.jpg"
              src="./assets/img/m/blank.png" class="img-rounded img-responsive lazy" />
         <span>Cost {{ servant.cost }}</span>
       </div>
+      <skill-popover servant="servant"></skill-popover>
     </div>
   </div>
 </div>
