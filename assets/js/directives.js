@@ -26,7 +26,7 @@ var lova;
     function skillPopover() {
         return {
             restrict: 'E',
-            templateUrl: 'partials/elements/skill-popover.html',
+            templateUrl: 'templates/elements/skill-popover.html',
             transclude: true,
             replace: true,
             scope: {

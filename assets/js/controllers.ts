@@ -268,9 +268,7 @@ module lova {
         private showServants() {
             this.$window.setTimeout(() => {
                 //noinspection TaskProblemsInspection
-                angular.element('img.lazy').lazyload({
-                    effect: 'fadeIn'
-                });
+                angular.element('img.lazy').lazyload();
             }, 1);
         }
 
@@ -287,7 +285,7 @@ module lova {
                             }
                             return 'top';
                         },
-                        container: 'body',
+                        container: '#deck-popover-content',
                         trigger: 'hover',
                         content: function() {
                             return angular.element(deck).find('.skill-popover-wrapper').html();
@@ -332,5 +330,9 @@ module lova {
         private decode(encodedString: string): number[] {
             return JSON.parse(this.$window.atob(encodedString));
         }
+    }
+
+    export class AboutController {
+        public mail: string = 'd.fiahfy@gmail.com';
     }
 }

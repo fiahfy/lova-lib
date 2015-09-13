@@ -198,9 +198,7 @@ var lova;
         DeckController.prototype.showServants = function () {
             this.$window.setTimeout(function () {
                 //noinspection TaskProblemsInspection
-                angular.element('img.lazy').lazyload({
-                    effect: 'fadeIn'
-                });
+                angular.element('img.lazy').lazyload();
             }, 1);
         };
         DeckController.prototype.updateEvent = function () {
@@ -216,7 +214,7 @@ var lova;
                             }
                             return 'top';
                         },
-                        container: 'body',
+                        container: '#deck-popover-content',
                         trigger: 'hover',
                         content: function () {
                             return angular.element(deck).find('.skill-popover-wrapper').html();
@@ -267,5 +265,12 @@ var lova;
         return DeckController;
     })();
     lova.DeckController = DeckController;
+    var AboutController = (function () {
+        function AboutController() {
+            this.mail = 'd.fiahfy@gmail.com';
+        }
+        return AboutController;
+    })();
+    lova.AboutController = AboutController;
 })(lova || (lova = {}));
 //# sourceMappingURL=controllers.js.map
