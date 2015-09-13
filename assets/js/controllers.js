@@ -216,7 +216,7 @@ var lova;
                             }
                             return 'top';
                         },
-                        container: 'body',
+                        container: '#deck-popover-content',
                         trigger: 'hover',
                         content: function () {
                             return angular.element(deck).find('.skill-popover-wrapper').html();

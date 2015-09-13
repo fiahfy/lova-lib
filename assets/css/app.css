@@ -244,6 +244,9 @@ img {
     bottom: 0;
     padding: 0 7px;
 }
+#deck-popover-content {
+    position: relative;
+}
 
 /* About */
 #about > pre {
