@@ -13,27 +13,27 @@ var lova;
         function Router(routerProvider) {
             routerProvider.
                 when('/servants/', {
-                templateUrl: 'partials/servant.html',
+                templateUrl: 'templates/pages/servant.html',
                 controller: 'ServantListController',
                 controllerAs: 'c'
             }).
                 when('/servants/:id/', {
-                templateUrl: 'partials/servant/detail.html',
+                templateUrl: 'templates/pages/servant/detail.html',
                 controller: 'ServantDetailController',
                 controllerAs: 'c'
             }).
                 when('/decks/', {
-                templateUrl: 'partials/deck.html',
+                templateUrl: 'templates/pages/deck.html',
                 controller: 'DeckController',
                 controllerAs: 'c'
             }).
                 when('/decks/:hash/', {
-                templateUrl: 'partials/deck.html',
+                templateUrl: 'templates/pages/deck.html',
                 controller: 'DeckController',
                 controllerAs: 'c'
             }).
                 when('/about/', {
-                templateUrl: 'partials/about.html'
+                templateUrl: 'templates/pages/about.html'
             }).
                 otherwise({
                 redirectTo: '/servants/'

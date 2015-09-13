@@ -268,9 +268,7 @@ module lova {
         private showServants() {
             this.$window.setTimeout(() => {
                 //noinspection TaskProblemsInspection
-                angular.element('img.lazy').lazyload({
-                    effect: 'fadeIn'
-                });
+                angular.element('img.lazy').lazyload();
             }, 1);
         }
 

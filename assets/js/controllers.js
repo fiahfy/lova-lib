@@ -198,9 +198,7 @@ var lova;
         DeckController.prototype.showServants = function () {
             this.$window.setTimeout(function () {
                 //noinspection TaskProblemsInspection
-                angular.element('img.lazy').lazyload({
-                    effect: 'fadeIn'
-                });
+                angular.element('img.lazy').lazyload();
             }, 1);
         };
         DeckController.prototype.updateEvent = function () {
