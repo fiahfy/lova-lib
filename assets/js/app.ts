@@ -41,7 +41,9 @@ module lova {
                     controllerAs: 'c'
                 }).
                 when('/about/', {
-                    templateUrl: 'templates/pages/about.html'
+                    templateUrl: 'templates/pages/about.html',
+                    controller: 'AboutController',
+                    controllerAs: 'c'
                 }).
                 otherwise({
                     redirectTo: '/servants/'
@@ -54,6 +56,7 @@ module lova {
     app.controller('ServantListController', ServantListController);
     app.controller('ServantDetailController', ServantDetailController);
     app.controller('DeckController', DeckController);
+    app.controller('AboutController', AboutController);
     app.directive('fittable', fittable);
     app.directive('skillPopover', skillPopover);
     app.filter('pad', pad);

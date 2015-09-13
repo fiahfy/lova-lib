@@ -33,7 +33,9 @@ var lova;
                 controllerAs: 'c'
             }).
                 when('/about/', {
-                templateUrl: 'templates/pages/about.html'
+                templateUrl: 'templates/pages/about.html',
+                controller: 'AboutController',
+                controllerAs: 'c'
             }).
                 otherwise({
                 redirectTo: '/servants/'
@@ -49,6 +51,7 @@ var lova;
     app.controller('ServantListController', lova.ServantListController);
     app.controller('ServantDetailController', lova.ServantDetailController);
     app.controller('DeckController', lova.DeckController);
+    app.controller('AboutController', lova.AboutController);
     app.directive('fittable', lova.fittable);
     app.directive('skillPopover', lova.skillPopover);
     app.filter('pad', lova.pad);

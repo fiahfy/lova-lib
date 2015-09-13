@@ -265,5 +265,12 @@ var lova;
         return DeckController;
     })();
     lova.DeckController = DeckController;
+    var AboutController = (function () {
+        function AboutController() {
+            this.mail = 'd.fiahfy@gmail.com';
+        }
+        return AboutController;
+    })();
+    lova.AboutController = AboutController;
 })(lova || (lova = {}));
 //# sourceMappingURL=controllers.js.map
