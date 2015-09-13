@@ -23,8 +23,8 @@
          ng-class="'race-' + deck.race_id"
          ng-drop="true" ng-drop-success="c.setServant($index, $data, $event)">
       <div class="background">
-        <img ng-if="[0, 1, 2, 3, 4, 5].indexOf($index) > -1" src="../../assets/img/m/deck.png" class="img-rounded img-responsive" />
-        <img ng-if="[6, 7].indexOf($index) > -1" src="../../assets/img/m/side-board.png" class="img-rounded img-responsive" />
+        <img ng-if="[0, 1, 2, 3, 4, 5].indexOf($index) > -1" src="assets/img/m/deck.png" class="img-rounded img-responsive" />
+        <img ng-if="[6, 7].indexOf($index) > -1" src="assets/img/m/side-board.png" class="img-rounded img-responsive" />
       </div>
       <div class="content" ng-drag="deck" ng-drag-data="{index: $index, servantId: deck.id}" ng-drag-stop="c.clearServant($index)"
            ng-dblclick="c.showServant(deck.id)">
@@ -56,8 +56,8 @@
          ng-class="'race-' + deck.race_id"
          ng-drop="true" ng-drop-success="c.setServant($index, $data, $event)">
       <div class="background">
-        <img ng-if="[0, 1, 2].indexOf($index) > -1" src="../../assets/img/m/deck.png" class="img-rounded img-responsive" />
-        <img ng-if="[6].indexOf($index) > -1" src="../../assets/img/m/side-board.png" class="img-rounded img-responsive" />
+        <img ng-if="[0, 1, 2].indexOf($index) > -1" src="assets/img/m/deck.png" class="img-rounded img-responsive" />
+        <img ng-if="[6].indexOf($index) > -1" src="assets/img/m/side-board.png" class="img-rounded img-responsive" />
       </div>
       <div class="content" ng-drag="deck" ng-drag-data="{index: $index, servantId: deck.id}" ng-drag-stop="c.clearServant($index)"
            ng-dblclick="c.showServant(deck.id)">
@@ -70,8 +70,8 @@
          ng-class="'race-' + deck.race_id"
          ng-drop="true" ng-drop-success="c.setServant($index, $data, $event)">
       <div class="background">
-        <img ng-if="[3, 4, 5].indexOf($index) > -1" src="../../assets/img/m/deck.png" class="img-rounded img-responsive" />
-        <img ng-if="[7].indexOf($index) > -1" src="../../assets/img/m/side-board.png" class="img-rounded img-responsive" />
+        <img ng-if="[3, 4, 5].indexOf($index) > -1" src="assets/img/m/deck.png" class="img-rounded img-responsive" />
+        <img ng-if="[7].indexOf($index) > -1" src="assets/img/m/side-board.png" class="img-rounded img-responsive" />
       </div>
       <div class="content" ng-drag="deck" ng-drag-data="{index: $index, servantId: deck.id}" ng-drag-stop="c.clearServant($index)"
            ng-dblclick="c.showServant(deck.id)">
@@ -89,12 +89,12 @@
     <div class="deck" ng-repeat="servant in c.servants | filter:c.filter | orderBy:c.predicate:c.reverse"
          ng-class="['race-' + servant.race_id, {'setted': servant.setted}]">
       <div class="background">
-        <img src="../../assets/img/m/blank.png" class="img-rounded img-responsive" />
+        <img src="assets/img/m/blank.png" class="img-rounded img-responsive" />
       </div>
       <div class="content" ng-drag="true" ng-drag-data="{index: null, servantId: servant.id}"
            ng-dblclick="c.showServant(servant.id)">
         <img data-original="./assets/img/m/{{ servant.id }}.jpg"
-             src="../../assets/img/m/blank.png" class="img-rounded img-responsive lazy" />
+             src="assets/img/m/blank.png" class="img-rounded img-responsive lazy" />
         <span>Cost {{ servant.cost }}</span>
       </div>
       <skill-popover servant="servant"></skill-popover>
