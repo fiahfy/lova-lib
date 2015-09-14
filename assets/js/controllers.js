@@ -187,10 +187,12 @@ var lova;
             this.raceName = raceName;
             this.filter.race_id = this.raceId ? this.raceId : '';
             this.showServants();
+            this.updateEvent();
         };
         DeckController.prototype.changeQuery = function () {
             this.filter.name = this.q;
             this.showServants();
+            this.updateEvent();
         };
         DeckController.prototype.showServant = function (servantId) {
             this.$window.open('/lova-tool/#/servants/' + servantId + '/', '_blank');
@@ -203,9 +205,15 @@ var lova;
         };
         DeckController.prototype.updateEvent = function () {
             this.$window.setTimeout(function () {
+                // clear all popovers
+                angular.element('#deck-popover-content').empty();
+                // attach event listener
                 angular.element('.deck').each(function () {
                     var deck = this;
-                    angular.element(this).find('span').popover({
+                    angular.element(this)
+                        .find('span')
+                        .popover({
+                        animation: false,
                         html: true,
                         placement: function (context, source) {
                             var top = angular.element(deck).find('span').offset().top;
