@@ -20,7 +20,7 @@
   <!-- .hidden-xs -->
   <div class="container hidden-xs">
     <div class="deck" ng-repeat="($index, deck) in c.decks track by $index"
-         ng-class="'race-' + deck.race_id"
+         ng-class="'race-' + deck.raceId"
          ng-drop="true" ng-drop-success="c.setServant($index, $data, $event)">
       <div class="background">
         <img ng-if="[0, 1, 2, 3, 4, 5].indexOf($index) > -1" src="assets/img/m/deck.png" class="img-rounded img-responsive" />
@@ -53,7 +53,7 @@
   <!-- .visible-xs -->
   <div class="container visible-xs">
     <div class="deck" ng-repeat="($index, deck) in c.decks track by $index" ng-if="[0, 1, 2, 6].indexOf($index) > -1"
-         ng-class="'race-' + deck.race_id"
+         ng-class="'race-' + deck.raceId"
          ng-drop="true" ng-drop-success="c.setServant($index, $data, $event)">
       <div class="background">
         <img ng-if="[0, 1, 2].indexOf($index) > -1" src="assets/img/m/deck.png" class="img-rounded img-responsive" />
@@ -67,7 +67,7 @@
       <skill-popover servant="deck"></skill-popover>
     </div>
     <div class="deck" ng-repeat="($index, deck) in c.decks track by $index" ng-if="[3, 4, 5, 7].indexOf($index) > -1"
-         ng-class="'race-' + deck.race_id"
+         ng-class="'race-' + deck.raceId"
          ng-drop="true" ng-drop-success="c.setServant($index, $data, $event)">
       <div class="background">
         <img ng-if="[3, 4, 5].indexOf($index) > -1" src="assets/img/m/deck.png" class="img-rounded img-responsive" />
@@ -87,7 +87,7 @@
 <div id="deck-servants" class="container">
   <div>
     <div class="deck" ng-repeat="servant in c.servants | filter:c.filter | orderBy:c.predicate:c.reverse"
-         ng-class="['race-' + servant.race_id, {'setted': servant.setted}]">
+         ng-class="['race-' + servant.raceId, {'setted': c.decks.indexOf(servant) > -1}]">
       <div class="background">
         <img src="assets/img/m/blank.png" class="img-rounded img-responsive" />
       </div>

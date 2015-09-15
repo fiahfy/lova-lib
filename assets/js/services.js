@@ -10,38 +10,31 @@ var lova;
             this.servants = [];
         }
         ServantService.prototype.load = function () {
+            var _this = this;
             var deferrd = this.$q.defer();
-            var me = this;
-            this.$http.get(this.url, { cache: true })
+            if (this.servants.length) {
+                deferrd.resolve();
+                return deferrd.promise;
+            }
+            this.$http.get(this.url)
                 .then(function (res) {
-                me.servants = res.data;
+                res.data.forEach(function (servant) {
+                    _this.servants.push(new lova.ServantModel(servant));
+                });
                 deferrd.resolve();
             }, function () {
                 deferrd.reject();
             });
             return deferrd.promise;
         };
-        ServantService.prototype.loadServants = function () {
-            var deferrd = this.$q.defer();
-            var me = this;
-            this.load()
-                .then(function () {
-                deferrd.resolve({ servants: me.servants });
+        ServantService.prototype.getServantWithId = function (id) {
+            var result = null;
+            this.servants.forEach(function (servant) {
+                if (servant.id == id) {
+                    result = servant;
+                }
             });
-            return deferrd.promise;
-        };
-        ServantService.prototype.loadServant = function (id) {
-            var deferrd = this.$q.defer();
-            var me = this;
-            this.load()
-                .then(function () {
-                me.servants.forEach(function (servant) {
-                    if (servant.id == id) {
-                        deferrd.resolve({ servant: servant });
-                    }
-                });
-            });
-            return deferrd.promise;
+            return result;
         };
         ServantService.$inject = [
             '$http',
@@ -51,19 +44,22 @@ var lova;
     })();
     lova.ServantService = ServantService;
     var ScrollService = (function () {
-        function ScrollService($location) {
+        function ScrollService($location, $window) {
             var _this = this;
             this.$location = $location;
+            this.$window = $window;
             this.positions = {};
-            $(window).on('scroll', function () {
-                _this.positions[_this.$location.path()] = $(window).scrollTop();
+            angular.element($window).on('scroll', function () {
+                _this.positions[_this.$location.path()] = angular.element($window).scrollTop();
             });
         }
         ScrollService.prototype.restore = function () {
-            $(window).scrollTop(this.positions[this.$location.path()] || 0);
+            var top = this.positions[this.$location.path()] || 0;
+            angular.element(this.$window).scrollTop(top);
         };
         ScrollService.$inject = [
-            '$location'
+            '$location',
+            '$window'
         ];
         return ScrollService;
     })();

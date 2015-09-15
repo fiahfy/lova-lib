@@ -16,16 +16,16 @@ module lova {
     }
 
     interface ServantListParams extends ng.route.IRouteParamsService {
-        view: number;
-        race_id: number;
+        view: string;
+        race_id: string;
     }
 
     export class ServantListController {
-        public servants: any[] = [];
+        public servants: ServantModel[] = [];
 
         public viewOptions: any[] = [
-            {key: null, icon: 'fui-list-columned'},
-            {key: 1,    icon: 'fui-list-large-thumbnails'}
+            {key: 0, icon: 'fui-list-columned'},
+            {key: 1, icon: 'fui-list-large-thumbnails'}
         ];
 
         public raceIdOptions: any[] = [
@@ -43,9 +43,15 @@ module lova {
 
         public q: string;
 
-        public filter: any;
+        public filter: {
+            raceId: number;
+            name: string;
+        } = {
+            raceId: undefined,
+            name: undefined
+        };
 
-        public predicate: string[] = ['race_id', 'race_code'];
+        public predicate: string[] = ['raceId', 'raceCode'];
 
         public reverse: boolean = false;
 
@@ -66,17 +72,13 @@ module lova {
             private servantService: ServantService,
             private scrollService: ScrollService
         ) {
-            this.view = $routeParams.view;
-            this.raceId = $routeParams.race_id;
-            var filter: any = {};
-            if (this.raceId) {
-                filter.race_id = this.raceId;
-            }
-            this.filter = filter;
+            this.view = $routeParams.view ? +$routeParams.view : 0;
+            this.raceId = $routeParams.race_id ? +$routeParams.race_id : 0;
+            this.filter.raceId = this.raceId ? this.raceId : undefined;
 
-            servantService.loadServants()
-                .then((reason: any) => {
-                    this.servants = reason.servants;
+            servantService.load()
+                .then(() => {
+                    this.servants = servantService.servants;
                     this.scrollService.restore();
                     this.showServants();
                 });
@@ -85,18 +87,16 @@ module lova {
                 if (typeof newValue === 'undefined' || typeof oldValue === 'undefined' || newValue == oldValue) {
                     return;
                 }
-                this.filter.race_id =  this.raceId ? this.raceId : '';
-                $location.search('race_id', this.raceId).replace();
+                this.selectRaceId(this.raceId);
             }, true);
         }
 
-        public showServant(servant) {
-            this.$location.url('/servants/' + servant.id + '/');
+        public selectView(view: number) {
+            this.$location.url(this.$location.search('view', view).url());
         }
 
-        public selectView(view) {
-            this.view = view;
-            this.$location.search('view', view).replace();
+        public selectRaceId(raceId: number) {
+            this.$location.url(this.$location.search('race_id', this.raceId).url());
         }
 
         public changeQuery() {
@@ -104,22 +104,24 @@ module lova {
             this.showServants();
         }
 
+        public openServant(servant: ServantModel) {
+            this.$location.url('/servants/' + servant.id + '/');
+        }
+
         private showServants() {
             this.$window.setTimeout(() => {
                 //noinspection TaskProblemsInspection
-                angular.element('img.lazy').lazyload({
-                    effect: 'fadeIn'
-                });
+                angular.element('img.lazy').lazyload();
             }, 1);
         }
     }
 
     interface ServantDetailParams extends ng.route.IRouteParamsService {
-        id: number;
+        id: string;
     }
 
     export class ServantDetailController {
-        public servant: any[];
+        public servant: ServantModel;
 
         public static $inject = [
             '$routeParams',
@@ -132,11 +134,9 @@ module lova {
             private servantService: ServantService,
             private scrollService: ScrollService
         ) {
-            this.servant = null;
-
-            servantService.loadServant($routeParams.id)
-                .then((reason: any) => {
-                    this.servant = reason.servant;
+            servantService.load()
+                .then(() => {
+                    this.servant = servantService.getServantWithId(+$routeParams.id);
                     this.scrollService.restore();
                 });
         }
@@ -147,7 +147,7 @@ module lova {
     }
 
     export class DeckController {
-        public servants: any[] = [];
+        public servants: ServantModel[] = [];
 
         public raceIdOptions: any[] = [
             {key: null, value: 'Select Race...'},
@@ -164,9 +164,15 @@ module lova {
 
         public q: string;
 
-        public filter: any = {};
+        public filter: {
+            raceId: number;
+            name: string;
+        } = {
+            raceId: undefined,
+            name: undefined
+        };
 
-        public predicate: string[] = ['race_id', 'race_code'];
+        public predicate: string[] = ['raceId', 'raceCode'];
 
         public reverse: boolean = false;
 
@@ -174,7 +180,7 @@ module lova {
 
         public deckIds: number[] = new Array(8);
 
-        public decks: number[];
+        public decks: ServantModel[];
 
         public static $inject = [
             '$scope',
@@ -195,17 +201,16 @@ module lova {
                 this.deckIds = this.decode($routeParams.hash);
             } catch (e) {}
 
-            servantService.loadServants()
-                .then((reason:any) => {
-                    this.servants = reason.servants;
-                    this.updateServants();
+            servantService.load()
+                .then(() => {
+                    this.servants = servantService.servants;
                     this.updateDecks();
                     this.updateLink();
                     this.updateEvent();
                     this.showServants();
                 });
 
-            angular.element(document).ready(() => {
+            angular.element($window.document).ready(() => {
                 let button = angular.element('.copy-clipboard');
                 let clip = new ZeroClipboard(button);
                 clip.on('ready', () => {
@@ -235,7 +240,6 @@ module lova {
                 this.deckIds[oldIndex] = this.deckIds[index];
             }
             this.deckIds[index] = servantId;
-            this.updateServants();
             this.updateDecks();
             this.updateLink();
             this.updateEvent();
@@ -243,7 +247,6 @@ module lova {
 
         public clearServant(index: number) {
             this.deckIds[index] = 0;
-            this.updateServants();
             this.updateDecks();
             this.updateLink();
             this.updateEvent();
@@ -252,15 +255,15 @@ module lova {
         public selectRaceId(raceId: number, raceName: string) {
             this.raceId = raceId;
             this.raceName = raceName;
-            this.filter.race_id = this.raceId ? this.raceId : '';
-            this.showServants();
+            this.filter.raceId = this.raceId ? this.raceId : undefined;
             this.updateEvent();
+            this.showServants();
         }
 
         public changeQuery() {
             this.filter.name = this.q;
-            this.showServants();
             this.updateEvent();
+            this.showServants();
         }
 
         public showServant(servantId: number) {
@@ -286,27 +289,21 @@ module lova {
                         .popover({
                             animation: false,
                             html : true,
-                            placement: function(context, source) {
-                                var top = angular.element(deck).find('span').offset().top;
-                                if (top - angular.element(window).scrollTop() < angular.element(window).height() / 2) {
+                            placement: (context, source) => {
+                                let top = angular.element(deck).find('span').offset().top;
+                                if (top - angular.element(this.$window).scrollTop() < angular.element(this.$window).height() / 2) {
                                     return 'bottom';
                                 }
                                 return 'top';
                             },
                             container: '#deck-popover-content',
                             trigger: 'hover',
-                            content: function() {
+                            content: () => {
                                 return angular.element(deck).find('.skill-popover-wrapper').html();
                             }
                         });
                 });
             }, 1);
-        }
-
-        private updateServants() {
-            this.servants.forEach((servant) => {
-                servant.setted = this.deckIds.indexOf(servant.id) > -1;
-            });
         }
 
         private updateDecks() {

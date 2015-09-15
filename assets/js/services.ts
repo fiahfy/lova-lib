@@ -5,7 +5,7 @@ module lova {
 
     export class ServantService {
         private url: string = './assets/data/servant.json';
-        private servants: any[] = [];
+        public servants: ServantModel[] = [];
 
         public static $inject = [
             '$http',
@@ -19,40 +19,31 @@ module lova {
         }
 
         public load(): ng.IPromise<any> {
-            var deferrd = this.$q.defer();
-            var me = this;
-            this.$http.get(this.url, {cache: true})
-                .then(function(res: any) {
-                    me.servants = res.data;
+            let deferrd = this.$q.defer();
+            if (this.servants.length) {
+                deferrd.resolve();
+                return deferrd.promise;
+            }
+            this.$http.get(this.url)
+                .then((res: any) => {
+                    res.data.forEach((servant) => {
+                        this.servants.push(new ServantModel(servant));
+                    });
                     deferrd.resolve();
-                }, function() {
+                }, () => {
                     deferrd.reject();
                 });
             return deferrd.promise;
         }
 
-        public loadServants(): ng.IPromise<any> {
-            var deferrd = this.$q.defer();
-            var me = this;
-            this.load()
-                .then(function() {
-                    deferrd.resolve({servants: me.servants});
-                });
-            return deferrd.promise;
-        }
-
-        public loadServant(id): ng.IPromise<any> {
-            var deferrd = this.$q.defer();
-            var me = this;
-            this.load()
-                .then(function() {
-                    me.servants.forEach(function(servant) {
-                        if (servant.id == id) {
-                            deferrd.resolve({servant: servant});
-                        }
-                    });
-                });
-            return deferrd.promise;
+        public getServantWithId(id: number) {
+            let result = null;
+            this.servants.forEach((servant) => {
+                if (servant.id == id) {
+                    result = servant;
+                }
+            });
+            return result;
         }
     }
 
@@ -60,19 +51,22 @@ module lova {
         private positions: any = {};
 
         public static $inject = [
-            '$location'
+            '$location',
+            '$window'
         ];
 
         constructor(
-            private $location: ng.ILocationService
+            private $location: ng.ILocationService,
+            private $window: ng.IWindowService
         ) {
-            $(window).on('scroll', () => {
-                this.positions[this.$location.path()] = $(window).scrollTop();
+            angular.element($window).on('scroll', () => {
+                this.positions[this.$location.path()] = angular.element($window).scrollTop();
             });
         }
 
         public restore(): void {
-            $(window).scrollTop(this.positions[this.$location.path()] || 0);
+            let top = this.positions[this.$location.path()] || 0;
+            angular.element(this.$window).scrollTop(top);
         }
     }
 }

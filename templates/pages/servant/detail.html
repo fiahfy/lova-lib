@@ -4,7 +4,7 @@
   </div>
 
   <div class="clearfix col-xs-12">
-    <a class="pull-right" href="http://wiki.4gamer.net/lova/使い魔/{{ c.servant.race_name }}/{{ c.servant.name }}/">to Official Wiki</a>
+    <a class="pull-right" href="http://wiki.4gamer.net/lova/使い魔/{{ c.servant.raceName }}/{{ c.servant.name }}/">to Official Wiki</a>
   </div>
 
   <div class="row">
@@ -19,7 +19,7 @@
       <div class="col-sm-6 row">
         <dl class="row">
           <dt class="col-xs-3">Race</dt>
-          <dd class="col-xs-9">{{ c.servant.race_name }}-{{ c.servant.race_code|pad:3:'0' }}</dd>
+          <dd class="col-xs-9">{{ c.servant.raceNameAndCode }}</dd>
         </dl>
         <dl class="row">
           <dt class="col-xs-3">Type</dt>
@@ -44,7 +44,7 @@
         <dt class="col-sm-12">Oral Tradition</dt>
         <dd class="col-sm-12">
           <div class="well well-sm">
-            <small>{{ c.servant.oral_tradition }}</small>
+            <small>{{ c.servant.oralTradition }}</small>
           </div>
         </dd>
       </dl>

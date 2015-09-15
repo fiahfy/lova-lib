@@ -21,7 +21,7 @@ var lova;
             this.scrollService = scrollService;
             this.servants = [];
             this.viewOptions = [
-                { key: null, icon: 'fui-list-columned' },
+                { key: 0, icon: 'fui-list-columned' },
                 { key: 1, icon: 'fui-list-large-thumbnails' }
             ];
             this.raceIdOptions = [
@@ -32,18 +32,18 @@ var lova;
                 { key: 4, value: '海種' },
                 { key: 5, value: '不死' }
             ];
-            this.predicate = ['race_id', 'race_code'];
+            this.filter = {
+                raceId: undefined,
+                name: undefined
+            };
+            this.predicate = ['raceId', 'raceCode'];
             this.reverse = false;
-            this.view = $routeParams.view;
-            this.raceId = $routeParams.race_id;
-            var filter = {};
-            if (this.raceId) {
-                filter.race_id = this.raceId;
-            }
-            this.filter = filter;
-            servantService.loadServants()
-                .then(function (reason) {
-                _this.servants = reason.servants;
+            this.view = $routeParams.view ? +$routeParams.view : 0;
+            this.raceId = $routeParams.race_id ? +$routeParams.race_id : 0;
+            this.filter.raceId = this.raceId ? this.raceId : undefined;
+            servantService.load()
+                .then(function () {
+                _this.servants = servantService.servants;
                 _this.scrollService.restore();
                 _this.showServants();
             });
@@ -51,27 +51,26 @@ var lova;
                 if (typeof newValue === 'undefined' || typeof oldValue === 'undefined' || newValue == oldValue) {
                     return;
                 }
-                _this.filter.race_id = _this.raceId ? _this.raceId : '';
-                $location.search('race_id', _this.raceId).replace();
+                _this.selectRaceId(_this.raceId);
             }, true);
         }
-        ServantListController.prototype.showServant = function (servant) {
-            this.$location.url('/servants/' + servant.id + '/');
-        };
         ServantListController.prototype.selectView = function (view) {
-            this.view = view;
-            this.$location.search('view', view).replace();
+            this.$location.url(this.$location.search('view', view).url());
+        };
+        ServantListController.prototype.selectRaceId = function (raceId) {
+            this.$location.url(this.$location.search('race_id', this.raceId).url());
         };
         ServantListController.prototype.changeQuery = function () {
             this.filter.name = this.q;
             this.showServants();
         };
+        ServantListController.prototype.openServant = function (servant) {
+            this.$location.url('/servants/' + servant.id + '/');
+        };
         ServantListController.prototype.showServants = function () {
             this.$window.setTimeout(function () {
                 //noinspection TaskProblemsInspection
-                angular.element('img.lazy').lazyload({
-                    effect: 'fadeIn'
-                });
+                angular.element('img.lazy').lazyload();
             }, 1);
         };
         ServantListController.$inject = [
@@ -91,10 +90,9 @@ var lova;
             this.$routeParams = $routeParams;
             this.servantService = servantService;
             this.scrollService = scrollService;
-            this.servant = null;
-            servantService.loadServant($routeParams.id)
-                .then(function (reason) {
-                _this.servant = reason.servant;
+            servantService.load()
+                .then(function () {
+                _this.servant = servantService.getServantWithId(+$routeParams.id);
                 _this.scrollService.restore();
             });
         }
@@ -124,24 +122,26 @@ var lova;
                 { key: 5, value: '不死' }
             ];
             this.raceName = 'Select Race...';
-            this.filter = {};
-            this.predicate = ['race_id', 'race_code'];
+            this.filter = {
+                raceId: undefined,
+                name: undefined
+            };
+            this.predicate = ['raceId', 'raceCode'];
             this.reverse = false;
             this.deckIds = new Array(8);
             try {
                 this.deckIds = this.decode($routeParams.hash);
             }
             catch (e) { }
-            servantService.loadServants()
-                .then(function (reason) {
-                _this.servants = reason.servants;
-                _this.updateServants();
+            servantService.load()
+                .then(function () {
+                _this.servants = servantService.servants;
                 _this.updateDecks();
                 _this.updateLink();
                 _this.updateEvent();
                 _this.showServants();
             });
-            angular.element(document).ready(function () {
+            angular.element($window.document).ready(function () {
                 var button = angular.element('.copy-clipboard');
                 var clip = new ZeroClipboard(button);
                 clip.on('ready', function () {
@@ -170,14 +170,12 @@ var lova;
                 this.deckIds[oldIndex] = this.deckIds[index];
             }
             this.deckIds[index] = servantId;
-            this.updateServants();
             this.updateDecks();
             this.updateLink();
             this.updateEvent();
         };
         DeckController.prototype.clearServant = function (index) {
             this.deckIds[index] = 0;
-            this.updateServants();
             this.updateDecks();
             this.updateLink();
             this.updateEvent();
@@ -185,14 +183,14 @@ var lova;
         DeckController.prototype.selectRaceId = function (raceId, raceName) {
             this.raceId = raceId;
             this.raceName = raceName;
-            this.filter.race_id = this.raceId ? this.raceId : '';
-            this.showServants();
+            this.filter.raceId = this.raceId ? this.raceId : undefined;
             this.updateEvent();
+            this.showServants();
         };
         DeckController.prototype.changeQuery = function () {
             this.filter.name = this.q;
-            this.showServants();
             this.updateEvent();
+            this.showServants();
         };
         DeckController.prototype.showServant = function (servantId) {
             this.$window.open('/lova-tool/#/servants/' + servantId + '/', '_blank');
@@ -209,6 +207,7 @@ var lova;
                 angular.element('#deck-popover-content').empty();
                 // attach event listener
                 angular.element('.deck').each(function () {
+                    var _this = this;
                     var deck = this;
                     angular.element(this)
                         .find('span')
@@ -217,7 +216,7 @@ var lova;
                         html: true,
                         placement: function (context, source) {
                             var top = angular.element(deck).find('span').offset().top;
-                            if (top - angular.element(window).scrollTop() < angular.element(window).height() / 2) {
+                            if (top - angular.element(_this.$window).scrollTop() < angular.element(_this.$window).height() / 2) {
                                 return 'bottom';
                             }
                             return 'top';
@@ -230,12 +229,6 @@ var lova;
                     });
                 });
             }, 1);
-        };
-        DeckController.prototype.updateServants = function () {
-            var _this = this;
-            this.servants.forEach(function (servant) {
-                servant.setted = _this.deckIds.indexOf(servant.id) > -1;
-            });
         };
         DeckController.prototype.updateDecks = function () {
             var _this = this;
