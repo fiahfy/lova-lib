@@ -4,8 +4,8 @@ module lova {
     'use strict';
 
     export class ServantService {
-        private url: string = './assets/data/servant.json';
-        private servants: any[] = [];
+        private static url: string = './assets/data/servant.json';
+        public servants: ServantModel[] = [];
 
         public static $inject = [
             '$http',
@@ -19,60 +19,89 @@ module lova {
         }
 
         public load(): ng.IPromise<any> {
-            var deferrd = this.$q.defer();
-            var me = this;
-            this.$http.get(this.url, {cache: true})
-                .then(function(res: any) {
-                    me.servants = res.data;
+            let deferrd = this.$q.defer();
+            if (this.servants.length) {
+                deferrd.resolve();
+                return deferrd.promise;
+            }
+            this.$http.get(ServantService.url)
+                .then((res: any) => {
+                    res.data.forEach((servant) => {
+                        this.servants.push(new ServantModel(servant));
+                    });
                     deferrd.resolve();
-                }, function() {
+                }, () => {
                     deferrd.reject();
                 });
             return deferrd.promise;
         }
 
-        public loadServants(): ng.IPromise<any> {
-            var deferrd = this.$q.defer();
-            var me = this;
-            this.load()
-                .then(function() {
-                    deferrd.resolve({servants: me.servants});
-                });
-            return deferrd.promise;
+        public getServantWithId(id: number) {
+            let result: ServantModel = null;
+            this.servants.forEach((servant) => {
+                if (servant.id == id) {
+                    result = servant;
+                }
+            });
+            return result;
+        }
+    }
+
+    export class DeckService {
+        public servants: ServantModel[] = [];
+        public deck: DeckModel;
+
+        public get url(): string {
+            let a = this.$window.document.createElement('a');
+            a.href = this.$window.location.href;
+            return a.protocol + '//' + a.hostname + a.pathname + '#/decks/' + this.deck.hash + '/';
         }
 
-        public loadServant(id): ng.IPromise<any> {
-            var deferrd = this.$q.defer();
-            var me = this;
-            this.load()
-                .then(function() {
-                    me.servants.forEach(function(servant) {
-                        if (servant.id == id) {
-                            deferrd.resolve({servant: servant});
-                        }
-                    });
-                });
-            return deferrd.promise;
+        public static $inject = [
+            '$window'
+        ];
+
+        constructor(
+            private $window: ng.IWindowService
+        ) {
+            this.deck = new DeckModel();
+        }
+
+        public loadWithHash(hash: string) {
+            this.deck.hash = hash;
+            this.deck.updateServants(this.servants);
+        }
+
+        public setServant(index: number, servantId: number) {
+            this.deck.servantIds[index] = servantId;
+            this.deck.updateServants(this.servants);
+        }
+
+        public unsetServant(index: number) {
+            this.setServant(index, undefined);
         }
     }
 
     export class ScrollService {
-        private positions: any = {};
+        private positions: { [index: string]: number; } = {};
 
         public static $inject = [
-            '$location'
+            '$location',
+            '$window'
         ];
 
         constructor(
-            private $location: ng.ILocationService
+            private $location: ng.ILocationService,
+            private $window: ng.IWindowService
         ) {
-            $(window).on('scroll', () => {
-                this.positions[this.$location.path()] = $(window).scrollTop();
+            angular.element($window).on('scroll', () => {
+                this.positions[this.$location.path()] = angular.element($window).scrollTop();
             });
         }
 
         public restore(): void {
-            $(window).scrollTop(this.positions[this.$location.path()] || 0);
+            let top = this.positions[this.$location.path()] || 0;
+            angular.element(this.$window).scrollTop(top);
         }
     }
 }

@@ -46,9 +46,9 @@
       </thead>
       <tbody>
       <tr ng-repeat="servant in c.servants | filter:c.filter | orderBy:c.predicate:c.reverse"
-          ng-click="c.showServant(servant)">
+          ng-click="c.openServant(servant)">
         <th class="hidden-xs" scope="row">{{ servant.id }}</th>
-        <td class="">{{ servant.race_name }}-{{ servant.race_code|pad:3:'0' }}</td>
+        <td class="">{{ servant.raceNameAndCode }}</td>
         <td class="">{{ servant.cost }}</td>
         <td class="hidden-xs">{{ servant.type }}</td>
         <td class="">{{ servant.name }}</td>
@@ -69,7 +69,7 @@
   <div ng-if="c.view" id="servant-thumbnails">
     <div class="col-md-2 col-sm-3 col-xs-6"
          ng-repeat="servant in c.servants | filter:c.filter | orderBy:c.predicate:c.reverse">
-      <a ng-click="c.showServant(servant)">
+      <a ng-click="c.openServant(servant)">
         <img data-original="./assets/img/m/{{ servant.id }}.jpg"
              src="assets/img/m/blank.png" class="img-rounded img-responsive lazy" />
       </a>

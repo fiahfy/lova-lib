@@ -20,14 +20,14 @@ module lova {
             if (!input) {
                 return input;
             }
-            var reg = new RegExp(regexp);
+            let reg = new RegExp(regexp);
             return input.replace(reg, newSubStr);
         };
     }
 
     export function skillDescription($sce: ng.ISCEService) {
         return (skill: any) => {
-            var desc = skill.description;
+            let desc = skill.description;
             if (!desc) {
                 return desc;
             }
@@ -37,13 +37,13 @@ module lova {
                 .replace(/［([^］]+)］/g, '<br/>&nbsp;&nbsp;<b>- $1</b>')
                 .replace(/：/g, ' : ');
 
-            var cd = skill.cd;
+            let cd = skill.cd;
             if (cd) {
                 cd = '- クールダウン : ' + cd.replace(/,/g, ' / ');
                 desc = desc.replace(/<br\/>/, '<br/>&nbsp;&nbsp;<b>' + cd + '</b><br/>');
             }
 
-            var ap = skill.ap;
+            let ap = skill.ap;
             if (ap) {
                 ap = '- 消費AP : ' + ap.replace(/,/g, ' / ');
                 desc = desc.replace(/<br\/>/, '<br/>&nbsp;&nbsp;<b>' + ap + '</b><br/>');

@@ -16,19 +16,19 @@ module lova {
     }
 
     interface ServantListParams extends ng.route.IRouteParamsService {
-        view: number;
-        race_id: number;
+        view: string;
+        race_id: string;
     }
 
     export class ServantListController {
-        public servants: any[] = [];
+        public servants: ServantModel[] = [];
 
-        public viewOptions: any[] = [
-            {key: null, icon: 'fui-list-columned'},
-            {key: 1,    icon: 'fui-list-large-thumbnails'}
+        public viewOptions: {key: number; icon: string;}[] = [
+            {key: 0, icon: 'fui-list-columned'},
+            {key: 1, icon: 'fui-list-large-thumbnails'}
         ];
 
-        public raceIdOptions: any[] = [
+        public raceIdOptions: {key: number; value: string;}[] = [
             {key: null, value: 'Select Race...'},
             {key: 1,    value: '人獣'},
             {key: 2,    value: '神族'},
@@ -43,9 +43,15 @@ module lova {
 
         public q: string;
 
-        public filter: any;
+        public filter: {
+            raceId: number;
+            name: string;
+        } = {
+            raceId: undefined,
+            name: undefined
+        };
 
-        public predicate: string[] = ['race_id', 'race_code'];
+        public predicate: string[] = ['raceId', 'raceCode'];
 
         public reverse: boolean = false;
 
@@ -66,60 +72,56 @@ module lova {
             private servantService: ServantService,
             private scrollService: ScrollService
         ) {
-            this.view = $routeParams.view;
-            this.raceId = $routeParams.race_id;
-            var filter: any = {};
-            if (this.raceId) {
-                filter.race_id = this.raceId;
-            }
-            this.filter = filter;
+            this.view = $routeParams.view ? +$routeParams.view : 0;
+            this.raceId = $routeParams.race_id ? +$routeParams.race_id : 0;
+            this.filter.raceId = this.raceId ? this.raceId : undefined;
 
-            servantService.loadServants()
-                .then((reason: any) => {
-                    this.servants = reason.servants;
+            servantService.load()
+                .then(() => {
+                    this.servants = servantService.servants;
                     this.scrollService.restore();
-                    this.showServants();
+                    this.refreshEventListener();
                 });
 
             $scope.$watch(() => this.raceId, (newValue, oldValue) => {
                 if (typeof newValue === 'undefined' || typeof oldValue === 'undefined' || newValue == oldValue) {
                     return;
                 }
-                this.filter.race_id =  this.raceId ? this.raceId : '';
-                $location.search('race_id', this.raceId).replace();
+                this.selectRaceId(this.raceId);
             }, true);
         }
 
-        public showServant(servant) {
-            this.$location.url('/servants/' + servant.id + '/');
+        public selectView(view: number) {
+            this.$location.url(this.$location.search('view', view).url());
         }
 
-        public selectView(view) {
-            this.view = view;
-            this.$location.search('view', view).replace();
+        public selectRaceId(raceId: number) {
+            this.$location.url(this.$location.search('race_id', raceId).url());
         }
 
         public changeQuery() {
             this.filter.name = this.q;
-            this.showServants();
+            this.refreshEventListener();
         }
 
-        private showServants() {
+        public openServant(servant: ServantModel) {
+            this.$location.url('/servants/' + servant.id + '/');
+        }
+
+        private refreshEventListener() {
             this.$window.setTimeout(() => {
                 //noinspection TaskProblemsInspection
-                angular.element('img.lazy').lazyload({
-                    effect: 'fadeIn'
-                });
+                angular.element('img.lazy').lazyload();
             }, 1);
         }
     }
 
     interface ServantDetailParams extends ng.route.IRouteParamsService {
-        id: number;
+        id: string;
     }
 
     export class ServantDetailController {
-        public servant: any[];
+        public servant: ServantModel;
 
         public static $inject = [
             '$routeParams',
@@ -132,11 +134,9 @@ module lova {
             private servantService: ServantService,
             private scrollService: ScrollService
         ) {
-            this.servant = null;
-
-            servantService.loadServant($routeParams.id)
-                .then((reason: any) => {
-                    this.servant = reason.servant;
+            servantService.load()
+                .then(() => {
+                    this.servant = servantService.getServantWithId(+$routeParams.id);
                     this.scrollService.restore();
                 });
         }
@@ -147,9 +147,9 @@ module lova {
     }
 
     export class DeckController {
-        public servants: any[] = [];
+        public servants: ServantModel[] = [];
 
-        public raceIdOptions: any[] = [
+        public raceIdOptions: {key: number; value: string;}[] = [
             {key: null, value: 'Select Race...'},
             {key: 1,    value: '人獣'},
             {key: 2,    value: '神族'},
@@ -164,48 +164,48 @@ module lova {
 
         public q: string;
 
-        public filter: any = {};
+        public filter: {
+            raceId: number;
+            name: string;
+        } = {
+            raceId: undefined,
+            name: undefined
+        };
 
-        public predicate: string[] = ['race_id', 'race_code'];
+        public predicate: string[] = ['raceId', 'raceCode'];
 
         public reverse: boolean = false;
 
-        public link: string;
+        public url: string;
 
-        public deckIds: number[] = new Array(8);
-
-        public decks: number[];
+        public deck: DeckModel;
 
         public static $inject = [
-            '$scope',
             '$window',
             '$location',
             '$routeParams',
-            'ServantService'
+            'ServantService',
+            'DeckService'
         ];
 
         constructor(
-            private $scope: ng.IScope,
             private $window: ng.IWindowService,
             private $location: ng.ILocationService,
             private $routeParams: DeckParams,
-            private servantService: ServantService
+            private servantService: ServantService,
+            private deckService: DeckService
         ) {
-            try {
-                this.deckIds = this.decode($routeParams.hash);
-            } catch (e) {}
-
-            servantService.loadServants()
-                .then((reason:any) => {
-                    this.servants = reason.servants;
-                    this.updateServants();
-                    this.updateDecks();
-                    this.updateLink();
-                    this.updateEvent();
-                    this.showServants();
+            servantService.load()
+                .then(() => {
+                    this.servants = servantService.servants;
+                    deckService.servants = servantService.servants;
+                    deckService.loadWithHash($routeParams.hash);
+                    this.deck = deckService.deck;
+                    this.url = deckService.url;
+                    this.refreshEventListener();
                 });
 
-            angular.element(document).ready(() => {
+            angular.element($window.document).ready(() => {
                 let button = angular.element('.copy-clipboard');
                 let clip = new ZeroClipboard(button);
                 clip.on('ready', () => {
@@ -228,119 +228,58 @@ module lova {
             });
         }
 
-        public setServant(index: number, data: any, event: any) {
+        public setServant(index: number, data: {servantId: number; index: number}) {
             let servantId = data.servantId;
             let oldIndex = data.index;
             if (oldIndex !== null) {
-                this.deckIds[oldIndex] = this.deckIds[index];
+                this.deckService.setServant(oldIndex, this.deck.servants[index] ? this.deck.servants[index].id : undefined);
             }
-            this.deckIds[index] = servantId;
-            this.updateServants();
-            this.updateDecks();
-            this.updateLink();
-            this.updateEvent();
+            this.deckService.setServant(index, servantId);
+            this.deck = this.deckService.deck;
+            this.url = this.deckService.url;
+            this.refreshEventListener();
         }
 
         public clearServant(index: number) {
-            this.deckIds[index] = 0;
-            this.updateServants();
-            this.updateDecks();
-            this.updateLink();
-            this.updateEvent();
+            this.deckService.unsetServant(index);
+            this.deck = this.deckService.deck;
+            this.url = this.deckService.url;
+            this.refreshEventListener();
         }
 
         public selectRaceId(raceId: number, raceName: string) {
             this.raceId = raceId;
             this.raceName = raceName;
-            this.filter.race_id = this.raceId ? this.raceId : '';
-            this.showServants();
-            this.updateEvent();
+            this.filter.raceId = this.raceId ? this.raceId : undefined;
+            this.refreshEventListener();
         }
 
         public changeQuery() {
             this.filter.name = this.q;
-            this.showServants();
-            this.updateEvent();
+            this.refreshEventListener();
         }
 
-        public showServant(servantId: number) {
+        public openServant(servantId: number) {
             this.$window.open('/lova-tool/#/servants/' + servantId + '/', '_blank');
         }
 
-        private showServants() {
+        private refreshEventListener() {
             this.$window.setTimeout(() => {
                 //noinspection TaskProblemsInspection
                 angular.element('img.lazy').lazyload();
             }, 1);
         }
-
-        private updateEvent() {
-            this.$window.setTimeout(() => {
-                // clear all popovers
-                angular.element('#deck-popover-content').empty();
-                // attach event listener
-                angular.element('.deck').each(function() {
-                    let deck = this;
-                    angular.element(this)
-                        .find('span')
-                        .popover({
-                            animation: false,
-                            html : true,
-                            placement: function(context, source) {
-                                var top = angular.element(deck).find('span').offset().top;
-                                if (top - angular.element(window).scrollTop() < angular.element(window).height() / 2) {
-                                    return 'bottom';
-                                }
-                                return 'top';
-                            },
-                            container: '#deck-popover-content',
-                            trigger: 'hover',
-                            content: function() {
-                                return angular.element(deck).find('.skill-popover-wrapper').html();
-                            }
-                        });
-                });
-            }, 1);
-        }
-
-        private updateServants() {
-            this.servants.forEach((servant) => {
-                servant.setted = this.deckIds.indexOf(servant.id) > -1;
-            });
-        }
-
-        private updateDecks() {
-            this.decks = this.deckIds.map((deckId) => {
-                for (let i = 0; i < this.servants.length; i++) {
-                    let servant = this.servants[i];
-                    if (deckId == servant.id) {
-                        return servant;
-                    }
-                }
-                return null;
-            });
-        }
-
-        private updateLink() {
-            this.link = this.getLinkFromHash(this.encode(this.deckIds));
-        }
-
-        private getLinkFromHash(hash: string): string {
-            let a = this.$window.document.createElement('a');
-            a.href = this.$window.location.href;
-            return a.protocol + '//' + a.hostname + a.pathname + '#/decks/' + hash + '/';
-        }
-
-        private encode(data: number[]): string {
-            return this.$window.btoa(JSON.stringify(data));
-        }
-
-        private decode(encodedString: string): number[] {
-            return JSON.parse(this.$window.atob(encodedString));
-        }
     }
 
     export class AboutController {
-        public mail: string = 'd.fiahfy@gmail.com';
+        public mail: string;
+
+        public static $inject = [
+        ];
+
+        constructor(
+        ) {
+            this.mail = AppConfig.mail;
+        }
     }
 }

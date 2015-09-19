@@ -4,7 +4,7 @@
   </div>
 
   <div class="clearfix col-xs-12">
-    <a class="pull-right" href="http://wiki.4gamer.net/lova/使い魔/{{ c.servant.race_name }}/{{ c.servant.name }}/">to Official Wiki</a>
+    <a class="pull-right" href="http://wiki.4gamer.net/lova/使い魔/{{ c.servant.raceName }}/{{ c.servant.name }}/">to Official Wiki</a>
   </div>
 
   <div class="row">
@@ -16,35 +16,37 @@
       </div>
     </div>
     <div class="col-lg-8 col-md-7 col-sm-7">
-      <div class="col-sm-6 row">
-        <dl class="row">
-          <dt class="col-xs-3">Race</dt>
-          <dd class="col-xs-9">{{ c.servant.race_name }}-{{ c.servant.race_code|pad:3:'0' }}</dd>
-        </dl>
-        <dl class="row">
-          <dt class="col-xs-3">Type</dt>
-          <dd class="col-xs-9">{{ c.servant.type }}</dd>
-        </dl>
-        <dl class="row">
-          <dt class="col-xs-3">Cost</dt>
-          <dd class="col-xs-9">{{ c.servant.cost }}</dd>
-        </dl>
-      </div>
-      <div class="col-sm-6 row">
-        <dl class="row">
-          <dt class="col-xs-3">Updated</dt>
-          <dd class="col-xs-9">{{ c.servant.date|date:'yyyy-MM-dd' }}</dd>
-        </dl>
-        <dl class="row">
-          <dt class="col-xs-3">Range</dt>
-          <dd class="col-xs-9">{{ c.servant.range }}</dd>
-        </dl>
+      <div class="row">
+        <div class="col-sm-6">
+          <dl class="row">
+            <dt class="col-xs-3">Race</dt>
+            <dd class="col-xs-9">{{ c.servant.raceNameAndCode }}</dd>
+          </dl>
+          <dl class="row">
+            <dt class="col-xs-3">Type</dt>
+            <dd class="col-xs-9">{{ c.servant.type }}</dd>
+          </dl>
+          <dl class="row">
+            <dt class="col-xs-3">Cost</dt>
+            <dd class="col-xs-9">{{ c.servant.cost }}</dd>
+          </dl>
+        </div>
+        <div class="col-sm-6">
+          <dl class="row">
+            <dt class="col-xs-3">Updated</dt>
+            <dd class="col-xs-9">{{ c.servant.date|date:'yyyy-MM-dd' }}</dd>
+          </dl>
+          <dl class="row">
+            <dt class="col-xs-3">Range</dt>
+            <dd class="col-xs-9">{{ c.servant.range }}</dd>
+          </dl>
+        </div>
       </div>
       <dl class="row">
         <dt class="col-sm-12">Oral Tradition</dt>
         <dd class="col-sm-12">
           <div class="well well-sm">
-            <small>{{ c.servant.oral_tradition }}</small>
+            <small>{{ c.servant.oralTradition }}</small>
           </div>
         </dd>
       </dl>
