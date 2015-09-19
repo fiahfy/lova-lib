@@ -46,7 +46,15 @@ var lova;
         ];
         return Router;
     })();
+    var AppConfig = (function () {
+        function AppConfig() {
+        }
+        AppConfig.mail = 'd.fiahfy@gmail.com';
+        return AppConfig;
+    })();
+    lova.AppConfig = AppConfig;
     app.config(Router);
+    app.value('AppConfig', AppConfig);
     app.controller('MainController', lova.MainController);
     app.controller('ServantListController', lova.ServantListController);
     app.controller('ServantDetailController', lova.ServantDetailController);
@@ -54,11 +62,13 @@ var lova;
     app.controller('AboutController', lova.AboutController);
     app.directive('fittable', lova.fittable);
     app.directive('skillPopover', lova.skillPopover);
+    app.directive('skillPopoverContent', lova.skillPopoverContent);
     app.filter('pad', lova.pad);
     app.filter('default', lova.def);
     app.filter('replace', lova.replace);
     app.filter('skillDescription', lova.skillDescription);
     app.service('ServantService', lova.ServantService);
+    app.service('DeckService', lova.DeckService);
     app.service('ScrollService', lova.ScrollService);
 })(lova || (lova = {}));
 //# sourceMappingURL=app.js.map

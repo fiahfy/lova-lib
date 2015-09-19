@@ -162,6 +162,25 @@ img {
     box-shadow: 0 1px 1px 0 #e7e9ec;
     border-bottom: 0;
 }
+#deck-container>div>dl {
+    margin: 0;
+    padding: 0;
+}
+#deck-container>div>dl>* {
+    display: table-cell;
+}
+#deck-container>div>dl>dt {
+    padding: 0 15px;
+    font-size: 90%;
+    font-weight: 400;
+    line-height: 25px;
+    color: #c0c1c2;
+    width: 1%;
+}
+#deck-container>div>dl>dd {
+    width: 100%;
+}
+
 #deck-container .deck {
     padding: 3px;
     border: 0 solid #1abc9c;
@@ -169,7 +188,7 @@ img {
 #deck-container .deck:nth-child(1) {
     border-width: 2px 0 0 2px;
     padding: 1px 3px 3px 1px;
-    border-radius: 5px 0 0 0;
+    border-radius: 7px 0 0 0;
 }
 #deck-container .deck:nth-child(2) {
     border-width: 2px 0 0 0;
@@ -179,12 +198,12 @@ img {
 #deck-container .deck:nth-child(3) {
     border-width: 2px 2px 0 0;
     padding: 1px 1px 3px 3px;
-    border-radius: 0 5px 0 0;
+    border-radius: 0 7px 0 0;
 }
 #deck-container .deck:nth-child(5) {
     border-width: 0 0 2px 2px;
     padding: 3px 3px 1px 1px;
-    border-radius: 0 0 0 5px;
+    border-radius: 0 0 0 7px;
 }
 #deck-container .deck:nth-child(6) {
     border-width: 0 0 2px 0;
@@ -194,7 +213,7 @@ img {
 #deck-container .deck:nth-child(7) {
     border-width: 0 2px 2px 0;
     padding: 3px 1px 1px 3px;
-    border-radius: 0 0 5px 0;
+    border-radius: 0 0 7px 0;
 }
 @media (min-width: 768px) {
     #deck-container {
@@ -203,7 +222,7 @@ img {
     #deck-container .deck:nth-child(1) {
         border-width: 2px 0 2px 2px;
         padding: 1px 3px 1px 1px;
-        border-radius: 5px 0 0 5px;
+        border-radius: 7px 0 0 7px;
     }
     #deck-container .deck:nth-child(2),
     #deck-container .deck:nth-child(3),
@@ -216,7 +235,7 @@ img {
     #deck-container .deck:nth-child(6) {
         border-width: 2px 2px 2px 0;
         padding: 1px 1px 1px 3px;
-        border-radius: 0 5px 5px 0;
+        border-radius: 0 7px 7px 0;
     }
     #deck-container .deck:nth-child(7),
     #deck-container .deck:nth-child(8) {
@@ -244,7 +263,7 @@ img {
     bottom: 0;
     padding: 0 7px;
 }
-#deck-popover-content {
+#deck-popover-container {
     position: relative;
 }
 
@@ -267,6 +286,7 @@ img {
 }
 .deck>div.content>img {
     border: 2px solid transparent;
+    border-radius: 5px;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
 }
@@ -294,27 +314,28 @@ img {
 .deck>div.background>img {
     width: 100%;
     height: 100%;
+    border-radius: 5px;
     background-color: lightgray;
 }
 .deck.race-1>div.content>img {
     border-color: #a26821;
-    box-shadow: 0 0 2px #a26821;
+    box-shadow: 0 0 1px #a26821;
 }
 .deck.race-2>div.content>img {
     border-color: #9d9075;
-    box-shadow: 0 0 2px #9d9075;
+    box-shadow: 0 0 1px #9d9075;
 }
 .deck.race-3>div.content>img {
     border-color: #554e86;
-    box-shadow: 0 0 2px #554e86;
+    box-shadow: 0 0 1px #554e86;
 }
 .deck.race-4>div.content>img {
     border-color: #558c9e;
-    box-shadow: 0 0 2px #558c9e;
+    box-shadow: 0 0 1px #558c9e;
 }
 .deck.race-5>div.content>img {
     border-color: #7f4a83;
-    box-shadow: 0 0 2px #7f4a83;
+    box-shadow: 0 0 1px #7f4a83;
 }
 @media (min-width: 768px) {
     .deck {
@@ -336,7 +357,7 @@ img {
 }
 
 /* Skill Popover Class */
-.skill-popover-wrapper {
+.skill-popover-content {
     display: none;
 }
 .skill-popover>dl {

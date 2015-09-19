@@ -73,5 +73,90 @@ var lova;
         return SkillModel;
     })();
     lova.SkillModel = SkillModel;
+    var DeckModel = (function () {
+        function DeckModel() {
+            this.servants = [];
+            this.servantIds = [];
+        }
+        Object.defineProperty(DeckModel.prototype, "hash", {
+            get: function () {
+                return window.btoa(JSON.stringify(this.servantIds));
+            },
+            set: function (value) {
+                try {
+                    this.servantIds = JSON.parse(window.atob(value));
+                }
+                catch (e) {
+                    this.servantIds = [];
+                }
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(DeckModel.prototype, "mana", {
+            get: function () {
+                var fill = true;
+                this.servants.forEach(function (e, i) {
+                    if (!e && DeckModel.deckIndexes.indexOf(i) > -1) {
+                        fill = false;
+                    }
+                });
+                return fill ? 30 : 0;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(DeckModel.prototype, "bonusMana", {
+            get: function () {
+                var raceIds = [];
+                var fill = true;
+                this.servants.forEach(function (e, i) {
+                    if (DeckModel.deckIndexes.indexOf(i) == -1) {
+                        return;
+                    }
+                    if (!e) {
+                        fill = false;
+                        return;
+                    }
+                    if (raceIds.indexOf(e.raceId) == -1) {
+                        raceIds.push(e.raceId);
+                    }
+                });
+                if (!fill) {
+                    return 0;
+                }
+                switch (raceIds.length) {
+                    case 1:
+                        return 10;
+                    case 2:
+                        return 5;
+                    default:
+                        return 0;
+                }
+            },
+            enumerable: true,
+            configurable: true
+        });
+        DeckModel.prototype.updateServants = function (servants) {
+            this.servants = [];
+            for (var i = 0; i < DeckModel.size; i++) {
+                var servantId = this.servantIds[i];
+                var tmp = void 0;
+                for (var j = 0; j < servants.length; j++) {
+                    var servant = servants[j];
+                    if (servantId == servant.id) {
+                        tmp = servant;
+                        break;
+                    }
+                }
+                this.servants.push(tmp);
+            }
+        };
+        DeckModel.deckIndexes = [0, 1, 2, 3, 4, 5];
+        DeckModel.sideBoardIndexes = [6, 7];
+        DeckModel.size = DeckModel.deckIndexes.length + DeckModel.sideBoardIndexes.length;
+        return DeckModel;
+    })();
+    lova.DeckModel = DeckModel;
 })(lova || (lova = {}));
 //# sourceMappingURL=models.js.map

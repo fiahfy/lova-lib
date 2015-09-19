@@ -6,7 +6,6 @@ var lova;
         function ServantService($http, $q) {
             this.$http = $http;
             this.$q = $q;
-            this.url = './assets/data/servant.json';
             this.servants = [];
         }
         ServantService.prototype.load = function () {
@@ -16,7 +15,7 @@ var lova;
                 deferrd.resolve();
                 return deferrd.promise;
             }
-            this.$http.get(this.url)
+            this.$http.get(ServantService.url)
                 .then(function (res) {
                 res.data.forEach(function (servant) {
                     _this.servants.push(new lova.ServantModel(servant));
@@ -36,6 +35,7 @@ var lova;
             });
             return result;
         };
+        ServantService.url = './assets/data/servant.json';
         ServantService.$inject = [
             '$http',
             '$q'
@@ -43,6 +43,38 @@ var lova;
         return ServantService;
     })();
     lova.ServantService = ServantService;
+    var DeckService = (function () {
+        function DeckService($window) {
+            this.$window = $window;
+            this.servants = [];
+            this.deck = new lova.DeckModel();
+        }
+        Object.defineProperty(DeckService.prototype, "url", {
+            get: function () {
+                var a = this.$window.document.createElement('a');
+                a.href = this.$window.location.href;
+                return a.protocol + '//' + a.hostname + a.pathname + '#/decks/' + this.deck.hash + '/';
+            },
+            enumerable: true,
+            configurable: true
+        });
+        DeckService.prototype.loadWithHash = function (hash) {
+            this.deck.hash = hash;
+            this.deck.updateServants(this.servants);
+        };
+        DeckService.prototype.setServant = function (index, servantId) {
+            this.deck.servantIds[index] = servantId;
+            this.deck.updateServants(this.servants);
+        };
+        DeckService.prototype.unsetServant = function (index) {
+            this.setServant(index, undefined);
+        };
+        DeckService.$inject = [
+            '$window'
+        ];
+        return DeckService;
+    })();
+    lova.DeckService = DeckService;
     var ScrollService = (function () {
         function ScrollService($location, $window) {
             var _this = this;

@@ -45,7 +45,7 @@ var lova;
                 .then(function () {
                 _this.servants = servantService.servants;
                 _this.scrollService.restore();
-                _this.showServants();
+                _this.refreshEventListener();
             });
             $scope.$watch(function () { return _this.raceId; }, function (newValue, oldValue) {
                 if (typeof newValue === 'undefined' || typeof oldValue === 'undefined' || newValue == oldValue) {
@@ -58,16 +58,16 @@ var lova;
             this.$location.url(this.$location.search('view', view).url());
         };
         ServantListController.prototype.selectRaceId = function (raceId) {
-            this.$location.url(this.$location.search('race_id', this.raceId).url());
+            this.$location.url(this.$location.search('race_id', raceId).url());
         };
         ServantListController.prototype.changeQuery = function () {
             this.filter.name = this.q;
-            this.showServants();
+            this.refreshEventListener();
         };
         ServantListController.prototype.openServant = function (servant) {
             this.$location.url('/servants/' + servant.id + '/');
         };
-        ServantListController.prototype.showServants = function () {
+        ServantListController.prototype.refreshEventListener = function () {
             this.$window.setTimeout(function () {
                 //noinspection TaskProblemsInspection
                 angular.element('img.lazy').lazyload();
@@ -105,13 +105,13 @@ var lova;
     })();
     lova.ServantDetailController = ServantDetailController;
     var DeckController = (function () {
-        function DeckController($scope, $window, $location, $routeParams, servantService) {
+        function DeckController($window, $location, $routeParams, servantService, deckService) {
             var _this = this;
-            this.$scope = $scope;
             this.$window = $window;
             this.$location = $location;
             this.$routeParams = $routeParams;
             this.servantService = servantService;
+            this.deckService = deckService;
             this.servants = [];
             this.raceIdOptions = [
                 { key: null, value: 'Select Race...' },
@@ -128,18 +128,14 @@ var lova;
             };
             this.predicate = ['raceId', 'raceCode'];
             this.reverse = false;
-            this.deckIds = new Array(8);
-            try {
-                this.deckIds = this.decode($routeParams.hash);
-            }
-            catch (e) { }
             servantService.load()
                 .then(function () {
                 _this.servants = servantService.servants;
-                _this.updateDecks();
-                _this.updateLink();
-                _this.updateEvent();
-                _this.showServants();
+                deckService.servants = servantService.servants;
+                deckService.loadWithHash($routeParams.hash);
+                _this.deck = deckService.deck;
+                _this.url = deckService.url;
+                _this.refreshEventListener();
             });
             angular.element($window.document).ready(function () {
                 var button = angular.element('.copy-clipboard');
@@ -163,113 +159,57 @@ var lova;
                 });
             });
         }
-        DeckController.prototype.setServant = function (index, data, event) {
+        DeckController.prototype.setServant = function (index, data) {
             var servantId = data.servantId;
             var oldIndex = data.index;
             if (oldIndex !== null) {
-                this.deckIds[oldIndex] = this.deckIds[index];
+                this.deckService.setServant(oldIndex, this.deck.servants[index] ? this.deck.servants[index].id : undefined);
             }
-            this.deckIds[index] = servantId;
-            this.updateDecks();
-            this.updateLink();
-            this.updateEvent();
+            this.deckService.setServant(index, servantId);
+            this.deck = this.deckService.deck;
+            this.url = this.deckService.url;
+            this.refreshEventListener();
         };
         DeckController.prototype.clearServant = function (index) {
-            this.deckIds[index] = 0;
-            this.updateDecks();
-            this.updateLink();
-            this.updateEvent();
+            this.deckService.unsetServant(index);
+            this.deck = this.deckService.deck;
+            this.url = this.deckService.url;
+            this.refreshEventListener();
         };
         DeckController.prototype.selectRaceId = function (raceId, raceName) {
             this.raceId = raceId;
             this.raceName = raceName;
             this.filter.raceId = this.raceId ? this.raceId : undefined;
-            this.updateEvent();
-            this.showServants();
+            this.refreshEventListener();
         };
         DeckController.prototype.changeQuery = function () {
             this.filter.name = this.q;
-            this.updateEvent();
-            this.showServants();
+            this.refreshEventListener();
         };
-        DeckController.prototype.showServant = function (servantId) {
+        DeckController.prototype.openServant = function (servantId) {
             this.$window.open('/lova-tool/#/servants/' + servantId + '/', '_blank');
         };
-        DeckController.prototype.showServants = function () {
+        DeckController.prototype.refreshEventListener = function () {
             this.$window.setTimeout(function () {
                 //noinspection TaskProblemsInspection
                 angular.element('img.lazy').lazyload();
             }, 1);
         };
-        DeckController.prototype.updateEvent = function () {
-            this.$window.setTimeout(function () {
-                // clear all popovers
-                angular.element('#deck-popover-content').empty();
-                // attach event listener
-                angular.element('.deck').each(function () {
-                    var _this = this;
-                    var deck = this;
-                    angular.element(this)
-                        .find('span')
-                        .popover({
-                        animation: false,
-                        html: true,
-                        placement: function (context, source) {
-                            var top = angular.element(deck).find('span').offset().top;
-                            if (top - angular.element(_this.$window).scrollTop() < angular.element(_this.$window).height() / 2) {
-                                return 'bottom';
-                            }
-                            return 'top';
-                        },
-                        container: '#deck-popover-content',
-                        trigger: 'hover',
-                        content: function () {
-                            return angular.element(deck).find('.skill-popover-wrapper').html();
-                        }
-                    });
-                });
-            }, 1);
-        };
-        DeckController.prototype.updateDecks = function () {
-            var _this = this;
-            this.decks = this.deckIds.map(function (deckId) {
-                for (var i = 0; i < _this.servants.length; i++) {
-                    var servant = _this.servants[i];
-                    if (deckId == servant.id) {
-                        return servant;
-                    }
-                }
-                return null;
-            });
-        };
-        DeckController.prototype.updateLink = function () {
-            this.link = this.getLinkFromHash(this.encode(this.deckIds));
-        };
-        DeckController.prototype.getLinkFromHash = function (hash) {
-            var a = this.$window.document.createElement('a');
-            a.href = this.$window.location.href;
-            return a.protocol + '//' + a.hostname + a.pathname + '#/decks/' + hash + '/';
-        };
-        DeckController.prototype.encode = function (data) {
-            return this.$window.btoa(JSON.stringify(data));
-        };
-        DeckController.prototype.decode = function (encodedString) {
-            return JSON.parse(this.$window.atob(encodedString));
-        };
         DeckController.$inject = [
-            '$scope',
             '$window',
             '$location',
             '$routeParams',
-            'ServantService'
+            'ServantService',
+            'DeckService'
         ];
         return DeckController;
     })();
     lova.DeckController = DeckController;
     var AboutController = (function () {
         function AboutController() {
-            this.mail = 'd.fiahfy@gmail.com';
+            this.mail = lova.AppConfig.mail;
         }
+        AboutController.$inject = [];
         return AboutController;
     })();
     lova.AboutController = AboutController;

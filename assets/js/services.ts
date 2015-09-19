@@ -4,7 +4,7 @@ module lova {
     'use strict';
 
     export class ServantService {
-        private url: string = './assets/data/servant.json';
+        private static url: string = './assets/data/servant.json';
         public servants: ServantModel[] = [];
 
         public static $inject = [
@@ -24,7 +24,7 @@ module lova {
                 deferrd.resolve();
                 return deferrd.promise;
             }
-            this.$http.get(this.url)
+            this.$http.get(ServantService.url)
                 .then((res: any) => {
                     res.data.forEach((servant) => {
                         this.servants.push(new ServantModel(servant));
@@ -37,7 +37,7 @@ module lova {
         }
 
         public getServantWithId(id: number) {
-            let result = null;
+            let result: ServantModel = null;
             this.servants.forEach((servant) => {
                 if (servant.id == id) {
                     result = servant;
@@ -47,8 +47,43 @@ module lova {
         }
     }
 
+    export class DeckService {
+        public servants: ServantModel[] = [];
+        public deck: DeckModel;
+
+        public get url(): string {
+            let a = this.$window.document.createElement('a');
+            a.href = this.$window.location.href;
+            return a.protocol + '//' + a.hostname + a.pathname + '#/decks/' + this.deck.hash + '/';
+        }
+
+        public static $inject = [
+            '$window'
+        ];
+
+        constructor(
+            private $window: ng.IWindowService
+        ) {
+            this.deck = new DeckModel();
+        }
+
+        public loadWithHash(hash: string) {
+            this.deck.hash = hash;
+            this.deck.updateServants(this.servants);
+        }
+
+        public setServant(index: number, servantId: number) {
+            this.deck.servantIds[index] = servantId;
+            this.deck.updateServants(this.servants);
+        }
+
+        public unsetServant(index: number) {
+            this.setServant(index, undefined);
+        }
+    }
+
     export class ScrollService {
-        private positions: any = {};
+        private positions: { [index: string]: number; } = {};
 
         public static $inject = [
             '$location',

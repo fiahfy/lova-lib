@@ -51,7 +51,12 @@ module lova {
         }
     }
 
+    export class AppConfig {
+        public static mail: string = 'd.fiahfy@gmail.com';
+    }
+
     app.config(Router);
+    app.value('AppConfig', AppConfig);
     app.controller('MainController', MainController);
     app.controller('ServantListController', ServantListController);
     app.controller('ServantDetailController', ServantDetailController);
@@ -59,10 +64,12 @@ module lova {
     app.controller('AboutController', AboutController);
     app.directive('fittable', fittable);
     app.directive('skillPopover', skillPopover);
+    app.directive('skillPopoverContent', skillPopoverContent);
     app.filter('pad', pad);
     app.filter('default', def);
     app.filter('replace', replace);
     app.filter('skillDescription', skillDescription);
     app.service('ServantService', ServantService);
+    app.service('DeckService', DeckService);
     app.service('ScrollService', ScrollService);
 }
