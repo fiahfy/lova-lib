@@ -18,13 +18,18 @@
     "type": "git",
     "url": "https://github.com/openshift/origin-server"
   },
+  "scripts": {
+    "start": "supervisor server.js"
+  },
   "engines": {
     "node": ">= 0.6.0",
     "npm": ">= 1.0.0"
   },
   "dependencies": {
     "express": "~3.4.4",
-    "koa": "^1.0.0"
+    "koa": "^1.0.0",
+    "koa-route": "^2.4.2",
+    "supervisor": "^0.8.0"
   },
   "devDependencies": {},
   "bundleDependencies": [],
