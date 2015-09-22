@@ -26,9 +26,11 @@
     "npm": ">= 1.0.0"
   },
   "dependencies": {
-    "express": "~3.4.4",
+    "fs": "0.0.2",
     "koa": "^1.0.0",
     "koa-route": "^2.4.2",
+    "mongoose": "^4.1.8",
+    "q": "^1.4.1",
     "supervisor": "^0.8.0"
   },
   "devDependencies": {},
