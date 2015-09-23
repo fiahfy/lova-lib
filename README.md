@@ -1,3 +1,5 @@
-The OpenShift `nodejs` cartridge documentation can be found at:
+lova-tool
+===========
 
-http://openshift.github.io/documentation/oo_cartridge_guide.html#nodejs
+This project is Tool Site for [Lord of Vermilion Arena](http://lova.jp/).  
+<http://lova-fiahfy.rhcloud.com/>

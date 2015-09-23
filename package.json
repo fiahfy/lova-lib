@@ -18,9 +18,6 @@
     "type": "git",
     "url": "https://github.com/fiahfy/lova-tool"
   },
-  "scripts": {
-    "start": "supervisor server.js"
-  },
   "engines": {
     "node": ">= 0.6.0",
     "npm": ">= 1.0.0"
@@ -41,5 +38,8 @@
   "devDependencies": {},
   "bundleDependencies": [],
   "private": true,
+  "scripts": {
+    "start": "supervisor server.js"
+  },
   "main": "server.js"
 }
