@@ -9,7 +9,7 @@ var config = {
   user: process.env.OPENSHIFT_MONGODB_DB_USERNAME,
   pass: process.env.OPENSHIFT_MONGODB_DB_PASSWORD
 };
-var uri = `mongodb://${config.user}:${config.pass}@${config.host}:${config.port}/lovaapi`;
+var uri = `mongodb://${config.user}:${config.pass}@${config.host}:${config.port}/lova`;
 
 mongoose.connect(uri);
 
