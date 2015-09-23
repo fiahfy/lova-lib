@@ -13,16 +13,16 @@ var lova;
             this.cost = obj.cost;
             this.range = obj.range;
             this.date = new Date(obj.date);
-            this.illust = obj.illust;
-            this.cv = obj.cv;
+            this.illustrationBy = obj.illustration_by;
+            this.characterVoice = obj.character_voice;
             this.oralTradition = obj.oral_tradition;
-            this.statuses = {
-                1: obj.statuses[1] ? new StatusModel(obj.statuses[1]) : null,
-                20: obj.statuses[20] ? new StatusModel(obj.statuses[20]) : null
+            this.status = {
+                1: obj.status[1] ? new StatusModel(obj.status[1]) : null,
+                20: obj.status[20] ? new StatusModel(obj.status[20]) : null
             };
-            this.skills = {
-                active: obj.skills.active ? new SkillModel(obj.skills.active) : null,
-                passive: obj.skills.passive ? new SkillModel(obj.skills.passive) : null
+            this.skill = {
+                active: obj.skill.active ? new SkillModel(obj.skill.active) : null,
+                passive: obj.skill.passive ? new SkillModel(obj.skill.passive) : null
             };
         }
         Object.defineProperty(ServantModel.prototype, "raceNameAndCode", {
@@ -37,11 +37,6 @@ var lova;
     lova.ServantModel = ServantModel;
     var StatusModel = (function () {
         function StatusModel(obj) {
-            this.servantId = obj.servant_id;
-            this.raceId = obj.race_id;
-            this.raceName = obj.race_name;
-            this.raceCode = obj.race_code;
-            this.level = obj.level;
             this.hp = obj.hp;
             this.ap = obj.ap;
             this.atk = obj.atk;
@@ -56,19 +51,12 @@ var lova;
     lova.StatusModel = StatusModel;
     var SkillModel = (function () {
         function SkillModel(obj) {
-            this.servantId = obj.servant_id;
-            this.raceId = obj.race_id;
-            this.raceName = obj.race_name;
-            this.raceCode = obj.race_code;
-            this.type = obj.type;
             this.name = obj.name;
             this.designation = obj.designation;
             this.effect = obj.effect;
             this.description = obj.description;
             this.ap = obj.ap;
             this.cd = obj.cd;
-            this.range = obj.range;
-            this.angle = obj.angle;
         }
         return SkillModel;
     })();

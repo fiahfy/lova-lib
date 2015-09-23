@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-        <loc>http://fiahfy.github.io/lova-tool/</loc>
+        <loc>http://lova-fiahfy.rhcloud.com/</loc>
     </url>
     <url>
-        <loc>http://fiahfy.github.io/lova-tool/#/servants/</loc>
+        <loc>http://lova-fiahfy.rhcloud.com/servants/</loc>
     </url>
     <url>
-        <loc>http://fiahfy.github.io/lova-tool/#/decks/</loc>
+        <loc>http://lova-fiahfy.rhcloud.com/decks/</loc>
     </url>
     <url>
-        <loc>http://fiahfy.github.io/lova-tool/#/about/</loc>
+        <loc>http://lova-fiahfy.rhcloud.com/about/</loc>
     </url>
 </urlset>

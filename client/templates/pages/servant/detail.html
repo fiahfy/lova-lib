@@ -79,7 +79,7 @@
               </tr>
               </thead>
               <tbody>
-              <tr ng-repeat="status in c.servant.statuses">
+              <tr ng-repeat="status in c.servant.status">
                 <td class="">{{ status.level }}</td>
                 <td class="">{{ status.hp }}</td>
                 <td class="">{{ status.ap }}</td>
@@ -108,7 +108,7 @@
                 <th class="">AS</th>
               </tr>
               </thead>
-              <tbody ng-repeat="status in c.servant.statuses">
+              <tbody ng-repeat="status in c.servant.status">
               <tr>
                 <td rowspan="2">{{ status.level }}</td>
                 <td class="">{{ status.hp }}</td>
@@ -133,29 +133,29 @@
   <div id="servant-detail-skill" class="row">
     <dl class="col-sm-6">
       <dt><b>Active Skill</b></dt>
-      <dd ng-if="c.servant.skills.active">
+      <dd ng-if="c.servant.skill.active">
         <dl class="row">
           <dt class="col-xs-3">Name</dt>
-          <dd class="col-xs-9">{{ c.servant.skills.active.name }}</dd>
+          <dd class="col-xs-9">{{ c.servant.skill.active.name }}</dd>
         </dl>
         <dl class="row">
           <dt class="col-xs-3">Designation</dt>
-          <dd class="col-xs-9">{{ c.servant.skills.active.designation|replace:',':'・'|default:'-' }}</dd>
+          <dd class="col-xs-9">{{ c.servant.skill.active.designation|replace:',':'・'|default:'-' }}</dd>
         </dl>
         <dl class="row">
           <dt class="col-xs-3">Effect</dt>
-          <dd class="col-xs-9">{{ c.servant.skills.active.effect|replace:',':'・'|default:'-' }}</dd>
+          <dd class="col-xs-9">{{ c.servant.skill.active.effect|replace:',':'・'|default:'-' }}</dd>
         </dl>
         <dl class="row">
           <dt class="col-sm-12">Description</dt>
           <dd class="col-sm-12">
             <div class="well well-sm">
-              <small ng-bind-html="c.servant.skills.active|skillDescription"></small>
+              <small ng-bind-html="c.servant.skill.active|skillDescription"></small>
             </div>
           </dd>
         </dl>
       </dd>
-      <dd ng-if="!c.servant.skills.active">
+      <dd ng-if="!c.servant.skill.active">
         <div class="well well-sm">
           <small>None</small>
         </div>
@@ -163,29 +163,29 @@
     </dl>
     <dl class="col-sm-6">
       <dt><b>Passive Skill</b></dt>
-      <dd ng-if="c.servant.skills.passive">
+      <dd ng-if="c.servant.skill.passive">
         <dl class="row">
           <dt class="col-xs-3">Name</dt>
-          <dd class="col-xs-9">{{ c.servant.skills.passive.name }}</dd>
+          <dd class="col-xs-9">{{ c.servant.skill.passive.name }}</dd>
         </dl>
         <dl class="row">
           <dt class="col-xs-3">Designation</dt>
-          <dd class="col-xs-9">{{ c.servant.skills.passive.designation|replace:',':'・'|default:'-' }}</dd>
+          <dd class="col-xs-9">{{ c.servant.skill.passive.designation|replace:',':'・'|default:'-' }}</dd>
         </dl>
         <dl class="row">
           <dt class="col-xs-3">Effect</dt>
-          <dd class="col-xs-9">{{ c.servant.skills.passive.effect|replace:',':'・'|default:'-' }}</dd>
+          <dd class="col-xs-9">{{ c.servant.skill.passive.effect|replace:',':'・'|default:'-' }}</dd>
         </dl>
         <dl class="row">
           <dt class="col-sm-12">Description</dt>
           <dd class="col-sm-12">
             <div class="well well-sm">
-              <small ng-bind-html="c.servant.skills.passive|skillDescription"></small>
+              <small ng-bind-html="c.servant.skill.passive|skillDescription"></small>
             </div>
           </dd>
         </dl>
       </dd>
-      <dd ng-if="!c.servant.skills.passive">
+      <dd ng-if="!c.servant.skill.passive">
         <div class="well well-sm">
           <small>None</small>
         </div>

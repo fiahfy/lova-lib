@@ -35,7 +35,7 @@ var lova;
             });
             return result;
         };
-        ServantService.url = './assets/data/servant.json';
+        ServantService.url = './api/servants/';
         ServantService.$inject = [
             '$http',
             '$q'
