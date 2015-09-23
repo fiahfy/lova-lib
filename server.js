@@ -1,6 +1,6 @@
 'use strict';
 
-var route = require('./config/route');
+var route = require('./server/config/route');
 var koa = require('koa');
 var app = koa();
 
