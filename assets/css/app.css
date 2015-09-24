@@ -44,6 +44,9 @@ img {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+.navbar {
+    margin-bottom: 0;
+}
 .navbar-brand {
     font-size: 22px;
 }
@@ -51,19 +54,19 @@ img {
     font-size: 15px;
 }
 .dropdown-toggle.btn-primary,
-.open>.dropdown-toggle.btn-primary {
+.input-group-btn >.dropdown-toggle.btn-primary {
     color: #fff;
     background-color: #1abc9c;
     border-color: #1abc9c;
 }
 .dropdown-toggle.btn-primary:hover,
-.open>.dropdown-toggle.btn-primary:hover {
+.input-group-btn >.dropdown-toggle.btn-primary:hover {
     color: #fff;
     background-color: #48c9b0;
     border-color: #48c9b0;
 }
 .dropdown-toggle.btn-primary:focus,
-.open>.dropdown-toggle.btn-primary:focus {
+.input-group-btn >.dropdown-toggle.btn-primary:focus {
     color: #fff;
     background-color: #16a085;
     border-color: #16a085;
@@ -72,6 +75,16 @@ img {
     color: #fff;
     background-color: #1abc9c;
     border-color: #1abc9c;
+}
+.input-group-btn .btn.btn-primary:hover {
+    color: #fff;
+    background-color: #48c9b0;
+    border-color: #48c9b0;
+}
+.input-group-btn .btn.btn-primary:focus {
+    color: #fff;
+    background-color: #16a085;
+    border-color: #16a085;
 }
 .input-group-btn .btn.btn-primary.zeroclipboard-is-hover {
     color: #fff;
