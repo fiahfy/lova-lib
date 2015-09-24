@@ -56,7 +56,7 @@ module lova {
             a.href = this.$window.location.href;
             return a.protocol + '//'
                 + a.hostname + (a.port ? ':' + a.port : a.port)
-                + '/decks/' + this.deck.hash + '/';
+                + '/deck/' + this.deck.hash + '/';
         }
 
         public static $inject = [

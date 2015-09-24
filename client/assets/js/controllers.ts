@@ -271,6 +271,16 @@ module lova {
         }
     }
 
+    export class PrizeController {
+        public static $inject = [
+        ];
+
+        constructor(
+        ) {
+            //
+        }
+    }
+
     export class AboutController {
         public mail: string;
 

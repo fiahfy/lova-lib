@@ -31,14 +31,19 @@ var lova;
                 controller: 'ServantDetailController',
                 controllerAs: 'c'
             }).
-                when('/decks/', {
+                when('/deck/', {
                 templateUrl: 'templates/pages/deck.html',
                 controller: 'DeckController',
                 controllerAs: 'c'
             }).
-                when('/decks/:hash/', {
+                when('/deck/:hash/', {
                 templateUrl: 'templates/pages/deck.html',
                 controller: 'DeckController',
+                controllerAs: 'c'
+            }).
+                when('/prize/', {
+                templateUrl: 'templates/pages/prize.html',
+                controller: 'PrizeController',
                 controllerAs: 'c'
             }).
                 when('/about/', {
@@ -69,6 +74,7 @@ var lova;
     app.controller('ServantListController', lova.ServantListController);
     app.controller('ServantDetailController', lova.ServantDetailController);
     app.controller('DeckController', lova.DeckController);
+    app.controller('PrizeController', lova.PrizeController);
     app.controller('AboutController', lova.AboutController);
     app.directive('fittable', lova.fittable);
     app.directive('skillPopover', lova.skillPopover);

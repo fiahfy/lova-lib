@@ -205,6 +205,14 @@ var lova;
         return DeckController;
     })();
     lova.DeckController = DeckController;
+    var PrizeController = (function () {
+        function PrizeController() {
+            //
+        }
+        PrizeController.$inject = [];
+        return PrizeController;
+    })();
+    lova.PrizeController = PrizeController;
     var AboutController = (function () {
         function AboutController() {
             this.mail = lova.AppConfig.mail;
