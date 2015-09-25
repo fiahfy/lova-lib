@@ -3,16 +3,14 @@
     <h2>Deck<small>under development</small></h2>
   </div>
 
-  <div>
-    <div class="input-group">
-      <input type="text" class="form-control" placeholder="" ng-model="c.url">
-      <span class="input-group-btn">
-        <a href="{{ c.url }}" class="visible-xs btn btn-primary" onclick="return false;">Hold to Copy</a>
-        <button class="hidden-xs btn btn-primary copy-clipboard"
-                data-toggle="tooltip" data-placement="bottom"
-                data-clipboard-text="{{ c.url }}">Copy</button>
-      </span>
-    </div>
+  <div class="input-group">
+    <input type="text" class="form-control" placeholder="" ng-model="c.url">
+    <span class="input-group-btn">
+      <a href="{{ c.url }}" class="visible-xs btn btn-primary" onclick="return false;">Hold to Copy</a>
+      <button class="hidden-xs btn btn-primary copy-clipboard"
+              data-toggle="tooltip" data-placement="bottom"
+              data-clipboard-text="{{ c.url }}">Copy</button>
+    </span>
   </div>
 </div>
 

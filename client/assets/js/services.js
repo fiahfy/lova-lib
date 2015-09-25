@@ -77,6 +77,38 @@ var lova;
         return DeckService;
     })();
     lova.DeckService = DeckService;
+    var PrizeService = (function () {
+        function PrizeService($http, $q) {
+            this.$http = $http;
+            this.$q = $q;
+            this.prizes = [];
+        }
+        PrizeService.prototype.load = function () {
+            var _this = this;
+            var deferrd = this.$q.defer();
+            if (this.prizes.length) {
+                deferrd.resolve();
+                return deferrd.promise;
+            }
+            this.$http.get(PrizeService.url)
+                .then(function (res) {
+                res.data.forEach(function (servant) {
+                    _this.prizes.push(new lova.PrizeModel(servant));
+                });
+                deferrd.resolve();
+            }, function () {
+                deferrd.reject();
+            });
+            return deferrd.promise;
+        };
+        PrizeService.url = '/assets/data/prize.json';
+        PrizeService.$inject = [
+            '$http',
+            '$q'
+        ];
+        return PrizeService;
+    })();
+    lova.PrizeService = PrizeService;
     var ScrollService = (function () {
         function ScrollService($location, $window) {
             var _this = this;

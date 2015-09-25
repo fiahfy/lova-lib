@@ -1,10 +1,8 @@
 <div class="container" id="servant-detail">
-  <div class="page-header">
-    <h2>{{ c.servant.name }}</h2>
-  </div>
-
-  <div class="clearfix col-xs-12">
-    <a class="pull-right" href="http://wiki.4gamer.net/lova/使い魔/{{ c.servant.raceName }}/{{ c.servant.name }}/">to Official Wiki</a>
+  <div class="page-header clearfix">
+    <h2>{{ c.servant.name }}
+      <small class="pull-right"><a href="http://wiki.4gamer.net/lova/使い魔/{{ c.servant.raceName }}/{{ c.servant.name }}/">to Official Wiki</a></small>
+    </h2>
   </div>
 
   <div class="row">
@@ -53,11 +51,11 @@
       <div class="row">
         <dl class="col-sm-6 row">
           <dt class="col-xs-3">Illust</dt>
-          <dd class="col-xs-9">{{ c.servant.illust }}</dd>
+          <dd class="col-xs-9">{{ c.servant.illustrationBy }}</dd>
         </dl>
         <dl class="col-sm-6 row">
           <dt class="col-xs-3">CV</dt>
-          <dd class="col-xs-9">{{ c.servant.cv }}</dd>
+          <dd class="col-xs-9">{{ c.servant.characterVoice }}</dd>
         </dl>
       </div>
       <div id="servant-detail-status">

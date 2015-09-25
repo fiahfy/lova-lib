@@ -85,6 +85,7 @@ var lova;
     app.filter('skillDescription', lova.skillDescription);
     app.service('ServantService', lova.ServantService);
     app.service('DeckService', lova.DeckService);
+    app.service('PrizeService', lova.PrizeService);
     app.service('ScrollService', lova.ScrollService);
 })(lova || (lova = {}));
 //# sourceMappingURL=app.js.map

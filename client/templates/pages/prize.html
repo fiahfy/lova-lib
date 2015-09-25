@@ -3,4 +3,83 @@
     <h2>Prize</h2>
   </div>
 
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="clearfix">
+        <h3>Draw Lots</h3>
+      </div>
+
+      <div class="input-group pull-left">
+        <input type="text" class="form-control" min="1" max="1000" placeholder="1-1000" ng-model="c.times">
+        <span class="input-group-btn">
+          <button class="btn btn-primary" ng-click="c.drawPrizes()">Draw</button>
+        </span>
+      </div>
+
+      <div class="btn-toolbar pull-right">
+        <div class="btn-group">
+          <a class="btn btn-primary" ng-repeat="option in c.viewOptions"
+             ng-class="{active: option.key == c.view}" ng-click="c.selectView(option.key)">
+            <span class="{{ option.icon }}"></span>
+          </a>
+        </div>
+      </div>
+
+      <table class="table table-hover" ng-if="!c.view">
+        <thead>
+        <tr>
+          <th class="">#</th>
+          <th class="">Name</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="($index, prize) in c.results track by $index">
+          <td class="">{{ $index + 1 }}</td>
+          <td class="">{{ prize.name }}</td>
+        </tr>
+        </tbody>
+      </table>
+
+      <table class="table table-hover" ng-if="c.view">
+        <thead>
+        <tr>
+          <th class="">Name</th>
+          <th class="">Count</th>
+          <th class="">Rate</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="result in c.resultSummary | orderBy:['count']:true">
+          <td class="">{{ result.prize.name }}</td>
+          <td class="">{{ result.count }}</td>
+          <td class="">{{ result.count / c.resultTimes|number:3 }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="col-sm-6">
+      <div class="clearfix">
+        <h3>Prize List
+          <small>Updated {{ c.prizes[0].date|date:'yyyy-MM-dd' }}</small>
+          <small class="pull-right"><a href="http://lova.jp/prizelist/">to Official Site</a></small>
+        </h3>
+      </div>
+
+      <table class="table table-hover">
+        <thead>
+        <tr>
+          <th class="">Name</th>
+          <th class="">Rate</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="prize in c.prizes">
+          <td class="">{{ prize.name }}</td>
+          <td class="">{{ prize.rate }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>

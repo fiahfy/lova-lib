@@ -19,7 +19,6 @@ var lova;
             this.$routeParams = $routeParams;
             this.servantService = servantService;
             this.scrollService = scrollService;
-            this.servants = [];
             this.viewOptions = [
                 { key: 0, icon: 'fui-list-columned' },
                 { key: 1, icon: 'fui-list-large-thumbnails' }
@@ -112,7 +111,6 @@ var lova;
             this.$routeParams = $routeParams;
             this.servantService = servantService;
             this.deckService = deckService;
-            this.servants = [];
             this.raceIdOptions = [
                 { key: null, value: 'Select Race...' },
                 { key: 1, value: '人獣' },
@@ -206,10 +204,64 @@ var lova;
     })();
     lova.DeckController = DeckController;
     var PrizeController = (function () {
-        function PrizeController() {
-            //
+        function PrizeController(prizeService) {
+            var _this = this;
+            this.prizeService = prizeService;
+            this.times = 10;
+            this.viewOptions = [
+                { key: 0, icon: 'fui-list-numbered' },
+                { key: 1, icon: 'fui-list-thumbnailed' }
+            ];
+            this.view = 0;
+            prizeService.load()
+                .then(function () {
+                _this.prizes = prizeService.prizes;
+            });
         }
-        PrizeController.$inject = [];
+        PrizeController.prototype.drawPrizes = function () {
+            this.times = !isNaN(this.times) ? this.times : 10;
+            this.times = this.times < 1000 ? this.times : 1000;
+            var drawList = [];
+            var cn = 0;
+            this.prizes.forEach(function (e) {
+                cn += e.rate;
+                drawList.push({ n: cn, prize: e });
+            });
+            this.results = [];
+            var summary = {};
+            for (var i = 0; i < this.times; i++) {
+                var r = Math.random() * cn;
+                for (var j = 0; j < drawList.length; j++) {
+                    var draw = drawList[j];
+                    if (r <= draw.n) {
+                        this.results.push(draw.prize);
+                        if (summary[draw.prize.id]) {
+                            summary[draw.prize.id].count++;
+                        }
+                        else {
+                            summary[draw.prize.id] = {
+                                prize: draw.prize, count: 1
+                            };
+                        }
+                        break;
+                    }
+                }
+            }
+            this.resultTimes = this.times;
+            this.resultSummary = [];
+            var me = this;
+            Object.keys(summary).forEach(function (key) {
+                me.resultSummary.push({
+                    prize: this[key].prize, count: this[key].count
+                });
+            }, summary);
+        };
+        PrizeController.prototype.selectView = function (view) {
+            this.view = view;
+        };
+        PrizeController.$inject = [
+            'PrizeService'
+        ];
         return PrizeController;
     })();
     lova.PrizeController = PrizeController;

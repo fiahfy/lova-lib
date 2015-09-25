@@ -146,5 +146,15 @@ var lova;
         return DeckModel;
     })();
     lova.DeckModel = DeckModel;
+    var PrizeModel = (function () {
+        function PrizeModel(obj) {
+            this.id = obj.id;
+            this.date = new Date(obj.date);
+            this.name = obj.name;
+            this.rate = obj.rate;
+        }
+        return PrizeModel;
+    })();
+    lova.PrizeModel = PrizeModel;
 })(lova || (lova = {}));
 //# sourceMappingURL=models.js.map
