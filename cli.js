@@ -9,6 +9,7 @@ var mongoose = require('mongoose');
 var models = require('./server/models');
 
 var scraper = require('./server/libs/scraper');
+var commands = require('./server/libs/commands');
 //var sqlite = require('./lib/sqlite');
 
 var command, url;
@@ -94,6 +95,9 @@ switch (command) {
   //case 'migrate':
   //  promise = migrate();
   //  break;
+  case 'prize':
+    promise = commands.prize();
+    break;
   default:
     console.warn('invalid command: %s', command);
     process.exit(1);
