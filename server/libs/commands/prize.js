@@ -1,13 +1,13 @@
 'use strict';
 
-var Q = require('q');
 var co = require('co');
 var scraper = require('../scrapers');
 var models = require('../../models');
 
+const fetchMaxPage = 5;
+
 module.exports = function() {
-  var d = Q.defer();
-  co(function *() {
+  return co(function *() {
     // get article id
     var id = yield getRecentPrizeArticleId();
     if (!id) {
@@ -26,29 +26,17 @@ module.exports = function() {
     // insert prizes
     console.log('insert prizes: count = %d', prizes.length);
     yield insertPrizes(prizes);
-
-  }).then(function(reason) {
-    d.resolve(reason);
-  }, function(reason) {
-    d.reject(reason);
   });
-  return d.promise;
 };
 
 function insertPrizes(prizes) {
-  var d = Q.defer();
-  co(function *() {
+  return co(function *() {
     for (var i = 0; i < prizes.length; i++) {
       var prize = prizes[i];
       prize._id = i + 1;
       yield insertPrize(prize);
     }
-  }).then(function(reason) {
-    d.resolve(reason);
-  }, function(reason) {
-    d.reject(reason);
   });
-  return d.promise;
 }
 
 function insertPrize(prize) {
@@ -63,8 +51,7 @@ function truncatePrizes() {
 }
 
 function getPrizesWithArticleId(id) {
-  var d = Q.defer();
-  co(function *() {
+  return co(function *() {
     var $ = (yield scraper.fetchArticle(id)).$;
     var prizes = [];
     var date = new Date($('#mainpanel').find('div.article_title span.date').text());
@@ -80,20 +67,12 @@ function getPrizesWithArticleId(id) {
       }
     });
     return prizes;
-
-  }).then(function(reason) {
-    d.resolve(reason);
-  }, function(reason) {
-    d.reject(reason);
   });
-  return d.promise;
 }
 
 function getRecentPrizeArticleId() {
-  var maxPage = 5;
-  var d = Q.defer();
-  co(function *() {
-    for (var i = 1; i <= maxPage; i++) {
+  return co(function *() {
+    for (var i = 1; i <= fetchMaxPage; i++) {
       var $ = (yield scraper.fetchNotice(i)).$;
       var id;
       $('#information_panel').find('div.tab_topics ul.page_inner li a').each(function() {
@@ -108,11 +87,5 @@ function getRecentPrizeArticleId() {
       }
     }
     return null;
-
-  }).then(function(reason) {
-    d.resolve(reason);
-  }, function(reason) {
-    d.reject(reason);
   });
-  return d.promise;
 }
