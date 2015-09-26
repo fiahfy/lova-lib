@@ -6,102 +6,38 @@ var fs = require('fs');
 var request = require('request');
 var mongoose = require('mongoose');
 
-var models = require('./server/models');
-
 var scraper = require('./server/libs/scraper');
 var commands = require('./server/libs/commands');
-//var sqlite = require('./lib/sqlite');
 
-var command, url;
-
-var db = {
-  select: function (table, args, callback) {
-    return new Promise(function(resolve, reject) {
-      models.servant.find(args, function(err, rows) {
-        if (callback) {
-          callback(err, rows);
-        }
-        var reason = {err: err, rows: rows};
-        if (err) {
-          reject(reason);
-          return;
-        }
-        resolve(reason);
-      });
-    });
-  },
-  upsert: function (table, args, callback) {
-    return new Promise(function(resolve, reject) {
-
-      var func = function(callback) {
-        if (args._id) {
-          callback(null, args._id);
-          return;
-        }
-        models.counter.getNewId('servant', function(err, counter) {
-          callback(err, counter.value.seq);
-        });
-      };
-
-      func(function(err, _id) {
-        delete args._id;
-        models.servant.update({_id: _id}, args, {upsert: true}, function(err) {
-          if (callback) {
-            callback(err);
-          }
-          var reason = {err: err};
-          if (err) {
-            reject(reason);
-            return;
-          }
-          resolve(reason);
-        });
-      });
-    });
-  }
-};
-
+var promise;
 
 commander
+  .command('servant [env]')
+  .description('update for prizes')
+  .option('-f, --force', 'update force')
+  .action(function(env, opts){
+    promise = commands.servant(env, opts.force);
+  });
+commander
+  .command('prize')
+  .description('update for prizes')
+  .action(function(){
+    promise = commands.prize();
+  });
+  //.arguments('<cmd> [env]')
+  //.action(function(cmd, env, opts) {
+  //  command = cmd;
+  //  environment = env;
+  //  options = opts;
+  //})
+commander
   .version('0.0.1')
-  .arguments('<cmd> [env]')
-  .action(function(cmd, env) {
-    command = cmd;
-    url = env;
-  })
   .parse(process.argv);
 
-if (typeof command === 'undefined') {
+if (typeof promise === 'undefined') {
   commander.help();
 }
 
-var promise;
-switch (command) {
-  case 'one':
-    promise = updateWithUrl(url);
-    break;
-  case 'all':
-    promise = updateAll();
-    break;
-  //case 'clear':
-  //  promise = clear();
-  //  break;
-  //case 'dump':
-  //  promise = dump();
-  //  break;
-  case 'download':
-    promise = downloadImages();
-    break;
-  //case 'migrate':
-  //  promise = migrate();
-  //  break;
-  case 'prize':
-    promise = commands.prize();
-    break;
-  default:
-    console.warn('invalid command: %s', command);
-    process.exit(1);
-}
 promise.then(function(reason) {
     mongoose.disconnect();
   }, function(reason) {

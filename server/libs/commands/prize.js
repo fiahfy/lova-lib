@@ -8,16 +8,10 @@ const fetchMaxPage = 5;
 
 module.exports = function() {
   return co(function *() {
-    // get article id
-    var id = yield getRecentPrizeArticleId();
-    if (!id) {
-      console.log('prize notice is not found');
-      return;
-    }
     // get prizes
-    var prizes = yield getPrizesWithArticleId(id);
+    var prizes = yield getPrizes();
     if (!prizes) {
-      console.log('prize notice parse error');
+      console.log('prize is nothing');
       return;
     }
     // clean prizes
@@ -39,23 +33,29 @@ function insertPrizes(prizes) {
   });
 }
 
-function insertPrize(prize) {
-  var _id = prize._id;
-  delete prize._id;
-
-  return models.prize.update({_id: _id}, prize, {upsert: true}).exec();
+function insertPrize(args) {
+  var _id = args._id;
+  delete args._id;
+  return models.prize.update({_id: _id}, args, {upsert: true}).exec();
 }
 
 function truncatePrizes() {
   return models.prize.remove({}).exec();
 }
 
-function getPrizesWithArticleId(id) {
+function getPrizes() {
   return co(function *() {
+    // get article id
+    var id = yield getRecentPrizeArticleId();
+    if (!id) {
+      console.log('prize notice is not found');
+      return null;
+    }
     var $ = (yield scraper.fetchArticle(id)).$;
     var prizes = [];
-    var date = new Date($('#mainpanel').find('div.article_title span.date').text());
-    $('#mainpanel').find('div.subsection_frame strong').each(function() {
+    var panel = $('#mainpanel');
+    var date = new Date(panel.find('div.article_title span.date').text());
+    panel.find('div.subsection_frame strong').each(function() {
       var text = $(this).text();
       var matches = text.match(/([^・：]+)：(.+)[%％]/i);
       if (matches) {

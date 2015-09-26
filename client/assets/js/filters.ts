@@ -38,13 +38,13 @@ module lova {
         .replace(/：/g, ' : ');
 
       let cd = skill.cd;
-      if (cd) {
+      if (cd && cd.length) {
         cd = '- クールダウン : ' + cd.join(' / ');
         desc = desc.replace(/<br\/>/, '<br/>&nbsp;&nbsp;<b>' + cd + '</b><br/>');
       }
 
       let ap = skill.ap;
-      if (ap) {
+      if (ap && cd.length) {
         ap = '- 消費AP : ' + ap.join(' / ');
         desc = desc.replace(/<br\/>/, '<br/>&nbsp;&nbsp;<b>' + ap + '</b><br/>');
       }

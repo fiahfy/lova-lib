@@ -27,8 +27,13 @@ function fetchNotice(page) {
   return fetch(url);
 }
 
+function fetchAllServantList() {
+  return fetch('http://wiki.4gamer.net/lova/%E4%BD%BF%E3%81%84%E9%AD%94');
+}
+
 module.exports = {
-  fetch:        fetch,
-  fetchArticle: fetchArticle,
-  fetchNotice:  fetchNotice
+  fetch:               fetch,
+  fetchArticle:        fetchArticle,
+  fetchNotice:         fetchNotice,
+  fetchAllServantList: fetchAllServantList
 };
