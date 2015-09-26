@@ -85,7 +85,7 @@ module lova {
   }
 
   export class PrizeService {
-    private static url: string = '/assets/data/prize.json';
+    private static url: string = './api/prizes/';
     public prizes: PrizeModel[] = [];
 
     public static $inject = [

@@ -101,7 +101,7 @@ var lova;
             });
             return deferrd.promise;
         };
-        PrizeService.url = '/assets/data/prize.json';
+        PrizeService.url = './api/prizes/';
         PrizeService.$inject = [
             '$http',
             '$q'

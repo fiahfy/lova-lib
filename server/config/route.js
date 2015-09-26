@@ -22,4 +22,5 @@ module.exports = function(app) {
   app.use(route.get('/api', controllers.root));
   app.use(route.get('/api/servants', controllers.servants));
   app.use(route.get('/api/servants/:id', controllers.servant));
+  app.use(route.get('/api/prizes', controllers.prizes));
 };
