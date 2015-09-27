@@ -27,13 +27,21 @@ function fetchNotice(page) {
   return fetch(url);
 }
 
+function fetchServant(race_name, name) {
+  name = name.replace('・', '');
+  var url = `http://wiki.4gamer.net/lova/%E4%BD%BF%E3%81%84%E9%AD%94/${encodeURIComponent(race_name)}/${encodeURIComponent(name)}`;
+  return fetch(url);
+}
+
 function fetchAllServantList() {
-  return fetch('http://wiki.4gamer.net/lova/%E4%BD%BF%E3%81%84%E9%AD%94');
+  var url = 'http://wiki.4gamer.net/lova/%E4%BD%BF%E3%81%84%E9%AD%94';
+  return fetch(url);
 }
 
 module.exports = {
   fetch:               fetch,
   fetchArticle:        fetchArticle,
   fetchNotice:         fetchNotice,
+  fetchServant:        fetchServant,
   fetchAllServantList: fetchAllServantList
 };
