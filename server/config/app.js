@@ -2,6 +2,7 @@
 
 var controllers = require('../controllers');
 var route = require('koa-route');
+var st = require('koa-static');
 var send = require('koa-send');
 
 var config = {
@@ -11,19 +12,18 @@ var config = {
 
 config.route = function(app) {
   app.use(function *(next) {
-    var sendOpts = {root: 'client'};
-    if (this.path.substr(0, 5).toLowerCase() === '/api/') {
+    if (this.path.indexOf('/api/') === 0) {
       // server
       yield next;
-    } else if (yield send(this, this.path, sendOpts)) {
+    } else if (this.path.indexOf('.') > -1) {
       // static file
-    } else if (this.path.indexOf('.') !== -1) {
-      // not found
+      yield next;
     } else {
       // client
-      yield send(this, '/index.html', sendOpts);
+      yield send(this, '/index.html', {root: 'client'});
     }
   });
+  app.use(st(__dirname + '/../../client'));
   app.use(route.get('/api', controllers.root));
   app.use(route.get('/api/servants', controllers.servants));
   app.use(route.get('/api/servants/:id', controllers.servant));
