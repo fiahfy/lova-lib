@@ -34,6 +34,7 @@
     "supervisor": "^0.8.0"
   },
   "devDependencies": {
+    "lwip": "git://github.com/kant2002/lwip.git#5f6a38c"
   },
   "bundleDependencies": [],
   "private": true,
