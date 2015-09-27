@@ -1,7 +1,7 @@
 {
-  "name": "Lova-Tool",
+  "name": "lova-tool",
   "version": "1.0.0",
-  "description": "Tool Site for Lord of Vermilion Arena",
+  "description": "Tools for Lord of Vermilion Arena",
   "keywords": [
     "OpenShift",
     "Node.js",
@@ -40,7 +40,11 @@
   "bundleDependencies": [],
   "private": true,
   "scripts": {
-    "start": "supervisor server.js"
+    "start": "PWD=`pwd`; forever start -w --minUptime 1000 --spinSleepTime 1000 -a -l ${PWD}/tmp/forever/forever.log server.js",
+    "poststart": "mongod --fork --logpath /dev/null --dbpath tmp/mongodb/data",
+    "prestop": "mongo admin --eval 'db.shutdownServer()' > /dev/null",
+    "stop": "forever stop server.js",
+    "tail": "forever logs -f server.js"
   },
   "main": "server.js"
 }
