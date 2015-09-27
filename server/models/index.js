@@ -2,35 +2,12 @@
 
 var fs = require('fs');
 var mongoose = require('mongoose');
+var config = require('../config/mongodb');
 
-var config = {
-  host: process.env.OPENSHIFT_MONGODB_DB_HOST || '127.0.0.1',
-  port: process.env.OPENSHIFT_MONGODB_DB_PORT || 27017,
-  user: process.env.OPENSHIFT_MONGODB_DB_USERNAME,
-  pass: process.env.OPENSHIFT_MONGODB_DB_PASSWORD,
-  db: 'lova'
-};
-
-var uri = (function(config) {
-  var uri = '';
-  if (config.user) {
-    uri += config.user;
-    if (config.pass) {
-      uri += `:${config.pass}`;
-    }
-    uri += '@';
-  }
-  uri += config.host;
-  if (config.port) {
-    uri += `:${config.port}`;
-  }
-  return uri = `mongodb://${uri}/${config.db}`;
-})(config);
-
-mongoose.connect(uri);
+mongoose.connect(config.uri);
 
 mongoose.connection.on('connected', function() {
-  console.log('Mongoose default connection open to ' + uri);
+  console.log('Mongoose default connection open to ' + config.uri);
 });
 
 mongoose.connection.on('error',function(err) {
