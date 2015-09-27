@@ -23,11 +23,11 @@ config.route = function(app) {
       yield send(this, '/index.html', {root: 'client'});
     }
   });
-  app.use(st(__dirname + '/../../client'));
-  app.use(route.get('/api', controllers.root));
-  app.use(route.get('/api/servants', controllers.servants));
-  app.use(route.get('/api/servants/:id', controllers.servant));
-  app.use(route.get('/api/prizes', controllers.prizes));
+  app.use(st('client', {maxage: 10 * 60 * 1000}));
+  app.use(route.get('/api/', controllers.root));
+  app.use(route.get('/api/servants/', controllers.servants));
+  app.use(route.get('/api/servants/:id/', controllers.servant));
+  app.use(route.get('/api/prizes/', controllers.prizes));
 };
 
 module.exports = config;
