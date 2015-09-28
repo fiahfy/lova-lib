@@ -157,4 +157,3 @@ var lova;
     })();
     lova.PrizeModel = PrizeModel;
 })(lova || (lova = {}));
-//# sourceMappingURL=models.js.map

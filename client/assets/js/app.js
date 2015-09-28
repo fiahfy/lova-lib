@@ -88,4 +88,3 @@ var lova;
     app.service('PrizeService', lova.PrizeService);
     app.service('ScrollService', lova.ScrollService);
 })(lova || (lova = {}));
-//# sourceMappingURL=app.js.map

@@ -77,4 +77,3 @@ var lova;
     }
     lova.skillPopoverContent = skillPopoverContent;
 })(lova || (lova = {}));
-//# sourceMappingURL=directives.js.map
