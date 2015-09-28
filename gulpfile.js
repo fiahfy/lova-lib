@@ -2,12 +2,12 @@
 
 var gulp = require('gulp');
 var tsd = require('gulp-tsd');
+var tsc = require('gulp-typescript');
 //var browserify = require('browserify');
 //var source = require('vinyl-source-stream');
 //var buffer = require('vinyl-buffer');
 //var sourcemaps = require('gulp-sourcemaps');
-var typescript = require('gulp-typescript');
-//var watch = require('gulp-watch');
+var watch = require('gulp-watch');
 //var jsmin = require('gulp-jsmin');
 //var rename = require('gulp-rename');
 //
@@ -17,16 +17,19 @@ var path = require('path');
 var relativeSrcPath = path.relative('.', src);
 //
 var config = {
-  minify: {
-    src: dest + '/js/*.js',
-    dest: dest + '/js/min'
-  },
-  //
-  //tsd: {
-  //  json: src + '/tsd.json'
+  //minify: {
+  //  src: dest + '/js/*.js',
+  //  dest: dest + '/js/min'
   //},
+  //
+  tsd: {
+    optoins: {
+      command: 'reinstall',
+      config: 'tsd.json'
+    }
+  },
 
-  ts: {
+  tsc: {
     src: [
       'client/assets/js/*.ts'
     ],
@@ -38,34 +41,31 @@ var config = {
     }
   },
 
-  browserify: {
-    entry: {
-      entries: src + '/js/main.js',
-      debug: true
-    },
-    dest: dest + '/js',
-    output: {
-      filename: 'bundle.js'
-    }
-  },
-//--sourcemap $FilePath$ -m commonjs -t es5
+  //browserify: {
+  //  entry: {
+  //    entries: src + '/js/main.js',
+  //    debug: true
+  //  },
+  //  dest: dest + '/js',
+  //  output: {
+  //    filename: 'bundle.js'
+  //  }
+  //},
+
   watch: {
-    ts: relativeSrcPath + '/ts/*.ts',
-    js: relativeSrcPath + '/js/*.js'
+    ts: 'client/assets/js/*.ts',
+    js: 'client/assets/js/*.js'
   }
 };
 
 gulp.task('tsd', function (callback) {
-  tsd({
-    command: 'reinstall',
-    config: 'tsd.json'
-  }, callback);
+  tsd(config.tsd.optoins, callback);
 });
 
 gulp.task('tsc', function(){
-  gulp.src(config.ts.src)
-    .pipe(typescript(config.ts.options))
-    .pipe(gulp.dest(config.ts.dest));
+  gulp.src(config.tsc.src)
+    .pipe(tsc(config.tsc.options))
+    .pipe(gulp.dest(config.tsc.dest));
 });
 //
 //gulp.task('browserify', function(){
@@ -78,16 +78,15 @@ gulp.task('tsc', function(){
 //    .pipe(gulp.dest(config.browserify.dest));
 //});
 //
-//gulp.task('watch', function () {
-//  // IDEの恩恵を授かる場合は、以下の3行をコメントアウト
-//  watch(config.watch.ts, function () {
-//    gulp.start(['tsc']);
-//  });
-//
-//  watch(config.watch.js, function () {
-//    gulp.start(['browserify']);
-//  });
-//});
+gulp.task('watch', function () {
+  watch(config.watch.ts, function () {
+    gulp.start(['tsc']);
+  });
+
+  //watch(config.watch.js, function () {
+  //  gulp.start(['browserify']);
+  //});
+});
 //
 //gulp.task('minify', function () {
 //  gulp.src(config.js.src)
