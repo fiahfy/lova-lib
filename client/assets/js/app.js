@@ -1,7 +1,10 @@
 /// <reference path="_all.ts" />
+'use strict';
+//var angular = require('angular');
+var angular = require('angular');
+var MainController = lova.MainController;
 var lova;
 (function (lova) {
-    'use strict';
     var app = angular.module('app', [
         'ngRoute',
         'ngTouch',
@@ -70,21 +73,21 @@ var lova;
     app.config(Router);
     app.config(Locator);
     app.value('AppConfig', AppConfig);
-    app.controller('MainController', lova.MainController);
-    app.controller('ServantListController', lova.ServantListController);
-    app.controller('ServantDetailController', lova.ServantDetailController);
-    app.controller('DeckController', lova.DeckController);
-    app.controller('PrizeController', lova.PrizeController);
-    app.controller('AboutController', lova.AboutController);
-    app.directive('fittable', lova.fittable);
-    app.directive('skillPopover', lova.skillPopover);
-    app.directive('skillPopoverContent', lova.skillPopoverContent);
-    app.filter('pad', lova.pad);
-    app.filter('default', lova.def);
-    app.filter('replace', lova.replace);
-    app.filter('skillDescription', lova.skillDescription);
-    app.service('ServantService', lova.ServantService);
-    app.service('DeckService', lova.DeckService);
-    app.service('PrizeService', lova.PrizeService);
-    app.service('ScrollService', lova.ScrollService);
+    app.controller('MainController', MainController);
+    app.controller('ServantListController', ServantListController);
+    app.controller('ServantDetailController', ServantDetailController);
+    app.controller('DeckController', DeckController);
+    app.controller('PrizeController', PrizeController);
+    app.controller('AboutController', AboutController);
+    app.directive('fittable', fittable);
+    app.directive('skillPopover', skillPopover);
+    app.directive('skillPopoverContent', skillPopoverContent);
+    app.filter('pad', pad);
+    app.filter('default', def);
+    app.filter('replace', replace);
+    app.filter('skillDescription', skillDescription);
+    app.service('ServantService', ServantService);
+    app.service('DeckService', DeckService);
+    app.service('PrizeService', PrizeService);
+    app.service('ScrollService', ScrollService);
 })(lova || (lova = {}));

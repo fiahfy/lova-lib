@@ -1,7 +1,10 @@
 /// <reference path="_all.ts" />
+'use strict';
+//var angular = require('angular');
+import * as angular from 'angular';
+import MainController = lova.MainController;
 
-module lova {
-  'use strict';
+namespace lova {
 
   var app = angular.module('app', [
     'ngRoute',

@@ -267,7 +267,7 @@ var lova;
     lova.PrizeController = PrizeController;
     var AboutController = (function () {
         function AboutController() {
-            this.mail = lova.AppConfig.mail;
+            this.mail = AppConfig.mail;
         }
         AboutController.$inject = [];
         return AboutController;

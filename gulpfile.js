@@ -43,7 +43,7 @@ var config = {
 
   browserify: {
     options: {
-      entries: 'client/assets/js/_all.js',
+      entries: 'client/assets/js/app.js',
       debug: true
     },
     dest: 'client/assets/js',
@@ -54,7 +54,7 @@ var config = {
 
   watch: {
     ts: 'client/assets/js/*.ts',
-    js: 'client/assets/js/*.js'
+    js: ['client/assets/js/*.js', '!client/assets/js/bundle.js']
   }
 };
 
@@ -83,9 +83,9 @@ gulp.task('watch', function () {
     gulp.start(['tsc']);
   });
 
-  //watch(config.watch.js, function () {
-  //  gulp.start(['browserify']);
-  //});
+  watch(config.watch.js, function () {
+    gulp.start(['browserify']);
+  });
 });
 //
 //gulp.task('minify', function () {

@@ -22,7 +22,21 @@
     "node": ">= 0.6.0",
     "npm": ">= 1.0.0"
   },
+  "browser": {
+    "jquery": "./node_modules/jquery/dist/jquery.js",
+    "angular": "./node_modules/angular/angular.js"
+  },
+  "browserify-shim": {
+    "jquery": {
+      "exports": "$"
+    },
+    "angular": {
+      "depends": "jquery",
+      "exports": "angular"
+    }
+  },
   "dependencies": {
+    "angular": "^1.4.6",
     "browserify": "^11.2.0",
     "cheerio-httpcli": "^0.3.3",
     "co": "^4.6.0",
@@ -32,6 +46,7 @@
     "gulp-tsd": "0.0.4",
     "gulp-typescript": "^2.9.0",
     "gulp-watch": "^4.3.5",
+    "jquery": "^2.1.4",
     "koa": "^1.0.0",
     "koa-route": "^2.4.2",
     "koa-send": "^1.3.1",

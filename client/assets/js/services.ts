@@ -1,6 +1,6 @@
 /// <reference path="_all.ts" />
 
-module lova {
+namespace lova {
   'use strict';
 
   export class ServantService {
