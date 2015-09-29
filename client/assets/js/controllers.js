@@ -1,276 +1,454 @@
 /// <reference path="_all.ts" />
-var lova;
-(function (lova) {
-    'use strict';
-    var MainController = (function () {
-        function MainController() {
-            this.now = new Date();
-        }
-        MainController.$inject = [];
-        return MainController;
-    })();
-    lova.MainController = MainController;
-    var ServantListController = (function () {
-        function ServantListController($scope, $window, $location, $routeParams, servantService, scrollService) {
-            var _this = this;
-            this.$scope = $scope;
-            this.$window = $window;
-            this.$location = $location;
-            this.$routeParams = $routeParams;
-            this.servantService = servantService;
-            this.scrollService = scrollService;
-            this.viewOptions = [
-                { key: 0, icon: 'fui-list-columned' },
-                { key: 1, icon: 'fui-list-large-thumbnails' }
-            ];
-            this.raceIdOptions = [
-                { key: null, value: 'Select Race...' },
-                { key: 1, value: '人獣' },
-                { key: 2, value: '神族' },
-                { key: 3, value: '魔種' },
-                { key: 4, value: '海種' },
-                { key: 5, value: '不死' }
-            ];
-            this.filter = {
-                raceId: undefined,
-                name: undefined
-            };
-            this.predicate = ['raceId', 'raceCode'];
-            this.reverse = false;
-            this.view = $routeParams.view ? +$routeParams.view : 0;
-            this.raceId = $routeParams.race_id ? +$routeParams.race_id : 0;
-            this.filter.raceId = this.raceId ? this.raceId : undefined;
-            servantService.load()
-                .then(function () {
-                _this.servants = servantService.servants;
-                _this.scrollService.restore();
-                _this.refreshEventListener();
-            });
-            $scope.$watch(function () { return _this.raceId; }, function (newValue, oldValue) {
-                if (typeof newValue === 'undefined' || typeof oldValue === 'undefined' || newValue == oldValue) {
-                    return;
-                }
-                _this.selectRaceId(_this.raceId);
-            }, true);
-        }
-        ServantListController.prototype.selectView = function (view) {
-            this.$location.url(this.$location.search('view', view).url());
-        };
-        ServantListController.prototype.selectRaceId = function (raceId) {
-            this.$location.url(this.$location.search('race_id', raceId).url());
-        };
-        ServantListController.prototype.changeQuery = function () {
-            this.filter.name = this.q;
-            this.refreshEventListener();
-        };
-        ServantListController.prototype.openServant = function (servant) {
-            this.$location.url('/servants/' + servant.id + '/');
-        };
-        ServantListController.prototype.refreshEventListener = function () {
-            this.$window.setTimeout(function () {
-                //noinspection TaskProblemsInspection
-                angular.element('img.lazy').lazyload();
-            }, 1);
-        };
-        ServantListController.$inject = [
-            '$scope',
-            '$window',
-            '$location',
-            '$routeParams',
-            'ServantService',
-            'ScrollService'
+'use strict';
+var app = require('./app');
+var ServantListController = (function () {
+    function ServantListController($scope, $window, $location, $routeParams, servantService, scrollService) {
+        var _this = this;
+        this.$scope = $scope;
+        this.$window = $window;
+        this.$location = $location;
+        this.$routeParams = $routeParams;
+        this.servantService = servantService;
+        this.scrollService = scrollService;
+        this.viewOptions = [
+            { key: 0, icon: 'fui-list-columned' },
+            { key: 1, icon: 'fui-list-large-thumbnails' }
         ];
-        return ServantListController;
-    })();
-    lova.ServantListController = ServantListController;
-    var ServantDetailController = (function () {
-        function ServantDetailController($routeParams, servantService, scrollService) {
-            var _this = this;
-            this.$routeParams = $routeParams;
-            this.servantService = servantService;
-            this.scrollService = scrollService;
-            servantService.load()
-                .then(function () {
-                _this.servant = servantService.getServantWithId(+$routeParams.id);
-                _this.scrollService.restore();
-            });
-        }
-        ServantDetailController.$inject = [
-            '$routeParams',
-            'ServantService',
-            'ScrollService'
+        this.raceIdOptions = [
+            { key: null, value: 'Select Race...' },
+            { key: 1, value: '人獣' },
+            { key: 2, value: '神族' },
+            { key: 3, value: '魔種' },
+            { key: 4, value: '海種' },
+            { key: 5, value: '不死' }
         ];
-        return ServantDetailController;
-    })();
-    lova.ServantDetailController = ServantDetailController;
-    var DeckController = (function () {
-        function DeckController($window, $location, $routeParams, servantService, deckService) {
-            var _this = this;
-            this.$window = $window;
-            this.$location = $location;
-            this.$routeParams = $routeParams;
-            this.servantService = servantService;
-            this.deckService = deckService;
-            this.raceIdOptions = [
-                { key: null, value: 'Select Race...' },
-                { key: 1, value: '人獣' },
-                { key: 2, value: '神族' },
-                { key: 3, value: '魔種' },
-                { key: 4, value: '海種' },
-                { key: 5, value: '不死' }
-            ];
-            this.raceName = 'Select Race...';
-            this.filter = {
-                raceId: undefined,
-                name: undefined
-            };
-            this.predicate = ['raceId', 'raceCode'];
-            this.reverse = false;
-            servantService.load()
-                .then(function () {
-                _this.servants = servantService.servants;
-                deckService.servants = servantService.servants;
-                deckService.loadWithHash($routeParams.hash);
-                _this.deck = deckService.deck;
-                _this.url = deckService.url;
-                _this.refreshEventListener();
-            });
-            angular.element($window.document).ready(function () {
-                var button = angular.element('.copy-clipboard');
-                var clip = new ZeroClipboard(button);
-                clip.on('ready', function () {
-                    clip.on('aftercopy', function () {
-                        button
-                            .attr('data-original-title', 'Copied')
-                            .tooltip('show');
-                        $window.setTimeout(function () {
-                            button
-                                .tooltip('hide')
-                                .attr('data-original-title', '');
-                        }, 1000);
-                    });
-                });
-                button
-                    .tooltip({
-                    trigger: 'manual',
-                    container: 'body'
-                });
-            });
-        }
-        DeckController.prototype.setServant = function (index, data) {
-            var servantId = data.servantId;
-            var oldIndex = data.index;
-            if (oldIndex !== null) {
-                this.deckService.setServant(oldIndex, this.deck.servants[index] ? this.deck.servants[index].id : undefined);
+        this.filter = {
+            raceId: undefined,
+            name: undefined
+        };
+        this.predicate = ['raceId', 'raceCode'];
+        this.reverse = false;
+        this.view = $routeParams.view ? +$routeParams.view : 0;
+        this.raceId = $routeParams.race_id ? +$routeParams.race_id : 0;
+        this.filter.raceId = this.raceId ? this.raceId : undefined;
+        servantService.load()
+            .then(function () {
+            _this.servants = servantService.servants;
+            _this.scrollService.restore();
+            _this.refreshEventListener();
+        });
+        $scope.$watch(function () { return _this.raceId; }, function (newValue, oldValue) {
+            if (typeof newValue === 'undefined' || typeof oldValue === 'undefined' || newValue == oldValue) {
+                return;
             }
-            this.deckService.setServant(index, servantId);
-            this.deck = this.deckService.deck;
-            this.url = this.deckService.url;
-            this.refreshEventListener();
+            _this.selectRaceId(_this.raceId);
+        }, true);
+    }
+    ServantListController.prototype.selectView = function (view) {
+        this.$location.url(this.$location.search('view', view).url());
+    };
+    ServantListController.prototype.selectRaceId = function (raceId) {
+        this.$location.url(this.$location.search('race_id', raceId).url());
+    };
+    ServantListController.prototype.changeQuery = function () {
+        this.filter.name = this.q;
+        this.refreshEventListener();
+    };
+    ServantListController.prototype.openServant = function (servant) {
+        this.$location.url('/servants/' + servant.id + '/');
+    };
+    ServantListController.prototype.refreshEventListener = function () {
+        this.$window.setTimeout(function () {
+            //noinspection TaskProblemsInspection
+            angular.element('img.lazy').lazyload();
+        }, 1);
+    };
+    ServantListController.$inject = [
+        '$scope',
+        '$window',
+        '$location',
+        '$routeParams',
+        'ServantService',
+        'ScrollService'
+    ];
+    return ServantListController;
+})();
+var Definition = (function () {
+    function Definition() {
+    }
+    Definition.ddo = function () {
+        return {
+            controller: ServantListController,
+            controllerAs: 'c',
+            restrict: 'E',
+            //scope: {
+            //  locale: '&isemIoLocale'
+            //},
+            templateUrl: '../../templates/pages/servant.html'
         };
-        DeckController.prototype.clearServant = function (index) {
-            this.deckService.unsetServant(index);
-            this.deck = this.deckService.deck;
-            this.url = this.deckService.url;
-            this.refreshEventListener();
-        };
-        DeckController.prototype.selectRaceId = function (raceId, raceName) {
-            this.raceId = raceId;
-            this.raceName = raceName;
-            this.filter.raceId = this.raceId ? this.raceId : undefined;
-            this.refreshEventListener();
-        };
-        DeckController.prototype.changeQuery = function () {
-            this.filter.name = this.q;
-            this.refreshEventListener();
-        };
-        DeckController.prototype.openServant = function (servantId) {
-            this.$window.open('/servants/' + servantId + '/', '_blank');
-        };
-        DeckController.prototype.refreshEventListener = function () {
-            this.$window.setTimeout(function () {
-                //noinspection TaskProblemsInspection
-                angular.element('img.lazy').lazyload();
-            }, 1);
-        };
-        DeckController.$inject = [
-            '$window',
-            '$location',
-            '$routeParams',
-            'ServantService',
-            'DeckService'
-        ];
-        return DeckController;
-    })();
-    lova.DeckController = DeckController;
-    var PrizeController = (function () {
-        function PrizeController(prizeService) {
-            var _this = this;
-            this.prizeService = prizeService;
-            this.times = 10;
-            this.viewOptions = [
-                { key: 0, icon: 'fui-list-numbered' },
-                { key: 1, icon: 'fui-list-thumbnailed' }
-            ];
-            this.view = 0;
-            prizeService.load()
-                .then(function () {
-                _this.prizes = prizeService.prizes;
-            });
-        }
-        PrizeController.prototype.drawPrizes = function () {
-            this.times = !isNaN(this.times) ? this.times : 10;
-            this.times = this.times < 1000 ? this.times : 1000;
-            var drawList = [];
-            var cn = 0;
-            this.prizes.forEach(function (e) {
-                cn += e.rate;
-                drawList.push({ n: cn, prize: e });
-            });
-            this.results = [];
-            var summary = {};
-            for (var i = 0; i < this.times; i++) {
-                var r = Math.random() * cn;
-                for (var j = 0; j < drawList.length; j++) {
-                    var draw = drawList[j];
-                    if (r <= draw.n) {
-                        this.results.push(draw.prize);
-                        if (summary[draw.prize.id]) {
-                            summary[draw.prize.id].count++;
-                        }
-                        else {
-                            summary[draw.prize.id] = {
-                                prize: draw.prize, count: 1
-                            };
-                        }
-                        break;
-                    }
-                }
-            }
-            this.resultTimes = this.times;
-            this.resultSummary = [];
-            var me = this;
-            Object.keys(summary).forEach(function (key) {
-                me.resultSummary.push({
-                    prize: this[key].prize, count: this[key].count
-                });
-            }, summary);
-        };
-        PrizeController.prototype.selectView = function (view) {
-            this.view = view;
-        };
-        PrizeController.$inject = [
-            'PrizeService'
-        ];
-        return PrizeController;
-    })();
-    lova.PrizeController = PrizeController;
-    var AboutController = (function () {
-        function AboutController() {
-            this.mail = AppConfig.mail;
-        }
-        AboutController.$inject = [];
-        return AboutController;
-    })();
-    lova.AboutController = AboutController;
-})(lova || (lova = {}));
+    };
+    return Definition;
+})();
+exports.Definition = Definition;
+angular.module(app.appName).directive('lovaServant', Definition.ddo);
+//
+//namespace lova {
+//  'use strict';
+//
+//  export class MainController {
+//    public now: Date;
+//
+//    public static $inject = [
+//    ];
+//
+//    constructor(
+//    ) {
+//      this.now = new Date();
+//    }
+//  }
+//
+//  interface ServantListParams extends ng.route.IRouteParamsService {
+//    view: string;
+//    race_id: string;
+//  }
+//
+//  export class ServantListController {
+//    public servants: ServantModel[];
+//
+//    public viewOptions: {key: number; icon: string;}[] = [
+//      {key: 0, icon: 'fui-list-columned'},
+//      {key: 1, icon: 'fui-list-large-thumbnails'}
+//    ];
+//
+//    public raceIdOptions: {key: number; value: string;}[] = [
+//      {key: null, value: 'Select Race...'},
+//      {key: 1,    value: '人獣'},
+//      {key: 2,    value: '神族'},
+//      {key: 3,    value: '魔種'},
+//      {key: 4,    value: '海種'},
+//      {key: 5,    value: '不死'}
+//    ];
+//
+//    public view: number;
+//
+//    public raceId: number;
+//
+//    public q: string;
+//
+//    public filter: {
+//      raceId: number;
+//      name: string;
+//    } = {
+//      raceId: undefined,
+//      name: undefined
+//    };
+//
+//    public predicate: string[] = ['raceId', 'raceCode'];
+//
+//    public reverse: boolean = false;
+//
+//    public static $inject = [
+//      '$scope',
+//      '$window',
+//      '$location',
+//      '$routeParams',
+//      'ServantService',
+//      'ScrollService'
+//    ];
+//
+//    constructor(
+//      private $scope: ng.IScope,
+//      private $window: ng.IWindowService,
+//      private $location: ng.ILocationService,
+//      private $routeParams: ServantListParams,
+//      private servantService: ServantService,
+//      private scrollService: ScrollService
+//    ) {
+//      this.view = $routeParams.view ? +$routeParams.view : 0;
+//      this.raceId = $routeParams.race_id ? +$routeParams.race_id : 0;
+//      this.filter.raceId = this.raceId ? this.raceId : undefined;
+//
+//      servantService.load()
+//        .then(() => {
+//          this.servants = servantService.servants;
+//          this.scrollService.restore();
+//          this.refreshEventListener();
+//        });
+//
+//      $scope.$watch(() => this.raceId, (newValue, oldValue) => {
+//        if (typeof newValue === 'undefined' || typeof oldValue === 'undefined' || newValue == oldValue) {
+//          return;
+//        }
+//        this.selectRaceId(this.raceId);
+//      }, true);
+//    }
+//
+//    public selectView(view: number): void {
+//      this.$location.url(this.$location.search('view', view).url());
+//    }
+//
+//    public selectRaceId(raceId: number): void {
+//      this.$location.url(this.$location.search('race_id', raceId).url());
+//    }
+//
+//    public changeQuery(): void {
+//      this.filter.name = this.q;
+//      this.refreshEventListener();
+//    }
+//
+//    public openServant(servant: ServantModel): void {
+//      this.$location.url('/servants/' + servant.id + '/');
+//    }
+//
+//    private refreshEventListener(): void {
+//      this.$window.setTimeout(() => {
+//        //noinspection TaskProblemsInspection
+//        angular.element('img.lazy').lazyload();
+//      }, 1);
+//    }
+//  }
+//
+//  interface ServantDetailParams extends ng.route.IRouteParamsService {
+//    id: string;
+//  }
+//
+//  export class ServantDetailController {
+//    public servant: ServantModel;
+//
+//    public static $inject = [
+//      '$routeParams',
+//      'ServantService',
+//      'ScrollService'
+//    ];
+//
+//    constructor(
+//      private $routeParams: ServantDetailParams,
+//      private servantService: ServantService,
+//      private scrollService: ScrollService
+//    ) {
+//      servantService.load()
+//        .then(() => {
+//          this.servant = servantService.getServantWithId(+$routeParams.id);
+//          this.scrollService.restore();
+//        });
+//    }
+//  }
+//
+//  interface DeckParams extends ng.route.IRouteParamsService {
+//    hash: string;
+//  }
+//
+//  export class DeckController {
+//    public servants: ServantModel[];
+//
+//    public raceIdOptions: {key: number; value: string;}[] = [
+//      {key: null, value: 'Select Race...'},
+//      {key: 1,    value: '人獣'},
+//      {key: 2,    value: '神族'},
+//      {key: 3,    value: '魔種'},
+//      {key: 4,    value: '海種'},
+//      {key: 5,    value: '不死'}
+//    ];
+//
+//    public raceId: number;
+//
+//    public raceName: string = 'Select Race...';
+//
+//    public q: string;
+//
+//    public filter: {
+//      raceId: number;
+//      name: string;
+//    } = {
+//      raceId: undefined,
+//      name: undefined
+//    };
+//
+//    public predicate: string[] = ['raceId', 'raceCode'];
+//
+//    public reverse: boolean = false;
+//
+//    public url: string;
+//
+//    public deck: DeckModel;
+//
+//    public static $inject = [
+//      '$window',
+//      '$location',
+//      '$routeParams',
+//      'ServantService',
+//      'DeckService'
+//    ];
+//
+//    constructor(
+//      private $window: ng.IWindowService,
+//      private $location: ng.ILocationService,
+//      private $routeParams: DeckParams,
+//      private servantService: ServantService,
+//      private deckService: DeckService
+//    ) {
+//      servantService.load()
+//        .then(() => {
+//          this.servants = servantService.servants;
+//          deckService.servants = servantService.servants;
+//          deckService.loadWithHash($routeParams.hash);
+//          this.deck = deckService.deck;
+//          this.url = deckService.url;
+//          this.refreshEventListener();
+//        });
+//
+//      angular.element($window.document).ready(() => {
+//        let button = angular.element('.copy-clipboard');
+//        let clip = new ZeroClipboard(button);
+//        clip.on('ready', () => {
+//          clip.on('aftercopy', () => {
+//            button
+//              .attr('data-original-title', 'Copied')
+//              .tooltip('show');
+//            $window.setTimeout(() => {
+//              button
+//                .tooltip('hide')
+//                .attr('data-original-title', '');
+//            }, 1000);
+//          });
+//        });
+//        button
+//          .tooltip({
+//            trigger: 'manual',
+//            container: 'body'
+//          });
+//      });
+//    }
+//
+//    public setServant(index: number, data: {servantId: number; index: number}): void {
+//      let servantId = data.servantId;
+//      let oldIndex = data.index;
+//      if (oldIndex !== null) {
+//        this.deckService.setServant(oldIndex, this.deck.servants[index] ? this.deck.servants[index].id : undefined);
+//      }
+//      this.deckService.setServant(index, servantId);
+//      this.deck = this.deckService.deck;
+//      this.url = this.deckService.url;
+//      this.refreshEventListener();
+//    }
+//
+//    public clearServant(index: number): void {
+//      this.deckService.unsetServant(index);
+//      this.deck = this.deckService.deck;
+//      this.url = this.deckService.url;
+//      this.refreshEventListener();
+//    }
+//
+//    public selectRaceId(raceId: number, raceName: string): void {
+//      this.raceId = raceId;
+//      this.raceName = raceName;
+//      this.filter.raceId = this.raceId ? this.raceId : undefined;
+//      this.refreshEventListener();
+//    }
+//
+//    public changeQuery(): void {
+//      this.filter.name = this.q;
+//      this.refreshEventListener();
+//    }
+//
+//    public openServant(servantId: number): void {
+//      this.$window.open('/servants/' + servantId + '/', '_blank');
+//    }
+//
+//    private refreshEventListener(): void {
+//      this.$window.setTimeout(() => {
+//        //noinspection TaskProblemsInspection
+//        angular.element('img.lazy').lazyload();
+//      }, 1);
+//    }
+//  }
+//
+//  export class PrizeController {
+//    public prizes: PrizeModel[];
+//
+//    public results: PrizeModel[];
+//
+//    public resultSummary: {prize: PrizeModel; count: number;}[];
+//
+//    public resultTimes: number;
+//
+//    public times: number = 10;
+//
+//    public viewOptions: {key: number; icon: string;}[] = [
+//      {key: 0, icon: 'fui-list-numbered'},
+//      {key: 1, icon: 'fui-list-thumbnailed'}
+//    ];
+//
+//    public view: number = 0;
+//
+//    public static $inject = [
+//      'PrizeService'
+//    ];
+//
+//    constructor(
+//      private prizeService: PrizeService
+//    ) {
+//      prizeService.load()
+//        .then(() => {
+//          this.prizes = prizeService.prizes;
+//        });
+//    }
+//
+//    public drawPrizes(): void {
+//      this.times = !isNaN(this.times) ? this.times : 10;
+//      this.times = this.times < 1000 ? this.times : 1000;
+//
+//      let drawList: {n: number; prize: PrizeModel;}[] = [];
+//      let cn = 0;
+//      this.prizes.forEach(function(e) {
+//        cn += e.rate;
+//        drawList.push({n: cn, prize: e});
+//      });
+//
+//      this.results = [];
+//      let summary: {[index: number]: {prize: PrizeModel; count: number;}} = {};
+//      for (let i = 0; i < this.times; i++) {
+//        let r = Math.random() * cn;
+//        for (let j = 0; j < drawList.length; j++) {
+//          let draw = drawList[j];
+//          if (r <= draw.n) {
+//            this.results.push(draw.prize);
+//            if (summary[draw.prize.id]) {
+//              summary[draw.prize.id].count++;
+//            } else {
+//              summary[draw.prize.id] = {
+//                prize: draw.prize, count: 1
+//              };
+//            }
+//            break;
+//          }
+//        }
+//      }
+//
+//      this.resultTimes = this.times;
+//      this.resultSummary = [];
+//      let me = this;
+//      Object.keys(summary).forEach(function(key) {
+//        me.resultSummary.push({
+//          prize: this[key].prize, count: this[key].count
+//        });
+//      }, summary);
+//    }
+//
+//    public selectView(view: number): void {
+//      this.view = view;
+//    }
+//  }
+//
+//  export class AboutController {
+//    public mail: string;
+//
+//    public static $inject = [
+//    ];
+//
+//    constructor(
+//    ) {
+//      this.mail = AppConfig.mail;
+//    }
+//  }
+//}

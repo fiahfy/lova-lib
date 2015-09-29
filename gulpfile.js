@@ -35,7 +35,7 @@ var config = {
     ],
     dest: 'client/assets/js/',
     options: {
-      //noImplicitAny : true,
+      noImplicitAny : true,
       target : 'es5',
       module : 'commonjs'
     }
@@ -43,7 +43,10 @@ var config = {
 
   browserify: {
     options: {
-      entries: 'client/assets/js/app.js',
+      entries: [
+        'client/assets/js/app.js'
+        //'client/assets/js/controllers.js'
+      ],
       debug: true
     },
     dest: 'client/assets/js',

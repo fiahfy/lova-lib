@@ -38,6 +38,7 @@
   "dependencies": {
     "angular": "^1.4.6",
     "browserify": "^11.2.0",
+    "browserify-shim": "^3.8.10",
     "cheerio-httpcli": "^0.3.3",
     "co": "^4.6.0",
     "commander": "^2.8.1",
