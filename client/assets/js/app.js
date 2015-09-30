@@ -1,15 +1,15 @@
 /// <reference path="_all.ts" />
 'use strict';
 var angular = require('angular');
+require('angular-route');
+//import './directives';
+//import './filters';
+//import './models';
+//import './services';
 exports.appName = 'app';
 exports.modules = [
-    'ngRoute',
-    'ngTouch',
-    'ngDraggable',
-    'ui',
-    'angulartics', 'angulartics.google.analytics'
+    'ngRoute'
 ];
-console.log(angular);
 angular.module(exports.appName, exports.modules);
 var Locator = (function () {
     function Locator(locationProvider) {
@@ -49,6 +49,7 @@ var AppConfig = (function () {
 angular.module(exports.appName).config(Router);
 angular.module(exports.appName).config(Locator);
 angular.module(exports.appName).value('AppConfig', AppConfig);
+require('./controllers');
 //app.controller('MainController', MainController);
 //app.controller('ServantListController', ServantListController);
 //app.controller('ServantDetailController', ServantDetailController);

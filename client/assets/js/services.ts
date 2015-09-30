@@ -1,6 +1,7 @@
 /// <reference path="_all.ts" />
 'use strict';
 
+import * as angular from 'angular';
 import {ServantModel, SkillModel, StatusModel, DeckModel, PrizeModel} from './models';
 
 export class ServantService {

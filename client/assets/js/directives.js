@@ -1,5 +1,6 @@
 /// <reference path="_all.ts" />
 'use strict';
+var angular = require('angular');
 function fittable() {
     return {
         restrict: 'A',

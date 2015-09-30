@@ -1,7 +1,9 @@
 /// <reference path="_all.ts" />
 'use strict';
 
+import * as angular from 'angular';
 import * as app from './app';
+
 import {ServantModel, SkillModel, StatusModel, DeckModel, PrizeModel} from './models';
 import {ServantService, DeckService, PrizeService, ScrollService} from './services';
 
@@ -110,8 +112,8 @@ class ServantListController {
 export class Definition {
   static ddo() {
     return {
-      controller: ServantListController,
-      controllerAs: 'c',
+      //controller: ServantListController,
+      //controllerAs: 'c',
       restrict: 'E',
       //scope: {
       //  locale: '&isemIoLocale'
@@ -121,7 +123,7 @@ export class Definition {
   }
 }
 
-angular.module(app.appName).directive('lovaServant', Definition.ddo);
+angular.module('app').directive('lovaServant', Definition.ddo);
 
 //
 //namespace lova {

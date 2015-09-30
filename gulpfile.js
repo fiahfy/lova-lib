@@ -81,7 +81,7 @@ gulp.task('browserify', function(){
     .pipe(gulp.dest(config.browserify.dest));
 });
 
-gulp.task('watch', function () {
+gulp.task('watch', ['tsc', 'browserify'], function () {
   watch(config.watch.ts, function () {
     gulp.start(['tsc']);
   });

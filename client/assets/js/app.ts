@@ -2,17 +2,22 @@
 'use strict';
 
 import * as angular from 'angular';
+import 'angular-route';
+
+//import './directives';
+//import './filters';
+//import './models';
+//import './services';
 
 export const appName = 'app';
 export const modules = [
-  'ngRoute',
-  'ngTouch',
-  'ngDraggable',
-  'ui',
-  'angulartics', 'angulartics.google.analytics'
+  'ngRoute'
+  //'ngTouch',
+  //'ngDraggable',
+  //'ui',
+  //'angulartics', 'angulartics.google.analytics'
 ];
 
-console.log(angular);
 angular.module(appName, modules);
 
 class Locator {
@@ -80,6 +85,9 @@ class AppConfig {
 angular.module(appName).config(Router);
 angular.module(appName).config(Locator);
 angular.module(appName).value('AppConfig', AppConfig);
+
+import './controllers';
+
   //app.controller('MainController', MainController);
   //app.controller('ServantListController', ServantListController);
   //app.controller('ServantDetailController', ServantDetailController);

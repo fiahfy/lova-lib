@@ -1,5 +1,6 @@
 /// <reference path="_all.ts" />
 'use strict';
+var angular = require('angular');
 var models_1 = require('./models');
 var ServantService = (function () {
     function ServantService($http, $q) {

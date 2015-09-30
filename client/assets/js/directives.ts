@@ -1,6 +1,8 @@
 /// <reference path="_all.ts" />
 'use strict';
 
+import * as angular from 'angular';
+
 export function fittable(): ng.IDirective {
   return {
     restrict: 'A',

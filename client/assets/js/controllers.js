@@ -1,6 +1,6 @@
 /// <reference path="_all.ts" />
 'use strict';
-var app = require('./app');
+var angular = require('angular');
 var ServantListController = (function () {
     function ServantListController($scope, $window, $location, $routeParams, servantService, scrollService) {
         var _this = this;
@@ -78,8 +78,8 @@ var Definition = (function () {
     }
     Definition.ddo = function () {
         return {
-            controller: ServantListController,
-            controllerAs: 'c',
+            //controller: ServantListController,
+            //controllerAs: 'c',
             restrict: 'E',
             //scope: {
             //  locale: '&isemIoLocale'
@@ -90,7 +90,7 @@ var Definition = (function () {
     return Definition;
 })();
 exports.Definition = Definition;
-angular.module(app.appName).directive('lovaServant', Definition.ddo);
+angular.module('app').directive('lovaServant', Definition.ddo);
 //
 //namespace lova {
 //  'use strict';

@@ -22,9 +22,10 @@
     "node": ">= 0.6.0",
     "npm": ">= 1.0.0"
   },
-  "browser": {
+  "browserify": {
     "jquery": "./node_modules/jquery/dist/jquery.js",
-    "angular": "./node_modules/angular/angular.js"
+    "angular": "./node_modules/angular/angular.js",
+    "angular-route": "./node_modules/angular-route/angular-route.js"
   },
   "browserify-shim": {
     "jquery": {
@@ -37,6 +38,7 @@
   },
   "dependencies": {
     "angular": "^1.4.6",
+    "angular-route": "^1.4.7",
     "browserify": "^11.2.0",
     "browserify-shim": "^3.8.10",
     "cheerio-httpcli": "^0.3.3",
