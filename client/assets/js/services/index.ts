@@ -1,8 +1,8 @@
-/// <reference path="../_all.ts" />
 'use strict';
 
-//import {ServantService} from './servant';
-//import {ScrollService} from './scroll';
+import './servant';
+import './scroll';
+
 //export var ServantService = ServantService;
 //export var ScrollService = ScrollService;
 

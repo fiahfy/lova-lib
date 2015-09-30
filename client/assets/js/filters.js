@@ -1,4 +1,3 @@
-/// <reference path="_all.ts" />
 'use strict';
 function pad() {
     return function (input, length, str) {

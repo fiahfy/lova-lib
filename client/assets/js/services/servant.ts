@@ -2,7 +2,6 @@
 
 import * as angular from 'angular';
 import * as app from '../app';
-
 import {ServantModel} from '../models';
 
 export class ServantService {

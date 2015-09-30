@@ -1,4 +1,3 @@
-/// <reference path="_all.ts" />
 'use strict';
 var ServantModel = (function () {
     function ServantModel(obj) {

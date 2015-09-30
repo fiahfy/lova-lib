@@ -1,4 +1,3 @@
-/// <reference path="_all.ts" />
 'use strict';
 
 import * as angular from 'angular';

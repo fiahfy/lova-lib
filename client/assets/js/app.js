@@ -46,6 +46,7 @@ angular.module(exports.appName).config(Router);
 angular.module(exports.appName).config(Locator);
 angular.module(exports.appName).value('AppConfig', AppConfig);
 require('./controllers');
+require('./services');
 //app.controller('MainController', MainController);
 //app.controller('ServantListController', ServantListController);
 //app.controller('ServantDetailController', ServantDetailController);

@@ -2,11 +2,8 @@
 
 import * as angular from 'angular';
 import 'jquery-lazyload';
-
 import * as app from '../app';
 import {ServantModel, SkillModel, StatusModel, DeckModel, PrizeModel} from '../models';
-import {ServantService} from '../services/servant';
-import {ScrollService} from '../services/scroll';
 
 interface ServantListParams extends ng.route.IRouteParamsService {
   view: string;

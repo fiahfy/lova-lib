@@ -47,6 +47,7 @@ angular.module(exports.appName).config(Router);
 angular.module(exports.appName).config(Locator);
 angular.module(exports.appName).value('AppConfig', AppConfig);
 require('./controllers');
+require('./services');
 //app.controller('MainController', MainController);
 //app.controller('ServantListController', ServantListController);
 //app.controller('ServantDetailController', ServantDetailController);
@@ -65,7 +66,7 @@ require('./controllers');
 //app.service('PrizeService', PrizeService);
 //app.service('ScrollService', ScrollService);
 
-},{"./controllers":2,"angular":5,"angular-route":4}],2:[function(require,module,exports){
+},{"./controllers":2,"./services":5,"angular":9,"angular-route":8}],2:[function(require,module,exports){
 'use strict';
 require('./servant-list');
 //
@@ -521,7 +522,350 @@ var Definition = (function () {
 })();
 angular.module('app').directive('lovaServant', Definition.ddo);
 
-},{"angular":5,"jquery-lazyload":6}],4:[function(require,module,exports){
+},{"angular":9,"jquery-lazyload":10}],4:[function(require,module,exports){
+'use strict';
+var ServantModel = (function () {
+    function ServantModel(obj) {
+        this.id = obj.id;
+        this.raceId = obj.race_id;
+        this.raceName = obj.race_name;
+        this.raceCode = obj.race_code;
+        this.type = obj.type;
+        this.name = obj.name;
+        this.cost = obj.cost;
+        this.range = obj.range;
+        this.date = new Date(obj.date);
+        this.illustrationBy = obj.illustration_by;
+        this.characterVoice = obj.character_voice;
+        this.oralTradition = obj.oral_tradition;
+        this.status = {
+            1: obj.status[1] ? new StatusModel(obj.status[1]) : null,
+            20: obj.status[20] ? new StatusModel(obj.status[20]) : null
+        };
+        this.skill = {
+            active: obj.skill.active ? new SkillModel(obj.skill.active) : null,
+            passive: obj.skill.passive ? new SkillModel(obj.skill.passive) : null
+        };
+    }
+    Object.defineProperty(ServantModel.prototype, "raceNameAndCode", {
+        get: function () {
+            return this.raceName + '-' + ('000' + this.raceCode).slice(-3);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return ServantModel;
+})();
+exports.ServantModel = ServantModel;
+var StatusModel = (function () {
+    function StatusModel(obj) {
+        this.hp = obj.hp;
+        this.ap = obj.ap;
+        this.atk = obj.atk;
+        this.pow = obj.pow;
+        this.def = obj.def;
+        this.res = obj.res;
+        this.ms = obj.ms;
+        this.as = obj.as;
+    }
+    return StatusModel;
+})();
+exports.StatusModel = StatusModel;
+var SkillModel = (function () {
+    function SkillModel(obj) {
+        this.name = obj.name;
+        this.designation = obj.designation;
+        this.effect = obj.effect;
+        this.description = obj.description;
+        this.ap = obj.ap;
+        this.cd = obj.cd;
+    }
+    return SkillModel;
+})();
+exports.SkillModel = SkillModel;
+var DeckModel = (function () {
+    function DeckModel() {
+        this.servants = [];
+        this.servantIds = [];
+    }
+    Object.defineProperty(DeckModel.prototype, "hash", {
+        get: function () {
+            return window.btoa(JSON.stringify(this.servantIds));
+        },
+        set: function (value) {
+            try {
+                this.servantIds = JSON.parse(window.atob(value));
+            }
+            catch (e) {
+                this.servantIds = [];
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(DeckModel.prototype, "mana", {
+        get: function () {
+            var fill = true;
+            this.servants.forEach(function (e, i) {
+                if (!e && DeckModel.deckIndexes.indexOf(i) > -1) {
+                    fill = false;
+                }
+            });
+            return fill ? 30 : 0;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(DeckModel.prototype, "bonusMana", {
+        get: function () {
+            var raceIds = [];
+            var fill = true;
+            this.servants.forEach(function (e, i) {
+                if (DeckModel.deckIndexes.indexOf(i) == -1) {
+                    return;
+                }
+                if (!e) {
+                    fill = false;
+                    return;
+                }
+                if (raceIds.indexOf(e.raceId) == -1) {
+                    raceIds.push(e.raceId);
+                }
+            });
+            if (!fill) {
+                return 0;
+            }
+            switch (raceIds.length) {
+                case 1:
+                    return 10;
+                case 2:
+                    return 5;
+                default:
+                    return 0;
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    DeckModel.prototype.updateServants = function (servants) {
+        this.servants = [];
+        for (var i = 0; i < DeckModel.size; i++) {
+            var servantId = this.servantIds[i];
+            var tmp = void 0;
+            for (var j = 0; j < servants.length; j++) {
+                var servant = servants[j];
+                if (servantId == servant.id) {
+                    tmp = servant;
+                    break;
+                }
+            }
+            this.servants.push(tmp);
+        }
+    };
+    DeckModel.deckIndexes = [0, 1, 2, 3, 4, 5];
+    DeckModel.sideBoardIndexes = [6, 7];
+    DeckModel.size = DeckModel.deckIndexes.length + DeckModel.sideBoardIndexes.length;
+    return DeckModel;
+})();
+exports.DeckModel = DeckModel;
+var PrizeModel = (function () {
+    function PrizeModel(obj) {
+        this.id = obj.id;
+        this.date = new Date(obj.date);
+        this.name = obj.name;
+        this.rate = obj.rate;
+    }
+    return PrizeModel;
+})();
+exports.PrizeModel = PrizeModel;
+
+},{}],5:[function(require,module,exports){
+'use strict';
+require('./servant');
+require('./scroll');
+//export var ServantService = ServantService;
+//export var ScrollService = ScrollService;
+//import * as angular from 'angular';
+//import * as app from '../app';
+//import {ServantModel, SkillModel, StatusModel, DeckModel, PrizeModel} from '../models';
+//
+//
+//export class DeckService {
+//  public servants: ServantModel[] = [];
+//  public deck: DeckModel;
+//
+//  public get url(): string {
+//    let a = this.$window.document.createElement('a');
+//    a.href = this.$window.location.href;
+//    return a.protocol + '//'
+//      + a.hostname + (a.port ? ':' + a.port : a.port)
+//      + '/deck/' + this.deck.hash + '/';
+//  }
+//
+//  public static $inject = [
+//    '$window'
+//  ];
+//
+//  constructor(
+//    private $window: ng.IWindowService
+//  ) {
+//    this.deck = new DeckModel();
+//  }
+//
+//  public loadWithHash(hash: string): void {
+//    this.deck.hash = hash;
+//    this.deck.updateServants(this.servants);
+//  }
+//
+//  public setServant(index: number, servantId: number): void {
+//    this.deck.servantIds[index] = servantId;
+//    this.deck.updateServants(this.servants);
+//  }
+//
+//  public unsetServant(index: number): void {
+//    this.setServant(index, undefined);
+//  }
+//}
+//
+//angular.module(app.appName).service('DeckService', DeckService);
+//
+//export class PrizeService {
+//  private static url: string = './api/prizes/';
+//  public prizes: PrizeModel[] = [];
+//
+//  public static $inject = [
+//    '$http',
+//    '$q'
+//  ];
+//
+//  constructor(
+//    private $http: ng.IHttpService,
+//    private $q: ng.IQService
+//  ) {
+//  }
+//
+//  public load(): ng.IPromise<any> {
+//    let deferred = this.$q.defer();
+//    if (this.prizes.length) {
+//      deferred.resolve();
+//      return deferred.promise;
+//    }
+//    this.$http.get(PrizeService.url)
+//      .then((res: any) => {
+//        res.data.forEach((prize: any) => {
+//          this.prizes.push(new PrizeModel(prize));
+//        });
+//        deferred.resolve();
+//      }, () => {
+//        deferred.reject();
+//      });
+//    return deferred.promise;
+//  }
+//}
+//
+//angular.module(app.appName).service('PrizeService', PrizeService);
+//
+//export class ScrollService {
+//  private positions: { [index: string]: number; } = {};
+//
+//  public static $inject = [
+//    '$location',
+//    '$window'
+//  ];
+//
+//  constructor(
+//    private $location: ng.ILocationService,
+//    private $window: ng.IWindowService
+//  ) {
+//    angular.element($window).on('scroll', () => {
+//      this.positions[this.$location.path()] = angular.element($window).scrollTop();
+//    });
+//  }
+//
+//  public restore(): void {
+//    let top = this.positions[this.$location.path()] || 0;
+//    angular.element(this.$window).scrollTop(top);
+//  }
+//}
+//
+//angular.module(app.appName).service('ScrollService', ScrollService);
+
+},{"./scroll":6,"./servant":7}],6:[function(require,module,exports){
+'use strict';
+var angular = require('angular');
+var app = require('../app');
+var ScrollService = (function () {
+    function ScrollService($location, $window) {
+        var _this = this;
+        this.$location = $location;
+        this.$window = $window;
+        this.positions = {};
+        angular.element($window).on('scroll', function () {
+            _this.positions[_this.$location.path()] = angular.element($window).scrollTop();
+        });
+    }
+    ScrollService.prototype.restore = function () {
+        var top = this.positions[this.$location.path()] || 0;
+        angular.element(this.$window).scrollTop(top);
+    };
+    ScrollService.$inject = [
+        '$location',
+        '$window'
+    ];
+    return ScrollService;
+})();
+exports.ScrollService = ScrollService;
+angular.module(app.appName).service('ScrollService', ScrollService);
+
+},{"../app":1,"angular":9}],7:[function(require,module,exports){
+'use strict';
+var angular = require('angular');
+var app = require('../app');
+var models_1 = require('../models');
+var ServantService = (function () {
+    function ServantService($http, $q) {
+        this.$http = $http;
+        this.$q = $q;
+        this.servants = [];
+    }
+    ServantService.prototype.load = function () {
+        var _this = this;
+        var deferred = this.$q.defer();
+        if (this.servants.length) {
+            deferred.resolve();
+            return deferred.promise;
+        }
+        this.$http.get(ServantService.url)
+            .then(function (res) {
+            res.data.forEach(function (servant) {
+                _this.servants.push(new models_1.ServantModel(servant));
+            });
+            deferred.resolve();
+        }, function () {
+            deferred.reject();
+        });
+        return deferred.promise;
+    };
+    ServantService.prototype.getServantWithId = function (id) {
+        var result = null;
+        this.servants.forEach(function (servant) {
+            if (servant.id == id) {
+                result = servant;
+            }
+        });
+        return result;
+    };
+    ServantService.url = './api/servants/';
+    ServantService.$inject = [
+        '$http',
+        '$q'
+    ];
+    return ServantService;
+})();
+exports.ServantService = ServantService;
+angular.module(app.appName).service('ServantService', ServantService);
+
+},{"../app":1,"../models":4,"angular":9}],8:[function(require,module,exports){
 /**
  * @license AngularJS v1.4.7
  * (c) 2010-2015 Google, Inc. http://angularjs.org
@@ -1514,7 +1858,7 @@ function ngViewFillContentFactory($compile, $controller, $route) {
 
 })(window, window.angular);
 
-},{}],5:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 (function (global){
 
 ; require("/Users/fiahfy/Documents/project/lova/node_modules/jquery/dist/jquery.js");
@@ -30351,7 +30695,7 @@ $provide.value("$locale", {
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"/Users/fiahfy/Documents/project/lova/node_modules/jquery/dist/jquery.js":7}],6:[function(require,module,exports){
+},{"/Users/fiahfy/Documents/project/lova/node_modules/jquery/dist/jquery.js":11}],10:[function(require,module,exports){
 (function (global){
 
 ; require("/Users/fiahfy/Documents/project/lova/node_modules/jquery/dist/jquery.js");
@@ -30603,7 +30947,7 @@ $provide.value("$locale", {
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"/Users/fiahfy/Documents/project/lova/node_modules/jquery/dist/jquery.js":7}],7:[function(require,module,exports){
+},{"/Users/fiahfy/Documents/project/lova/node_modules/jquery/dist/jquery.js":11}],11:[function(require,module,exports){
 (function (global){
 ; var __browserify_shim_require__=require;(function browserifyShim(module, exports, require, define, browserify_shim__define__module__export__) {
 /*!

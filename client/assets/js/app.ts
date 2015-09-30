@@ -82,6 +82,7 @@ angular.module(appName).config(Locator);
 angular.module(appName).value('AppConfig', AppConfig);
 
 import './controllers';
+import './services';
 
   //app.controller('MainController', MainController);
   //app.controller('ServantListController', ServantListController);

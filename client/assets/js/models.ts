@@ -1,4 +1,3 @@
-/// <reference path="_all.ts" />
 'use strict';
 
 export class ServantModel {
