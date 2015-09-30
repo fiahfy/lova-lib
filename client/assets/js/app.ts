@@ -1,13 +1,8 @@
-/// <reference path="_all.ts" />
+/// <reference path="../../../typings/tsd.d.ts" />
 'use strict';
 
 import * as angular from 'angular';
 import 'angular-route';
-
-//import './directives';
-//import './filters';
-//import './models';
-//import './services';
 
 export const appName = 'app';
 export const modules = [

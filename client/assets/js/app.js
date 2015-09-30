@@ -1,11 +1,7 @@
-/// <reference path="_all.ts" />
+/// <reference path="../../../typings/tsd.d.ts" />
 'use strict';
 var angular = require('angular');
 require('angular-route');
-//import './directives';
-//import './filters';
-//import './models';
-//import './services';
 exports.appName = 'app';
 exports.modules = [
     'ngRoute'

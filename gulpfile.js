@@ -31,7 +31,7 @@ var config = {
 
   tsc: {
     src: [
-      'client/assets/js/*.ts'
+      'client/assets/js/**/*.ts'
     ],
     dest: 'client/assets/js/',
     options: {
@@ -45,7 +45,6 @@ var config = {
     options: {
       entries: [
         'client/assets/js/app.js'
-        //'client/assets/js/controllers.js'
       ],
       debug: true
     },
@@ -56,8 +55,8 @@ var config = {
   },
 
   watch: {
-    ts: 'client/assets/js/*.ts',
-    js: ['client/assets/js/*.js', '!client/assets/js/bundle.js']
+    ts: 'client/assets/js/**/*.ts',
+    js: ['client/assets/js/**/*.js', '!client/assets/js/bundle.js']
   }
 };
 
