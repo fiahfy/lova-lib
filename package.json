@@ -22,10 +22,13 @@
     "node": ">= 0.6.0",
     "npm": ">= 1.0.0"
   },
-  "browserify": {
+  "browser": {
     "jquery": "./node_modules/jquery/dist/jquery.js",
     "angular": "./node_modules/angular/angular.js",
     "angular-route": "./node_modules/angular-route/angular-route.js"
+  },
+  "browserify": {
+    "transform": ["browserify-shim"]
   },
   "browserify-shim": {
     "jquery": {
