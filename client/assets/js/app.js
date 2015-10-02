@@ -2,9 +2,18 @@
 'use strict';
 var angular = require('angular');
 require('angular-route');
+//import 'angular-ui-bootstrap';
+require('angular-ui-select2');
+//import 'bootstrap';
+require('jquery-lazyload');
+require('flat-ui');
 exports.appName = 'app';
 exports.modules = [
-    'ngRoute'
+    'ngRoute',
+    //'ngTouch',
+    //'ngDraggable',
+    //'ui.bootstrap',
+    'ui.select2'
 ];
 angular.module(exports.appName, exports.modules);
 var Locator = (function () {

@@ -26,7 +26,11 @@
     "jquery": "./node_modules/jquery/dist/jquery.js",
     "jquery-lazyload": "./node_modules/jquery-lazyload/jquery.lazyload.js",
     "angular": "./node_modules/angular/angular.js",
-    "angular-route": "./node_modules/angular-route/angular-route.js"
+    "angular-route": "./node_modules/angular-route/angular-route.js",
+    "angular-ui-bootstrap": "./node_modules/angular-ui-bootstrap/ui-bootstrap.js",
+    "angular-ui-select2": "./node_modules/angular-ui-select2/src/select2.js",
+    "bootstrap": "./node_modules/bootstrap/dist/js/bootstrap.js",
+    "flat-ui": "./node_modules/flat-ui/dist/js/flat-ui.js"
   },
   "browserify": {
     "transform": [
@@ -43,16 +47,32 @@
     "angular": {
       "depends": "jquery",
       "exports": "angular"
+    },
+    "angular-ui-bootstrap": {
+      "depends": "jquery"
+    },
+    "angular-ui-select2": {
+      "depends": "jquery"
+    },
+    "flat-ui": {
+      "depends": "jquery"
+    },
+    "bootstrap": {
+      "depends": "jquery"
     }
   },
   "dependencies": {
-    "angular": "^1.4.6",
+    "angular": "^1.4.7",
     "angular-route": "^1.4.7",
+    "angular-ui-bootstrap": "^0.13.4",
+    "angular-ui-select2": "0.0.5",
+    "bootstrap": "^3.3.5",
     "browserify": "^11.2.0",
     "browserify-shim": "^3.8.10",
     "cheerio-httpcli": "^0.3.3",
     "co": "^4.6.0",
     "commander": "^2.8.1",
+    "flat-ui": "git://github.com/designmodo/Flat-UI.git#2.2.2",
     "gulp": "^3.9.0",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-tsd": "0.0.4",

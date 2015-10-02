@@ -3,13 +3,19 @@
 
 import * as angular from 'angular';
 import 'angular-route';
+//import 'angular-ui-bootstrap';
+import 'angular-ui-select2';
+//import 'bootstrap';
+import 'jquery-lazyload';
+import 'flat-ui';
 
 export const appName = 'app';
 export const modules = [
-  'ngRoute'
+  'ngRoute',
   //'ngTouch',
   //'ngDraggable',
-  //'ui',
+  //'ui.bootstrap',
+  'ui.select2'
   //'angulartics', 'angulartics.google.analytics'
 ];
 

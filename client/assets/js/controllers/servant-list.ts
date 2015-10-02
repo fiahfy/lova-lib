@@ -1,9 +1,10 @@
 'use strict';
 
 import * as angular from 'angular';
-import 'jquery-lazyload';
 import * as app from '../app';
 import {ServantModel, SkillModel, StatusModel, DeckModel, PrizeModel} from '../models';
+import {ServantService} from '../services/servant';
+import {ScrollService} from '../services/scroll';
 
 interface ServantListParams extends ng.route.IRouteParamsService {
   view: string;
@@ -19,12 +20,12 @@ class ServantListController {
   ];
 
   public raceIdOptions: {key: number; value: string;}[] = [
-    {key: null, value: 'Select Race...'},
-    {key: 1,    value: '人獣'},
-    {key: 2,    value: '神族'},
-    {key: 3,    value: '魔種'},
-    {key: 4,    value: '海種'},
-    {key: 5,    value: '不死'}
+    {key: 0, value: 'Select Race...'},
+    {key: 1, value: '人獣'},
+    {key: 2, value: '神族'},
+    {key: 3, value: '魔種'},
+    {key: 4, value: '海種'},
+    {key: 5, value: '不死'}
   ];
 
   public view: number;

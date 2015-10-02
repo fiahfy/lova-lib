@@ -1,6 +1,5 @@
 'use strict';
 var angular = require('angular');
-require('jquery-lazyload');
 var ServantListController = (function () {
     function ServantListController($scope, $window, $location, $routeParams, servantService, scrollService) {
         var _this = this;
@@ -15,7 +14,7 @@ var ServantListController = (function () {
             { key: 1, icon: 'fui-list-large-thumbnails' }
         ];
         this.raceIdOptions = [
-            { key: null, value: 'Select Race...' },
+            { key: 0, value: 'Select Race...' },
             { key: 1, value: '人獣' },
             { key: 2, value: '神族' },
             { key: 3, value: '魔種' },
