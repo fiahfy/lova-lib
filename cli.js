@@ -27,10 +27,11 @@ commander
   .alias('im')
   .description('manage images')
   .option('-i, --id [id]', 'target servant id', null, null)
+  .option('-f, --force', 'download force', null, null)
   .action(function(command, opts) {
     switch (command) {
       case 'download':
-        promise = commands.image.download(opts.id);
+        promise = commands.image.download(opts.id, opts.force);
         break;
       case 'sprite':
         promise = commands.image.sprite();

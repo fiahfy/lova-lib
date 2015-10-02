@@ -48,9 +48,10 @@ function findServant(args) {
 }
 
 function insertServant(args) {
-  models.counter.getNewId('servant', function(err, counter) {
-    var _id = counter.value.seq;
-    return models.servant.update({_id: _id}, args, {upsert: true}).exec();
+  return co(function *() {
+    var result = (yield models.counter.getNewId('servant')).result;
+    var _id = result.value.seq;
+    yield models.servant.update({_id: _id}, args, {upsert: true}).exec();
   });
 }
 
@@ -88,8 +89,8 @@ function getServantWithUrl(url) {
 
     var table1 = $('.servant_table > div:nth-child(1) table');
     var table2 = $('.servant_table > div:nth-child(2) table');
-    var table3 = section1.next().find('table');
-    var table4 = section2.next().find('table');
+    var table3 = section1.nextAll('.table-type-1').first().find('table');
+    var table4 = section2.nextAll('.table-type-1').first().find('table');
 
     var raceParams = getRaceParam(table1.find('tr:nth-child(1) td:nth-child(2)').text());
 
@@ -129,7 +130,7 @@ function getServantWithUrl(url) {
     if (section1[0]) {
       skill.active = {};
       skill.active.name         = section1.text().split('：')[1].trim();
-      skill.active.description  = section1.next().next().text().replace(/<br\s*\/?>/gi, "\n").trim();
+      skill.active.description  = section1.nextAll('p').first().text().replace(/<br\s*\/?>/gi, "\n").trim();
       skill.active.designation  = table3.find('tr:nth-child(1) td:nth-child(2)').text().replace(/[・･]/ig, ',').trim();
       skill.active.effect       = table3.find('tr:nth-child(1) td:nth-child(4)').text().replace(/[・･]/ig, ',').trim();
       skill.active.ap           = table3.find('tr:nth-child(2) td:nth-child(2)').text().replace(/\s*\/\s*/ig, ',').trim().split(',');
@@ -138,7 +139,7 @@ function getServantWithUrl(url) {
     if (section2[0]) {
       skill.passive = {};
       skill.passive.name        = section2.text().split('：')[1].trim();
-      skill.passive.description = section2.next().next().text().replace(/<br\s*\/?>/gi, "\n").trim();
+      skill.passive.description = section2.nextAll('p').first().text().replace(/<br\s*\/?>/gi, "\n").trim();
       skill.passive.designation = table4.find('tr:nth-child(1) td:nth-child(2)').text().replace(/[・･]/ig, ',').trim();
       skill.passive.effect      = table4.find('tr:nth-child(1) td:nth-child(4)').text().replace(/[・･]/ig, ',').trim();
       skill.passive.ap          = [];
