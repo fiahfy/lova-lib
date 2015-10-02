@@ -4,21 +4,6 @@ var mongoose = require('mongoose');
 
 var Schema = mongoose.Schema;
 
-//var CounterSchema = new Schema({
-//  _id: String,
-//  seq: Number
-//});
-//CounterSchema.statics.getNewId = function (name,  callback) {
-//  return this.collection.findAndModify(
-//    { _id: name },
-//    [],
-//    { $inc: { seq: 1 } },
-//    { new: true, upsert: true },
-//    callback
-//  );
-//};
-//var Counter = mongoose.model('counter', CounterSchema);
-
 var ServantSchema = new Schema({
   _id:              { type: Number, require: true, unique: true },
   race_id:          { type: Number, require: true, unique: true },

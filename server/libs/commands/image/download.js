@@ -9,7 +9,7 @@ var models = require('../../../models/index');
 
 const imageDir = './client/assets/img/';
 
-module.exports = function(id) {
+module.exports = function(id, force) {
   return co(function *() {
     var servants;
     if (id) {
@@ -18,7 +18,7 @@ module.exports = function(id) {
       servants = yield findServants({});
     }
     for (var i = 0; i < servants.length; i++) {
-      yield save(servants[i]);
+      yield save(servants[i], force);
     }
   });
 };
@@ -27,7 +27,7 @@ function findServants(args) {
   return models.servant.find(args).sort({_id: 1}).exec();
 }
 
-function save(servant) {
+function save(servant, force) {
   return co(function *() {
     console.log('save image: id = %d', servant.id);
     var url = yield getImageUrlWithServant(servant);
@@ -39,6 +39,11 @@ function save(servant) {
     var largeImagePath = `${imageDir}l/${servant.id}.jpg`;
     var middleImagePath = `${imageDir}m/${servant.id}.jpg`;
 
+    if (!force && (yield exists(largeImagePath)) && (yield exists(middleImagePath))) {
+      console.log('image is almost exists');
+      return;
+    }
+
     yield download(url, largeImagePath);
 
     yield scale(largeImagePath, middleImagePath, 150 / 640);
@@ -49,6 +54,18 @@ function getImageUrlWithServant(servant) {
   return co(function *() {
     var $ = (yield scraper.fetchServant(servant.race_name, servant.name)).$;
     return $('#rendered-body').find('> div:first-child img').attr('src');
+  });
+}
+
+function exists(path) {
+  return new Promise(function(resolve, reject) {
+    fs.stat(path, function(err, stat) {
+      if (err == null) {
+        resolve(true);
+        return;
+      }
+      resolve(false);
+    });
   });
 }
 

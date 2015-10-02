@@ -28,7 +28,9 @@ function fetchNotice(page) {
 }
 
 function fetchServant(race_name, name) {
-  name = name.replace('・', '');
+  if (['ミミララ・レイア', 'ジャンヌ・ダルク'].indexOf(name) > -1) {
+    name = name.replace('・', '');
+  }
   var url = `http://wiki.4gamer.net/lova/%E4%BD%BF%E3%81%84%E9%AD%94/${encodeURIComponent(race_name)}/${encodeURIComponent(name)}`;
   return fetch(url);
 }
