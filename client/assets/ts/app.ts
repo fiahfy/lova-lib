@@ -1,7 +1,7 @@
 /// <reference path="_all.ts" />
+'use strict';
 
 module lova {
-  'use strict';
 
   var app = angular.module('app', [
     'ngRoute',

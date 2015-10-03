@@ -1,7 +1,7 @@
 /// <reference path="_all.ts" />
+'use strict';
 
 module lova {
-  'use strict';
 
   export function pad() {
     return (input: string, length: number, str: string) => {

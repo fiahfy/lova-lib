@@ -1,7 +1,7 @@
 /// <reference path="_all.ts" />
+'use strict';
 var lova;
 (function (lova) {
-    'use strict';
     var MainController = (function () {
         function MainController() {
             this.now = new Date();
@@ -39,7 +39,8 @@ var lova;
             this.view = $routeParams.view ? +$routeParams.view : 0;
             this.raceId = $routeParams.race_id ? +$routeParams.race_id : 0;
             this.filter.raceId = this.raceId ? this.raceId : undefined;
-            servantService.load().then(function () {
+            servantService.load()
+                .then(function () {
                 _this.servants = servantService.servants;
                 _this.scrollService.restore();
                 _this.refreshEventListener();
@@ -87,7 +88,8 @@ var lova;
             this.$routeParams = $routeParams;
             this.servantService = servantService;
             this.scrollService = scrollService;
-            servantService.load().then(function () {
+            servantService.load()
+                .then(function () {
                 _this.servant = servantService.getServantWithId(+$routeParams.id);
                 _this.scrollService.restore();
             });
@@ -123,7 +125,8 @@ var lova;
             };
             this.predicate = ['raceId', 'raceCode'];
             this.reverse = false;
-            servantService.load().then(function () {
+            servantService.load()
+                .then(function () {
                 _this.servants = servantService.servants;
                 deckService.servants = servantService.servants;
                 deckService.loadWithHash($routeParams.hash);
@@ -132,25 +135,30 @@ var lova;
                 _this.refreshEventListener();
             });
             angular.element($window.document).ready(function () {
-                let button = angular.element('.copy-clipboard');
-                let clip = new ZeroClipboard(button);
+                var button = angular.element('.copy-clipboard');
+                var clip = new ZeroClipboard(button);
                 clip.on('ready', function () {
                     clip.on('aftercopy', function () {
-                        button.attr('data-original-title', 'Copied').tooltip('show');
+                        button
+                            .attr('data-original-title', 'Copied')
+                            .tooltip('show');
                         $window.setTimeout(function () {
-                            button.tooltip('hide').attr('data-original-title', '');
+                            button
+                                .tooltip('hide')
+                                .attr('data-original-title', '');
                         }, 1000);
                     });
                 });
-                button.tooltip({
+                button
+                    .tooltip({
                     trigger: 'manual',
                     container: 'body'
                 });
             });
         }
         DeckController.prototype.setServant = function (index, data) {
-            let servantId = data.servantId;
-            let oldIndex = data.index;
+            var servantId = data.servantId;
+            var oldIndex = data.index;
             if (oldIndex !== null) {
                 this.deckService.setServant(oldIndex, this.deck.servants[index] ? this.deck.servants[index].id : undefined);
             }
@@ -204,25 +212,26 @@ var lova;
                 { key: 1, icon: 'fui-list-thumbnailed' }
             ];
             this.view = 0;
-            prizeService.load().then(function () {
+            prizeService.load()
+                .then(function () {
                 _this.prizes = prizeService.prizes;
             });
         }
         PrizeController.prototype.drawPrizes = function () {
             this.times = !isNaN(this.times) ? this.times : 10;
             this.times = this.times < 1000 ? this.times : 1000;
-            let drawList = [];
-            let cn = 0;
+            var drawList = [];
+            var cn = 0;
             this.prizes.forEach(function (e) {
                 cn += e.rate;
                 drawList.push({ n: cn, prize: e });
             });
             this.results = [];
-            let summary = {};
-            for (let i = 0; i < this.times; i++) {
-                let r = Math.random() * cn;
-                for (let j = 0; j < drawList.length; j++) {
-                    let draw = drawList[j];
+            var summary = {};
+            for (var i = 0; i < this.times; i++) {
+                var r = Math.random() * cn;
+                for (var j = 0; j < drawList.length; j++) {
+                    var draw = drawList[j];
                     if (r <= draw.n) {
                         this.results.push(draw.prize);
                         if (summary[draw.prize.id]) {
@@ -230,8 +239,7 @@ var lova;
                         }
                         else {
                             summary[draw.prize.id] = {
-                                prize: draw.prize,
-                                count: 1
+                                prize: draw.prize, count: 1
                             };
                         }
                         break;
@@ -240,11 +248,10 @@ var lova;
             }
             this.resultTimes = this.times;
             this.resultSummary = [];
-            let me = this;
+            var me = this;
             Object.keys(summary).forEach(function (key) {
                 me.resultSummary.push({
-                    prize: this[key].prize,
-                    count: this[key].count
+                    prize: this[key].prize, count: this[key].count
                 });
             }, summary);
         };
@@ -266,19 +273,19 @@ var lova;
     lova.AboutController = AboutController;
 })(lova || (lova = {}));
 /// <reference path="_all.ts" />
+'use strict';
 var lova;
 (function (lova) {
-    'use strict';
     function fittable() {
         return {
             restrict: 'A',
             link: function ($scope, element, attributes) {
-                let cls = attributes.fittable;
-                let elementTop = element.offset().top;
-                let dummyWrapper = $('<div>');
+                var cls = attributes.fittable;
+                var elementTop = element.offset().top;
+                var dummyWrapper = $('<div>');
                 $(window).on('scroll touchmove', function () {
                     if ($(window).scrollTop() >= elementTop) {
-                        let h = element.outerHeight();
+                        var h = element.outerHeight();
                         element.addClass(cls);
                         element.after(dummyWrapper.height(h));
                         return;
@@ -300,18 +307,19 @@ var lova;
                 skillPopover: '='
             },
             link: function ($scope, element, attributes) {
-                let args = $scope.skillPopover;
+                var args = $scope.skillPopover;
                 // clear all popovers
                 angular.element(args.container).empty();
                 // attach event listener
                 angular.element(element).each((function (window) {
                     return function () {
                         var _this = this;
-                        angular.element(this).popover({
+                        angular.element(this)
+                            .popover({
                             animation: false,
                             html: true,
                             placement: function () {
-                                let top = angular.element(_this).offset().top;
+                                var top = angular.element(_this).offset().top;
                                 if (top - angular.element(window).scrollTop() < angular.element(window).height() / 2) {
                                     return 'bottom';
                                 }
@@ -344,9 +352,9 @@ var lova;
     lova.skillPopoverContent = skillPopoverContent;
 })(lova || (lova = {}));
 /// <reference path="_all.ts" />
+'use strict';
 var lova;
 (function (lova) {
-    'use strict';
     function pad() {
         return function (input, length, str) {
             return ((new Array(length + 1)).join(str) + input).slice(-length);
@@ -364,24 +372,28 @@ var lova;
             if (!input) {
                 return input;
             }
-            let reg = new RegExp(regexp);
+            var reg = new RegExp(regexp);
             return input.replace(reg, newSubStr);
         };
     }
     lova.replace = replace;
     function skillDescription($sce) {
         return function (skill) {
-            let desc = skill.description;
+            var desc = skill.description;
             if (!desc) {
                 return desc;
             }
-            desc = desc.replace(/(^|\n)\d+\.\s/g, '$1').replace(/\n/g, '<br/><br/>').replace(/［([^］]+)］/g, '<br/>&nbsp;&nbsp;<b>- $1</b>').replace(/：/g, ' : ');
-            let cd = skill.cd;
+            desc = desc
+                .replace(/(^|\n)\d+\.\s/g, '$1')
+                .replace(/\n/g, '<br/><br/>')
+                .replace(/［([^］]+)］/g, '<br/>&nbsp;&nbsp;<b>- $1</b>')
+                .replace(/：/g, ' : ');
+            var cd = skill.cd;
             if (cd && cd.length) {
                 cd = '- クールダウン : ' + cd.join(' / ');
                 desc = desc.replace(/<br\/>/, '<br/>&nbsp;&nbsp;<b>' + cd + '</b><br/>');
             }
-            let ap = skill.ap;
+            var ap = skill.ap;
             if (ap && cd.length) {
                 ap = '- 消費AP : ' + ap.join(' / ');
                 desc = desc.replace(/<br\/>/, '<br/>&nbsp;&nbsp;<b>' + ap + '</b><br/>');
@@ -392,138 +404,9 @@ var lova;
     lova.skillDescription = skillDescription;
 })(lova || (lova = {}));
 /// <reference path="_all.ts" />
+'use strict';
 var lova;
 (function (lova) {
-    'use strict';
-    var ServantService = (function () {
-        function ServantService($http, $q) {
-            this.$http = $http;
-            this.$q = $q;
-            this.servants = [];
-        }
-        ServantService.prototype.load = function () {
-            var _this = this;
-            let deferrd = this.$q.defer();
-            if (this.servants.length) {
-                deferrd.resolve();
-                return deferrd.promise;
-            }
-            this.$http.get(ServantService.url).then(function (res) {
-                res.data.forEach(function (servant) {
-                    _this.servants.push(new lova.ServantModel(servant));
-                });
-                deferrd.resolve();
-            }, function () {
-                deferrd.reject();
-            });
-            return deferrd.promise;
-        };
-        ServantService.prototype.getServantWithId = function (id) {
-            let result = null;
-            this.servants.forEach(function (servant) {
-                if (servant.id == id) {
-                    result = servant;
-                }
-            });
-            return result;
-        };
-        ServantService.url = './api/servants/';
-        ServantService.$inject = [
-            '$http',
-            '$q'
-        ];
-        return ServantService;
-    })();
-    lova.ServantService = ServantService;
-    var DeckService = (function () {
-        function DeckService($window) {
-            this.$window = $window;
-            this.servants = [];
-            this.deck = new lova.DeckModel();
-        }
-        Object.defineProperty(DeckService.prototype, "url", {
-            get: function () {
-                let a = this.$window.document.createElement('a');
-                a.href = this.$window.location.href;
-                return a.protocol + '//' + a.hostname + (a.port ? ':' + a.port : a.port) + '/deck/' + this.deck.hash + '/';
-            },
-            enumerable: true,
-            configurable: true
-        });
-        DeckService.prototype.loadWithHash = function (hash) {
-            this.deck.hash = hash;
-            this.deck.updateServants(this.servants);
-        };
-        DeckService.prototype.setServant = function (index, servantId) {
-            this.deck.servantIds[index] = servantId;
-            this.deck.updateServants(this.servants);
-        };
-        DeckService.prototype.unsetServant = function (index) {
-            this.setServant(index, undefined);
-        };
-        DeckService.$inject = [
-            '$window'
-        ];
-        return DeckService;
-    })();
-    lova.DeckService = DeckService;
-    var PrizeService = (function () {
-        function PrizeService($http, $q) {
-            this.$http = $http;
-            this.$q = $q;
-            this.prizes = [];
-        }
-        PrizeService.prototype.load = function () {
-            var _this = this;
-            let deferrd = this.$q.defer();
-            if (this.prizes.length) {
-                deferrd.resolve();
-                return deferrd.promise;
-            }
-            this.$http.get(PrizeService.url).then(function (res) {
-                res.data.forEach(function (servant) {
-                    _this.prizes.push(new lova.PrizeModel(servant));
-                });
-                deferrd.resolve();
-            }, function () {
-                deferrd.reject();
-            });
-            return deferrd.promise;
-        };
-        PrizeService.url = './api/prizes/';
-        PrizeService.$inject = [
-            '$http',
-            '$q'
-        ];
-        return PrizeService;
-    })();
-    lova.PrizeService = PrizeService;
-    var ScrollService = (function () {
-        function ScrollService($location, $window) {
-            var _this = this;
-            this.$location = $location;
-            this.$window = $window;
-            this.positions = {};
-            angular.element($window).on('scroll', function () {
-                _this.positions[_this.$location.path()] = angular.element($window).scrollTop();
-            });
-        }
-        ScrollService.prototype.restore = function () {
-            let top = this.positions[this.$location.path()] || 0;
-            angular.element(this.$window).scrollTop(top);
-        };
-        ScrollService.$inject = [
-            '$location',
-            '$window'
-        ];
-        return ScrollService;
-    })();
-    lova.ScrollService = ScrollService;
-})(lova || (lova = {}));
-/// <reference path="_all.ts" />
-var lova;
-(function (lova) {
-    'use strict';
     var ServantModel = (function () {
         function ServantModel(obj) {
             this.id = obj.id;
@@ -605,7 +488,7 @@ var lova;
         });
         Object.defineProperty(DeckModel.prototype, "mana", {
             get: function () {
-                let fill = true;
+                var fill = true;
                 this.servants.forEach(function (e, i) {
                     if (!e && DeckModel.deckIndexes.indexOf(i) > -1) {
                         fill = false;
@@ -618,8 +501,8 @@ var lova;
         });
         Object.defineProperty(DeckModel.prototype, "bonusMana", {
             get: function () {
-                let raceIds = [];
-                let fill = true;
+                var raceIds = [];
+                var fill = true;
                 this.servants.forEach(function (e, i) {
                     if (DeckModel.deckIndexes.indexOf(i) == -1) {
                         return;
@@ -649,11 +532,11 @@ var lova;
         });
         DeckModel.prototype.updateServants = function (servants) {
             this.servants = [];
-            for (let i = 0; i < DeckModel.size; i++) {
-                let servantId = this.servantIds[i];
-                let tmp;
-                for (let j = 0; j < servants.length; j++) {
-                    let servant = servants[j];
+            for (var i = 0; i < DeckModel.size; i++) {
+                var servantId = this.servantIds[i];
+                var tmp = void 0;
+                for (var j = 0; j < servants.length; j++) {
+                    var servant = servants[j];
                     if (servantId == servant.id) {
                         tmp = servant;
                         break;
@@ -679,24 +562,16 @@ var lova;
     })();
     lova.PrizeModel = PrizeModel;
 })(lova || (lova = {}));
-/// <reference path="../../typings/tsd.d.ts" />
-/// <reference path="controllers.ts" />
-/// <reference path="directives.ts" />
-/// <reference path="filters.ts" />
-/// <reference path="services.ts" />
-/// <reference path="models.ts" />
-/// <reference path="app.ts" />
 /// <reference path="_all.ts" />
+'use strict';
 var lova;
 (function (lova) {
-    'use strict';
     var app = angular.module('app', [
         'ngRoute',
         'ngTouch',
         'ngDraggable',
         'ui',
-        'angulartics',
-        'angulartics.google.analytics'
+        'angulartics', 'angulartics.google.analytics'
     ]);
     var Locator = (function () {
         function Locator(locationProvider) {
@@ -709,31 +584,38 @@ var lova;
     })();
     var Router = (function () {
         function Router(routerProvider) {
-            routerProvider.when('/servants/', {
+            routerProvider.
+                when('/servants/', {
                 templateUrl: 'templates/pages/servant.html',
                 controller: 'ServantListController',
                 controllerAs: 'c'
-            }).when('/servants/:id/', {
+            }).
+                when('/servants/:id/', {
                 templateUrl: 'templates/pages/servant/detail.html',
                 controller: 'ServantDetailController',
                 controllerAs: 'c'
-            }).when('/deck/', {
+            }).
+                when('/deck/', {
                 templateUrl: 'templates/pages/deck.html',
                 controller: 'DeckController',
                 controllerAs: 'c'
-            }).when('/deck/:hash/', {
+            }).
+                when('/deck/:hash/', {
                 templateUrl: 'templates/pages/deck.html',
                 controller: 'DeckController',
                 controllerAs: 'c'
-            }).when('/prize/', {
+            }).
+                when('/prize/', {
                 templateUrl: 'templates/pages/prize.html',
                 controller: 'PrizeController',
                 controllerAs: 'c'
-            }).when('/about/', {
+            }).
+                when('/about/', {
                 templateUrl: 'templates/pages/about.html',
                 controller: 'AboutController',
                 controllerAs: 'c'
-            }).otherwise({
+            }).
+                otherwise({
                 redirectTo: '/servants/'
             });
         }
@@ -769,5 +651,145 @@ var lova;
     app.service('DeckService', lova.DeckService);
     app.service('PrizeService', lova.PrizeService);
     app.service('ScrollService', lova.ScrollService);
+})(lova || (lova = {}));
+/// <reference path="../../typings/tsd.d.ts" />
+/// <reference path="controllers.ts" />
+/// <reference path="directives.ts" />
+/// <reference path="filters.ts" />
+/// <reference path="services.ts" />
+/// <reference path="models.ts" />
+/// <reference path="app.ts" />
+/// <reference path="_all.ts" />
+'use strict';
+var lova;
+(function (lova) {
+    var ServantService = (function () {
+        function ServantService($http, $q) {
+            this.$http = $http;
+            this.$q = $q;
+            this.servants = [];
+        }
+        ServantService.prototype.load = function () {
+            var _this = this;
+            var deferrd = this.$q.defer();
+            if (this.servants.length) {
+                deferrd.resolve();
+                return deferrd.promise;
+            }
+            this.$http.get(ServantService.url)
+                .then(function (res) {
+                res.data.forEach(function (servant) {
+                    _this.servants.push(new lova.ServantModel(servant));
+                });
+                deferrd.resolve();
+            }, function () {
+                deferrd.reject();
+            });
+            return deferrd.promise;
+        };
+        ServantService.prototype.getServantWithId = function (id) {
+            var result = null;
+            this.servants.forEach(function (servant) {
+                if (servant.id == id) {
+                    result = servant;
+                }
+            });
+            return result;
+        };
+        ServantService.url = './api/servants/';
+        ServantService.$inject = [
+            '$http',
+            '$q'
+        ];
+        return ServantService;
+    })();
+    lova.ServantService = ServantService;
+    var DeckService = (function () {
+        function DeckService($window) {
+            this.$window = $window;
+            this.servants = [];
+            this.deck = new lova.DeckModel();
+        }
+        Object.defineProperty(DeckService.prototype, "url", {
+            get: function () {
+                var a = this.$window.document.createElement('a');
+                a.href = this.$window.location.href;
+                return a.protocol + '//'
+                    + a.hostname + (a.port ? ':' + a.port : a.port)
+                    + '/deck/' + this.deck.hash + '/';
+            },
+            enumerable: true,
+            configurable: true
+        });
+        DeckService.prototype.loadWithHash = function (hash) {
+            this.deck.hash = hash;
+            this.deck.updateServants(this.servants);
+        };
+        DeckService.prototype.setServant = function (index, servantId) {
+            this.deck.servantIds[index] = servantId;
+            this.deck.updateServants(this.servants);
+        };
+        DeckService.prototype.unsetServant = function (index) {
+            this.setServant(index, undefined);
+        };
+        DeckService.$inject = [
+            '$window'
+        ];
+        return DeckService;
+    })();
+    lova.DeckService = DeckService;
+    var PrizeService = (function () {
+        function PrizeService($http, $q) {
+            this.$http = $http;
+            this.$q = $q;
+            this.prizes = [];
+        }
+        PrizeService.prototype.load = function () {
+            var _this = this;
+            var deferrd = this.$q.defer();
+            if (this.prizes.length) {
+                deferrd.resolve();
+                return deferrd.promise;
+            }
+            this.$http.get(PrizeService.url)
+                .then(function (res) {
+                res.data.forEach(function (servant) {
+                    _this.prizes.push(new lova.PrizeModel(servant));
+                });
+                deferrd.resolve();
+            }, function () {
+                deferrd.reject();
+            });
+            return deferrd.promise;
+        };
+        PrizeService.url = './api/prizes/';
+        PrizeService.$inject = [
+            '$http',
+            '$q'
+        ];
+        return PrizeService;
+    })();
+    lova.PrizeService = PrizeService;
+    var ScrollService = (function () {
+        function ScrollService($location, $window) {
+            var _this = this;
+            this.$location = $location;
+            this.$window = $window;
+            this.positions = {};
+            angular.element($window).on('scroll', function () {
+                _this.positions[_this.$location.path()] = angular.element($window).scrollTop();
+            });
+        }
+        ScrollService.prototype.restore = function () {
+            var top = this.positions[this.$location.path()] || 0;
+            angular.element(this.$window).scrollTop(top);
+        };
+        ScrollService.$inject = [
+            '$location',
+            '$window'
+        ];
+        return ScrollService;
+    })();
+    lova.ScrollService = ScrollService;
 })(lova || (lova = {}));
 //# sourceMappingURL=main.js.map

@@ -1,7 +1,7 @@
 /// <reference path="_all.ts" />
+'use strict';
 
 module lova {
-  'use strict';
 
   export class MainController {
     public now: Date;
