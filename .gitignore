@@ -29,6 +29,7 @@ node_modules
 
 # Custom
 .idea
+client/assets/js/**/*.js
 typings
 tmp/mongodb/data/*
 !.gitkeep

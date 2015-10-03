@@ -2,7 +2,7 @@
 
 import * as angular from 'angular';
 import * as app from '../app';
-import {ServantModel} from '../models';
+import {ServantModel} from '../models/servant';
 
 export class ServantService {
   private static url: string = './api/servants/';

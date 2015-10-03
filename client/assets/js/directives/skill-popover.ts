@@ -1,27 +1,7 @@
 'use strict';
 
 import * as angular from 'angular';
-
-export function fittable(): ng.IDirective {
-  return {
-    restrict: 'A',
-    link: ($scope: ng.IScope, element: JQuery, attributes: any) => {
-      let cls = attributes.fittable;
-      let elementTop = element.offset().top;
-      let dummyWrapper = $('<div>');
-      $(window).on('scroll touchmove', () => {
-        if ($(window).scrollTop() >= elementTop) {
-          let h = element.outerHeight();
-          element.addClass(cls);
-          element.after(dummyWrapper.height(h));
-          return;
-        }
-        element.removeClass(cls);
-        dummyWrapper.remove();
-      });
-    }
-  };
-}
+import * as app from '../app';
 
 interface SkillPopoverScope extends ng.IScope {
   skillPopover: any;
@@ -31,7 +11,7 @@ skillPopover.$inject = [
   '$window'
 ];
 
-export function skillPopover($window: ng.IWindowService): ng.IDirective {
+function skillPopover($window: ng.IWindowService): ng.IDirective {
   return {
     restrict: 'A',
     scope: {
@@ -70,14 +50,4 @@ export function skillPopover($window: ng.IWindowService): ng.IDirective {
   };
 }
 
-export function skillPopoverContent(): ng.IDirective {
-  return {
-    restrict: 'E',
-    templateUrl:'templates/elements/skill-popover.html',
-    transclude: true,
-    replace: true,
-    scope: {
-      servant: '='
-    }
-  };
-}
+angular.module(app.appName).directive('skillPopover', skillPopover);

@@ -27,10 +27,15 @@
     "jquery-lazyload": "./node_modules/jquery-lazyload/jquery.lazyload.js",
     "angular": "./node_modules/angular/angular.js",
     "angular-route": "./node_modules/angular-route/angular-route.js",
+    "angular-touch": "./node_modules/angular-touch/angular-touch.js",
     "angular-ui-bootstrap": "./node_modules/angular-ui-bootstrap/ui-bootstrap.js",
     "angular-ui-select2": "./node_modules/angular-ui-select2/src/select2.js",
+    "angulartics": "./node_modules/angulartics/src/angulartics.js",
+    "angulartics-google-analytics": "./node_modules/angulartics-google-analytics/lib/angulartics-google-analytics.js",
     "bootstrap": "./node_modules/bootstrap/dist/js/bootstrap.js",
-    "flat-ui": "./node_modules/flat-ui/dist/js/flat-ui.js"
+    "flat-ui": "./node_modules/flat-ui/dist/js/flat-ui.js",
+    "google-analytics": "./vendor/google-analytics.js",
+    "angular-draggable": "./vendor/ngDraggable.js"
   },
   "browserify": {
     "transform": [
@@ -48,24 +53,30 @@
       "depends": "jquery",
       "exports": "angular"
     },
+    "angular-touch": {
+      "depends": "jquery"
+    },
     "angular-ui-bootstrap": {
       "depends": "jquery"
     },
     "angular-ui-select2": {
       "depends": "jquery"
     },
-    "flat-ui": {
+    "bootstrap": {
       "depends": "jquery"
     },
-    "bootstrap": {
+    "flat-ui": {
       "depends": "jquery"
     }
   },
   "dependencies": {
     "angular": "^1.4.7",
     "angular-route": "^1.4.7",
+    "angular-touch": "^1.4.7",
     "angular-ui-bootstrap": "^0.13.4",
     "angular-ui-select2": "0.0.5",
+    "angulartics": "^0.20.1",
+    "angulartics-google-analytics": "^0.1.1",
     "bootstrap": "^3.3.5",
     "browserify": "^11.2.0",
     "browserify-shim": "^3.8.10",

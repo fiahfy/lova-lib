@@ -3,20 +3,27 @@
 
 import * as angular from 'angular';
 import 'angular-route';
+import 'angular-touch';
 //import 'angular-ui-bootstrap';
 import 'angular-ui-select2';
+import 'angulartics';
+import 'angulartics-google-analytics';
 //import 'bootstrap';
 import 'jquery-lazyload';
 import 'flat-ui';
 
+import 'google-analytics';
+import 'angular-draggable';
+
 export const appName = 'app';
 export const modules = [
   'ngRoute',
-  //'ngTouch',
-  //'ngDraggable',
+  'ngTouch',
+  'ngDraggable',
   //'ui.bootstrap',
-  'ui.select2'
-  //'angulartics', 'angulartics.google.analytics'
+  'ui.select2',
+  'angulartics',
+  'angulartics.google.analytics'
 ];
 
 angular.module(appName, modules);
@@ -43,35 +50,22 @@ class Router {
   ) {
     routerProvider.
       when('/servants/', {
-        template: '<lova-servant></lova-servant>'
-        //templateUrl: 'templates/pages/servant.html',
-        //controller: 'ServantListController',
-        //controllerAs: 'c'
+        template: '<lova-servant-list></lova-servant-list>'
       }).
       when('/servants/:id/', {
-        //templateUrl: 'templates/pages/servant/detail.html',
-        //controller: 'ServantDetailController',
-        //controllerAs: 'c'
+        template: '<lova-servant-detail></lova-servant-detail>'
       }).
       when('/deck/', {
-        //templateUrl: 'templates/pages/deck.html',
-        //controller: 'DeckController',
-        //controllerAs: 'c'
+        template: '<lova-deck></lova-deck>'
       }).
       when('/deck/:hash/', {
-        //templateUrl: 'templates/pages/deck.html',
-        //controller: 'DeckController',
-        //controllerAs: 'c'
+        template: '<lova-deck></lova-deck>'
       }).
       when('/prize/', {
-        //templateUrl: 'templates/pages/prize.html',
-        //controller: 'PrizeController',
-        //controllerAs: 'c'
+        template: '<lova-prize></lova-prize>'
       }).
       when('/about/', {
-        //templateUrl: 'templates/pages/about.html',
-        //controller: 'AboutController',
-        //controllerAs: 'c'
+        template: '<lova-about></lova-about>'
       }).
       otherwise({
         redirectTo: '/servants/'
@@ -79,7 +73,7 @@ class Router {
   }
 }
 
-class AppConfig {
+export class AppConfig {
   public static mail: string = 'd.fiahfy@gmail.com';
 }
 
@@ -88,23 +82,6 @@ angular.module(appName).config(Locator);
 angular.module(appName).value('AppConfig', AppConfig);
 
 import './controllers';
+import './directives';
 import './services';
-
-  //app.controller('MainController', MainController);
-  //app.controller('ServantListController', ServantListController);
-  //app.controller('ServantDetailController', ServantDetailController);
-  //app.controller('DeckController', DeckController);
-  //app.controller('PrizeController', PrizeController);
-  //app.controller('AboutController', AboutController);
-  //app.directive('fittable', fittable);
-  //app.directive('skillPopover', skillPopover);
-  //app.directive('skillPopoverContent', skillPopoverContent);
-  //app.filter('pad', pad);
-  //app.filter('default', def);
-  //app.filter('replace', replace);
-  //app.filter('skillDescription', skillDescription);
-  //app.service('ServantService', ServantService);
-  //app.service('DeckService', DeckService);
-  //app.service('PrizeService', PrizeService);
-  //app.service('ScrollService', ScrollService);
-
+import './filters';

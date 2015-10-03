@@ -1,29 +1,10 @@
 'use strict';
 
-export function pad() {
-  return (input: string, length: number, str: string) => {
-    return ((new Array(length+1)).join(str) + input).slice(-length);
-  };
-}
+import * as angular from 'angular';
+import * as app from '../app';
 
-export function def() {
-  return (input: string, value: any) => {
-    return (typeof input === 'undefined' || input == null) ? value : input;
-  };
-}
-
-export function replace() {
-  return (input: string, regexp: string, newSubStr: string) => {
-    if (!input) {
-      return input;
-    }
-    let reg = new RegExp(regexp);
-    return input.replace(reg, newSubStr);
-  };
-}
-
-export function skillDescription($sce: ng.ISCEService) {
-  return (skill: any) => {
+function skillDescription($sce: ng.ISCEService) {
+  return (skill:any) => {
     let desc = skill.description;
     if (!desc) {
       return desc;
@@ -49,3 +30,5 @@ export function skillDescription($sce: ng.ISCEService) {
     return $sce.trustAsHtml(desc);
   }
 }
+
+angular.module(app.appName).filter('skillDescription', skillDescription);

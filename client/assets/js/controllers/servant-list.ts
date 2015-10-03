@@ -2,9 +2,9 @@
 
 import * as angular from 'angular';
 import * as app from '../app';
-import {ServantModel, SkillModel, StatusModel, DeckModel, PrizeModel} from '../models';
 import {ServantService} from '../services/servant';
 import {ScrollService} from '../services/scroll';
+import {ServantModel, SkillModel, StatusModel} from '../models/servant';
 
 interface ServantListParams extends ng.route.IRouteParamsService {
   view: string;
@@ -118,4 +118,4 @@ class Definition {
   }
 }
 
-angular.module('app').directive('lovaServant', Definition.ddo);
+angular.module('app').directive('lovaServantList', Definition.ddo);
