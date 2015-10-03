@@ -26,7 +26,7 @@ module lova {
       }
       this.$http.get(ServantService.url)
         .then((res: any) => {
-          res.data.forEach((servant) => {
+          res.data.forEach((servant: ServantModel) => {
             this.servants.push(new ServantModel(servant));
           });
           deferrd.resolve();
@@ -107,7 +107,7 @@ module lova {
       }
       this.$http.get(PrizeService.url)
         .then((res: any) => {
-          res.data.forEach((servant) => {
+          res.data.forEach((servant: ServantModel) => {
             this.prizes.push(new PrizeModel(servant));
           });
           deferrd.resolve();

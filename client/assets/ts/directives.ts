@@ -32,7 +32,7 @@ module lova {
     '$window'
   ];
 
-  export function skillPopover($window): ng.IDirective {
+  export function skillPopover($window: ng.IWindowService): ng.IDirective {
     return {
       restrict: 'A',
       scope: {
@@ -45,7 +45,7 @@ module lova {
         angular.element(args.container).empty();
 
         // attach event listener
-        angular.element(element).each(((window) => {
+        angular.element(element).each(((window: ng.IWindowService) => {
           return function() {
             angular.element(this)
               .popover({

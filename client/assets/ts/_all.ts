@@ -1,5 +1,6 @@
 /// <reference path="../../typings/tsd.d.ts" />
 /// <reference path="controllers.ts" />
+/// <reference path="directives.ts" />
 /// <reference path="filters.ts" />
 /// <reference path="services.ts" />
 /// <reference path="models.ts" />

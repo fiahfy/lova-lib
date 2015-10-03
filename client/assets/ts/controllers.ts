@@ -6,9 +6,6 @@ module lova {
   export class MainController {
     public now: Date;
 
-    public static $inject = [
-    ];
-
     constructor(
     ) {
       this.now = new Date();
@@ -350,9 +347,6 @@ module lova {
 
   export class AboutController {
     public mail: string;
-
-    public static $inject = [
-    ];
 
     constructor(
     ) {
