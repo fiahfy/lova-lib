@@ -85,6 +85,8 @@
     "commander": "^2.8.1",
     "flat-ui": "git://github.com/designmodo/Flat-UI.git#2.2.2",
     "gulp": "^3.9.0",
+    "gulp-jsmin": "^0.1.5",
+    "gulp-rename": "^1.2.2",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-tsd": "0.0.4",
     "gulp-typescript": "^2.9.0",
@@ -97,6 +99,7 @@
     "koa-static": "^1.4.9",
     "mongoose": "^4.1.8",
     "request": "^2.63.0",
+    "run-sequence": "^1.1.4",
     "supervisor": "^0.8.0",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
@@ -107,6 +110,7 @@
   "bundleDependencies": [],
   "private": true,
   "scripts": {
+    "postinstall": "gulp build",
     "start": "PWD=`pwd`; forever start -w --minUptime 1000 --spinSleepTime 1000 -a -l ${PWD}/tmp/forever/forever.log server.js",
     "poststart": "mongod --fork --logpath /dev/null --dbpath tmp/mongodb/data",
     "prestop": "mongo admin --eval 'db.shutdownServer()' > /dev/null",
