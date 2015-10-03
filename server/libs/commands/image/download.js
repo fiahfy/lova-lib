@@ -47,6 +47,8 @@ function save(servant, force) {
     yield download(url, largeImagePath);
 
     yield scale(largeImagePath, middleImagePath, 150 / 640);
+
+    yield compress(middleImagePath, middleImagePath, {quality: 50});
   });
 }
 
@@ -94,6 +96,24 @@ function scale(orgPath, distPath, ratio) {
           return;
         }
         resolve();
+      });
+    });
+  });
+}
+
+function compress(orgPath, distPath, params) {
+  return new Promise(function(resolve, reject) {
+    lwip.open(orgPath, function(err, image) {
+      image.toBuffer('jpg', {quality: 50}, function(err, buffer) {
+        lwip.open(buffer, 'jpg', function(err, image) {
+          image.writeFile(distPath, 'jpg', {}, function (err) {
+            if (err) {
+              reject(err);
+              return;
+            }
+            resolve();
+          });
+        });
       });
     });
   });
