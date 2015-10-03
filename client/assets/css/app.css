@@ -129,10 +129,6 @@ img {
 #servant>div>.btn-toolbar {
     margin-bottom: 20px;
 }
-#servant-thumbnails>div {
-    margin-top: 5px;
-    margin-bottom: 5px;
-}
 
 /* Servant Detail */
 #servant-detail .table>thead>tr>th {
@@ -325,6 +321,7 @@ img {
 .deck>div.content>img {
     border: 2px solid transparent;
     border-radius: 5px;
+    margin: 0 auto;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
 }

@@ -67,12 +67,19 @@
   </div>
 
   <div ng-if="c.view" id="servant-thumbnails">
-    <div class="col-md-2 col-sm-3 col-xs-6"
-         ng-repeat="servant in c.servants | filter:c.filter | orderBy:c.predicate:c.reverse">
-      <a ng-click="c.openServant(servant)">
-        <img data-original="https://fiahfy.github.io/lova-tool/assets/img/m/{{ servant.id }}.jpg"
-             src="https://fiahfy.github.io/lova-tool/assets/img/m/blank.png" class="img-rounded img-responsive lazy" />
-      </a>
+    <div class="deck" ng-repeat="servant in c.servants | filter:c.filter | orderBy:c.predicate:c.reverse"
+         ng-class="['race-' + servant.raceId]">
+      <div class="background">
+        <img src="/assets/img/m/blank.png" class="img-rounded img-responsive" />
+      </div>
+      <div class="content"
+           ng-click="c.openServant(servant)">
+        <img data-original="/assets/img/m/{{ servant.id }}.jpg"
+             src="/assets/img/m/blank.png" class="img-rounded img-responsive lazy" />
+        <span>
+          Cost {{ servant.cost }}
+        </span>
+      </div>
     </div>
   </div>
 </div>
