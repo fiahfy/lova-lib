@@ -1,7 +1,7 @@
 {
-  "name": "Lova-Tool",
+  "name": "lova-tool",
   "version": "1.0.0",
-  "description": "Tool Site for Lord of Vermilion Arena",
+  "description": "Tools for Lord of Vermilion Arena",
   "keywords": [
     "OpenShift",
     "Node.js",
@@ -19,8 +19,8 @@
     "url": "https://github.com/fiahfy/lova-tool"
   },
   "engines": {
-    "node": ">= 0.6.0",
-    "npm": ">= 1.0.0"
+    "node": ">= 4.1.0",
+    "npm": ">= 2.14.4"
   },
   "dependencies": {
     "cheerio-httpcli": "^0.3.3",
@@ -31,8 +31,7 @@
     "koa-send": "^1.3.1",
     "koa-static": "^1.4.9",
     "mongoose": "^4.1.8",
-    "request": "^2.63.0",
-    "supervisor": "^0.8.0"
+    "request": "^2.63.0"
   },
   "devDependencies": {
     "lwip": "git://github.com/kant2002/lwip.git#5f6a38c"
@@ -40,7 +39,11 @@
   "bundleDependencies": [],
   "private": true,
   "scripts": {
-    "start": "supervisor server.js"
+    "start": "PWD=`pwd`; forever start -w --minUptime 1000 --spinSleepTime 1000 -a -l ${PWD}/tmp/forever/forever.log server.js",
+    "poststart": "mongod --fork --logpath /dev/null --dbpath tmp/mongodb/data",
+    "prestop": "mongo admin --eval 'db.shutdownServer()' > /dev/null",
+    "stop": "forever stop server.js",
+    "tail": "forever logs -f server.js"
   },
   "main": "server.js"
 }

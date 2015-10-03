@@ -1,13 +1,10 @@
 /// <reference path="_all.ts" />
+'use strict';
 
 module lova {
-  'use strict';
 
   export class MainController {
     public now: Date;
-
-    public static $inject = [
-    ];
 
     constructor(
     ) {
@@ -350,9 +347,6 @@ module lova {
 
   export class AboutController {
     public mail: string;
-
-    public static $inject = [
-    ];
 
     constructor(
     ) {

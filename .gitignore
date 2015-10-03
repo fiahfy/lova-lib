@@ -29,4 +29,5 @@ node_modules
 
 # Custom
 .idea
+tmp/mongodb/data/*
 !.gitkeep
