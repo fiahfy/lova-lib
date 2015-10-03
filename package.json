@@ -85,6 +85,7 @@
     "commander": "^2.8.1",
     "flat-ui": "git://github.com/designmodo/Flat-UI.git#2.2.2",
     "gulp": "^3.9.0",
+    "gulp-cli": "^0.3.0",
     "gulp-jsmin": "^0.1.5",
     "gulp-rename": "^1.2.2",
     "gulp-sourcemaps": "^1.6.0",
