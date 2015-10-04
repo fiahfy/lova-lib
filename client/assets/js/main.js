@@ -316,7 +316,7 @@ var lova;
                         var _this = this;
                         angular.element(this)
                             .popover({
-                            animation: false,
+                            animation: true,
                             html: true,
                             placement: function () {
                                 var top = angular.element(_this).offset().top;
@@ -695,13 +695,6 @@ var lova;
     })();
     lova.PrizeModel = PrizeModel;
 })(lova || (lova = {}));
-/// <reference path="../../typings/tsd.d.ts" />
-/// <reference path="controllers.ts" />
-/// <reference path="directives.ts" />
-/// <reference path="filters.ts" />
-/// <reference path="services.ts" />
-/// <reference path="models.ts" />
-/// <reference path="app.ts" />
 /// <reference path="_all.ts" />
 'use strict';
 var lova;
@@ -792,4 +785,11 @@ var lova;
     app.service('PrizeService', lova.PrizeService);
     app.service('ScrollService', lova.ScrollService);
 })(lova || (lova = {}));
+/// <reference path="../../typings/tsd.d.ts" />
+/// <reference path="controllers.ts" />
+/// <reference path="directives.ts" />
+/// <reference path="filters.ts" />
+/// <reference path="services.ts" />
+/// <reference path="models.ts" />
+/// <reference path="app.ts" />
 //# sourceMappingURL=main.js.map
