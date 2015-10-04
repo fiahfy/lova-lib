@@ -174,13 +174,11 @@ img {
     z-index: 1;
     background: #fff;
     padding: 3px 0;
-    border-bottom: 1px solid #e7e9ec;
 }
 #deck-container.fitted {
     position: fixed;
     top: 0;
     box-shadow: 0 1px 1px 0 #e7e9ec;
-    border-bottom: 0;
 }
 #deck-container>div>dl {
     margin: 0;
