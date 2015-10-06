@@ -88,7 +88,7 @@ var FooterController = (function () {
 exports.FooterController = FooterController;
 angular.module(exports.appName).controller('FooterController', FooterController);
 
-},{"./controllers":4,"./directives":9,"./filters":13,"./services":21}],2:[function(require,module,exports){
+},{"./controllers":4,"./directives":9,"./filters":14,"./services":22}],2:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -363,8 +363,8 @@ var ServantListController = (function () {
         this.servantService = servantService;
         this.scrollService = scrollService;
         this.viewOptions = [
-            { key: 0, icon: 'fui-list-columned' },
-            { key: 1, icon: 'fui-list-large-thumbnails' }
+            { key: 0, icon: 'fui-list-large-thumbnails' },
+            { key: 1, icon: 'fui-list-columned' }
         ];
         this.raceIdOptions = [
             { key: 0, value: 'Select Race...' },
@@ -376,13 +376,19 @@ var ServantListController = (function () {
         ];
         this.filter = {
             raceId: undefined,
-            name: undefined
+            name: undefined,
+            type: undefined,
+            range: undefined,
+            cost: undefined,
+            illustrationBy: undefined,
+            characterVoice: undefined
         };
         this.predicate = ['raceId', 'raceCode'];
         this.reverse = false;
         this.view = $routeParams.view ? +$routeParams.view : 0;
         this.raceId = $routeParams.race_id ? +$routeParams.race_id : 0;
-        this.filter.raceId = this.raceId ? this.raceId : undefined;
+        this.q = $routeParams.q ? $routeParams.q : '';
+        this.updateFilter();
         servantService.load()
             .then(function () {
             _this.servants = servantService.servants;
@@ -403,11 +409,33 @@ var ServantListController = (function () {
         this.$location.url(this.$location.search('race_id', raceId).url());
     };
     ServantListController.prototype.changeQuery = function () {
-        this.filter.name = this.q;
+        this.updateFilter();
         this.refreshEventListener();
     };
     ServantListController.prototype.openServant = function (servant) {
         this.$location.url('/servants/' + servant.id + '/');
+    };
+    ServantListController.prototype.updateFilter = function () {
+        var _this = this;
+        var params = this.parseQuery(this.q);
+        Object.keys(this.filter).forEach(function (key) {
+            _this.filter[key] = params[key];
+        });
+        console.log(this.raceId);
+        this.filter['raceId'] = +this.raceId ? '' + this.raceId : undefined;
+        console.log(this.filter);
+    };
+    ServantListController.prototype.parseQuery = function (query) {
+        var params = {};
+        query.split(/[\s　]/i).forEach(function (e) {
+            var _a = e.split(':'), key = _a[0], value = _a[1];
+            if (!value) {
+                params['name'] = key;
+                return;
+            }
+            params[key] = value;
+        });
+        return params;
     };
     ServantListController.prototype.refreshEventListener = function () {
         this.$window.setTimeout(function () {
@@ -548,12 +576,25 @@ angular.module(app.appName).filter('default', def);
 
 },{"../app":1}],13:[function(require,module,exports){
 'use strict';
-require('./pad');
+//import * as angular from 'angular';
+var app = require('../app');
+function escape() {
+    return function (input, type) {
+        return encodeURIComponent(input);
+    };
+}
+angular.module(app.appName).filter('escape', escape);
+angular.module(app.appName).filter('e', escape);
+
+},{"../app":1}],14:[function(require,module,exports){
+'use strict';
 require('./default');
+require('./escape');
+require('./pad');
 require('./replace');
 require('./skill-description');
 
-},{"./default":12,"./pad":14,"./replace":15,"./skill-description":16}],14:[function(require,module,exports){
+},{"./default":12,"./escape":13,"./pad":15,"./replace":16,"./skill-description":17}],15:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -564,7 +605,7 @@ function pad() {
 }
 angular.module(app.appName).filter('pad', pad);
 
-},{"../app":1}],15:[function(require,module,exports){
+},{"../app":1}],16:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -579,7 +620,7 @@ function replace() {
 }
 angular.module(app.appName).filter('replace', replace);
 
-},{"../app":1}],16:[function(require,module,exports){
+},{"../app":1}],17:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -609,7 +650,7 @@ function skillDescription($sce) {
 }
 angular.module(app.appName).filter('skillDescription', skillDescription);
 
-},{"../app":1}],17:[function(require,module,exports){
+},{"../app":1}],18:[function(require,module,exports){
 'use strict';
 var DeckModel = (function () {
     function DeckModel() {
@@ -697,7 +738,7 @@ var DeckModel = (function () {
 })();
 exports.DeckModel = DeckModel;
 
-},{}],18:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 'use strict';
 var PrizeModel = (function () {
     function PrizeModel(obj) {
@@ -710,7 +751,7 @@ var PrizeModel = (function () {
 })();
 exports.PrizeModel = PrizeModel;
 
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 'use strict';
 var ServantModel = (function () {
     function ServantModel(obj) {
@@ -772,7 +813,7 @@ var SkillModel = (function () {
 })();
 exports.SkillModel = SkillModel;
 
-},{}],20:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -813,14 +854,14 @@ var DeckService = (function () {
 exports.DeckService = DeckService;
 angular.module(app.appName).service('DeckService', DeckService);
 
-},{"../app":1,"../models/deck":17}],21:[function(require,module,exports){
+},{"../app":1,"../models/deck":18}],22:[function(require,module,exports){
 'use strict';
 require('./servant');
 require('./deck');
 require('./prize');
 require('./scroll');
 
-},{"./deck":20,"./prize":22,"./scroll":23,"./servant":24}],22:[function(require,module,exports){
+},{"./deck":21,"./prize":23,"./scroll":24,"./servant":25}],23:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -859,7 +900,7 @@ var PrizeService = (function () {
 exports.PrizeService = PrizeService;
 angular.module(app.appName).service('PrizeService', PrizeService);
 
-},{"../app":1,"../models/prize":18}],23:[function(require,module,exports){
+},{"../app":1,"../models/prize":19}],24:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -886,7 +927,7 @@ var ScrollService = (function () {
 exports.ScrollService = ScrollService;
 angular.module(app.appName).service('ScrollService', ScrollService);
 
-},{"../app":1}],24:[function(require,module,exports){
+},{"../app":1}],25:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -934,4 +975,4 @@ var ServantService = (function () {
 exports.ServantService = ServantService;
 angular.module(app.appName).service('ServantService', ServantService);
 
-},{"../app":1,"../models/servant":19}]},{},[1]);
+},{"../app":1,"../models/servant":20}]},{},[1]);

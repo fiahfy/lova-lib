@@ -9,14 +9,15 @@ import {ServantModel, SkillModel, StatusModel} from '../models/servant';
 interface ServantListParams extends ng.route.IRouteParamsService {
   view: string;
   race_id: string;
+  q: string;
 }
 
 class ServantListController {
   public servants: ServantModel[];
 
   public viewOptions: {key: number; icon: string;}[] = [
-    {key: 0, icon: 'fui-list-columned'},
-    {key: 1, icon: 'fui-list-large-thumbnails'}
+    {key: 0, icon: 'fui-list-large-thumbnails'},
+    {key: 1, icon: 'fui-list-columned'}
   ];
 
   public raceIdOptions: {key: number; value: string;}[] = [
@@ -34,12 +35,14 @@ class ServantListController {
 
   public q: string;
 
-  public filter: {
-    raceId: number;
-    name: string;
-  } = {
+  public filter: { [key: string]: string; } = {
     raceId: undefined,
-    name: undefined
+    name: undefined,
+    type: undefined,
+    range: undefined,
+    cost: undefined,
+    illustrationBy: undefined,
+    characterVoice: undefined
   };
 
   public predicate: string[] = ['raceId', 'raceCode'];
@@ -65,7 +68,8 @@ class ServantListController {
   ) {
     this.view = $routeParams.view ? +$routeParams.view : 0;
     this.raceId = $routeParams.race_id ? +$routeParams.race_id : 0;
-    this.filter.raceId = this.raceId ? this.raceId : undefined;
+    this.q = $routeParams.q ? $routeParams.q : '';
+    this.updateFilter();
 
     servantService.load()
       .then(() => {
@@ -91,12 +95,35 @@ class ServantListController {
   }
 
   public changeQuery(): void {
-    this.filter.name = this.q;
+    this.updateFilter();
     this.refreshEventListener();
   }
 
   public openServant(servant: ServantModel): void {
     this.$location.url('/servants/' + servant.id + '/');
+  }
+
+  private updateFilter() {
+    var params = this.parseQuery(this.q);
+    Object.keys(this.filter).forEach((key) => {
+      this.filter[key] = params[key];
+    });
+    console.log(this.raceId);
+    this.filter['raceId'] = +this.raceId ? ''+this.raceId : undefined;
+    console.log(this.filter);
+  }
+
+  private parseQuery(query: string): { [index: string]: string; } {
+    var params: { [index: string]: string; } = {};
+    query.split(/[\s　]/i).forEach(function(e) {
+      var [key, value] = e.split(':');
+      if (!value) {
+        params['name'] = key;
+        return;
+      }
+      params[key] = value;
+    });
+    return params;
   }
 
   private refreshEventListener(): void {

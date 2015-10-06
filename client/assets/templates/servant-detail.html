@@ -22,11 +22,11 @@
           </dl>
           <dl class="row">
             <dt class="col-xs-3">Type</dt>
-            <dd class="col-xs-9">{{ c.servant.type }}</dd>
+            <dd class="col-xs-9"><a href="/servants/?q=type:{{ c.servant.type|e:'url' }}">{{ c.servant.type }}</a></dd>
           </dl>
           <dl class="row">
             <dt class="col-xs-3">Cost</dt>
-            <dd class="col-xs-9">{{ c.servant.cost }}</dd>
+            <dd class="col-xs-9"><a href="/servants/?q=cost:{{ c.servant.cost|e:'url' }}">{{ c.servant.cost }}</a></dd>
           </dl>
         </div>
         <div class="col-sm-6">
@@ -36,7 +36,7 @@
           </dl>
           <dl class="row">
             <dt class="col-xs-3">Range</dt>
-            <dd class="col-xs-9">{{ c.servant.range }}</dd>
+            <dd class="col-xs-9"><a href="/servants/?q=range:{{ c.servant.range|e:'url' }}">{{ c.servant.range }}</a></dd>
           </dl>
         </div>
       </div>
@@ -51,11 +51,11 @@
       <div class="row">
         <dl class="col-sm-6 row">
           <dt class="col-xs-3">Illust</dt>
-          <dd class="col-xs-9">{{ c.servant.illustrationBy }}</dd>
+          <dd class="col-xs-9"><a href="/servants/?q=illustrationBy:{{ c.servant.illustrationBy|e:'url' }}">{{ c.servant.illustrationBy }}</a></dd>
         </dl>
         <dl class="col-sm-6 row">
           <dt class="col-xs-3">CV</dt>
-          <dd class="col-xs-9">{{ c.servant.characterVoice }}</dd>
+          <dd class="col-xs-9"><a href="/servants/?q=characterVoice:{{ c.servant.characterVoice|e:'url' }}">{{ c.servant.characterVoice }}</a></dd>
         </dl>
       </div>
       <div id="servant-detail-status">

@@ -1,6 +1,7 @@
 'use strict';
 
-import './pad';
 import './default';
+import './escape';
+import './pad';
 import './replace';
 import './skill-description';
