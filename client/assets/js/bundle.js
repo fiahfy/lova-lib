@@ -421,9 +421,7 @@ var ServantListController = (function () {
         Object.keys(this.filter).forEach(function (key) {
             _this.filter[key] = params[key];
         });
-        console.log(this.raceId);
         this.filter['raceId'] = +this.raceId ? '' + this.raceId : undefined;
-        console.log(this.filter);
     };
     ServantListController.prototype.parseQuery = function (query) {
         var params = {};
@@ -433,7 +431,7 @@ var ServantListController = (function () {
                 params['name'] = key;
                 return;
             }
-            params[key] = value;
+            params[key] = value.replace('+', ' ');
         });
         return params;
     };
@@ -600,6 +598,9 @@ require('./skill-description');
 var app = require('../app');
 function pad() {
     return function (input, length, str) {
+        if (input === undefined || input === null) {
+            return input;
+        }
         return ((new Array(length + 1)).join(str) + input).slice(-length);
     };
 }
