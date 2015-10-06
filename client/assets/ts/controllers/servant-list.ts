@@ -108,9 +108,7 @@ class ServantListController {
     Object.keys(this.filter).forEach((key) => {
       this.filter[key] = params[key];
     });
-    console.log(this.raceId);
     this.filter['raceId'] = +this.raceId ? ''+this.raceId : undefined;
-    console.log(this.filter);
   }
 
   private parseQuery(query: string): { [index: string]: string; } {
@@ -121,7 +119,7 @@ class ServantListController {
         params['name'] = key;
         return;
       }
-      params[key] = value;
+      params[key] = value.replace('+', ' ');
     });
     return params;
   }
