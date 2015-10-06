@@ -23,10 +23,10 @@
   <script src="//cdnjs.cloudflare.com/ajax/libs/angulartics/0.19.3/angulartics-ga.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.min.js"></script>
   <script src="./assets/js/libs/ngDraggable.js"></script>
-  <script src="./assets/js/main.js"></script>
   <script src="./assets/js/analytics.js"></script>
+  <script src="./assets/js/bundle.js"></script>
 </head>
-<body ng-controller="MainController as c">
+<body>
 
 <nav class="navbar navbar-default">
   <div class="container">
@@ -54,7 +54,7 @@
 
 <ng-view></ng-view>
 
-<footer class="footer">
+<footer class="footer" ng-controller="FooterController as c">
   <div>
     <div class="container">
       <p class="text-center text-muted">
