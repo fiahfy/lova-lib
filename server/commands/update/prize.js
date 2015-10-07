@@ -1,8 +1,9 @@
 'use strict';
 
 var co = require('co');
-var scraper = require('../../scrapers/index');
-var models = require('../../../models/index');
+var scraper = require('../../utils/scrapers');
+var models = require('../../models');
+var logger = require('../../utils/logger');
 
 const fetchMaxPage = 5;
 
@@ -11,14 +12,14 @@ module.exports = function() {
     // get prizes
     var prizes = yield getPrizes();
     if (!prizes) {
-      console.log('prize is nothing');
+      logger.warn('prize is nothing');
       return;
     }
     // clean prizes
-    console.log('truncate prizes');
+    logger.info('truncate prizes');
     yield truncatePrizes();
     // insert prizes
-    console.log('insert prizes: count = %d', prizes.length);
+    logger.info('insert prizes: count = %d', prizes.length);
     yield insertPrizes(prizes);
   });
 };
@@ -48,7 +49,7 @@ function getPrizes() {
     // get article id
     var id = yield getRecentPrizeArticleId();
     if (!id) {
-      console.log('prize notice is not found');
+      logger.warn('prize notice is not found');
       return null;
     }
     var $ = (yield scraper.fetchArticle(id)).$;

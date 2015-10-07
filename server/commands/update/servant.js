@@ -1,8 +1,9 @@
 'use strict';
 
 var co = require('co');
-var scraper = require('../../scrapers/index');
-var models = require('../../../models/index');
+var scraper = require('../../utils/scrapers');
+var models = require('../../models');
+var logger = require('../../utils/logger');
 
 module.exports = function(url, force) {
   return co(function *() {
@@ -25,18 +26,18 @@ function updateOne(url, force) {
     // find servant
     var row = yield findServant({race_name: servant.race_name, race_code: servant.race_code});
     if (row) {
-      console.log('compare update date: %s > %s', servant.date, row.date);
+      logger.info('compare update date: %j > %j', servant.date+'', row.date+'');
       if (servant.date <= row.date && !force) {
-        console.log('skip update servant: id = %s, race_name = %s, race_code = %s, name = %s',
-          servant._id, servant.race_name, servant.race_code, servant.name);
+        logger.info('skip update servant: id = %s, race_name = %s, race_code = %s, name = %s',
+          row._id, servant.race_name, servant.race_code, servant.name);
         return;
       }
       servant._id = row._id;
-      console.log('update servant: id = %s, race_name = %s, race_code = %s, name = %s',
+      logger.info('update servant: id = %s, race_name = %s, race_code = %s, name = %s',
         servant._id, servant.race_name, servant.race_code, servant.name);
       yield updateServant(servant);
     } else {
-      console.log('create servant: race_name = %s, race_code = %s, name = %s',
+      logger.info('create servant: race_name = %s, race_code = %s, name = %s',
         servant.race_name, servant.race_code, servant.name);
       yield insertServant(servant);
     }

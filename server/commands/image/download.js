@@ -4,8 +4,9 @@ var co = require('co');
 var fs = require('fs');
 var request = require('request');
 var lwip = require('lwip');
-var scraper = require('../../scrapers/index');
-var models = require('../../../models/index');
+var scraper = require('../../utils/scrapers');
+var models = require('../../models');
+var logger = require('../../utils/logger');
 
 const imageDir = './client/assets/img/';
 
@@ -29,10 +30,10 @@ function findServants(args) {
 
 function save(servant, force) {
   return co(function *() {
-    console.log('save image: id = %d', servant.id);
+    logger.info('save image: id = %d', servant.id);
     var url = yield getImageUrlWithServant(servant);
     if (!url) {
-      console.log('image url is not found');
+      logger.warn('image url is not found');
       return;
     }
 
@@ -40,7 +41,7 @@ function save(servant, force) {
     var middleImagePath = `${imageDir}m/${servant.id}.jpg`;
 
     if (!force && (yield exists(largeImagePath)) && (yield exists(middleImagePath))) {
-      console.log('image is almost exists');
+      logger.info('image is almost exists');
       return;
     }
 
@@ -73,7 +74,7 @@ function exists(path) {
 
 function download(url, path) {
   return new Promise(function(resolve, reject) {
-    console.log('download url: %s', url);
+    logger.info('download url: %s', url);
 
     request
       .get(url)

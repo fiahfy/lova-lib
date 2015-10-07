@@ -1,13 +1,14 @@
 'use strict';
 
 var client = require('cheerio-httpcli');
+var logger = require('../logger');
 
 // set ua
 client.setBrowser('chrome');
 client.headers['User-Agent'] += ' Lova Scraper Client/1.0.0';
 
 function fetch(url) {
-  console.log('fetch url: url = %s', url);
+  logger.info('fetch url: url = %s', url);
   return client.fetch(url);
 }
 

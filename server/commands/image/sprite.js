@@ -4,8 +4,8 @@ var co = require('co');
 var fs = require('fs');
 var request = require('request');
 var lwip = require('lwip');
-var scraper = require('../../scrapers/index');
-var models = require('../../../models/index');
+var scraper = require('../../utils/scrapers');
+var models = require('../../models');
 
 const imageDir = './client/assets/img/';
 
