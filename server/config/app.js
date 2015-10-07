@@ -4,6 +4,10 @@ var controllers = require('../controllers');
 var route = require('koa-route');
 var st = require('koa-static');
 var send = require('koa-send');
+var crypto = require('crypto');
+
+var LRU = require("lru-cache");
+var cache = LRU({maxAge: 1000 * 60});
 
 var config = {
   port: process.env.OPENSHIFT_NODEJS_PORT || 3000,
@@ -24,6 +28,16 @@ config.route = function(app) {
     }
   });
   app.use(st('client', {maxage: 10 * 60 * 1000}));
+  app.use(function *(next){
+    var key = crypto.createHash('md5').update(this.path).digest('hex');
+    var value = cache.get(key);
+    if (value) {
+      this.body = value;
+      return;
+    }
+    yield next;
+    cache.set(key, this.body);
+  });
   app.use(route.get('/api/', controllers.root));
   app.use(route.get('/api/servants/', controllers.servants));
   app.use(route.get('/api/servants/:id/', controllers.servant));
