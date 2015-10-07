@@ -6,7 +6,7 @@ var Schema = mongoose.Schema;
 
 var PrizeSchema = new Schema({
   _id:  { type: Number, require: true, unique: true },
-  name: { type: String, require: true, unique: true },
+  name: { type: String, require: true },
   rate: { type: Number, require: true },
   date: { type: Date,   require: true }
 }, {id: false});

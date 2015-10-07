@@ -6,9 +6,9 @@ var Schema = mongoose.Schema;
 
 var ServantSchema = new Schema({
   _id:              { type: Number, require: true, unique: true },
-  race_id:          { type: Number, require: true, unique: true },
-  race_name:        { type: String, require: true, unique: true },
-  race_code:        { type: Number, require: true, unique: true },
+  race_id:          { type: Number, require: true },
+  race_name:        { type: String, require: true },
+  race_code:        { type: Number, require: true },
   type:             String,
   name:             String,
   cost:             Number,
