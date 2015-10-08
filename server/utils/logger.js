@@ -1,8 +1,8 @@
 'use strict';
 
-var winston = require('winston');
+let winston = require('winston');
 
-var logger = new (winston.Logger)({
+let logger = new (winston.Logger)({
   transports: [
     new (winston.transports.Console)({timestamp: true})
   ]

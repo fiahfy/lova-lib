@@ -1,10 +1,10 @@
 'use strict';
 
-var mongoose = require('mongoose');
+let mongoose = require('mongoose');
 
-var Schema = mongoose.Schema;
+let Schema = mongoose.Schema;
 
-var PrizeSchema = new Schema({
+let PrizeSchema = new Schema({
   _id:  { type: Number, require: true, unique: true },
   name: { type: String, require: true },
   rate: { type: Number, require: true },

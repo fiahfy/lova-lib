@@ -1,6 +1,6 @@
 'use strict';
 
-var models = require('../models');
+let models = require('../models');
 
 function *prizes() {
   this.body = yield models.prize.find({}).exec();

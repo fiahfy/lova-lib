@@ -1,9 +1,9 @@
 'use strict';
 
-var fs = require('fs');
-var mongoose = require('mongoose');
-var config = require('../config/mongodb');
-var logger = require('../utils/logger');
+let fs = require('fs');
+let mongoose = require('mongoose');
+let config = require('../config/mongodb');
+let logger = require('../utils/logger');
 
 mongoose.connect(config.uri);
 
@@ -28,7 +28,7 @@ process.on('SIGINT', function() {
 
 fs.readdirSync(__dirname).forEach(function(file) {
   if (file !== 'index.js') {
-    var moduleName = file.split('.')[0];
+    let moduleName = file.split('.')[0];
     module.exports[moduleName] = require('./' + moduleName);
   }
 });
