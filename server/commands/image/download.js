@@ -1,24 +1,24 @@
 'use strict';
 
-var co = require('co');
-var fs = require('fs');
-var request = require('request');
-var lwip = require('lwip');
-var scraper = require('../../utils/scrapers');
-var models = require('../../models');
-var logger = require('../../utils/logger');
+let co = require('co');
+let fs = require('fs');
+let request = require('request');
+let lwip = require('lwip');
+let scraper = require('../../utils/scrapers');
+let models = require('../../models');
+let logger = require('../../utils/logger');
 
 const imageDir = './client/assets/img/';
 
 module.exports = function(id, force) {
   return co(function *() {
-    var servants;
+    let servants;
     if (id) {
       servants = yield findServants({_id: id});
     } else {
       servants = yield findServants({});
     }
-    for (var i = 0; i < servants.length; i++) {
+    for (let i = 0; i < servants.length; i++) {
       yield save(servants[i], force);
     }
   });
@@ -31,14 +31,14 @@ function findServants(args) {
 function save(servant, force) {
   return co(function *() {
     logger.info('save image: id = %d', servant.id);
-    var url = yield getImageUrlWithServant(servant);
+    let url = yield getImageUrlWithServant(servant);
     if (!url) {
       logger.warn('image url is not found');
       return;
     }
 
-    var largeImagePath = `${imageDir}l/${servant.id}.jpg`;
-    var middleImagePath = `${imageDir}m/${servant.id}.jpg`;
+    let largeImagePath = `${imageDir}l/${servant.id}.jpg`;
+    let middleImagePath = `${imageDir}m/${servant.id}.jpg`;
 
     if (!force && (yield exists(largeImagePath)) && (yield exists(middleImagePath))) {
       logger.info('image is almost exists');
@@ -55,7 +55,7 @@ function save(servant, force) {
 
 function getImageUrlWithServant(servant) {
   return co(function *() {
-    var $ = (yield scraper.fetchServant(servant.tribe_name, servant.name)).$;
+    let $ = (yield scraper.fetchServant(servant.tribe_name, servant.name)).$;
     return $('#rendered-body').find('> div:first-child img').attr('src');
   });
 }

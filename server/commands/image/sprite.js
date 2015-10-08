@@ -1,19 +1,29 @@
 'use strict';
 
-var co = require('co');
-var fs = require('fs');
-var request = require('request');
-var lwip = require('lwip');
-var scraper = require('../../utils/scrapers');
-var models = require('../../models');
+let co = require('co');
+let fs = require('fs');
+let request = require('request');
+let lwip = require('lwip');
+let scraper = require('../../utils/scrapers');
+let models = require('../../models');
 
 const imageDir = './client/assets/img/';
 
-module.exports = function(id) {
+module.exports = function() {
   return co(function *() {
-    var servants = yield findServants({});
+    let servants = yield findServants({});
 
-    yield createSprite(servants);
+    let tribes = new Map();
+    for (let servant of servants) {
+      if (!tribes.has(servant.tribe_id)) {
+        tribes.set(servant.tribe_id, []);
+      }
+      (tribes.get(servant.tribe_id)).push(servant);
+    }
+
+    for (let tribeId of tribes.keys()) {
+      yield createSpriteWithTribe(tribeId, tribes.get(tribeId));
+    }
   });
 };
 
@@ -21,23 +31,27 @@ function findServants(args) {
   return models.servant.find(args).sort({_id: 1}).exec();
 }
 
-function createSprite(servants) {
+function createSpriteWithTribe(tribeId, servants) {
   return new Promise(function(resolve, reject) {
-    lwip.create(150 * servants.length, 890 / 640 * 150, {r: 0, g: 0, b: 0, a: 0}, function(err, image) {
+    let max = 0;
+    for (let servant of servants) {
+      max = Math.max(servant.tribe_code, max);
+    }
+    lwip.create(150 * max, 890 / 640 * 150, {r: 0, g: 0, b: 0}, function(err, image) {
       co(function *() {
         image = image.batch();
-        for (var i = 0; i < servants.length; i++) {
-          image = yield paste(image, i);
+        for (let servant of servants) {
+          image = yield paste(image, servant);
         }
-        return image
+        return image;
       }).then(function(image) {
-        image.writeFile(`${imageDir}m/sprite.jpg`, 'jpg', function(err) {
+        image.writeFile(`${imageDir}m/spr-${tribeId}.jpg`, 'jpg', function(err) {
           if (err) {
             reject(err);
             return;
           }
           resolve();
-        })
+        });
       }, function(err) {
         reject(err);
       });
@@ -45,15 +59,15 @@ function createSprite(servants) {
   });
 }
 
-function paste(image, i) {
+function paste(image, servant) {
   return new Promise(function(resolve, reject) {
-    var imagePath = `${imageDir}m/${i + 1}.jpg`;
+    let imagePath = `${imageDir}m/${servant.id}.jpg`;
     lwip.open(imagePath, function(err, pasteImage) {
       if (err) {
         reject(err);
         return;
       }
-      image.paste(150 * i, 0, pasteImage);
+      image.paste(150 * (servant.tribe_code - 1), 0, pasteImage);
       resolve(image);
     });
   });

@@ -104,7 +104,7 @@ class ServantListController {
   }
 
   private updateFilter() {
-    var params = this.parseQuery(this.q);
+    let params = this.parseQuery(this.q);
     Object.keys(this.filter).forEach((key) => {
       this.filter[key] = params[key];
     });
@@ -112,9 +112,9 @@ class ServantListController {
   }
 
   private parseQuery(query: string): { [index: string]: string; } {
-    var params: { [index: string]: string; } = {};
+    let params: { [index: string]: string; } = {};
     query.split(/[\s　]/i).forEach(function(e) {
-      var [key, value] = e.split(':');
+      let [key, value] = e.split(':');
       if (!value) {
         params['name'] = key;
         return;

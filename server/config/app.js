@@ -1,15 +1,15 @@
 'use strict';
 
-var controllers = require('../controllers');
-var route = require('koa-route');
-var st = require('koa-static');
-var send = require('koa-send');
-var crypto = require('crypto');
+let controllers = require('../controllers');
+let route = require('koa-route');
+let st = require('koa-static');
+let send = require('koa-send');
+let crypto = require('crypto');
 
-var LRU = require("lru-cache");
-var cache = LRU({maxAge: 1000 * 60});
+let LRU = require("lru-cache");
+let cache = LRU({maxAge: 1000 * 60});
 
-var config = {
+let config = {
   port: process.env.OPENSHIFT_NODEJS_PORT || 3000,
   ip:   process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1'
 };
@@ -29,8 +29,8 @@ config.route = function(app) {
   });
   app.use(st('client', {maxage: 10 * 60 * 1000}));
   app.use(function *(next){
-    var key = crypto.createHash('md5').update(this.path).digest('hex');
-    var value = cache.get(key);
+    let key = crypto.createHash('md5').update(this.path).digest('hex');
+    let value = cache.get(key);
     if (value) {
       this.body = value;
       return;

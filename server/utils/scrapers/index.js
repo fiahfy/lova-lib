@@ -1,7 +1,7 @@
 'use strict';
 
-var client = require('cheerio-httpcli');
-var logger = require('../logger');
+let client = require('cheerio-httpcli');
+let logger = require('../logger');
 
 // set ua
 client.setBrowser('chrome');
@@ -13,7 +13,7 @@ function fetch(url) {
 }
 
 function fetchArticle(id) {
-  var url = 'http://lova.jp/member/article.php';
+  let url = 'http://lova.jp/member/article.php';
   if (id) {
     url += `?no=${id}`;
   }
@@ -21,7 +21,7 @@ function fetchArticle(id) {
 }
 
 function fetchNotice(page) {
-  var url = 'http://lova.jp/member/notice.php';
+  let url = 'http://lova.jp/member/notice.php';
   if (page) {
     url += `?p=${page}`;
   }
@@ -32,12 +32,12 @@ function fetchServant(tribe_name, name) {
   if (['ミミララ・レイア', 'ジャンヌ・ダルク'].indexOf(name) > -1) {
     name = name.replace('・', '');
   }
-  var url = `http://wiki.4gamer.net/lova/%E4%BD%BF%E3%81%84%E9%AD%94/${encodeURIComponent(tribe_name)}/${encodeURIComponent(name)}`;
+  let url = `http://wiki.4gamer.net/lova/%E4%BD%BF%E3%81%84%E9%AD%94/${encodeURIComponent(tribe_name)}/${encodeURIComponent(name)}`;
   return fetch(url);
 }
 
 function fetchAllServantList() {
-  var url = 'http://wiki.4gamer.net/lova/%E4%BD%BF%E3%81%84%E9%AD%94';
+  let url = 'http://wiki.4gamer.net/lova/%E4%BD%BF%E3%81%84%E9%AD%94';
   return fetch(url);
 }
 

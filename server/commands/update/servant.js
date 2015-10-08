@@ -1,9 +1,9 @@
 'use strict';
 
-var co = require('co');
-var scraper = require('../../utils/scrapers');
-var models = require('../../models');
-var logger = require('../../utils/logger');
+let co = require('co');
+let scraper = require('../../utils/scrapers');
+let models = require('../../models');
+let logger = require('../../utils/logger');
 
 module.exports = function(url, force) {
   return co(function *() {
@@ -12,8 +12,8 @@ module.exports = function(url, force) {
       return;
     }
 
-    var urls = yield getServantUrls();
-    for (var i = 0; i < urls.length; i++) {
+    let urls = yield getServantUrls();
+    for (let i = 0; i < urls.length; i++) {
       yield updateOne(urls[i], force);
     }
   });
@@ -22,9 +22,9 @@ module.exports = function(url, force) {
 function updateOne(url, force) {
   return co(function *() {
     // get servant
-    var servant = yield getServantWithUrl(url);
+    let servant = yield getServantWithUrl(url);
     // find servant
-    var row = yield findServant({tribe_name: servant.tribe_name, tribe_code: servant.tribe_code});
+    let row = yield findServant({tribe_name: servant.tribe_name, tribe_code: servant.tribe_code});
     if (row) {
       logger.info('compare update date: %j > %j', servant.date+'', row.date+'');
       if (servant.date <= row.date && !force) {
@@ -50,25 +50,25 @@ function findServant(args) {
 
 function insertServant(args) {
   return co(function *() {
-    var result = (yield models.counter.getNewId('servant')).result;
-    var _id = result.value.seq;
+    let result = (yield models.counter.getNewId('servant')).result;
+    let _id = result.value.seq;
     yield models.servant.update({_id: _id}, args, {upsert: true}).exec();
   });
 }
 
 function updateServant(args) {
-  var _id = args._id;
+  let _id = args._id;
   delete args._id;
   return models.servant.update({_id: _id}, args, {upsert: true}).exec();
 }
 
 function getServantUrls() {
   return co(function *() {
-    var $ = (yield scraper.fetchAllServantList()).$;
+    let $ = (yield scraper.fetchAllServantList()).$;
 
-    var urls = [];
+    let urls = [];
     $('#content_1001_1').next().next().find('table tbody tr').each(function() {
-      //var tribeParams = getTribeParam($(this).find('td:nth-child(3)').text());
+      //let tribeParams = getTribeParam($(this).find('td:nth-child(3)').text());
       //if (tribeParams[0] < tribe_id) {
       //  return;
       //}
@@ -83,19 +83,19 @@ function getServantUrls() {
 
 function getServantWithUrl(url) {
   return co(function *() {
-    var $ = (yield scraper.fetch(url)).$;
+    let $ = (yield scraper.fetch(url)).$;
 
-    var section1 = $('#content_1001_1');
-    var section2 = $('#content_1001_2');
+    let section1 = $('#content_1001_1');
+    let section2 = $('#content_1001_2');
 
-    var table1 = $('.servant_table > div:nth-child(1) table');
-    var table2 = $('.servant_table > div:nth-child(2) table');
-    var table3 = section1.nextAll('.table-type-1').first().find('table');
-    var table4 = section2.nextAll('.table-type-1').first().find('table');
+    let table1 = $('.servant_table > div:nth-child(1) table');
+    let table2 = $('.servant_table > div:nth-child(2) table');
+    let table3 = section1.nextAll('.table-type-1').first().find('table');
+    let table4 = section2.nextAll('.table-type-1').first().find('table');
 
-    var tribeParams = getTribeParam(table1.find('tr:nth-child(1) td:nth-child(2)').text());
+    let tribeParams = getTribeParam(table1.find('tr:nth-child(1) td:nth-child(2)').text());
 
-    var servant = {};
+    let servant = {};
     servant.tribe_id         = tribeParams[0];
     servant.tribe_name       = tribeParams[1];
     servant.tribe_code       = tribeParams[2];
@@ -108,7 +108,7 @@ function getServantWithUrl(url) {
     servant.character_voice = table1.find('tr:nth-child(3) td:nth-child(4)').text().trim();
     servant.oral_tradition  = $('#content_1001_0').next().text();
 
-    var status = {1: {}, 20: {}};
+    let status = {1: {}, 20: {}};
     status[1].hp   = Number(table2.find('tr:nth-child(2) td:nth-child(2)').text());
     status[1].ap   = Number(table2.find('tr:nth-child(3) td:nth-child(2)').text());
     status[1].atk  = Number(table2.find('tr:nth-child(4) td:nth-child(2)').text());
@@ -127,7 +127,7 @@ function getServantWithUrl(url) {
     status[20].as  = Number(table2.find('tr:nth-child(9) td:nth-child(3)').text());
     servant.status = status;
 
-    var skill = {active: null, passive: null};
+    let skill = {active: null, passive: null};
     if (section1[0]) {
       skill.active = {};
       skill.active.name         = section1.text().split('：')[1].trim();
@@ -159,7 +159,7 @@ function parseDateString(input) {
 }
 
 function getTribeParam(input) {
-  var args = input.split('-');
+  let args = input.split('-');
   return [[, '人獣', '神族', '魔種', '海種', '不死'].indexOf(args[0]), args[0], Number(args[1])];
 }
 
@@ -184,7 +184,7 @@ function fixServant(servant) {
     servant.character_voice = null;
   }
   // fix skill
-  for (var type of ['active', 'passive']) {
+  for (let type of ['active', 'passive']) {
     if (!servant.skill[type]) {
       continue
     }
@@ -203,7 +203,7 @@ function fixServant(servant) {
     }
   }
   // fix status
-  for (var level of [1, 20]) {
+  for (let level of [1, 20]) {
     if (!servant.status[level]) {
       continue
     }

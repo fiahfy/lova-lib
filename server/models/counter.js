@@ -1,16 +1,16 @@
 'use strict';
 
-var mongoose = require('mongoose');
+let mongoose = require('mongoose');
 
-var Schema = mongoose.Schema;
+let Schema = mongoose.Schema;
 
-var CounterSchema = new Schema({
+let CounterSchema = new Schema({
   _id: String,
   seq: Number
 });
 
 CounterSchema.statics.getNewId = function (name,  callback) {
-  var me = this;
+  let me = this;
   return new Promise(function(resolve, reject) {
     me.collection.findAndModify(
       { _id: name },

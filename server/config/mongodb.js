@@ -1,6 +1,6 @@
 'use strict';
 
-var config = {
+let config = {
   host:   process.env.OPENSHIFT_MONGODB_DB_HOST || '127.0.0.1',
   port:   process.env.OPENSHIFT_MONGODB_DB_PORT || 27017,
   user:   process.env.OPENSHIFT_MONGODB_DB_USERNAME,
@@ -10,7 +10,7 @@ var config = {
 };
 
 config.uri = (function(config) {
-  var uri = '';
+  let uri = '';
   if (config.user) {
     uri += config.user;
     if (config.pass) {

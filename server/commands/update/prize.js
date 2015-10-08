@@ -1,16 +1,16 @@
 'use strict';
 
-var co = require('co');
-var scraper = require('../../utils/scrapers');
-var models = require('../../models');
-var logger = require('../../utils/logger');
+let co = require('co');
+let scraper = require('../../utils/scrapers');
+let models = require('../../models');
+let logger = require('../../utils/logger');
 
 const fetchMaxPage = 5;
 
 module.exports = function() {
   return co(function *() {
     // get prizes
-    var prizes = yield getPrizes();
+    let prizes = yield getPrizes();
     if (!prizes) {
       logger.warn('prize is nothing');
       return;
@@ -26,8 +26,8 @@ module.exports = function() {
 
 function insertPrizes(prizes) {
   return co(function *() {
-    for (var i = 0; i < prizes.length; i++) {
-      var prize = prizes[i];
+    for (let i = 0; i < prizes.length; i++) {
+      let prize = prizes[i];
       prize._id = i + 1;
       yield insertPrize(prize);
     }
@@ -35,7 +35,7 @@ function insertPrizes(prizes) {
 }
 
 function insertPrize(args) {
-  var _id = args._id;
+  let _id = args._id;
   delete args._id;
   return models.prize.update({_id: _id}, args, {upsert: true}).exec();
 }
@@ -47,18 +47,18 @@ function truncatePrizes() {
 function getPrizes() {
   return co(function *() {
     // get article id
-    var id = yield getRecentPrizeArticleId();
+    let id = yield getRecentPrizeArticleId();
     if (!id) {
       logger.warn('prize notice is not found');
       return null;
     }
-    var $ = (yield scraper.fetchArticle(id)).$;
-    var prizes = [];
-    var panel = $('#mainpanel');
-    var date = new Date(panel.find('div.article_title span.date').text());
+    let $ = (yield scraper.fetchArticle(id)).$;
+    let prizes = [];
+    let panel = $('#mainpanel');
+    let date = new Date(panel.find('div.article_title span.date').text());
     panel.find('div.subsection_frame strong').each(function() {
-      var text = $(this).text();
-      var matches = text.match(/([^・：]+)：(.+)[%％]/i);
+      let text = $(this).text();
+      let matches = text.match(/([^・：]+)：(.+)[%％]/i);
       if (matches) {
         prizes.push({
           date: date,
@@ -73,11 +73,11 @@ function getPrizes() {
 
 function getRecentPrizeArticleId() {
   return co(function *() {
-    for (var i = 1; i <= fetchMaxPage; i++) {
-      var $ = (yield scraper.fetchNotice(i)).$;
-      var id;
+    for (let i = 1; i <= fetchMaxPage; i++) {
+      let $ = (yield scraper.fetchNotice(i)).$;
+      let id;
       $('#information_panel').find('div.tab_topics ul.page_inner li a').each(function() {
-        var title = $(this).find('span:last-child').text();
+        let title = $(this).find('span:last-child').text();
         if (title.match(/「転成儀」.*更新のお知らせ/i)) {
           id = $(this).attr('href').split('no=')[1];
           return false;
