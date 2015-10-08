@@ -3,24 +3,25 @@
 var fs = require('fs');
 var mongoose = require('mongoose');
 var config = require('../config/mongodb');
+var logger = require('../utils/logger');
 
 mongoose.connect(config.uri);
 
 mongoose.connection.on('connected', function() {
-  console.log('Mongoose default connection open to ' + config.uri);
+  logger.info('Mongoose default connection open to ' + config.uri);
 });
 
 mongoose.connection.on('error',function(err) {
-  console.log('Mongoose default connection error: ' + err);
+  logger.error('Mongoose default connection error: ' + err);
 });
 
 mongoose.connection.on('disconnected', function() {
-  console.log('Mongoose default connection disconnected');
+  logger.info('Mongoose default connection disconnected');
 });
 
 process.on('SIGINT', function() {
   mongoose.connection.close(function() {
-    console.log('Mongoose default connection disconnected through app termination');
+    logger.info('Mongoose default connection disconnected through app termination');
     process.exit(0);
   });
 });

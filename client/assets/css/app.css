@@ -350,23 +350,23 @@ img {
     border-radius: 5px;
     background-color: lightgray;
 }
-.deck.race-1>div.content>img {
+.deck.tribe-1>div.content>img {
     border-color: #a26821;
     box-shadow: 0 0 1px #a26821;
 }
-.deck.race-2>div.content>img {
+.deck.tribe-2>div.content>img {
     border-color: #9d9075;
     box-shadow: 0 0 1px #9d9075;
 }
-.deck.race-3>div.content>img {
+.deck.tribe-3>div.content>img {
     border-color: #554e86;
     box-shadow: 0 0 1px #554e86;
 }
-.deck.race-4>div.content>img {
+.deck.tribe-4>div.content>img {
     border-color: #558c9e;
     box-shadow: 0 0 1px #558c9e;
 }
-.deck.race-5>div.content>img {
+.deck.tribe-5>div.content>img {
     border-color: #7f4a83;
     box-shadow: 0 0 1px #7f4a83;
 }

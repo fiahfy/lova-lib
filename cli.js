@@ -2,7 +2,8 @@
 
 var mongoose = require('mongoose');
 var commander = require('commander');
-var commands = require('./server/libs/commands');
+var commands = require('./server/commands');
+var logger = require('./server/utils/logger');
 
 var promise;
 
@@ -50,6 +51,6 @@ promise.then(function(reason) {
     mongoose.disconnect();
   }, function(reason) {
     mongoose.disconnect();
-    console.error(reason);
+    logger.error(reason);
   }
 );

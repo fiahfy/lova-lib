@@ -14,8 +14,8 @@ interface DeckParams extends ng.route.IRouteParamsService {
 class DeckController {
   public servants: ServantModel[];
 
-  public raceIdOptions: {key: number; value: string;}[] = [
-    {key: 0, value: 'Select Race...'},
+  public tribeIdOptions: {key: number; value: string;}[] = [
+    {key: 0, value: 'Select Tribe...'},
     {key: 1, value: '人獣'},
     {key: 2, value: '神族'},
     {key: 3, value: '魔種'},
@@ -23,21 +23,21 @@ class DeckController {
     {key: 5, value: '不死'}
   ];
 
-  public raceId: number;
+  public tribeId: number;
 
-  public raceName: string = 'Select Race...';
+  public tribeName: string = 'Select Tribe...';
 
   public q: string;
 
   public filter: {
-    raceId: number;
+    tribeId: number;
     name: string;
   } = {
-    raceId: undefined,
+    tribeId: undefined,
     name: undefined
   };
 
-  public predicate: string[] = ['raceId', 'raceCode'];
+  public predicate: string[] = ['tribeId', 'tribeCode'];
 
   public reverse: boolean = false;
 
@@ -112,10 +112,10 @@ class DeckController {
     this.refreshEventListener();
   }
 
-  public selectRaceId(raceId: number, raceName: string): void {
-    this.raceId = raceId;
-    this.raceName = raceName;
-    this.filter.raceId = this.raceId ? this.raceId : undefined;
+  public selectTribeId(tribeId: number, tribeName: string): void {
+    this.tribeId = tribeId;
+    this.tribeName = tribeName;
+    this.filter.tribeId = this.tribeId ? this.tribeId : undefined;
     this.refreshEventListener();
   }
 

@@ -8,7 +8,7 @@ import {ServantModel, SkillModel, StatusModel} from '../models/servant';
 
 interface ServantListParams extends ng.route.IRouteParamsService {
   view: string;
-  race_id: string;
+  tribe_id: string;
   q: string;
 }
 
@@ -20,8 +20,8 @@ class ServantListController {
     {key: 1, icon: 'fui-list-columned'}
   ];
 
-  public raceIdOptions: {key: number; value: string;}[] = [
-    {key: 0, value: 'Select Race...'},
+  public tribeIdOptions: {key: number; value: string;}[] = [
+    {key: 0, value: 'Select Tribe...'},
     {key: 1, value: '人獣'},
     {key: 2, value: '神族'},
     {key: 3, value: '魔種'},
@@ -31,12 +31,12 @@ class ServantListController {
 
   public view: number;
 
-  public raceId: number;
+  public tribeId: number;
 
   public q: string;
 
   public filter: { [key: string]: string; } = {
-    raceId: undefined,
+    tribeId: undefined,
     name: undefined,
     type: undefined,
     range: undefined,
@@ -45,7 +45,7 @@ class ServantListController {
     characterVoice: undefined
   };
 
-  public predicate: string[] = ['raceId', 'raceCode'];
+  public predicate: string[] = ['tribeId', 'tribeCode'];
 
   public reverse: boolean = false;
 
@@ -67,7 +67,7 @@ class ServantListController {
     private scrollService: ScrollService
   ) {
     this.view = $routeParams.view ? +$routeParams.view : 0;
-    this.raceId = $routeParams.race_id ? +$routeParams.race_id : 0;
+    this.tribeId = $routeParams.tribe_id ? +$routeParams.tribe_id : 0;
     this.q = $routeParams.q ? $routeParams.q : '';
     this.updateFilter();
 
@@ -78,11 +78,11 @@ class ServantListController {
         this.refreshEventListener();
       });
 
-    $scope.$watch(() => this.raceId, (newValue, oldValue) => {
+    $scope.$watch(() => this.tribeId, (newValue, oldValue) => {
       if (typeof newValue === 'undefined' || typeof oldValue === 'undefined' || newValue == oldValue) {
         return;
       }
-      this.selectRaceId(this.raceId);
+      this.selectTribeId(this.tribeId);
     }, true);
   }
 
@@ -90,8 +90,8 @@ class ServantListController {
     this.$location.url(this.$location.search('view', view).url());
   }
 
-  public selectRaceId(raceId: number): void {
-    this.$location.url(this.$location.search('race_id', raceId).url());
+  public selectTribeId(tribeId: number): void {
+    this.$location.url(this.$location.search('tribe_id', tribeId).url());
   }
 
   public changeQuery(): void {
@@ -108,7 +108,7 @@ class ServantListController {
     Object.keys(this.filter).forEach((key) => {
       this.filter[key] = params[key];
     });
-    this.filter['raceId'] = +this.raceId ? ''+this.raceId : undefined;
+    this.filter['tribeId'] = +this.tribeId ? ''+this.tribeId : undefined;
   }
 
   private parseQuery(query: string): { [index: string]: string; } {
