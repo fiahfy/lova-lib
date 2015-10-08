@@ -123,20 +123,20 @@ var DeckController = (function () {
         this.$routeParams = $routeParams;
         this.servantService = servantService;
         this.deckService = deckService;
-        this.raceIdOptions = [
-            { key: 0, value: 'Select Race...' },
+        this.tribeIdOptions = [
+            { key: 0, value: 'Select Tribe...' },
             { key: 1, value: '人獣' },
             { key: 2, value: '神族' },
             { key: 3, value: '魔種' },
             { key: 4, value: '海種' },
             { key: 5, value: '不死' }
         ];
-        this.raceName = 'Select Race...';
+        this.tribeName = 'Select Tribe...';
         this.filter = {
-            raceId: undefined,
+            tribeId: undefined,
             name: undefined
         };
-        this.predicate = ['raceId', 'raceCode'];
+        this.predicate = ['tribeId', 'tribeCode'];
         this.reverse = false;
         servantService.load()
             .then(function () {
@@ -186,10 +186,10 @@ var DeckController = (function () {
         this.url = this.deckService.url;
         this.refreshEventListener();
     };
-    DeckController.prototype.selectRaceId = function (raceId, raceName) {
-        this.raceId = raceId;
-        this.raceName = raceName;
-        this.filter.raceId = this.raceId ? this.raceId : undefined;
+    DeckController.prototype.selectTribeId = function (tribeId, tribeName) {
+        this.tribeId = tribeId;
+        this.tribeName = tribeName;
+        this.filter.tribeId = this.tribeId ? this.tribeId : undefined;
         this.refreshEventListener();
     };
     DeckController.prototype.changeQuery = function () {
@@ -366,8 +366,8 @@ var ServantListController = (function () {
             { key: 0, icon: 'fui-list-large-thumbnails' },
             { key: 1, icon: 'fui-list-columned' }
         ];
-        this.raceIdOptions = [
-            { key: 0, value: 'Select Race...' },
+        this.tribeIdOptions = [
+            { key: 0, value: 'Select Tribe...' },
             { key: 1, value: '人獣' },
             { key: 2, value: '神族' },
             { key: 3, value: '魔種' },
@@ -375,7 +375,7 @@ var ServantListController = (function () {
             { key: 5, value: '不死' }
         ];
         this.filter = {
-            raceId: undefined,
+            tribeId: undefined,
             name: undefined,
             type: undefined,
             range: undefined,
@@ -383,10 +383,10 @@ var ServantListController = (function () {
             illustrationBy: undefined,
             characterVoice: undefined
         };
-        this.predicate = ['raceId', 'raceCode'];
+        this.predicate = ['tribeId', 'tribeCode'];
         this.reverse = false;
         this.view = $routeParams.view ? +$routeParams.view : 0;
-        this.raceId = $routeParams.race_id ? +$routeParams.race_id : 0;
+        this.tribeId = $routeParams.tribe_id ? +$routeParams.tribe_id : 0;
         this.q = $routeParams.q ? $routeParams.q : '';
         this.updateFilter();
         servantService.load()
@@ -395,18 +395,18 @@ var ServantListController = (function () {
             _this.scrollService.restore();
             _this.refreshEventListener();
         });
-        $scope.$watch(function () { return _this.raceId; }, function (newValue, oldValue) {
+        $scope.$watch(function () { return _this.tribeId; }, function (newValue, oldValue) {
             if (typeof newValue === 'undefined' || typeof oldValue === 'undefined' || newValue == oldValue) {
                 return;
             }
-            _this.selectRaceId(_this.raceId);
+            _this.selectTribeId(_this.tribeId);
         }, true);
     }
     ServantListController.prototype.selectView = function (view) {
         this.$location.url(this.$location.search('view', view).url());
     };
-    ServantListController.prototype.selectRaceId = function (raceId) {
-        this.$location.url(this.$location.search('race_id', raceId).url());
+    ServantListController.prototype.selectTribeId = function (tribeId) {
+        this.$location.url(this.$location.search('tribe_id', tribeId).url());
     };
     ServantListController.prototype.changeQuery = function () {
         this.updateFilter();
@@ -421,7 +421,7 @@ var ServantListController = (function () {
         Object.keys(this.filter).forEach(function (key) {
             _this.filter[key] = params[key];
         });
-        this.filter['raceId'] = +this.raceId ? '' + this.raceId : undefined;
+        this.filter['tribeId'] = +this.tribeId ? '' + this.tribeId : undefined;
     };
     ServantListController.prototype.parseQuery = function (query) {
         var params = {};
@@ -688,7 +688,7 @@ var DeckModel = (function () {
     });
     Object.defineProperty(DeckModel.prototype, "bonusMana", {
         get: function () {
-            var raceIds = [];
+            var tribeIds = [];
             var fill = true;
             this.servants.forEach(function (e, i) {
                 if (DeckModel.deckIndexes.indexOf(i) == -1) {
@@ -698,14 +698,14 @@ var DeckModel = (function () {
                     fill = false;
                     return;
                 }
-                if (raceIds.indexOf(e.raceId) == -1) {
-                    raceIds.push(e.raceId);
+                if (tribeIds.indexOf(e.tribeId) == -1) {
+                    tribeIds.push(e.tribeId);
                 }
             });
             if (!fill) {
                 return 0;
             }
-            switch (raceIds.length) {
+            switch (tribeIds.length) {
                 case 1:
                     return 10;
                 case 2:
@@ -757,9 +757,9 @@ exports.PrizeModel = PrizeModel;
 var ServantModel = (function () {
     function ServantModel(obj) {
         this.id = obj.id;
-        this.raceId = obj.race_id;
-        this.raceName = obj.race_name;
-        this.raceCode = obj.race_code;
+        this.tribeId = obj.tribe_id;
+        this.tribeName = obj.tribe_name;
+        this.tribeCode = obj.tribe_code;
         this.type = obj.type;
         this.name = obj.name;
         this.cost = obj.cost;
@@ -777,9 +777,9 @@ var ServantModel = (function () {
             passive: obj.skill.passive ? new SkillModel(obj.skill.passive) : null
         };
     }
-    Object.defineProperty(ServantModel.prototype, "raceNameAndCode", {
+    Object.defineProperty(ServantModel.prototype, "tribeNameAndCode", {
         get: function () {
-            return this.raceName + '-' + ('000' + this.raceCode).slice(-3);
+            return this.tribeName + '-' + ('000' + this.tribeCode).slice(-3);
         },
         enumerable: true,
         configurable: true

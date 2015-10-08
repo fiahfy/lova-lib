@@ -32,7 +32,7 @@ export class DeckModel {
   }
 
   public get bonusMana(): number {
-    let raceIds: number[] = [];
+    let tribeIds: number[] = [];
     let fill: boolean = true;
     this.servants.forEach(function(e, i) {
       if (DeckModel.deckIndexes.indexOf(i) == -1) {
@@ -42,14 +42,14 @@ export class DeckModel {
         fill = false;
         return;
       }
-      if (raceIds.indexOf(e.raceId) == -1) {
-        raceIds.push(e.raceId);
+      if (tribeIds.indexOf(e.tribeId) == -1) {
+        tribeIds.push(e.tribeId);
       }
     });
     if (!fill) {
       return 0;
     }
-    switch (raceIds.length) {
+    switch (tribeIds.length) {
       case 1:
         return 10;
       case 2:

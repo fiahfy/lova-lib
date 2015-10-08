@@ -24,21 +24,21 @@ function updateOne(url, force) {
     // get servant
     var servant = yield getServantWithUrl(url);
     // find servant
-    var row = yield findServant({race_name: servant.race_name, race_code: servant.race_code});
+    var row = yield findServant({tribe_name: servant.tribe_name, tribe_code: servant.tribe_code});
     if (row) {
       logger.info('compare update date: %j > %j', servant.date+'', row.date+'');
       if (servant.date <= row.date && !force) {
-        logger.info('skip update servant: id = %s, race_name = %s, race_code = %s, name = %s',
-          row._id, servant.race_name, servant.race_code, servant.name);
+        logger.info('skip update servant: id = %s, tribe_name = %s, tribe_code = %s, name = %s',
+          row._id, servant.tribe_name, servant.tribe_code, servant.name);
         return;
       }
       servant._id = row._id;
-      logger.info('update servant: id = %s, race_name = %s, race_code = %s, name = %s',
-        servant._id, servant.race_name, servant.race_code, servant.name);
+      logger.info('update servant: id = %s, tribe_name = %s, tribe_code = %s, name = %s',
+        servant._id, servant.tribe_name, servant.tribe_code, servant.name);
       yield updateServant(servant);
     } else {
-      logger.info('create servant: race_name = %s, race_code = %s, name = %s',
-        servant.race_name, servant.race_code, servant.name);
+      logger.info('create servant: tribe_name = %s, tribe_code = %s, name = %s',
+        servant.tribe_name, servant.tribe_code, servant.name);
       yield insertServant(servant);
     }
   });
@@ -68,11 +68,11 @@ function getServantUrls() {
 
     var urls = [];
     $('#content_1001_1').next().next().find('table tbody tr').each(function() {
-      //var raceParams = getRaceParam($(this).find('td:nth-child(3)').text());
-      //if (raceParams[0] < race_id) {
+      //var tribeParams = getTribeParam($(this).find('td:nth-child(3)').text());
+      //if (tribeParams[0] < tribe_id) {
       //  return;
       //}
-      //if (raceParams[0] === race_id && raceParams[2] < race_code) {
+      //if (tribeParams[0] === tribe_id && tribeParams[2] < tribe_code) {
       //  return;
       //}
       urls.push('http://wiki.4gamer.net' + $(this).find('td:nth-child(2) a').attr('href'));
@@ -93,12 +93,12 @@ function getServantWithUrl(url) {
     var table3 = section1.nextAll('.table-type-1').first().find('table');
     var table4 = section2.nextAll('.table-type-1').first().find('table');
 
-    var raceParams = getRaceParam(table1.find('tr:nth-child(1) td:nth-child(2)').text());
+    var tribeParams = getTribeParam(table1.find('tr:nth-child(1) td:nth-child(2)').text());
 
     var servant = {};
-    servant.race_id         = raceParams[0];
-    servant.race_name       = raceParams[1];
-    servant.race_code       = raceParams[2];
+    servant.tribe_id         = tribeParams[0];
+    servant.tribe_name       = tribeParams[1];
+    servant.tribe_code       = tribeParams[2];
     servant.name            = $('#page-main-title').text().replace(/[（\(][^）\)]*[）\)]/i, '').trim();
     servant.type            = table1.find('tr:nth-child(1) td:nth-child(4)').text().trim();
     servant.cost            = Number(table1.find('tr:nth-child(2) td:nth-child(2)').text());
@@ -158,7 +158,7 @@ function parseDateString(input) {
   return new Date(Number(input.slice(0, 4)), Number(input.slice(4, 6)) - 1, Number(input.slice(6, 8)));
 }
 
-function getRaceParam(input) {
+function getTribeParam(input) {
   var args = input.split('-');
   return [[, '人獣', '神族', '魔種', '海種', '不死'].indexOf(args[0]), args[0], Number(args[1])];
 }
@@ -166,14 +166,14 @@ function getRaceParam(input) {
 function fixServant(servant) {
   // adjust name
   servant.name = servant.name.replace('―', 'ー');
-  // fix servant race
+  // fix servant tribe
   if (servant.name === 'カイナッツォ') {
-    servant.race_name = '海種';
-    servant.race_code = 4;
+    servant.tribe_name = '海種';
+    servant.tribe_code = 4;
   }
   if (servant.name === 'シェラハ') {
-    servant.race_name = '海種';
-    servant.race_code = 20;
+    servant.tribe_name = '海種';
+    servant.tribe_code = 20;
   }
   // adjust illustration_by
   if (servant.illustration_by === '―') {

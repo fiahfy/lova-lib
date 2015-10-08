@@ -5,8 +5,8 @@
 
   <div class="clearfix">
     <div class="pull-left">
-      <select class="form-control select select-primary select-block mbl" ui-select2 ng-model="c.raceId">
-        <option ng-repeat="option in c.raceIdOptions" value="{{ option.key }}">{{ option.value }}</option>
+      <select class="form-control select select-primary select-block mbl" ui-select2 ng-model="c.tribeId">
+        <option ng-repeat="option in c.tribeIdOptions" value="{{ option.key }}">{{ option.value }}</option>
       </select>
     </div>
     <div class="btn-toolbar pull-right">
@@ -29,7 +29,7 @@
       <thead>
       <tr>
         <th class="hidden-xs">#</th>
-        <th class="">Race</th>
+        <th class="">Tribe</th>
         <th class="">Cost</th>
         <th class="hidden-xs">Type</th>
         <th class="">Servant Name</th>
@@ -48,7 +48,7 @@
       <tr ng-repeat="servant in c.servants | filter:c.filter | orderBy:c.predicate:c.reverse"
           ng-click="c.openServant(servant)">
         <th class="hidden-xs" scope="row">{{ servant.id }}</th>
-        <td class="">{{ servant.raceNameAndCode }}</td>
+        <td class="">{{ servant.tribeNameAndCode }}</td>
         <td class="">{{ servant.cost }}</td>
         <td class="hidden-xs">{{ servant.type }}</td>
         <td class="">{{ servant.name }}</td>
@@ -68,7 +68,7 @@
 
   <div ng-if="!c.view" id="servant-thumbnails">
     <div class="deck" ng-repeat="servant in c.servants | filter:c.filter | orderBy:c.predicate:c.reverse"
-         ng-class="['race-' + servant.raceId]">
+         ng-class="['tribe-' + servant.tribeId]">
       <div class="background">
         <img src="/assets/img/m/blank.png" class="img-rounded img-responsive" />
       </div>

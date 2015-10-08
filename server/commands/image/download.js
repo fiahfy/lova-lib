@@ -55,7 +55,7 @@ function save(servant, force) {
 
 function getImageUrlWithServant(servant) {
   return co(function *() {
-    var $ = (yield scraper.fetchServant(servant.race_name, servant.name)).$;
+    var $ = (yield scraper.fetchServant(servant.tribe_name, servant.name)).$;
     return $('#rendered-body').find('> div:first-child img').attr('src');
   });
 }

@@ -2,9 +2,9 @@
 
 export class ServantModel {
   public id: number;
-  public raceId: number;
-  public raceName: string;
-  public raceCode: number;
+  public tribeId: number;
+  public tribeName: string;
+  public tribeCode: number;
   public type: string;
   public name: string;
   public cost: number;
@@ -21,15 +21,15 @@ export class ServantModel {
     active: SkillModel;
     passive: SkillModel;
   };
-  public get raceNameAndCode(): string {
-    return this.raceName + '-' + ('000' + this.raceCode).slice(-3);
+  public get tribeNameAndCode(): string {
+    return this.tribeName + '-' + ('000' + this.tribeCode).slice(-3);
   }
 
   constructor(obj: any) {
     this.id             = obj.id;
-    this.raceId         = obj.race_id;
-    this.raceName       = obj.race_name;
-    this.raceCode       = obj.race_code;
+    this.tribeId         = obj.tribe_id;
+    this.tribeName       = obj.tribe_name;
+    this.tribeCode       = obj.tribe_code;
     this.type           = obj.type;
     this.name           = obj.name;
     this.cost           = obj.cost;
