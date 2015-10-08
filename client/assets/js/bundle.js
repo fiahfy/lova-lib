@@ -538,7 +538,7 @@ function skillPopover($window) {
                     var _this = this;
                     angular.element(this)
                         .popover({
-                        animation: false,
+                        animation: true,
                         html: true,
                         placement: function () {
                             var top = angular.element(_this).offset().top;

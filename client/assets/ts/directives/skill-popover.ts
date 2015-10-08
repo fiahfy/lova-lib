@@ -28,7 +28,7 @@ function skillPopover($window: ng.IWindowService): ng.IDirective {
         return function() {
           angular.element(this)
             .popover({
-              animation: false,
+              animation: true,
               html : true,
               placement: () => {
                 let top = angular.element(this).offset().top;
