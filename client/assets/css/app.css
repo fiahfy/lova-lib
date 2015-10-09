@@ -311,8 +311,6 @@ img {
     float: left;
     padding: 3px;
     position: relative;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
 }
 .card>div {
     position: relative;
@@ -321,6 +319,8 @@ img {
     border: 2px solid transparent;
     border-radius: 5px;
     margin: 0 auto;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
 }
 .card>div.content>span {
     position: absolute;
