@@ -21,7 +21,7 @@ ver=$(get_node_version)
 
 
 #  Set URI to the custom sample /env route.
-app_uri="http://$OPENSHIFT_GEAR_DNS/api"
+app_uri="http://$OPENSHIFT_GEAR_DNS/api/"
 
 #  Wait a bit to give the server time to come up.
 sleep 5
