@@ -268,8 +268,6 @@ img {
 #deck-servants {
     margin-top: 15px;
 }
-#deck-container .card:hover>div.content,
-#deck-servants .card:hover>div.content,
 #deck-servants .card.setted>div.content {
     /*transition: .25s;*/
     opacity: .5;
@@ -325,6 +323,11 @@ img {
     background-size: cover;
     border: 2px solid transparent;
     border-radius: 5px;
+}
+.card:hover>div.content {
+    /*transition: .25s;*/
+    opacity: .5;
+    background-color: white;
 }
 .card>div.content>span {
     position: absolute;
