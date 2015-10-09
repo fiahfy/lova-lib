@@ -490,9 +490,16 @@ function fitServant() {
             // call immediately
             callback();
             // attach event listener
-            $(window).on('resize', callback);
+            var width;
+            $(window).on('resize', function () {
+                var newWidth = $(window).width();
+                if (width != newWidth) {
+                    width = newWidth;
+                    callback();
+                }
+            });
             // watch
-            $scope.$watch(function () { return attributes.fitServant; }, function (newValue, oldValue) {
+            $scope.$watch(function () { return attributes.fitServant; }, function (newValue) {
                 tribeCode = newValue;
                 callback();
             });

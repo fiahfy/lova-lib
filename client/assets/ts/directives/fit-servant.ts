@@ -24,9 +24,16 @@ function fitServant(): ng.IDirective {
       // call immediately
       callback();
       // attach event listener
-      $(window).on('resize', callback);
+      let width: number;
+      $(window).on('resize', () => {
+        let newWidth = $(window).width();
+        if (width != newWidth) {
+          width = newWidth;
+          callback()
+        }
+      });
       // watch
-      $scope.$watch(() => attributes.fitServant, (newValue, oldValue) => {
+      $scope.$watch(() => attributes.fitServant, (newValue) => {
         tribeCode = newValue;
         callback();
       });

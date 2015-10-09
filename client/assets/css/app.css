@@ -271,7 +271,6 @@ img {
 #deck-servants .card.setted>div.content {
     /*transition: .25s;*/
     opacity: .5;
-    background-color: white;
 }
 #deck-servants .card.setted>div.content:after {
     *content: 'Setted';
@@ -314,6 +313,8 @@ img {
     float: left;
     padding: 3px;
     position: relative;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
 }
 .card>div {
     position: relative;
@@ -327,7 +328,6 @@ img {
 .card:hover>div.content {
     /*transition: .25s;*/
     opacity: .5;
-    background-color: white;
 }
 .card>div.content>span {
     position: absolute;
