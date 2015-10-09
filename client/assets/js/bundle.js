@@ -551,7 +551,7 @@ function skillPopover($window) {
                         trigger: 'hover',
                         title: args.title,
                         content: function () {
-                            return angular.element(_this).parents(args.deck).find(args.content).html();
+                            return angular.element(_this).parents(args.card).find(args.content).html();
                         }
                     });
                 };
