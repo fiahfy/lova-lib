@@ -67,15 +67,13 @@
   </div>
 
   <div ng-if="!c.view" id="servant-thumbnails">
-    <div class="deck" ng-repeat="servant in c.servants | filter:c.filter | orderBy:c.predicate:c.reverse"
-         ng-class="['tribe-' + servant.tribeId]">
-      <div class="background">
-        <img src="/assets/img/m/blank.png" class="img-rounded img-responsive" />
-      </div>
-      <div class="content"
+    <div class="card"
+         ng-repeat="servant in c.servants | filter:c.filter | orderBy:c.predicate:c.reverse"
+         ng-class="'tribe-' + servant.tribeId">
+      <div class="background"></div>
+      <div class="content" fit-servant="{{ servant.tribeCode }}"
            ng-click="c.openServant(servant)">
-        <img data-original="/assets/img/m/{{ servant.id }}.jpg"
-             src="/assets/img/m/blank.png" class="img-rounded img-responsive lazy" />
+        <img src="/assets/img/m/blank.png" class="img-responsive" />
         <span>
           Cost {{ servant.cost }}
         </span>

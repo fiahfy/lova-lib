@@ -88,7 +88,7 @@ var FooterController = (function () {
 exports.FooterController = FooterController;
 angular.module(exports.appName).controller('FooterController', FooterController);
 
-},{"./controllers":4,"./directives":9,"./filters":14,"./services":22}],2:[function(require,module,exports){
+},{"./controllers":4,"./directives":10,"./filters":15,"./services":23}],2:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -470,6 +470,41 @@ angular.module('app').directive('lovaServantList', Definition.ddo);
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
+var cardRatio = 150 / 208;
+function fitServant() {
+    return {
+        restrict: 'A',
+        link: function ($scope, element, attributes) {
+            var tribeCode = attributes.fitServant;
+            var callback = function () {
+                // remove css height
+                element.css({ height: '' });
+                // get height, and cast integer
+                var height = Math.floor(element.height());
+                // set css height
+                element.css({ height: height });
+                // set css background-position-x
+                var x = -element.height() * cardRatio * (tribeCode - 1);
+                element.css('background-position-x', x);
+            };
+            // call immediately
+            callback();
+            // attach event listener
+            $(window).on('resize', callback);
+            // watch
+            $scope.$watch(function () { return attributes.fitServant; }, function (newValue, oldValue) {
+                tribeCode = newValue;
+                callback();
+            });
+        }
+    };
+}
+angular.module(app.appName).directive('fitServant', fitServant);
+
+},{"../app":1}],9:[function(require,module,exports){
+'use strict';
+//import * as angular from 'angular';
+var app = require('../app');
 function fittable() {
     return {
         restrict: 'A',
@@ -492,13 +527,14 @@ function fittable() {
 }
 angular.module(app.appName).directive('fittable', fittable);
 
-},{"../app":1}],9:[function(require,module,exports){
+},{"../app":1}],10:[function(require,module,exports){
 'use strict';
+require('./fit-servant');
 require('./fittable');
 require('./skill-popover');
 require('./skill-popover-content');
 
-},{"./fittable":8,"./skill-popover":11,"./skill-popover-content":10}],10:[function(require,module,exports){
+},{"./fit-servant":8,"./fittable":9,"./skill-popover":12,"./skill-popover-content":11}],11:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -515,7 +551,7 @@ function skillPopoverContent() {
 }
 angular.module(app.appName).directive('skillPopoverContent', skillPopoverContent);
 
-},{"../app":1}],11:[function(require,module,exports){
+},{"../app":1}],12:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -551,7 +587,7 @@ function skillPopover($window) {
                         trigger: 'hover',
                         title: args.title,
                         content: function () {
-                            return angular.element(_this).parents(args.deck).find(args.content).html();
+                            return angular.element(_this).parents(args.card).find(args.content).html();
                         }
                     });
                 };
@@ -561,7 +597,7 @@ function skillPopover($window) {
 }
 angular.module(app.appName).directive('skillPopover', skillPopover);
 
-},{"../app":1}],12:[function(require,module,exports){
+},{"../app":1}],13:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -572,7 +608,7 @@ function def() {
 }
 angular.module(app.appName).filter('default', def);
 
-},{"../app":1}],13:[function(require,module,exports){
+},{"../app":1}],14:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -584,7 +620,7 @@ function escape() {
 angular.module(app.appName).filter('escape', escape);
 angular.module(app.appName).filter('e', escape);
 
-},{"../app":1}],14:[function(require,module,exports){
+},{"../app":1}],15:[function(require,module,exports){
 'use strict';
 require('./default');
 require('./escape');
@@ -592,7 +628,7 @@ require('./pad');
 require('./replace');
 require('./skill-description');
 
-},{"./default":12,"./escape":13,"./pad":15,"./replace":16,"./skill-description":17}],15:[function(require,module,exports){
+},{"./default":13,"./escape":14,"./pad":16,"./replace":17,"./skill-description":18}],16:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -606,7 +642,7 @@ function pad() {
 }
 angular.module(app.appName).filter('pad', pad);
 
-},{"../app":1}],16:[function(require,module,exports){
+},{"../app":1}],17:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -621,7 +657,7 @@ function replace() {
 }
 angular.module(app.appName).filter('replace', replace);
 
-},{"../app":1}],17:[function(require,module,exports){
+},{"../app":1}],18:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -651,7 +687,7 @@ function skillDescription($sce) {
 }
 angular.module(app.appName).filter('skillDescription', skillDescription);
 
-},{"../app":1}],18:[function(require,module,exports){
+},{"../app":1}],19:[function(require,module,exports){
 'use strict';
 var DeckModel = (function () {
     function DeckModel() {
@@ -739,7 +775,7 @@ var DeckModel = (function () {
 })();
 exports.DeckModel = DeckModel;
 
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 'use strict';
 var PrizeModel = (function () {
     function PrizeModel(obj) {
@@ -752,7 +788,7 @@ var PrizeModel = (function () {
 })();
 exports.PrizeModel = PrizeModel;
 
-},{}],20:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 'use strict';
 var ServantModel = (function () {
     function ServantModel(obj) {
@@ -814,7 +850,7 @@ var SkillModel = (function () {
 })();
 exports.SkillModel = SkillModel;
 
-},{}],21:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -855,14 +891,14 @@ var DeckService = (function () {
 exports.DeckService = DeckService;
 angular.module(app.appName).service('DeckService', DeckService);
 
-},{"../app":1,"../models/deck":18}],22:[function(require,module,exports){
+},{"../app":1,"../models/deck":19}],23:[function(require,module,exports){
 'use strict';
 require('./servant');
 require('./deck');
 require('./prize');
 require('./scroll');
 
-},{"./deck":21,"./prize":23,"./scroll":24,"./servant":25}],23:[function(require,module,exports){
+},{"./deck":22,"./prize":24,"./scroll":25,"./servant":26}],24:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -901,7 +937,7 @@ var PrizeService = (function () {
 exports.PrizeService = PrizeService;
 angular.module(app.appName).service('PrizeService', PrizeService);
 
-},{"../app":1,"../models/prize":19}],24:[function(require,module,exports){
+},{"../app":1,"../models/prize":20}],25:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -928,7 +964,7 @@ var ScrollService = (function () {
 exports.ScrollService = ScrollService;
 angular.module(app.appName).service('ScrollService', ScrollService);
 
-},{"../app":1}],25:[function(require,module,exports){
+},{"../app":1}],26:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -976,4 +1012,4 @@ var ServantService = (function () {
 exports.ServantService = ServantService;
 angular.module(app.appName).service('ServantService', ServantService);
 
-},{"../app":1,"../models/servant":20}]},{},[1]);
+},{"../app":1,"../models/servant":21}]},{},[1]);
