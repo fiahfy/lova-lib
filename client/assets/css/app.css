@@ -199,36 +199,36 @@ img {
     width: 100%;
 }
 
-#deck-container .deck {
+#deck-container .card {
     padding: 3px;
     border: 0 solid #1abc9c;
 }
-#deck-container .deck:nth-child(1) {
+#deck-container .card:nth-child(1) {
     border-width: 2px 0 0 2px;
     padding: 1px 3px 3px 1px;
     border-radius: 7px 0 0 0;
 }
-#deck-container .deck:nth-child(2) {
+#deck-container .card:nth-child(2) {
     border-width: 2px 0 0 0;
     padding: 1px 3px 3px 3px;
     border-radius: 0;
 }
-#deck-container .deck:nth-child(3) {
+#deck-container .card:nth-child(3) {
     border-width: 2px 2px 0 0;
     padding: 1px 1px 3px 3px;
     border-radius: 0 7px 0 0;
 }
-#deck-container .deck:nth-child(5) {
+#deck-container .card:nth-child(5) {
     border-width: 0 0 2px 2px;
     padding: 3px 3px 1px 1px;
     border-radius: 0 0 0 7px;
 }
-#deck-container .deck:nth-child(6) {
+#deck-container .card:nth-child(6) {
     border-width: 0 0 2px 0;
     padding: 3px 3px 1px 3px;
     border-radius: 0;
 }
-#deck-container .deck:nth-child(7) {
+#deck-container .card:nth-child(7) {
     border-width: 0 2px 2px 0;
     padding: 3px 1px 1px 3px;
     border-radius: 0 0 7px 0;
@@ -237,26 +237,26 @@ img {
     #deck-container {
         padding: 15px 0;
     }
-    #deck-container .deck:nth-child(1) {
+    #deck-container .card:nth-child(1) {
         border-width: 2px 0 2px 2px;
         padding: 1px 3px 1px 1px;
         border-radius: 7px 0 0 7px;
     }
-    #deck-container .deck:nth-child(2),
-    #deck-container .deck:nth-child(3),
-    #deck-container .deck:nth-child(4),
-    #deck-container .deck:nth-child(5) {
+    #deck-container .card:nth-child(2),
+    #deck-container .card:nth-child(3),
+    #deck-container .card:nth-child(4),
+    #deck-container .card:nth-child(5) {
         border-width: 2px 0 2px 0;
         padding: 1px 3px 1px 3px;
         border-radius: 0;
     }
-    #deck-container .deck:nth-child(6) {
+    #deck-container .card:nth-child(6) {
         border-width: 2px 2px 2px 0;
         padding: 1px 1px 1px 3px;
         border-radius: 0 7px 7px 0;
     }
-    #deck-container .deck:nth-child(7),
-    #deck-container .deck:nth-child(8) {
+    #deck-container .card:nth-child(7),
+    #deck-container .card:nth-child(8) {
         border-width: 0;
         padding: 3px;
         border-radius: 0;
@@ -268,14 +268,14 @@ img {
 #deck-servants {
     margin-top: 15px;
 }
-#deck-container .deck:hover>div.content,
-#deck-servants .deck:hover>div.content,
-#deck-servants .deck.setted>div.content {
-    transition: .25s;
+#deck-container .card:hover>div.content,
+#deck-servants .card:hover>div.content,
+#deck-servants .card.setted>div.content {
+    /*transition: .25s;*/
     opacity: .5;
     background-color: white;
 }
-#deck-servants .deck.setted>div.content:after {
+#deck-servants .card.setted>div.content:after {
     *content: 'Setted';
     display: block;
     position: absolute;
@@ -310,23 +310,23 @@ img {
     line-height: 18px;
 }
 
-/* Deck Class */
-.deck {
+/* Card Class */
+.card {
     width: 25%;
     float: left;
     padding: 3px;
     position: relative;
 }
-.deck>div {
+.card>div {
     position: relative;
 }
-.deck>div.content {
+.card>div.content {
     background-position: 0 0;
     background-size: cover;
     border: 2px solid transparent;
     border-radius: 5px;
 }
-.deck>div.content>span {
+.card>div.content>span {
     position: absolute;
     bottom: 0;
     left: 0;
@@ -338,7 +338,7 @@ img {
     font-size: 60%;
     font-weight: bold;
 }
-.deck>div.background {
+.card>div.background {
     display: block;
     position: absolute;
     top: 0;
@@ -353,52 +353,52 @@ img {
     border: none;
     border-radius: 5px;
 }
-.deck>div.background.empty-deck {
+.card.deck>div.background {
     background-image: url(/assets/img/m/deck.png);
 }
-.deck>div.background.empty-side-board {
+.card.side-board>div.background {
     background-image: url(/assets/img/m/side-board.png);
 }
-.deck.tribe-1>div.content {
+.card.tribe-1>div.content {
     background-image: url(/assets/img/m/spr-1.jpg);
     border-color: #a26821;
     box-shadow: 0 0 1px #a26821;
 }
-.deck.tribe-2>div.content {
+.card.tribe-2>div.content {
     background-image: url(/assets/img/m/spr-2.jpg);
     border-color: #9d9075;
     box-shadow: 0 0 1px #9d9075;
 }
-.deck.tribe-3>div.content {
+.card.tribe-3>div.content {
     background-image: url(/assets/img/m/spr-3.jpg);
     border-color: #554e86;
     box-shadow: 0 0 1px #554e86;
 }
-.deck.tribe-4>div.content {
+.card.tribe-4>div.content {
     background-image: url(/assets/img/m/spr-4.jpg);
     border-color: #558c9e;
     box-shadow: 0 0 1px #558c9e;
 }
-.deck.tribe-5>div.content {
+.card.tribe-5>div.content {
     background-image: url(/assets/img/m/spr-5.jpg);
     border-color: #7f4a83;
     box-shadow: 0 0 1px #7f4a83;
 }
 @media (min-width: 768px) {
-    .deck {
+    .card {
         width: 12.5%;
     }
-    .deck>div.content>span {
+    .card>div.content>span {
         font-size: 60%;
     }
 }
 @media (min-width: 992px) {
-    .deck>div.content>span {
+    .card>div.content>span {
         font-size: 90%;
     }
 }
 @media (min-width: 1200px) {
-    .deck>div.content>span {
+    .card>div.content>span {
         font-size: 100%;
     }
 }
