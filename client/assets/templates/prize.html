@@ -76,7 +76,7 @@
         <tbody>
         <tr ng-repeat="prize in c.prizes">
           <td class="">{{ prize.name }}</td>
-          <td class="">{{ prize.rate }}</td>
+          <td class="">{{ prize.rate|number:3 }}</td>
         </tr>
         </tbody>
       </table>

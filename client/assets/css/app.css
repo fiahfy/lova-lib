@@ -194,6 +194,7 @@ img {
     line-height: 25px;
     color: #c0c1c2;
     width: 1%;
+    white-space: nowrap;
 }
 #deck-container>div>dl>dd {
     width: 100%;

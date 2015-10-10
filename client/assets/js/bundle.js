@@ -717,6 +717,18 @@ var DeckModel = (function () {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(DeckModel.prototype, "totalMana", {
+        get: function () {
+            return this.servants.reduce(function (p, e, i) {
+                if (e && DeckModel.deckIndexes.indexOf(i) > -1) {
+                    return e.cost + p;
+                }
+                return p;
+            }, 0);
+        },
+        enumerable: true,
+        configurable: true
+    });
     DeckModel.prototype.updateServants = function (servants) {
         this.servants = [];
         for (var i = 0; i < DeckModel.size; i++) {

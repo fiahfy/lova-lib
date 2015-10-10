@@ -15,10 +15,14 @@
 </div>
 
 <div id="deck-container" fittable="fitted">
-  <div class="container">
-    <dl class="row">
+  <div class="container" class="row">
+    <dl class="row col-xs-6 col-sm-2">
       <dt class="">Mana</dt>
       <dd class="">{{ c.deck.mana }}<span ng-if="c.deck.bonusMana"> + {{ c.deck.bonusMana }}</span></dd>
+    </dl>
+    <dl class="row col-xs-6 col-sm-10">
+      <dt class="">Total Mana</dt>
+      <dd class="">{{ c.deck.totalMana }}</dd>
     </dl>
   </div>
   <!-- .hidden-xs -->
