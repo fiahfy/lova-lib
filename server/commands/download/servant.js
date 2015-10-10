@@ -30,7 +30,7 @@ function findServants(args) {
 
 function save(servant, force) {
   return co(function *() {
-    logger.info('save image: id = %d', servant.id);
+    logger.verbose('save image: id = %d', servant.id);
     let url = yield getImageUrlWithServant(servant);
     if (!url) {
       logger.warn('image url is not found');
@@ -41,7 +41,7 @@ function save(servant, force) {
     let middleImagePath = `${imageDir}m/${servant.id}.jpg`;
 
     if (!force && (yield exists(largeImagePath)) && (yield exists(middleImagePath))) {
-      logger.info('image is almost exists');
+      logger.verbose('image is almost exists');
       return;
     }
 
@@ -74,7 +74,7 @@ function exists(path) {
 
 function download(url, path) {
   return new Promise(function(resolve, reject) {
-    logger.info('download url: %s', url);
+    logger.verbose('download url: %s', url);
 
     request
       .get(url)

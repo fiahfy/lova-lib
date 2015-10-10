@@ -8,7 +8,7 @@ client.setBrowser('chrome');
 client.headers['User-Agent'] += ' Lova Scraper Client/1.0.0';
 
 function fetch(url) {
-  logger.info('fetch url: url = %s', url);
+  logger.verbose('fetch url: url = %s', url);
   return client.fetch(url);
 }
 

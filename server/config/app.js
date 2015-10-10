@@ -42,6 +42,11 @@ config.route = function(app) {
   app.use(route.get('/api/servants/', controllers.servants));
   app.use(route.get('/api/servants/:id/', controllers.servant));
   app.use(route.get('/api/prizes/', controllers.prizes));
+  app.use(route.get('/api/ranking/servants/:id/win/', controllers.root));
+  app.use(route.get('/api/ranking/servants/:id/used/', controllers.root));
+  app.use(route.get('/api/ranking/:date/servant/win/', controllers.root));
+  app.use(route.get('/api/ranking/:date/servant/used/', controllers.root));
+  app.use(route.get('/api/ranking/:date/spell/', controllers.root));
 };
 
 module.exports = config;
