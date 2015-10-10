@@ -56,6 +56,7 @@ function getPrizes() {
     let prizes = [];
     let panel = $('#mainpanel');
     let date = new Date(panel.find('div.article_title span.date').text());
+    date = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
     panel.find('div.subsection_frame strong').each(function() {
       let text = $(this).text();
       let matches = text.match(/([^・：]+)：(.+)[%％]/i);

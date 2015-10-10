@@ -155,7 +155,7 @@ function getServantWithUrl(url) {
 }
 
 function parseDateString(input) {
-  return new Date(Number(input.slice(0, 4)), Number(input.slice(4, 6)) - 1, Number(input.slice(6, 8)));
+  return new Date(Date.UTC(Number(input.slice(0, 4)), Number(input.slice(4, 6)) - 1, Number(input.slice(6, 8))));
 }
 
 function getTribeParam(input) {

@@ -10,6 +10,7 @@ module.exports = function(target, date) {
     let d;
     if (date) {
       d = new Date(date);
+      d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
       if (isNaN(d.valueOf())) {
         logger.error('Invalid Date: %s', date);
         return;
@@ -17,9 +18,9 @@ module.exports = function(target, date) {
     } else {
       // yesterday if empty
       d = new Date;
+      d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
       d.setDate(d.getDate() - 1);
     }
-    d = new Date(d.getFullYear(), d.getMonth(), d.getDate());
 
     switch (target) {
       case 'win':
@@ -87,7 +88,11 @@ function deleteWinRanking(args) {
 }
 
 function insertWinRanking(args) {
-  return models.servantwinranking.update(args, args, {upsert: true}).exec();
+  return co(function *() {
+    let result = (yield models.counter.getNewId('servantwinranking')).result;
+    let _id = result.value.seq;
+    yield models.servantwinranking.update({_id: _id}, args, {upsert: true}).exec();
+  });
 }
 
 function getWinRankingWithDate(date) {

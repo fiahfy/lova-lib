@@ -13,4 +13,12 @@ let ServantwinrankingShema = new Schema({
   rate:             { type: Number, require: true }
 }, {id: false});
 
+ServantwinrankingShema.virtual('id').get(function() {
+  return this._id;
+});
+
+ServantwinrankingShema.set('toJSON', {
+  virtuals: true
+});
+
 module.exports = mongoose.model('servantwinranking', ServantwinrankingShema);
