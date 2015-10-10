@@ -551,7 +551,7 @@ function skillPopover($window) {
                         trigger: 'hover',
                         title: args.title,
                         content: function () {
-                            return angular.element(_this).parents(args.deck).find(args.content).html();
+                            return angular.element(_this).parents(args.card).find(args.content).html();
                         }
                     });
                 };
@@ -713,6 +713,18 @@ var DeckModel = (function () {
                 default:
                     return 0;
             }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(DeckModel.prototype, "totalMana", {
+        get: function () {
+            return this.servants.reduce(function (p, e, i) {
+                if (e && DeckModel.deckIndexes.indexOf(i) > -1) {
+                    return e.cost + p;
+                }
+                return p;
+            }, 0);
         },
         enumerable: true,
         configurable: true

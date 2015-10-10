@@ -15,26 +15,32 @@
 </div>
 
 <div id="deck-container" fittable="fitted">
-  <div class="container">
-    <dl class="row">
+  <div class="container" class="row">
+    <dl class="row col-xs-6 col-sm-2">
       <dt class="">Mana</dt>
       <dd class="">{{ c.deck.mana }}<span ng-if="c.deck.bonusMana"> + {{ c.deck.bonusMana }}</span></dd>
+    </dl>
+    <dl class="row col-xs-6 col-sm-10">
+      <dt class="">Total Mana</dt>
+      <dd class="">{{ c.deck.totalMana }}</dd>
     </dl>
   </div>
   <!-- .hidden-xs -->
   <div class="container hidden-xs">
-    <div class="deck" ng-repeat="($index, servant) in c.deck.servants track by $index"
+    <div class="card"
+         ng-repeat="($index, servant) in c.deck.servants track by $index"
          ng-class="'tribe-' + servant.tribeId"
          ng-drop="true" ng-drop-success="c.setServant($index, $data)">
       <div class="background">
         <img ng-if="[0, 1, 2, 3, 4, 5].indexOf($index) > -1" src="/assets/img/m/deck.png" class="img-rounded img-responsive" />
         <img ng-if="[6, 7].indexOf($index) > -1" src="/assets/img/m/side-board.png" class="img-rounded img-responsive" />
       </div>
-      <div class="content" ng-drag="servant" ng-drag-data="{index: $index, servantId: servant.id}" ng-drag-stop="c.clearServant($index)"
+      <div class="content"
+           ng-drag="servant" ng-drag-data="{index: $index, servantId: servant.id}" ng-drag-stop="c.clearServant($index)"
            ng-dblclick="c.openServant(servant.id)">
         <img ng-src="/assets/img/m/{{ servant ? servant.id + '.jpg' : 'blank.png' }}" class="img-rounded img-responsive" />
         <span ng-if="servant"
-              skill-popover="{deck: '.deck', title: servant.name, content: '.skill-popover-content', container: '#deck-popover-container'}">
+              skill-popover="{card: '.card', title: servant.name, content: '.skill-popover-content', container: '#deck-popover-container'}">
           Cost {{ servant.cost }}
         </span>
       </div>
@@ -59,35 +65,41 @@
   <!-- /.hidden-xs -->
   <!-- .visible-xs -->
   <div class="container visible-xs">
-    <div class="deck" ng-repeat="($index, servant) in c.deck.servants track by $index" ng-if="[0, 1, 2, 6].indexOf($index) > -1"
+    <div class="card"
+         ng-repeat="($index, servant) in c.deck.servants track by $index"
+         ng-if="[0, 1, 2, 6].indexOf($index) > -1"
          ng-class="'tribe-' + servant.tribeId"
          ng-drop="true" ng-drop-success="c.setServant($index, $data)">
       <div class="background">
         <img ng-if="[0, 1, 2].indexOf($index) > -1" src="/assets/img/m/deck.png" class="img-rounded img-responsive" />
         <img ng-if="[6].indexOf($index) > -1" src="/assets/img/m/side-board.png" class="img-rounded img-responsive" />
       </div>
-      <div class="content" ng-drag="servant" ng-drag-data="{index: $index, servantId: servant.id}" ng-drag-stop="c.clearServant($index)"
+      <div class="content"
+           ng-drag="servant" ng-drag-data="{index: $index, servantId: servant.id}" ng-drag-stop="c.clearServant($index)"
            ng-dblclick="c.openServant(servant.id)">
         <img ng-src="/assets/img/m/{{ servant ? servant.id + '.jpg' : 'blank.png' }}" class="img-rounded img-responsive" />
         <span ng-if="servant"
-              skill-popover="{deck: '.deck', title: servant.name, content: '.skill-popover-content', container: '#deck-popover-container'}">
+              skill-popover="{card: '.card', title: servant.name, content: '.skill-popover-content', container: '#deck-popover-container'}">
           Cost {{ servant.cost }}
         </span>
       </div>
       <skill-popover-content servant="servant"></skill-popover-content>
     </div>
-    <div class="deck" ng-repeat="($index, servant) in c.deck.servants track by $index" ng-if="[3, 4, 5, 7].indexOf($index) > -1"
+    <div class="card"
+         ng-repeat="($index, servant) in c.deck.servants track by $index"
+         ng-if="[3, 4, 5, 7].indexOf($index) > -1"
          ng-class="'tribe-' + servant.tribeId"
          ng-drop="true" ng-drop-success="c.setServant($index, $data)">
       <div class="background">
         <img ng-if="[3, 4, 5].indexOf($index) > -1" src="/assets/img/m/deck.png" class="img-rounded img-responsive" />
         <img ng-if="[7].indexOf($index) > -1" src="/assets/img/m/side-board.png" class="img-rounded img-responsive" />
       </div>
-      <div class="content" ng-drag="servant" ng-drag-data="{index: $index, servantId: servant.id}" ng-drag-stop="c.clearServant($index)"
+      <div class="content"
+           ng-drag="servant" ng-drag-data="{index: $index, servantId: servant.id}" ng-drag-stop="c.clearServant($index)"
            ng-dblclick="c.openServant(servant.id)">
         <img ng-src="/assets/img/m/{{ servant ? servant.id + '.jpg' : 'blank.png' }}" class="img-rounded img-responsive" />
         <span ng-if="servant"
-              skill-popover="{deck: '.deck', title: servant.name, content: '.skill-popover-content', container: '#deck-popover-container'}">
+              skill-popover="{card: '.card', title: servant.name, content: '.skill-popover-content', container: '#deck-popover-container'}">
           Cost {{ servant.cost }}
         </span>
       </div>
@@ -99,16 +111,18 @@
 
 <div id="deck-servants" class="container">
   <div>
-    <div class="deck" ng-repeat="servant in c.servants | filter:c.filter | orderBy:c.predicate:c.reverse"
+    <div class="card"
+         ng-repeat="servant in c.servants | filter:c.filter | orderBy:c.predicate:c.reverse"
          ng-class="['tribe-' + servant.tribeId, {'setted': c.deck.servants.indexOf(servant) > -1}]">
       <div class="background">
         <img src="/assets/img/m/blank.png" class="img-rounded img-responsive" />
       </div>
-      <div class="content" ng-drag="true" ng-drag-data="{index: null, servantId: servant.id}"
+      <div class="content"
+           ng-drag="true" ng-drag-data="{index: null, servantId: servant.id}"
            ng-dblclick="c.openServant(servant.id)">
         <img data-original="/assets/img/m/{{ servant.id }}.jpg"
              src="/assets/img/m/blank.png" class="img-rounded img-responsive lazy" />
-        <span skill-popover="{deck: '.deck', title: servant.name, content: '.skill-popover-content', container: '#deck-popover-container'}">
+        <span skill-popover="{card: '.card', title: servant.name, content: '.skill-popover-content', container: '#deck-popover-container'}">
           Cost {{ servant.cost }}
         </span>
       </div>

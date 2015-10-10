@@ -5,45 +5,57 @@ var commander = require('commander');
 var commands = require('./server/commands');
 var logger = require('./server/utils/logger');
 
-var promise;
+var promise = null;
 
 commander
-  .command('update <target>')
-  .alias('up')
-  .description('update data')
-  .option('-u, --url [url]', 'target servant url', null, null)
-  .option('-f, --force', 'update force', null, null)
-  .action(function(target, opts) {
-    switch (target) {
-      case 'servant':
-        promise = commands.update.servant(opts.url, opts.force);
-        break;
-      case 'prize':
-        promise = commands.update.prize();
-        break;
-    }
+  .command('update-servant [url]')
+  .alias('ups')
+  .description('update servant data')
+  .option('-f, --force', 'force update', null, null)
+  .action(function(url, opts) {
+    promise = commands.update.servant(url, opts.force);
   });
+
 commander
-  .command('image <command>')
-  .alias('im')
-  .description('manage images')
-  .option('-i, --id [id]', 'target servant id', null, null)
-  .option('-f, --force', 'download force', null, null)
-  .action(function(command, opts) {
-    switch (command) {
-      case 'download':
-        promise = commands.image.download(opts.id, opts.force);
-        break;
-      case 'sprite':
-        promise = commands.image.sprite();
-        break;
-    }
+  .command('update-prize')
+  .alias('upp')
+  .description('update prize data')
+  .action(function() {
+    promise = commands.update.prize();
   });
+
+commander
+  .command('update-ranking <target>')
+  .alias('upr')
+  .description('update ranking data')
+  .option('-d, --date [date]', 'update force', null, null)
+  .action(function(target, opts) {
+    promise = commands.update.ranking(target, opts.date);
+  });
+
+commander
+  .command('download-servant')
+  .alias('dls')
+  .description('download servant images')
+  .option('-i, --id [id]', 'target servant id', null, null)
+  .option('-f, --force', 'force download', null, null)
+  .action(function(opts) {
+    promise = commands.download.servant(opts.id, opts.force);
+  });
+
+commander
+  .command('sprite-servant')
+  .alias('sps')
+  .description('create servant sprite image')
+  .action(function() {
+    promise = commands.sprite.servant();
+  });
+
 commander
   .version('0.0.1')
   .parse(process.argv);
 
-if (typeof promise === 'undefined') {
+if (!promise) {
   commander.help();
 }
 

@@ -67,7 +67,8 @@
   </div>
 
   <div ng-if="!c.view" id="servant-thumbnails">
-    <div class="deck" ng-repeat="servant in c.servants | filter:c.filter | orderBy:c.predicate:c.reverse"
+    <div class="card"
+         ng-repeat="servant in c.servants | filter:c.filter | orderBy:c.predicate:c.reverse"
          ng-class="['tribe-' + servant.tribeId]">
       <div class="background">
         <img src="/assets/img/m/blank.png" class="img-rounded img-responsive" />

@@ -59,6 +59,15 @@ export class DeckModel {
     }
   }
 
+  public get totalMana(): number {
+    return this.servants.reduce(function(p, e, i) {
+      if (e && DeckModel.deckIndexes.indexOf(i) > -1) {
+        return e.cost + p;
+      }
+      return p;
+    }, 0);
+  }
+
   constructor() {
   }
 

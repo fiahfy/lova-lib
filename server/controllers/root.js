@@ -1,7 +1,7 @@
 'use strict';
 
 function *root() {
-  this.body = {message: "OK"};
+  this.body = {node_version: process.version};
 }
 
 module.exports = root;

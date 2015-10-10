@@ -12,14 +12,14 @@ module.exports = function() {
     // get prizes
     let prizes = yield getPrizes();
     if (!prizes) {
-      logger.warn('prize is nothing');
+      logger.warn('Prize is Nothing');
       return;
     }
     // clean prizes
-    logger.info('truncate prizes');
+    logger.info('Truncate Prizes');
     yield truncatePrizes();
     // insert prizes
-    logger.info('insert prizes: count = %d', prizes.length);
+    logger.info('Insert Prizes: count = %d', prizes.length);
     yield insertPrizes(prizes);
   });
 };
@@ -49,13 +49,14 @@ function getPrizes() {
     // get article id
     let id = yield getRecentPrizeArticleId();
     if (!id) {
-      logger.warn('prize notice is not found');
+      logger.warn('Prize Notice is Not Found');
       return null;
     }
     let $ = (yield scraper.fetchArticle(id)).$;
     let prizes = [];
     let panel = $('#mainpanel');
     let date = new Date(panel.find('div.article_title span.date').text());
+    date = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
     panel.find('div.subsection_frame strong').each(function() {
       let text = $(this).text();
       let matches = text.match(/([^・：]+)：(.+)[%％]/i);

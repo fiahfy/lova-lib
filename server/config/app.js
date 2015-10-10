@@ -1,7 +1,7 @@
 'use strict';
 
 let controllers = require('../controllers');
-let route = require('koa-route');
+let router = require('koa-router')();
 let st = require('koa-static');
 let send = require('koa-send');
 let crypto = require('crypto');
@@ -23,7 +23,7 @@ config.route = function(app) {
       // static file
       yield next;
     } else {
-      // client
+      // client root
       yield send(this, '/index.html', {root: 'client'});
     }
   });
@@ -38,10 +38,14 @@ config.route = function(app) {
     yield next;
     cache.set(key, this.body);
   });
-  app.use(route.get('/api/', controllers.root));
-  app.use(route.get('/api/servants/', controllers.servants));
-  app.use(route.get('/api/servants/:id/', controllers.servant));
-  app.use(route.get('/api/prizes/', controllers.prizes));
+  router.get('/api/', controllers.root);
+  router.get('/api/servants/', controllers.servants);
+  router.get('/api/servants/:id/', controllers.servants);
+  router.get('/api/prizes/', controllers.prizes);
+  router.get('/api/ranking/servants/:mode/:year/:month/:date/', controllers.ranking.servants);
+  router.get('/api/ranking/servants/:id/:mode/:year/:month/:date/', controllers.ranking.servants);
+  //app.use(route.get('/api/ranking/:date/spell/', controllers.root));
+  app.use(router.routes());
 };
 
 module.exports = config;

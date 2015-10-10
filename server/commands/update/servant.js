@@ -26,18 +26,18 @@ function updateOne(url, force) {
     // find servant
     let row = yield findServant({tribe_name: servant.tribe_name, tribe_code: servant.tribe_code});
     if (row) {
-      logger.info('compare update date: %j > %j', servant.date+'', row.date+'');
+      logger.verbose('Compare Update Date: new = %j, current = %j', servant.date+'', row.date+'');
       if (servant.date <= row.date && !force) {
-        logger.info('skip update servant: id = %s, tribe_name = %s, tribe_code = %s, name = %s',
+        logger.verbose('Skip Update Servant: id = %s, tribe_name = %s, tribe_code = %s, name = %s',
           row._id, servant.tribe_name, servant.tribe_code, servant.name);
         return;
       }
       servant._id = row._id;
-      logger.info('update servant: id = %s, tribe_name = %s, tribe_code = %s, name = %s',
+      logger.info('Update Servant: id = %s, tribe_name = %s, tribe_code = %s, name = %s',
         servant._id, servant.tribe_name, servant.tribe_code, servant.name);
       yield updateServant(servant);
     } else {
-      logger.info('create servant: tribe_name = %s, tribe_code = %s, name = %s',
+      logger.info('Create Servant: tribe_name = %s, tribe_code = %s, name = %s',
         servant.tribe_name, servant.tribe_code, servant.name);
       yield insertServant(servant);
     }
@@ -155,7 +155,7 @@ function getServantWithUrl(url) {
 }
 
 function parseDateString(input) {
-  return new Date(Number(input.slice(0, 4)), Number(input.slice(4, 6)) - 1, Number(input.slice(6, 8)));
+  return new Date(Date.UTC(Number(input.slice(0, 4)), Number(input.slice(4, 6)) - 1, Number(input.slice(6, 8))));
 }
 
 function getTribeParam(input) {

@@ -41,7 +41,7 @@ function skillPopover($window: ng.IWindowService): ng.IDirective {
               trigger: 'hover',
               title: args.title,
               content: () => {
-                return angular.element(this).parents(args.deck).find(args.content).html();
+                return angular.element(this).parents(args.card).find(args.content).html();
               }
             });
         }
