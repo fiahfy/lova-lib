@@ -8,7 +8,7 @@ client.setBrowser('chrome');
 client.headers['User-Agent'] += ' Lova Scraper Client/1.0.0';
 
 function fetch(url) {
-  logger.verbose('fetch url: url = %s', url);
+  logger.verbose('Fetch Url: url = %s', url);
   return client.fetch(url);
 }
 
@@ -41,10 +41,19 @@ function fetchAllServantList() {
   return fetch(url);
 }
 
+function fetchServantWinRanking(date) {
+  let d = new Date(date);
+  d.setDate(d.getDate() + 1);
+  var dateString = d.getFullYear() + ('00' + (d.getMonth() + 1)).slice(-2) + ('00' + d.getDate()).slice(-2) + '0500';
+  let url = `http://cache.lova.jp/ranking/servantWinRate_weekly_all_all_all/${dateString}/page1.json`;
+  return fetch(url);
+}
+
 module.exports = {
-  fetch:               fetch,
-  fetchArticle:        fetchArticle,
-  fetchNotice:         fetchNotice,
-  fetchServant:        fetchServant,
-  fetchAllServantList: fetchAllServantList
+  fetch:                  fetch,
+  fetchArticle:           fetchArticle,
+  fetchNotice:            fetchNotice,
+  fetchServant:           fetchServant,
+  fetchAllServantList:    fetchAllServantList,
+  fetchServantWinRanking: fetchServantWinRanking
 };

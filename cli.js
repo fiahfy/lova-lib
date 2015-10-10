@@ -28,7 +28,7 @@ commander
   .command('update-ranking <target>')
   .alias('upr')
   .description('update ranking data')
-  .option('-d, --date', 'update force', null, null)
+  .option('-d, --date [date]', 'update force', null, null)
   .action(function(target, opts) {
     promise = commands.update.ranking(target, opts.date);
   });
