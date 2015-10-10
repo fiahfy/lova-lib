@@ -49,11 +49,20 @@ function fetchServantWinRanking(date) {
   return fetch(url);
 }
 
+function fetchServantUsedRanking(date) {
+  let d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  d.setDate(d.getDate() + 1);
+  var dateString = d.getFullYear() + ('00' + (d.getMonth() + 1)).slice(-2) + ('00' + d.getDate()).slice(-2) + '0500';
+  let url = `http://cache.lova.jp/ranking/servantUsedRate_weekly_all_all_all/${dateString}/page1.json`;
+  return fetch(url);
+}
+
 module.exports = {
-  fetch:                  fetch,
-  fetchArticle:           fetchArticle,
-  fetchNotice:            fetchNotice,
-  fetchServant:           fetchServant,
-  fetchAllServantList:    fetchAllServantList,
-  fetchServantWinRanking: fetchServantWinRanking
+  fetch:                   fetch,
+  fetchArticle:            fetchArticle,
+  fetchNotice:             fetchNotice,
+  fetchServant:            fetchServant,
+  fetchAllServantList:     fetchAllServantList,
+  fetchServantWinRanking:  fetchServantWinRanking,
+  fetchServantUsedRanking: fetchServantUsedRanking
 };

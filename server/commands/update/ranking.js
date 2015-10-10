@@ -25,6 +25,10 @@ module.exports = function(target, date) {
     switch (target) {
       case 'win':
         yield updateWinRanking(d);
+        break;
+      case 'used':
+        yield updateUsedRanking(d);
+        break;
     }
   });
 };
@@ -48,19 +52,92 @@ function updateWinRanking(date) {
     }
 
     if (!data) {
-      logger.error('Ranking Data is Nothing');
+      logger.error('Servant Win Ranking Data is Nothing');
       return;
     }
 
     // delete
-    logger.info('Delete Ranking: date = %s', date+'');
+    logger.info('Delete Servant Win Ranking: date = %s', date+'');
     yield deleteWinRanking({date: date});
 
     // insert
-    logger.info('Insert Ranking');
+    logger.info('Insert Servant Win Ranking');
     for (let d of data) {
       yield insertWinRanking(d);
     }
+  });
+}
+
+function updateUsedRanking(date) {
+  return co(function *() {
+    // get ranking
+    let rankings = yield getUsedRankingWithDate(date);
+    // get servant map to convert servant id
+    let map = yield getServantMap();
+
+    let data = [];
+    for (let r of rankings) {
+      data.push({
+        date: date,
+        servant_id: map[r.tribe][Number(r.id)],
+        seq: r.seq,
+        rank: r.rank,
+        rate: r.score
+      });
+    }
+
+    if (!data) {
+      logger.error('Servant Used Ranking Data is Nothing');
+      return;
+    }
+
+    // delete
+    logger.info('Delete Servant Used Ranking: date = %s', date+'');
+    yield deleteUsedRanking({date: date});
+
+    // insert
+    logger.info('Insert Servant Used Ranking');
+    for (let d of data) {
+      yield insertUsedRanking(d);
+    }
+  });
+}
+
+function deleteWinRanking(args) {
+  return models.servantwinranking.remove(args).exec();
+}
+
+function insertWinRanking(args) {
+  return co(function *() {
+    let result = (yield models.counter.getNewId('servantwinranking')).result;
+    let _id = result.value.seq;
+    yield models.servantwinranking.update({_id: _id}, args, {upsert: true}).exec();
+  });
+}
+
+function deleteUsedRanking(args) {
+  return models.servantusedranking.remove(args).exec();
+}
+
+function insertUsedRanking(args) {
+  return co(function *() {
+    let result = (yield models.counter.getNewId('servantusedranking')).result;
+    let _id = result.value.seq;
+    yield models.servantusedranking.update({_id: _id}, args, {upsert: true}).exec();
+  });
+}
+
+function getWinRankingWithDate(date) {
+  return co(function *() {
+    let body = (yield scraper.fetchServantWinRanking(date)).body;
+    return JSON.parse(body.match(/^\w+\((.*)\);$/i)[1]);
+  });
+}
+
+function getUsedRankingWithDate(date) {
+  return co(function *() {
+    let body = (yield scraper.fetchServantUsedRanking(date)).body;
+    return JSON.parse(body.match(/^\w+\((.*)\);$/i)[1]);
   });
 }
 
@@ -81,23 +158,4 @@ function getServantMap(args) {
 
 function getTribeName(tribeId) {
   return [, 'bst', 'hly', 'dvl', 'sea', 'und'][tribeId];
-}
-
-function deleteWinRanking(args) {
-  return models.servantwinranking.remove(args).exec();
-}
-
-function insertWinRanking(args) {
-  return co(function *() {
-    let result = (yield models.counter.getNewId('servantwinranking')).result;
-    let _id = result.value.seq;
-    yield models.servantwinranking.update({_id: _id}, args, {upsert: true}).exec();
-  });
-}
-
-function getWinRankingWithDate(date) {
-  return co(function *() {
-    let body = (yield scraper.fetchServantWinRanking(date)).body;
-    return JSON.parse(body.match(/^\w+\((.*)\);$/i)[1]);
-  });
 }
