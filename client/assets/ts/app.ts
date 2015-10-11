@@ -50,17 +50,20 @@ class Router {
     routerProvider: ng.route.IRouteProvider
   ) {
     routerProvider.
+      when('/deck/', {
+        template: '<lova-deck></lova-deck>'
+      }).
+      when('/deck/:hash/', {
+        template: '<lova-deck></lova-deck>'
+      }).
       when('/servants/', {
         template: '<lova-servant-list></lova-servant-list>'
       }).
       when('/servants/:id/', {
         template: '<lova-servant-detail></lova-servant-detail>'
       }).
-      when('/deck/', {
-        template: '<lova-deck></lova-deck>'
-      }).
-      when('/deck/:hash/', {
-        template: '<lova-deck></lova-deck>'
+      when('/ranking/', {
+        template: '<lova-ranking></lova-ranking>'
       }).
       when('/prize/', {
         template: '<lova-prize></lova-prize>'
@@ -69,7 +72,7 @@ class Router {
         template: '<lova-about></lova-about>'
       }).
       otherwise({
-        redirectTo: '/servants/'
+        redirectTo: '/deck/'
       });
   }
 }

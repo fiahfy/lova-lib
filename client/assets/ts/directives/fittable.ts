@@ -7,7 +7,7 @@ function fittable(): ng.IDirective {
   return {
     restrict: 'A',
     link: ($scope: ng.IScope, element: JQuery, attributes: any) => {
-      let cls = attributes.fittable;
+      let cls = attributes.lovaFittable;
       let elementTop = element.offset().top;
       let dummyWrapper = $('<div>');
       $(window).on('scroll touchmove', () => {
@@ -24,4 +24,4 @@ function fittable(): ng.IDirective {
   };
 }
 
-angular.module(app.appName).directive('fittable', fittable);
+angular.module(app.appName).directive('lovaFittable', fittable);

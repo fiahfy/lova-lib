@@ -14,7 +14,7 @@
   </div>
 </div>
 
-<div id="deck-container" fittable="fitted">
+<div id="deck-container" lova-fittable="fitted">
   <div class="container" class="row">
     <dl class="row col-xs-6 col-sm-2">
       <dt class="">Mana</dt>
@@ -40,11 +40,11 @@
            ng-dblclick="c.openServant(servant.id)">
         <img ng-src="/assets/img/m/{{ servant ? servant.id + '.jpg' : 'blank.png' }}" class="img-rounded img-responsive" />
         <span ng-if="servant"
-              skill-popover="{card: '.card', title: servant.name, content: '.skill-popover-content', container: '#deck-popover-container'}">
+              lova-skill-popover="{card: '.card', title: servant.name, content: '.skill-popover-content', container: '#deck-popover-container'}">
           Cost {{ servant.cost }}
         </span>
       </div>
-      <skill-popover-content servant="servant"></skill-popover-content>
+      <lova-skill-popover-content servant="servant"></lova-skill-popover-content>
     </div>
   </div>
   <div class="container input-group hidden-xs">
@@ -79,11 +79,11 @@
            ng-dblclick="c.openServant(servant.id)">
         <img ng-src="/assets/img/m/{{ servant ? servant.id + '.jpg' : 'blank.png' }}" class="img-rounded img-responsive" />
         <span ng-if="servant"
-              skill-popover="{card: '.card', title: servant.name, content: '.skill-popover-content', container: '#deck-popover-container'}">
+              lova-skill-popover="{card: '.card', title: servant.name, content: '.skill-popover-content', container: '#deck-popover-container'}">
           Cost {{ servant.cost }}
         </span>
       </div>
-      <skill-popover-content servant="servant"></skill-popover-content>
+      <lova-skill-popover-content servant="servant"></lova-skill-popover-content>
     </div>
     <div class="card"
          ng-repeat="($index, servant) in c.deck.servants track by $index"
@@ -99,11 +99,11 @@
            ng-dblclick="c.openServant(servant.id)">
         <img ng-src="/assets/img/m/{{ servant ? servant.id + '.jpg' : 'blank.png' }}" class="img-rounded img-responsive" />
         <span ng-if="servant"
-              skill-popover="{card: '.card', title: servant.name, content: '.skill-popover-content', container: '#deck-popover-container'}">
+              lova-skill-popover="{card: '.card', title: servant.name, content: '.skill-popover-content', container: '#deck-popover-container'}">
           Cost {{ servant.cost }}
         </span>
       </div>
-      <skill-popover-content servant="servant"></skill-popover-content>
+      <lova-skill-popover-content servant="servant"></lova-skill-popover-content>
     </div>
   </div>
   <!-- /.visible-xs -->
@@ -122,11 +122,11 @@
            ng-dblclick="c.openServant(servant.id)">
         <img data-original="/assets/img/m/{{ servant.id }}.jpg"
              src="/assets/img/m/blank.png" class="img-rounded img-responsive lazy" />
-        <span skill-popover="{card: '.card', title: servant.name, content: '.skill-popover-content', container: '#deck-popover-container'}">
+        <span lova-skill-popover="{card: '.card', title: servant.name, content: '.skill-popover-content', container: '#deck-popover-container'}">
           Cost {{ servant.cost }}
         </span>
       </div>
-      <skill-popover-content servant="servant"></skill-popover-content>
+      <lova-skill-popover-content servant="servant"></lova-skill-popover-content>
     </div>
   </div>
 </div>

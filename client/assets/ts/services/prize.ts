@@ -21,11 +21,7 @@ export class PrizeService {
 
   public load(): ng.IPromise<any> {
     let deferred = this.$q.defer();
-    if (this.prizes.length) {
-      deferred.resolve();
-      return deferred.promise;
-    }
-    this.$http.get(PrizeService.url)
+    this.$http.get(PrizeService.url, {cache: true})
       .then((res: any) => {
         res.data.forEach((prize: any) => {
           this.prizes.push(new PrizeModel(prize));

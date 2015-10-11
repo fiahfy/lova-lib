@@ -38,17 +38,20 @@ var Locator = (function () {
 var Router = (function () {
     function Router(routerProvider) {
         routerProvider.
+            when('/deck/', {
+            template: '<lova-deck></lova-deck>'
+        }).
+            when('/deck/:hash/', {
+            template: '<lova-deck></lova-deck>'
+        }).
             when('/servants/', {
             template: '<lova-servant-list></lova-servant-list>'
         }).
             when('/servants/:id/', {
             template: '<lova-servant-detail></lova-servant-detail>'
         }).
-            when('/deck/', {
-            template: '<lova-deck></lova-deck>'
-        }).
-            when('/deck/:hash/', {
-            template: '<lova-deck></lova-deck>'
+            when('/ranking/', {
+            template: '<lova-ranking></lova-ranking>'
         }).
             when('/prize/', {
             template: '<lova-prize></lova-prize>'
@@ -57,7 +60,7 @@ var Router = (function () {
             template: '<lova-about></lova-about>'
         }).
             otherwise({
-            redirectTo: '/servants/'
+            redirectTo: '/deck/'
         });
     }
     Router.$inject = [
@@ -474,7 +477,7 @@ function fittable() {
     return {
         restrict: 'A',
         link: function ($scope, element, attributes) {
-            var cls = attributes.fittable;
+            var cls = attributes.lovaFittable;
             var elementTop = element.offset().top;
             var dummyWrapper = $('<div>');
             $(window).on('scroll touchmove', function () {
@@ -490,7 +493,7 @@ function fittable() {
         }
     };
 }
-angular.module(app.appName).directive('fittable', fittable);
+angular.module(app.appName).directive('lovaFittable', fittable);
 
 },{"../app":1}],9:[function(require,module,exports){
 'use strict';
@@ -513,7 +516,7 @@ function skillPopoverContent() {
         }
     };
 }
-angular.module(app.appName).directive('skillPopoverContent', skillPopoverContent);
+angular.module(app.appName).directive('lovaSkillPopoverContent', skillPopoverContent);
 
 },{"../app":1}],11:[function(require,module,exports){
 'use strict';
@@ -526,10 +529,10 @@ function skillPopover($window) {
     return {
         restrict: 'A',
         scope: {
-            skillPopover: '='
+            lovaSkillPopover: '='
         },
         link: function ($scope, element, attributes) {
-            var args = $scope.skillPopover;
+            var args = $scope.lovaSkillPopover;
             // clear all popovers
             angular.element(args.container).empty();
             // attach event listener
@@ -559,7 +562,7 @@ function skillPopover($window) {
         }
     };
 }
-angular.module(app.appName).directive('skillPopover', skillPopover);
+angular.module(app.appName).directive('lovaSkillPopover', skillPopover);
 
 },{"../app":1}],12:[function(require,module,exports){
 'use strict';
@@ -888,11 +891,7 @@ var PrizeService = (function () {
     PrizeService.prototype.load = function () {
         var _this = this;
         var deferred = this.$q.defer();
-        if (this.prizes.length) {
-            deferred.resolve();
-            return deferred.promise;
-        }
-        this.$http.get(PrizeService.url)
+        this.$http.get(PrizeService.url, { cache: true })
             .then(function (res) {
             res.data.forEach(function (prize) {
                 _this.prizes.push(new prize_1.PrizeModel(prize));
