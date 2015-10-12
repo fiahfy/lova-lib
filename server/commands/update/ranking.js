@@ -10,7 +10,7 @@ module.exports = function(target, date) {
     let d;
     if (date) {
       d = new Date(date);
-      d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+      d = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
       if (isNaN(d.valueOf())) {
         logger.error('Invalid Date: %s', date);
         return;
@@ -18,7 +18,7 @@ module.exports = function(target, date) {
     } else {
       // today if empty
       d = new Date;
-      d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+      d = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
     }
 
     switch (target) {

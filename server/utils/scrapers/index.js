@@ -42,17 +42,17 @@ function fetchAllServantList() {
 }
 
 function fetchServantWinRanking(date) {
-  let d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
-  d.setDate(d.getDate() + 1);
-  var dateString = d.getFullYear() + ('00' + (d.getMonth() + 1)).slice(-2) + ('00' + d.getDate()).slice(-2) + '0500';
+  let d = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
+  d.setUTCDate(d.getUTCDate() + 1);
+  var dateString = d.getUTCFullYear() + ('00' + (d.getUTCMonth() + 1)).slice(-2) + ('00' + d.getUTCDate()).slice(-2) + '0500';
   let url = `http://cache.lova.jp/ranking/servantWinRate_weekly_all_all_all/${dateString}/page1.json`;
   return fetch(url);
 }
 
 function fetchServantUsedRanking(date) {
-  let d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
-  d.setDate(d.getDate() + 1);
-  var dateString = d.getFullYear() + ('00' + (d.getMonth() + 1)).slice(-2) + ('00' + d.getDate()).slice(-2) + '0500';
+  let d = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
+  d.setUTCDate(d.getUTCDate() + 1);
+  var dateString = d.getUTCFullYear() + ('00' + (d.getUTCMonth() + 1)).slice(-2) + ('00' + d.getUTCDate()).slice(-2) + '0500';
   let url = `http://cache.lova.jp/ranking/servantUsedRate_weekly_all_all_all/${dateString}/page1.json`;
   return fetch(url);
 }
