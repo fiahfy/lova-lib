@@ -10,7 +10,8 @@ function lazyImage(): ng.IDirective {
       window.setTimeout(() => {
         //noinspection TaskProblemsInspection
         element['lazyload']();
-      }, 1);
+        // todo: 一回目の変更時だけ初期表示がされない(/deck)
+      }, 0);
     }
   };
 }

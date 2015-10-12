@@ -8,7 +8,7 @@ body {
     font-size: 15px;
     font-family: Lato, '游ゴシック', YuGothic, 'ヒラギノ角ゴ ProN W3', 'Hiragino Kaku Gothic ProN', 'メイリオ', Meiryo, sans-serif;
     /* Margin bottom by footer height */
-    margin-bottom: 150px;
+    padding-bottom: 150px;
 }
 h2 {
     font-size: 200%;
@@ -101,6 +101,14 @@ img {
     color: #fff;
     background-color: #48c9b0;
     border-color: #48c9b0;
+}
+.input-group-btn:last-of-type>.btn-group:last-child>.btn {
+    margin-right: -3px;
+    border-right-width: 0;
+}
+.dropdown-menu {
+    max-height: 300px;
+    overflow-y: auto;
 }
 .select.form-control {
     height: 41px;

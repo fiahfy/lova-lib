@@ -23,17 +23,25 @@ class DeckController {
     {key: 5, value: '不死'}
   ];
 
+  public typeOptions: {key: string; value: string;}[] = [
+    {key: '', value: 'Select Type...'}
+  ];
+
   public tribeId: number;
 
   public tribeName: string = 'Select Tribe...';
+
+  public type: string = this.typeOptions[0].value;
 
   public q: string;
 
   public filter: {
     tribeId: number;
+    type: string;
     name: string;
   } = {
     tribeId: undefined,
+    type: undefined,
     name: undefined
   };
 
@@ -65,6 +73,7 @@ class DeckController {
         this.servants = servants;
         this.deck = deckService.getDeckWithHash($routeParams.hash, servants);
         this.url = deckService.getUrlWithDeck(this.deck);
+        this.buildOptions();
       });
 
     angular.element($window.document).ready(() => {
@@ -90,6 +99,18 @@ class DeckController {
     });
   }
 
+  public buildOptions(): void {
+    for (let servant of this.servants) {
+      let optionKeys = this.typeOptions.map((option) => {
+        return option.key;
+      });
+      if (optionKeys.indexOf(servant.type) == -1) {
+        this.typeOptions.push({key: servant.type, value: servant.type});
+      }
+    }
+    // todo: type 毎の total count も表示
+  }
+
   public setServant(index: number, data: {servant: ServantModel; index: number}): void {
     let servant = data.servant;
     let oldIndex = data.index;
@@ -109,6 +130,11 @@ class DeckController {
     this.tribeId = tribeId;
     this.tribeName = tribeName;
     this.filter.tribeId = this.tribeId ? this.tribeId : undefined;
+  }
+
+  public selectType(type: string, typeName: string): void {
+    this.type = typeName;
+    this.filter.type = type ? type : undefined;
   }
 
   public changeQuery(): void {

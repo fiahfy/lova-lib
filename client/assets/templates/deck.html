@@ -49,6 +49,7 @@
   </div>
   <div class="container input-group hidden-xs">
     <div class="input-group-btn">
+      <div class="btn-group">
       <button type="button" class="btn btn-primary dropdown-toggle"
               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         {{ c.tribeName }} <span class="caret"></span>
@@ -58,6 +59,18 @@
           <a ng-click="c.selectTribeId(option.key, option.value)">{{ option.value }}</a>
         </li>
       </ul>
+        </div>
+      <div class="btn-group">
+      <button type="button" class="btn btn-primary dropdown-toggle"
+              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        {{ c.type }} <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu">
+        <li ng-repeat="option in c.typeOptions">
+          <a ng-click="c.selectType(option.key, option.value)">{{ option.value }}</a>
+        </li>
+      </ul>
+        </div>
     </div>
     <input type="text" value="{{ c.q }}" placeholder="Search Servant..." class="form-control"
            ng-model="c.q" ng-change="c.changeQuery()" />

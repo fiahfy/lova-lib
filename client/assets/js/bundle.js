@@ -134,9 +134,14 @@ var DeckController = (function () {
             { key: 4, value: '海種' },
             { key: 5, value: '不死' }
         ];
+        this.typeOptions = [
+            { key: '', value: 'Select Type...' }
+        ];
         this.tribeName = 'Select Tribe...';
+        this.type = this.typeOptions[0].value;
         this.filter = {
             tribeId: undefined,
+            type: undefined,
             name: undefined
         };
         this.predicate = ['tribeId', 'tribeCode'];
@@ -146,6 +151,7 @@ var DeckController = (function () {
             _this.servants = servants;
             _this.deck = deckService.getDeckWithHash($routeParams.hash, servants);
             _this.url = deckService.getUrlWithDeck(_this.deck);
+            _this.buildOptions();
         });
         angular.element($window.document).ready(function () {
             var button = angular.element('.copy-clipboard');
@@ -169,6 +175,18 @@ var DeckController = (function () {
             });
         });
     }
+    DeckController.prototype.buildOptions = function () {
+        for (var _i = 0, _a = this.servants; _i < _a.length; _i++) {
+            var servant = _a[_i];
+            var optionKeys = this.typeOptions.map(function (option) {
+                return option.key;
+            });
+            if (optionKeys.indexOf(servant.type) == -1) {
+                this.typeOptions.push({ key: servant.type, value: servant.type });
+            }
+        }
+        // todo: type 毎の total count も表示
+    };
     DeckController.prototype.setServant = function (index, data) {
         var servant = data.servant;
         var oldIndex = data.index;
@@ -186,6 +204,10 @@ var DeckController = (function () {
         this.tribeId = tribeId;
         this.tribeName = tribeName;
         this.filter.tribeId = this.tribeId ? this.tribeId : undefined;
+    };
+    DeckController.prototype.selectType = function (type, typeName) {
+        this.type = typeName;
+        this.filter.type = type ? type : undefined;
     };
     DeckController.prototype.changeQuery = function () {
         this.filter.name = this.q;
@@ -552,7 +574,8 @@ function lazyImage() {
             window.setTimeout(function () {
                 //noinspection TaskProblemsInspection
                 element['lazyload']();
-            }, 1);
+                // todo: 一回目の変更時だけ初期表示がされない(/deck)
+            }, 0);
         }
     };
 }

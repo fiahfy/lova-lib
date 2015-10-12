@@ -4,10 +4,13 @@
         <loc>http://lova-fiahfy.rhcloud.com/</loc>
     </url>
     <url>
+        <loc>http://lova-fiahfy.rhcloud.com/deck/</loc>
+    </url>
+    <url>
         <loc>http://lova-fiahfy.rhcloud.com/servants/</loc>
     </url>
     <url>
-        <loc>http://lova-fiahfy.rhcloud.com/deck/</loc>
+        <loc>http://lova-fiahfy.rhcloud.com/ranking/</loc>
     </url>
     <url>
         <loc>http://lova-fiahfy.rhcloud.com/prize/</loc>
