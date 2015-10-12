@@ -16,7 +16,7 @@ module.exports = function(force) {
       return;
     }
 
-    // check prizes if not force update
+    // check exists if not force update
     if (!force) {
       let date = prizes[0].date;
       let results = yield findPrizes({date: date});

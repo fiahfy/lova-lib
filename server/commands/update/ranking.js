@@ -5,7 +5,7 @@ let scraper = require('../../utils/scrapers');
 let models = require('../../models');
 let logger = require('../../utils/logger');
 
-module.exports = function(target, date) {
+module.exports = function(target, date, force) {
   return co(function *() {
     let d;
     if (date) {
@@ -23,17 +23,26 @@ module.exports = function(target, date) {
 
     switch (target) {
       case 'win':
-        yield updateWinRanking(d);
+        yield updateWinRanking(d, force);
         break;
       case 'used':
-        yield updateUsedRanking(d);
+        yield updateUsedRanking(d, force);
         break;
     }
   });
 };
 
-function updateWinRanking(date) {
+function updateWinRanking(date, force) {
   return co(function *() {
+    // check exists if not force update
+    if (!force) {
+      let results = yield findRanking({mode: 'win', date: date});
+      if (results.length) {
+        logger.warn('Servant Win Ranking is Almost Exists: date = %s', date.toUTCString());
+        return;
+      }
+    }
+
     // get ranking
     let rankings = yield getWinRankingWithDate(date);
     // get servant map to convert servant id
@@ -68,8 +77,17 @@ function updateWinRanking(date) {
   });
 }
 
-function updateUsedRanking(date) {
+function updateUsedRanking(date, force) {
   return co(function *() {
+    // check exists if not force update
+    if (!force) {
+      let results = yield findRanking({mode: 'used', date: date});
+      if (results.length) {
+        logger.warn('Servant Used Ranking is Almost Exists: date = %s', date.toUTCString());
+        return;
+      }
+    }
+
     // get ranking
     let rankings = yield getUsedRankingWithDate(date);
     // get servant map to convert servant id
@@ -102,6 +120,10 @@ function updateUsedRanking(date) {
       yield insertRanking(d);
     }
   });
+}
+
+function findRanking(args) {
+  return models.servantranking.find(args).exec();
 }
 
 function deleteRanking(args) {
