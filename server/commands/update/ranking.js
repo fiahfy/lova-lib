@@ -42,11 +42,12 @@ function updateWinRanking(date) {
     let data = [];
     for (let r of rankings) {
       data.push({
+        mode: 'win',
         date: date,
         servant_id: map[r.tribe][Number(r.id)],
         seq: r.seq,
         rank: r.rank,
-        rate: r.score
+        score: r.score
       });
     }
 
@@ -57,12 +58,12 @@ function updateWinRanking(date) {
 
     // delete
     logger.info('Delete Servant Win Ranking: date = %s', date+'');
-    yield deleteWinRanking({date: date});
+    yield deleteRanking({mode: 'win', date: date});
 
     // insert
     logger.info('Insert Servant Win Ranking');
     for (let d of data) {
-      yield insertWinRanking(d);
+      yield insertRanking(d);
     }
   });
 }
@@ -77,11 +78,12 @@ function updateUsedRanking(date) {
     let data = [];
     for (let r of rankings) {
       data.push({
+        mode: 'used',
         date: date,
         servant_id: map[r.tribe][Number(r.id)],
         seq: r.seq,
         rank: r.rank,
-        rate: r.score
+        score: r.score
       });
     }
 
@@ -92,37 +94,25 @@ function updateUsedRanking(date) {
 
     // delete
     logger.info('Delete Servant Used Ranking: date = %s', date+'');
-    yield deleteUsedRanking({date: date});
+    yield deleteRanking({mode: 'used', date: date});
 
     // insert
     logger.info('Insert Servant Used Ranking');
     for (let d of data) {
-      yield insertUsedRanking(d);
+      yield insertRanking(d);
     }
   });
 }
 
-function deleteWinRanking(args) {
-  return models.servantwinranking.remove(args).exec();
+function deleteRanking(args) {
+  return models.servantranking.remove(args).exec();
 }
 
-function insertWinRanking(args) {
+function insertRanking(args) {
   return co(function *() {
-    let result = (yield models.counter.getNewId('servantwinranking')).result;
+    let result = (yield models.counter.getNewId('servantranking')).result;
     let _id = result.value.seq;
-    yield models.servantwinranking.update({_id: _id}, args, {upsert: true}).exec();
-  });
-}
-
-function deleteUsedRanking(args) {
-  return models.servantusedranking.remove(args).exec();
-}
-
-function insertUsedRanking(args) {
-  return co(function *() {
-    let result = (yield models.counter.getNewId('servantusedranking')).result;
-    let _id = result.value.seq;
-    yield models.servantusedranking.update({_id: _id}, args, {upsert: true}).exec();
+    yield models.servantranking.update({_id: _id}, args, {upsert: true}).exec();
   });
 }
 
