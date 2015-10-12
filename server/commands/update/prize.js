@@ -7,7 +7,7 @@ let logger = require('../../utils/logger');
 
 const fetchMaxPage = 5;
 
-module.exports = function() {
+module.exports = function(force) {
   return co(function *() {
     // get prizes
     let prizes = yield getPrizes();
@@ -15,14 +15,30 @@ module.exports = function() {
       logger.warn('Prize is Nothing');
       return;
     }
+
+    // check prizes if not force update
+    if (!force) {
+      let date = prizes[0].date;
+      let results = yield findPrizes({date: date});
+      if (results.length) {
+        logger.warn('Prize is Almost Exists: date = %s', date.toUTCString());
+        return;
+      }
+    }
+
     // clean prizes
     logger.info('Truncate Prizes');
     yield truncatePrizes();
+
     // insert prizes
     logger.info('Insert Prizes: count = %d', prizes.length);
     yield insertPrizes(prizes);
   });
 };
+
+function findPrizes(args) {
+  return models.prize.find(args).exec();
+}
 
 function insertPrizes(prizes) {
   return co(function *() {

@@ -20,15 +20,16 @@ commander
   .command('update-prize')
   .alias('upp')
   .description('update prize data')
-  .action(function() {
-    promise = commands.update.prize();
+  .option('-f, --force', 'force update', null, null)
+  .action(function(opts) {
+    promise = commands.update.prize(opts.force);
   });
 
 commander
   .command('update-ranking <target>')
   .alias('upr')
   .description('update ranking data')
-  .option('-d, --date [date]', 'update force', null, null)
+  .option('-d, --date [date]', 'target date', null, null)
   .action(function(target, opts) {
     promise = commands.update.ranking(target, opts.date);
   });
