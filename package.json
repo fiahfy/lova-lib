@@ -45,7 +45,8 @@
     "poststart": "mongod --fork --logpath /dev/null --dbpath tmp/mongodb/data",
     "prestop": "mongo admin --eval 'db.shutdownServer()' > /dev/null",
     "stop": "forever stop server.js",
-    "tail": "forever logs -f server.js"
+    "tail": "forever logs -f server.js",
+    "dump": "mongodump  --host=127.0.0.1 --port=27017 -u admin -d lova -o tmp/mongodb/dump"
   },
   "main": "server.js"
 }

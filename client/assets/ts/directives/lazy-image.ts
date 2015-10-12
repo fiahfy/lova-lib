@@ -9,7 +9,7 @@ function lazyImage(): ng.IDirective {
     link: ($scope: ng.IScope, element: JQuery, attributes: any) => {
       window.setTimeout(() => {
         //noinspection TaskProblemsInspection
-        element.lazyload();
+        element['lazyload']();
       }, 1);
     }
   };

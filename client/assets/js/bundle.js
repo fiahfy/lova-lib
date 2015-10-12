@@ -91,7 +91,7 @@ var FooterController = (function () {
 exports.FooterController = FooterController;
 angular.module(exports.appName).controller('FooterController', FooterController);
 
-},{"./controllers":4,"./directives":9,"./filters":15,"./services":23}],2:[function(require,module,exports){
+},{"./controllers":4,"./directives":10,"./filters":16,"./services":24}],2:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -219,13 +219,14 @@ angular.module('app').directive('lovaDeck', Definition.ddo);
 
 },{}],4:[function(require,module,exports){
 'use strict';
-require('./servant-list');
-require('./servant-detail');
+require('./about');
 require('./deck');
 require('./prize');
-require('./about');
+require('./ranking');
+require('./servant-detail');
+require('./servant-list');
 
-},{"./about":2,"./deck":3,"./prize":5,"./servant-detail":6,"./servant-list":7}],5:[function(require,module,exports){
+},{"./about":2,"./deck":3,"./prize":5,"./ranking":6,"./servant-detail":7,"./servant-list":8}],5:[function(require,module,exports){
 'use strict';
 var PrizeController = (function () {
     function PrizeController(prizeService) {
@@ -305,6 +306,42 @@ angular.module('app').directive('lovaPrize', Definition.ddo);
 
 },{}],6:[function(require,module,exports){
 'use strict';
+var RankingListController = (function () {
+    function RankingListController($routeParams, rankingService) {
+        this.$routeParams = $routeParams;
+        this.rankingService = rankingService;
+        this.modeOptions = [
+            { key: 'win', value: 'Win Rate' },
+            { key: 'used', value: 'Used Rate' }
+        ];
+        //rankingService.load($routeParams.mode)
+        //  .then((rankings) => {
+        //    this.rankings = rankings;
+        //  });
+    }
+    RankingListController.$inject = [
+        '$routeParams',
+        'RankingService'
+    ];
+    return RankingListController;
+})();
+var Definition = (function () {
+    function Definition() {
+    }
+    Definition.ddo = function () {
+        return {
+            controller: RankingListController,
+            controllerAs: 'c',
+            restrict: 'E',
+            templateUrl: '/assets/templates/ranking.html'
+        };
+    };
+    return Definition;
+})();
+angular.module('app').directive('lovaRanking', Definition.ddo);
+
+},{}],7:[function(require,module,exports){
+'use strict';
 var ServantDetailController = (function () {
     function ServantDetailController($routeParams, servantService, scrollService) {
         var _this = this;
@@ -339,7 +376,7 @@ var Definition = (function () {
 })();
 angular.module('app').directive('lovaServantDetail', Definition.ddo);
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 'use strict';
 var ServantListController = (function () {
     function ServantListController($scope, $window, $location, $routeParams, servantService, scrollService) {
@@ -446,7 +483,7 @@ var Definition = (function () {
 })();
 angular.module('app').directive('lovaServantList', Definition.ddo);
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -472,14 +509,14 @@ function fittable() {
 }
 angular.module(app.appName).directive('lovaFittable', fittable);
 
-},{"../app":1}],9:[function(require,module,exports){
+},{"../app":1}],10:[function(require,module,exports){
 'use strict';
 require('./fittable');
 require('./lazy-image');
 require('./skill-popover');
 require('./skill-popover-content');
 
-},{"./fittable":8,"./lazy-image":10,"./skill-popover":12,"./skill-popover-content":11}],10:[function(require,module,exports){
+},{"./fittable":9,"./lazy-image":11,"./skill-popover":13,"./skill-popover-content":12}],11:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -489,14 +526,14 @@ function lazyImage() {
         link: function ($scope, element, attributes) {
             window.setTimeout(function () {
                 //noinspection TaskProblemsInspection
-                element.lazyload();
+                element['lazyload']();
             }, 1);
         }
     };
 }
 angular.module(app.appName).directive('lovaLazyImage', lazyImage);
 
-},{"../app":1}],11:[function(require,module,exports){
+},{"../app":1}],12:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -513,7 +550,7 @@ function skillPopoverContent() {
 }
 angular.module(app.appName).directive('lovaSkillPopoverContent', skillPopoverContent);
 
-},{"../app":1}],12:[function(require,module,exports){
+},{"../app":1}],13:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -559,7 +596,7 @@ function skillPopover($window) {
 }
 angular.module(app.appName).directive('lovaSkillPopover', skillPopover);
 
-},{"../app":1}],13:[function(require,module,exports){
+},{"../app":1}],14:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -570,7 +607,7 @@ function def() {
 }
 angular.module(app.appName).filter('default', def);
 
-},{"../app":1}],14:[function(require,module,exports){
+},{"../app":1}],15:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -582,7 +619,7 @@ function escape() {
 angular.module(app.appName).filter('escape', escape);
 angular.module(app.appName).filter('e', escape);
 
-},{"../app":1}],15:[function(require,module,exports){
+},{"../app":1}],16:[function(require,module,exports){
 'use strict';
 require('./default');
 require('./escape');
@@ -590,7 +627,7 @@ require('./pad');
 require('./replace');
 require('./skill-description');
 
-},{"./default":13,"./escape":14,"./pad":16,"./replace":17,"./skill-description":18}],16:[function(require,module,exports){
+},{"./default":14,"./escape":15,"./pad":17,"./replace":18,"./skill-description":19}],17:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -604,7 +641,7 @@ function pad() {
 }
 angular.module(app.appName).filter('pad', pad);
 
-},{"../app":1}],17:[function(require,module,exports){
+},{"../app":1}],18:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -619,7 +656,7 @@ function replace() {
 }
 angular.module(app.appName).filter('replace', replace);
 
-},{"../app":1}],18:[function(require,module,exports){
+},{"../app":1}],19:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -649,7 +686,7 @@ function skillDescription($sce) {
 }
 angular.module(app.appName).filter('skillDescription', skillDescription);
 
-},{"../app":1}],19:[function(require,module,exports){
+},{"../app":1}],20:[function(require,module,exports){
 'use strict';
 var DeckModel = (function () {
     function DeckModel() {
@@ -718,7 +755,7 @@ var DeckModel = (function () {
 })();
 exports.DeckModel = DeckModel;
 
-},{}],20:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 'use strict';
 var PrizeModel = (function () {
     function PrizeModel(obj) {
@@ -731,7 +768,7 @@ var PrizeModel = (function () {
 })();
 exports.PrizeModel = PrizeModel;
 
-},{}],21:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 'use strict';
 var ServantModel = (function () {
     function ServantModel(obj) {
@@ -793,7 +830,7 @@ var SkillModel = (function () {
 })();
 exports.SkillModel = SkillModel;
 
-},{}],22:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -846,14 +883,15 @@ var DeckService = (function () {
 exports.DeckService = DeckService;
 angular.module(app.appName).service('DeckService', DeckService);
 
-},{"../app":1,"../models/deck":19}],23:[function(require,module,exports){
+},{"../app":1,"../models/deck":20}],24:[function(require,module,exports){
 'use strict';
-require('./servant');
 require('./deck');
 require('./prize');
+require('./ranking');
 require('./scroll');
+require('./servant');
 
-},{"./deck":22,"./prize":24,"./scroll":25,"./servant":26}],24:[function(require,module,exports){
+},{"./deck":23,"./prize":25,"./ranking":26,"./scroll":27,"./servant":28}],25:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -887,7 +925,28 @@ var PrizeService = (function () {
 exports.PrizeService = PrizeService;
 angular.module(app.appName).service('PrizeService', PrizeService);
 
-},{"../app":1,"../models/prize":20}],25:[function(require,module,exports){
+},{"../app":1,"../models/prize":21}],26:[function(require,module,exports){
+'use strict';
+//import * as angular from 'angular';
+var app = require('../app');
+var RankingService = (function () {
+    function RankingService($http, $q, servantService) {
+        this.$http = $http;
+        this.$q = $q;
+        this.servantService = servantService;
+    }
+    RankingService.url = './api/ranking/';
+    RankingService.$inject = [
+        '$http',
+        '$q',
+        'ServantService'
+    ];
+    return RankingService;
+})();
+exports.RankingService = RankingService;
+angular.module(app.appName).service('RankingService', RankingService);
+
+},{"../app":1}],27:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -914,7 +973,7 @@ var ScrollService = (function () {
 exports.ScrollService = ScrollService;
 angular.module(app.appName).service('ScrollService', ScrollService);
 
-},{"../app":1}],26:[function(require,module,exports){
+},{"../app":1}],28:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -959,4 +1018,4 @@ var ServantService = (function () {
 exports.ServantService = ServantService;
 angular.module(app.appName).service('ServantService', ServantService);
 
-},{"../app":1,"../models/servant":21}]},{},[1]);
+},{"../app":1,"../models/servant":22}]},{},[1]);

@@ -1,27 +1,14 @@
 <div class="container" id="servant">
   <div class="page-header">
-    <h2>Servant</h2>
+    <h2>Ranking</h2>
   </div>
 
   <div class="clearfix">
     <div class="pull-left">
       <select class="form-control select select-primary select-block mbl" ui-select2 ng-model="c.tribeId">
-        <option ng-repeat="option in c.tribeIdOptions" value="{{ option.key }}">{{ option.value }}</option>
+        <option ng-repeat="option in c.modeOptions" value="{{ option.key }}">{{ option.value }}</option>
       </select>
     </div>
-    <div class="btn-toolbar pull-right">
-      <div class="btn-group">
-        <a class="btn btn-primary" ng-repeat="option in c.viewOptions"
-           ng-class="{active: option.key == c.view}" ng-click="c.selectView(option.key)">
-          <span class="{{ option.icon }}"></span>
-        </a>
-      </div>
-    </div>
-  </div>
-
-  <div class="form-group">
-    <input type="text" value="{{ c.q }}" placeholder="Search Servant..." class="form-control"
-           ng-model="c.q" ng-change="c.changeQuery()" />
   </div>
 
   <div ng-if="c.view">
@@ -64,23 +51,5 @@
       </tr>
       </tbody>
     </table>
-  </div>
-
-  <div ng-if="!c.view" id="servant-thumbnails">
-    <div class="card"
-         ng-repeat="servant in c.servants | filter:c.filter | orderBy:c.predicate:c.reverse"
-         ng-class="['tribe-' + servant.tribeId]">
-      <div class="background">
-        <img src="/assets/img/m/blank.png" class="img-rounded img-responsive" />
-      </div>
-      <div class="content"
-           ng-click="c.openServant(servant)">
-        <img data-original="/assets/img/m/{{ servant.id }}.jpg"
-             src="/assets/img/m/blank.png" class="img-rounded img-responsive lazy" />
-        <span>
-          Cost {{ servant.cost }}
-        </span>
-      </div>
-    </div>
   </div>
 </div>

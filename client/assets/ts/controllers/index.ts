@@ -1,7 +1,8 @@
 'use strict';
 
-import './servant-list';
-import './servant-detail';
+import './about';
 import './deck';
 import './prize';
-import './about';
+import './ranking';
+import './servant-detail';
+import './servant-list';
