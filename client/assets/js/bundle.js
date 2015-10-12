@@ -821,7 +821,6 @@ var DeckService = (function () {
         var servantIds = deck.servants.map(function (servant) {
             return servant ? servant.id : undefined;
         });
-        console.log(servantIds);
         var a = this.$window.document.createElement('a');
         a.href = this.$window.location.href;
         return a.protocol + '//'

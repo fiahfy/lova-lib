@@ -36,7 +36,6 @@ export class DeckService {
     let servantIds: number[] = deck.servants.map((servant) => {
       return servant ? servant.id : undefined;
     });
-    console.log(servantIds);
     let a = this.$window.document.createElement('a');
     a.href = this.$window.location.href;
     return a.protocol + '//'

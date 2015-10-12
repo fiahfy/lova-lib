@@ -1,0 +1,10 @@
+#!/bin/bash
+
+HOUR=`date -u '+%H'`
+
+# 2015/01/01 21:00:00(UTC) : 2015/01/02 06:00:00(JST)
+if [ ${HOUR} -eq 21 ]; then
+  cd ${OPENSHIFT_REPO_DIR}
+  node cli upr win >> ${OPENSHIFT_LOG_DIR}/cron_hourly_jobs.log 2>&1
+  node cli upr used >> ${OPENSHIFT_LOG_DIR}/cron_hourly_jobs.log 2>&1
+fi

@@ -16,10 +16,9 @@ module.exports = function(target, date) {
         return;
       }
     } else {
-      // yesterday if empty
+      // today if empty
       d = new Date;
       d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-      d.setDate(d.getDate() - 1);
     }
 
     switch (target) {
