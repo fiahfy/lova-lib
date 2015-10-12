@@ -142,12 +142,10 @@ var DeckController = (function () {
         this.predicate = ['tribeId', 'tribeCode'];
         this.reverse = false;
         servantService.load()
-            .then(function () {
-            _this.servants = servantService.servants;
-            deckService.servants = servantService.servants;
-            deckService.loadWithHash($routeParams.hash);
-            _this.deck = deckService.deck;
-            _this.url = deckService.url;
+            .then(function (servants) {
+            _this.servants = servants;
+            _this.deck = deckService.getDeckWithHash($routeParams.hash, servants);
+            _this.url = deckService.getUrlWithDeck(_this.deck);
             _this.refreshEventListener();
         });
         angular.element($window.document).ready(function () {
@@ -173,20 +171,18 @@ var DeckController = (function () {
         });
     }
     DeckController.prototype.setServant = function (index, data) {
-        var servantId = data.servantId;
+        var servant = data.servant;
         var oldIndex = data.index;
         if (oldIndex !== null) {
-            this.deckService.setServant(oldIndex, this.deck.servants[index] ? this.deck.servants[index].id : undefined);
+            this.deck.servants[oldIndex] = this.deck.servants[index] ? this.deck.servants[index] : undefined;
         }
-        this.deckService.setServant(index, servantId);
-        this.deck = this.deckService.deck;
-        this.url = this.deckService.url;
+        this.deck.servants[index] = servant;
+        this.url = this.deckService.getUrlWithDeck(this.deck);
         this.refreshEventListener();
     };
     DeckController.prototype.clearServant = function (index) {
-        this.deckService.unsetServant(index);
-        this.deck = this.deckService.deck;
-        this.url = this.deckService.url;
+        this.deck.servants[index] = undefined;
+        this.url = this.deckService.getUrlWithDeck(this.deck);
         this.refreshEventListener();
     };
     DeckController.prototype.selectTribeId = function (tribeId, tribeName) {
@@ -253,8 +249,8 @@ var PrizeController = (function () {
         ];
         this.view = 0;
         prizeService.load()
-            .then(function () {
-            _this.prizes = prizeService.prizes;
+            .then(function (prizes) {
+            _this.prizes = prizes;
         });
     }
     PrizeController.prototype.drawPrizes = function () {
@@ -326,9 +322,9 @@ var ServantDetailController = (function () {
         this.$routeParams = $routeParams;
         this.servantService = servantService;
         this.scrollService = scrollService;
-        servantService.load()
-            .then(function () {
-            _this.servant = servantService.getServantWithId(+$routeParams.id);
+        servantService.loadWithId(+$routeParams.id)
+            .then(function (servant) {
+            _this.servant = servant;
             _this.scrollService.restore();
         });
     }
@@ -393,8 +389,8 @@ var ServantListController = (function () {
         this.q = $routeParams.q ? $routeParams.q : '';
         this.updateFilter();
         servantService.load()
-            .then(function () {
-            _this.servants = servantService.servants;
+            .then(function (servants) {
+            _this.servants = servants;
             _this.scrollService.restore();
             _this.refreshEventListener();
         });
@@ -658,24 +654,8 @@ angular.module(app.appName).filter('skillDescription', skillDescription);
 'use strict';
 var DeckModel = (function () {
     function DeckModel() {
-        this.servants = [];
-        this.servantIds = [];
+        this.servants = new Array(DeckModel.size);
     }
-    Object.defineProperty(DeckModel.prototype, "hash", {
-        get: function () {
-            return window.btoa(JSON.stringify(this.servantIds));
-        },
-        set: function (value) {
-            try {
-                this.servantIds = JSON.parse(window.atob(value));
-            }
-            catch (e) {
-                this.servantIds = [];
-            }
-        },
-        enumerable: true,
-        configurable: true
-    });
     Object.defineProperty(DeckModel.prototype, "mana", {
         get: function () {
             var fill = true;
@@ -732,21 +712,6 @@ var DeckModel = (function () {
         enumerable: true,
         configurable: true
     });
-    DeckModel.prototype.updateServants = function (servants) {
-        this.servants = [];
-        for (var i = 0; i < DeckModel.size; i++) {
-            var servantId = this.servantIds[i];
-            var tmp = void 0;
-            for (var j = 0; j < servants.length; j++) {
-                var servant = servants[j];
-                if (servantId == servant.id) {
-                    tmp = servant;
-                    break;
-                }
-            }
-            this.servants.push(tmp);
-        }
-    };
     DeckModel.deckIndexes = [0, 1, 2, 3, 4, 5];
     DeckModel.sideBoardIndexes = [6, 7];
     DeckModel.size = DeckModel.deckIndexes.length + DeckModel.sideBoardIndexes.length;
@@ -837,30 +802,43 @@ var deck_1 = require('../models/deck');
 var DeckService = (function () {
     function DeckService($window) {
         this.$window = $window;
-        this.servants = [];
-        this.deck = new deck_1.DeckModel();
     }
-    Object.defineProperty(DeckService.prototype, "url", {
-        get: function () {
-            var a = this.$window.document.createElement('a');
-            a.href = this.$window.location.href;
-            return a.protocol + '//'
-                + a.hostname + (a.port ? ':' + a.port : a.port)
-                + '/deck/' + this.deck.hash + '/';
-        },
-        enumerable: true,
-        configurable: true
-    });
-    DeckService.prototype.loadWithHash = function (hash) {
-        this.deck.hash = hash;
-        this.deck.updateServants(this.servants);
+    DeckService.prototype.getDeckWithHash = function (hash, servants) {
+        var deck = new deck_1.DeckModel();
+        var servantIds = DeckService.decode(hash);
+        for (var i = 0; i < deck_1.DeckModel.size; i++) {
+            var servantId = servantIds[i];
+            for (var _i = 0; _i < servants.length; _i++) {
+                var servant = servants[_i];
+                if (servant.id === servantId) {
+                    deck.servants[i] = servant;
+                    break;
+                }
+            }
+        }
+        return deck;
     };
-    DeckService.prototype.setServant = function (index, servantId) {
-        this.deck.servantIds[index] = servantId;
-        this.deck.updateServants(this.servants);
+    DeckService.prototype.getUrlWithDeck = function (deck) {
+        var servantIds = deck.servants.map(function (servant) {
+            return servant ? servant.id : undefined;
+        });
+        console.log(servantIds);
+        var a = this.$window.document.createElement('a');
+        a.href = this.$window.location.href;
+        return a.protocol + '//'
+            + a.hostname + (a.port ? ':' + a.port : a.port)
+            + '/deck/' + DeckService.encode(servantIds) + '/';
     };
-    DeckService.prototype.unsetServant = function (index) {
-        this.setServant(index, undefined);
+    DeckService.encode = function (data) {
+        return window.btoa(JSON.stringify(data));
+    };
+    DeckService.decode = function (encodedString) {
+        try {
+            return JSON.parse(window.atob(encodedString));
+        }
+        catch (e) {
+            return [];
+        }
     };
     DeckService.$inject = [
         '$window'
@@ -886,17 +864,16 @@ var PrizeService = (function () {
     function PrizeService($http, $q) {
         this.$http = $http;
         this.$q = $q;
-        this.prizes = [];
     }
     PrizeService.prototype.load = function () {
-        var _this = this;
         var deferred = this.$q.defer();
         this.$http.get(PrizeService.url, { cache: true })
             .then(function (res) {
+            var prizes = [];
             res.data.forEach(function (prize) {
-                _this.prizes.push(new prize_1.PrizeModel(prize));
+                prizes.push(new prize_1.PrizeModel(prize));
             });
-            deferred.resolve();
+            deferred.resolve(prizes);
         }, function () {
             deferred.reject();
         });
@@ -948,34 +925,31 @@ var ServantService = (function () {
     function ServantService($http, $q) {
         this.$http = $http;
         this.$q = $q;
-        this.servants = [];
     }
     ServantService.prototype.load = function () {
-        var _this = this;
         var deferred = this.$q.defer();
-        if (this.servants.length) {
-            deferred.resolve();
-            return deferred.promise;
-        }
-        this.$http.get(ServantService.url)
+        this.$http.get(ServantService.url, { cache: true })
             .then(function (res) {
+            var servants = [];
             res.data.forEach(function (servant) {
-                _this.servants.push(new servant_1.ServantModel(servant));
+                servants.push(new servant_1.ServantModel(servant));
             });
-            deferred.resolve();
+            deferred.resolve(servants);
         }, function () {
             deferred.reject();
         });
         return deferred.promise;
     };
-    ServantService.prototype.getServantWithId = function (id) {
-        var result = null;
-        this.servants.forEach(function (servant) {
-            if (servant.id == id) {
-                result = servant;
-            }
+    ServantService.prototype.loadWithId = function (id) {
+        var deferred = this.$q.defer();
+        this.$http.get("" + ServantService.url + id + "/", { cache: true })
+            .then(function (res) {
+            var servant = new servant_1.ServantModel(res.data);
+            deferred.resolve(servant);
+        }, function () {
+            deferred.reject();
         });
-        return result;
+        return deferred.promise;
     };
     ServantService.url = './api/servants/';
     ServantService.$inject = [

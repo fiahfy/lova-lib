@@ -61,12 +61,10 @@ class DeckController {
     private deckService: DeckService
   ) {
     servantService.load()
-      .then(() => {
-        this.servants = servantService.servants;
-        deckService.servants = servantService.servants;
-        deckService.loadWithHash($routeParams.hash);
-        this.deck = deckService.deck;
-        this.url = deckService.url;
+      .then((servants: ServantModel[]) => {
+        this.servants = servants;
+        this.deck = deckService.getDeckWithHash($routeParams.hash, servants);
+        this.url = deckService.getUrlWithDeck(this.deck);
         this.refreshEventListener();
       });
 
@@ -93,22 +91,20 @@ class DeckController {
     });
   }
 
-  public setServant(index: number, data: {servantId: number; index: number}): void {
-    let servantId = data.servantId;
+  public setServant(index: number, data: {servant: ServantModel; index: number}): void {
+    let servant = data.servant;
     let oldIndex = data.index;
     if (oldIndex !== null) {
-      this.deckService.setServant(oldIndex, this.deck.servants[index] ? this.deck.servants[index].id : undefined);
+      this.deck.servants[oldIndex] = this.deck.servants[index] ? this.deck.servants[index] : undefined;
     }
-    this.deckService.setServant(index, servantId);
-    this.deck = this.deckService.deck;
-    this.url = this.deckService.url;
+    this.deck.servants[index] = servant;
+    this.url = this.deckService.getUrlWithDeck(this.deck);
     this.refreshEventListener();
   }
 
   public clearServant(index: number): void {
-    this.deckService.unsetServant(index);
-    this.deck = this.deckService.deck;
-    this.url = this.deckService.url;
+    this.deck.servants[index] = undefined;
+    this.url = this.deckService.getUrlWithDeck(this.deck);
     this.refreshEventListener();
   }
 

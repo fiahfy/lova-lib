@@ -6,7 +6,6 @@ import {PrizeModel} from '../models/prize';
 
 export class PrizeService {
   private static url: string = './api/prizes/';
-  public prizes: PrizeModel[] = [];
 
   public static $inject = [
     '$http',
@@ -19,14 +18,15 @@ export class PrizeService {
   ) {
   }
 
-  public load(): ng.IPromise<any> {
+  public load(): ng.IPromise<PrizeModel[]> {
     let deferred = this.$q.defer();
     this.$http.get(PrizeService.url, {cache: true})
       .then((res: any) => {
+        let prizes: PrizeModel[] = [];
         res.data.forEach((prize: any) => {
-          this.prizes.push(new PrizeModel(prize));
+          prizes.push(new PrizeModel(prize));
         });
-        deferred.resolve();
+        deferred.resolve(prizes);
       }, () => {
         deferred.reject();
       });

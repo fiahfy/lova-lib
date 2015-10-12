@@ -72,8 +72,8 @@ class ServantListController {
     this.updateFilter();
 
     servantService.load()
-      .then(() => {
-        this.servants = servantService.servants;
+      .then((servants) => {
+        this.servants = servants;
         this.scrollService.restore();
         this.refreshEventListener();
       });

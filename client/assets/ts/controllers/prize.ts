@@ -31,8 +31,8 @@ class PrizeController {
     private prizeService: PrizeService
   ) {
     prizeService.load()
-      .then(() => {
-        this.prizes = prizeService.prizes;
+      .then((prizes: PrizeModel[]) => {
+        this.prizes = prizes;
       });
   }
 

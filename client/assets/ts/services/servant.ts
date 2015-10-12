@@ -6,7 +6,6 @@ import {ServantModel} from '../models/servant';
 
 export class ServantService {
   private static url: string = './api/servants/';
-  public servants: ServantModel[] = [];
 
   public static $inject = [
     '$http',
@@ -19,32 +18,31 @@ export class ServantService {
   ) {
   }
 
-  public load(): ng.IPromise<any> {
+  public load(): ng.IPromise<ServantModel[]> {
     let deferred = this.$q.defer();
-    if (this.servants.length) {
-      deferred.resolve();
-      return deferred.promise;
-    }
-    this.$http.get(ServantService.url)
+    this.$http.get(ServantService.url, {cache: true})
       .then((res: any) => {
+        let servants: ServantModel[] = [];
         res.data.forEach((servant: any) => {
-          this.servants.push(new ServantModel(servant));
+          servants.push(new ServantModel(servant));
         });
-        deferred.resolve();
+        deferred.resolve(servants);
       }, () => {
         deferred.reject();
       });
     return deferred.promise;
   }
 
-  public getServantWithId(id: number): ServantModel {
-    let result: ServantModel = null;
-    this.servants.forEach((servant) => {
-      if (servant.id == id) {
-        result = servant;
-      }
-    });
-    return result;
+  public loadWithId(id: number): ng.IPromise<ServantModel> {
+    let deferred = this.$q.defer();
+    this.$http.get(`${ServantService.url}${id}/`, {cache: true})
+      .then((res: any) => {
+        let servant = new ServantModel(res.data);
+        deferred.resolve(servant);
+      }, () => {
+        deferred.reject();
+      });
+    return deferred.promise;
   }
 }
 
