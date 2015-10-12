@@ -57,7 +57,7 @@ function updateWinRanking(date) {
     }
 
     // delete
-    logger.info('Delete Servant Win Ranking: date = %s', date+'');
+    logger.info('Delete Servant Win Ranking: date = %s', date.toUTCString());
     yield deleteRanking({mode: 'win', date: date});
 
     // insert
@@ -93,7 +93,7 @@ function updateUsedRanking(date) {
     }
 
     // delete
-    logger.info('Delete Servant Used Ranking: date = %s', date+'');
+    logger.info('Delete Servant Used Ranking: date = %s', date.toUTCString());
     yield deleteRanking({mode: 'used', date: date});
 
     // insert
