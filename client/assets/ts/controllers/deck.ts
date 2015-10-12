@@ -65,7 +65,6 @@ class DeckController {
         this.servants = servants;
         this.deck = deckService.getDeckWithHash($routeParams.hash, servants);
         this.url = deckService.getUrlWithDeck(this.deck);
-        this.refreshEventListener();
       });
 
     angular.element($window.document).ready(() => {
@@ -99,36 +98,25 @@ class DeckController {
     }
     this.deck.servants[index] = servant;
     this.url = this.deckService.getUrlWithDeck(this.deck);
-    this.refreshEventListener();
   }
 
   public clearServant(index: number): void {
     this.deck.servants[index] = undefined;
     this.url = this.deckService.getUrlWithDeck(this.deck);
-    this.refreshEventListener();
   }
 
   public selectTribeId(tribeId: number, tribeName: string): void {
     this.tribeId = tribeId;
     this.tribeName = tribeName;
     this.filter.tribeId = this.tribeId ? this.tribeId : undefined;
-    this.refreshEventListener();
   }
 
   public changeQuery(): void {
     this.filter.name = this.q;
-    this.refreshEventListener();
   }
 
   public openServant(servantId: number): void {
     this.$window.open('/servants/' + servantId + '/', '_blank');
-  }
-
-  private refreshEventListener(): void {
-    this.$window.setTimeout(() => {
-      //noinspection TaskProblemsInspection
-      angular.element('img.lazy').lazyload();
-    }, 1);
   }
 }
 

@@ -121,7 +121,7 @@
            ng-drag="true" ng-drag-data="{index: null, servant: servant}"
            ng-dblclick="c.openServant(servant.id)">
         <img data-original="/assets/img/m/{{ servant.id }}.jpg"
-             src="/assets/img/m/blank.png" class="img-rounded img-responsive lazy" />
+             src="/assets/img/m/blank.png" class="img-rounded img-responsive lazy" lova-lazy-image />
         <span lova-skill-popover="{card: '.card', title: servant.name, content: '.skill-popover-content', container: '#deck-popover-container'}">
           Cost {{ servant.cost }}
         </span>
