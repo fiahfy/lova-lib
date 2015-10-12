@@ -43,6 +43,7 @@ config.route = function(app) {
   router.get('/api/servants/:id/', controllers.servants);
   router.get('/api/prizes/', controllers.prizes);
   router.get('/api/ranking/servants/:mode/:year/:month/:date/', controllers.ranking.servants);
+  router.get('/api/ranking/servants/:mode/latest/', controllers.ranking.servants);
   router.get('/api/ranking/servants/:id/:mode/:year/:month/:date/', controllers.ranking.servants);
   //app.use(route.get('/api/ranking/:date/spell/', controllers.root));
   app.use(router.routes());

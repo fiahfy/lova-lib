@@ -2,7 +2,9 @@
 
 //import * as angular from 'angular';
 import * as app from '../app';
+import {ServantService} from '../services/servant';
 import {RankingService} from '../services/ranking';
+import {ServantModel} from '../models/servant';
 import {RankingModel} from '../models/ranking';
 
 interface RankingListParams extends ng.route.IRouteParamsService {
@@ -17,19 +19,51 @@ class RankingListController {
     {key: 'used', value: 'Used Rate'}
   ];
 
+  public mode: string;
+
   public static $inject = [
+    '$scope',
+    '$location',
     '$routeParams',
+    'ServantService',
     'RankingService'
   ];
 
+  public predicate: string[] = ['seq'];
+
+  public reverse: boolean = false;
+
   constructor(
+    private $scope: ng.IScope,
+    private $location: ng.ILocationService,
     private $routeParams: RankingListParams,
+    private servantService: ServantService,
     private rankingService: RankingService
   ) {
-    //rankingService.load($routeParams.mode)
-    //  .then((rankings) => {
-    //    this.rankings = rankings;
-    //  });
+    this.mode = $routeParams.mode ? $routeParams.mode : 'win';
+
+    servantService.load()
+      .then((servants) => {
+        return rankingService.load(this.mode, servants)
+      })
+      .then((rankings) => {
+        this.rankings = rankings;
+      });
+
+    $scope.$watch(() => this.mode, (newValue, oldValue) => {
+      if (typeof newValue === 'undefined' || typeof oldValue === 'undefined' || newValue == oldValue) {
+        return;
+      }
+      this.selectMode(this.mode);
+    }, true);
+  }
+
+  public selectMode(mode: string): void {
+    this.$location.url(this.$location.search('mode', mode).url());
+  }
+
+  public openServant(servant: ServantModel): void {
+    this.$location.url('/servants/' + servant.id + '/');
   }
 }
 
