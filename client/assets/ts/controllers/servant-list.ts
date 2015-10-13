@@ -72,10 +72,9 @@ class ServantListController {
     this.updateFilter();
 
     servantService.load()
-      .then(() => {
-        this.servants = servantService.servants;
+      .then((servants) => {
+        this.servants = servants;
         this.scrollService.restore();
-        this.refreshEventListener();
       });
 
     $scope.$watch(() => this.tribeId, (newValue, oldValue) => {
@@ -96,7 +95,6 @@ class ServantListController {
 
   public changeQuery(): void {
     this.updateFilter();
-    this.refreshEventListener();
   }
 
   public openServant(servant: ServantModel): void {
@@ -122,13 +120,6 @@ class ServantListController {
       params[key] = value.replace('+', ' ');
     });
     return params;
-  }
-
-  private refreshEventListener(): void {
-    this.$window.setTimeout(() => {
-      //noinspection TaskProblemsInspection
-      angular.element('img.lazy').lazyload();
-    }, 1);
   }
 }
 

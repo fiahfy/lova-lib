@@ -23,17 +23,25 @@ class DeckController {
     {key: 5, value: '不死'}
   ];
 
+  public typeOptions: {key: string; value: string;}[] = [
+    {key: '', value: 'Select Type...'}
+  ];
+
   public tribeId: number;
 
   public tribeName: string = 'Select Tribe...';
+
+  public type: string = this.typeOptions[0].value;
 
   public q: string;
 
   public filter: {
     tribeId: number;
+    type: string;
     name: string;
   } = {
     tribeId: undefined,
+    type: undefined,
     name: undefined
   };
 
@@ -61,13 +69,11 @@ class DeckController {
     private deckService: DeckService
   ) {
     servantService.load()
-      .then(() => {
-        this.servants = servantService.servants;
-        deckService.servants = servantService.servants;
-        deckService.loadWithHash($routeParams.hash);
-        this.deck = deckService.deck;
-        this.url = deckService.url;
-        this.refreshEventListener();
+      .then((servants: ServantModel[]) => {
+        this.servants = servants;
+        this.deck = deckService.getDeckWithHash($routeParams.hash, servants);
+        this.url = deckService.getUrlWithDeck(this.deck);
+        this.buildOptions();
       });
 
     angular.element($window.document).ready(() => {
@@ -93,46 +99,50 @@ class DeckController {
     });
   }
 
-  public setServant(index: number, data: {servantId: number; index: number}): void {
-    let servantId = data.servantId;
+  public buildOptions(): void {
+    for (let servant of this.servants) {
+      let optionKeys = this.typeOptions.map((option) => {
+        return option.key;
+      });
+      if (optionKeys.indexOf(servant.type) == -1) {
+        this.typeOptions.push({key: servant.type, value: servant.type});
+      }
+    }
+    // todo: type 毎の total count も表示
+  }
+
+  public setServant(index: number, data: {servant: ServantModel; index: number}): void {
+    let servant = data.servant;
     let oldIndex = data.index;
     if (oldIndex !== null) {
-      this.deckService.setServant(oldIndex, this.deck.servants[index] ? this.deck.servants[index].id : undefined);
+      this.deck.servants[oldIndex] = this.deck.servants[index] ? this.deck.servants[index] : undefined;
     }
-    this.deckService.setServant(index, servantId);
-    this.deck = this.deckService.deck;
-    this.url = this.deckService.url;
-    this.refreshEventListener();
+    this.deck.servants[index] = servant;
+    this.url = this.deckService.getUrlWithDeck(this.deck);
   }
 
   public clearServant(index: number): void {
-    this.deckService.unsetServant(index);
-    this.deck = this.deckService.deck;
-    this.url = this.deckService.url;
-    this.refreshEventListener();
+    this.deck.servants[index] = undefined;
+    this.url = this.deckService.getUrlWithDeck(this.deck);
   }
 
   public selectTribeId(tribeId: number, tribeName: string): void {
     this.tribeId = tribeId;
     this.tribeName = tribeName;
     this.filter.tribeId = this.tribeId ? this.tribeId : undefined;
-    this.refreshEventListener();
+  }
+
+  public selectType(type: string, typeName: string): void {
+    this.type = typeName;
+    this.filter.type = type ? type : undefined;
   }
 
   public changeQuery(): void {
     this.filter.name = this.q;
-    this.refreshEventListener();
   }
 
   public openServant(servantId: number): void {
     this.$window.open('/servants/' + servantId + '/', '_blank');
-  }
-
-  private refreshEventListener(): void {
-    this.$window.setTimeout(() => {
-      //noinspection TaskProblemsInspection
-      angular.element('img.lazy').lazyload();
-    }, 1);
   }
 }
 

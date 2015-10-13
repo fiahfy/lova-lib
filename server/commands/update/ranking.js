@@ -5,36 +5,44 @@ let scraper = require('../../utils/scrapers');
 let models = require('../../models');
 let logger = require('../../utils/logger');
 
-module.exports = function(target, date) {
+module.exports = function(target, date, force) {
   return co(function *() {
     let d;
     if (date) {
       d = new Date(date);
-      d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+      d = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
       if (isNaN(d.valueOf())) {
         logger.error('Invalid Date: %s', date);
         return;
       }
     } else {
-      // yesterday if empty
+      // today if empty
       d = new Date;
-      d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-      d.setDate(d.getDate() - 1);
+      d = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
     }
 
     switch (target) {
       case 'win':
-        yield updateWinRanking(d);
+        yield updateWinRanking(d, force);
         break;
       case 'used':
-        yield updateUsedRanking(d);
+        yield updateUsedRanking(d, force);
         break;
     }
   });
 };
 
-function updateWinRanking(date) {
+function updateWinRanking(date, force) {
   return co(function *() {
+    // check exists if not force update
+    if (!force) {
+      let results = yield findRanking({mode: 'win', date: date});
+      if (results.length) {
+        logger.warn('Servant Win Ranking is Almost Exists: date = %s', date.toUTCString());
+        return;
+      }
+    }
+
     // get ranking
     let rankings = yield getWinRankingWithDate(date);
     // get servant map to convert servant id
@@ -43,11 +51,12 @@ function updateWinRanking(date) {
     let data = [];
     for (let r of rankings) {
       data.push({
+        mode: 'win',
         date: date,
         servant_id: map[r.tribe][Number(r.id)],
         seq: r.seq,
         rank: r.rank,
-        rate: r.score
+        score: r.score
       });
     }
 
@@ -57,19 +66,28 @@ function updateWinRanking(date) {
     }
 
     // delete
-    logger.info('Delete Servant Win Ranking: date = %s', date+'');
-    yield deleteWinRanking({date: date});
+    logger.info('Delete Servant Win Ranking: date = %s', date.toUTCString());
+    yield deleteRanking({mode: 'win', date: date});
 
     // insert
     logger.info('Insert Servant Win Ranking');
     for (let d of data) {
-      yield insertWinRanking(d);
+      yield insertRanking(d);
     }
   });
 }
 
-function updateUsedRanking(date) {
+function updateUsedRanking(date, force) {
   return co(function *() {
+    // check exists if not force update
+    if (!force) {
+      let results = yield findRanking({mode: 'used', date: date});
+      if (results.length) {
+        logger.warn('Servant Used Ranking is Almost Exists: date = %s', date.toUTCString());
+        return;
+      }
+    }
+
     // get ranking
     let rankings = yield getUsedRankingWithDate(date);
     // get servant map to convert servant id
@@ -78,11 +96,12 @@ function updateUsedRanking(date) {
     let data = [];
     for (let r of rankings) {
       data.push({
+        mode: 'used',
         date: date,
         servant_id: map[r.tribe][Number(r.id)],
         seq: r.seq,
         rank: r.rank,
-        rate: r.score
+        score: r.score
       });
     }
 
@@ -92,38 +111,30 @@ function updateUsedRanking(date) {
     }
 
     // delete
-    logger.info('Delete Servant Used Ranking: date = %s', date+'');
-    yield deleteUsedRanking({date: date});
+    logger.info('Delete Servant Used Ranking: date = %s', date.toUTCString());
+    yield deleteRanking({mode: 'used', date: date});
 
     // insert
     logger.info('Insert Servant Used Ranking');
     for (let d of data) {
-      yield insertUsedRanking(d);
+      yield insertRanking(d);
     }
   });
 }
 
-function deleteWinRanking(args) {
-  return models.servantwinranking.remove(args).exec();
+function findRanking(args) {
+  return models.servantranking.find(args).exec();
 }
 
-function insertWinRanking(args) {
+function deleteRanking(args) {
+  return models.servantranking.remove(args).exec();
+}
+
+function insertRanking(args) {
   return co(function *() {
-    let result = (yield models.counter.getNewId('servantwinranking')).result;
+    let result = (yield models.counter.getNewId('servantranking')).result;
     let _id = result.value.seq;
-    yield models.servantwinranking.update({_id: _id}, args, {upsert: true}).exec();
-  });
-}
-
-function deleteUsedRanking(args) {
-  return models.servantusedranking.remove(args).exec();
-}
-
-function insertUsedRanking(args) {
-  return co(function *() {
-    let result = (yield models.counter.getNewId('servantusedranking')).result;
-    let _id = result.value.seq;
-    yield models.servantusedranking.update({_id: _id}, args, {upsert: true}).exec();
+    yield models.servantranking.update({_id: _id}, args, {upsert: true}).exec();
   });
 }
 

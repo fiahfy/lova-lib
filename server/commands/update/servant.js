@@ -26,7 +26,7 @@ function updateOne(url, force) {
     // find servant
     let row = yield findServant({tribe_name: servant.tribe_name, tribe_code: servant.tribe_code});
     if (row) {
-      logger.verbose('Compare Update Date: new = %j, current = %j', servant.date+'', row.date+'');
+      logger.verbose('Compare Update Date: new = %j, current = %j', servant.date.toUTCString(), row.date.toUTCString());
       if (servant.date <= row.date && !force) {
         logger.verbose('Skip Update Servant: id = %s, tribe_name = %s, tribe_code = %s, name = %s',
           row._id, servant.tribe_name, servant.tribe_code, servant.name);

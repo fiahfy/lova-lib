@@ -24,9 +24,9 @@ class ServantDetailController {
     private servantService: ServantService,
     private scrollService: ScrollService
   ) {
-    servantService.load()
-      .then(() => {
-        this.servant = servantService.getServantWithId(+$routeParams.id);
+    servantService.loadWithId(+$routeParams.id)
+      .then((servant: ServantModel) => {
+        this.servant = servant;
         this.scrollService.restore();
       });
   }

@@ -15,4 +15,4 @@ function skillPopoverContent(): ng.IDirective {
   };
 }
 
-angular.module(app.appName).directive('skillPopoverContent', skillPopoverContent);
+angular.module(app.appName).directive('lovaSkillPopoverContent', skillPopoverContent);

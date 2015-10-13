@@ -4,7 +4,7 @@
 import * as app from '../app';
 
 interface SkillPopoverScope extends ng.IScope {
-  skillPopover: any;
+  lovaSkillPopover: any;
 }
 
 skillPopover.$inject = [
@@ -15,10 +15,10 @@ function skillPopover($window: ng.IWindowService): ng.IDirective {
   return {
     restrict: 'A',
     scope: {
-      skillPopover: '='
+      lovaSkillPopover: '='
     },
     link: ($scope: SkillPopoverScope, element: JQuery, attributes: any) => {
-      let args = $scope.skillPopover;
+      let args = $scope.lovaSkillPopover;
 
       // clear all popovers
       angular.element(args.container).empty();
@@ -50,4 +50,4 @@ function skillPopover($window: ng.IWindowService): ng.IDirective {
   };
 }
 
-angular.module(app.appName).directive('skillPopover', skillPopover);
+angular.module(app.appName).directive('lovaSkillPopover', skillPopover);

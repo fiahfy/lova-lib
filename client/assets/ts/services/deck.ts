@@ -2,20 +2,11 @@
 
 //import * as angular from 'angular';
 import * as app from '../app';
+import {ServantService} from './servant';
 import {ServantModel} from '../models/servant';
 import {DeckModel} from '../models/deck';
 
 export class DeckService {
-  public servants: ServantModel[] = [];
-  public deck: DeckModel;
-
-  public get url(): string {
-    let a = this.$window.document.createElement('a');
-    a.href = this.$window.location.href;
-    return a.protocol + '//'
-      + a.hostname + (a.port ? ':' + a.port : a.port)
-      + '/deck/' + this.deck.hash + '/';
-  }
 
   public static $inject = [
     '$window'
@@ -24,21 +15,44 @@ export class DeckService {
   constructor(
     private $window: ng.IWindowService
   ) {
-    this.deck = new DeckModel();
   }
 
-  public loadWithHash(hash: string): void {
-    this.deck.hash = hash;
-    this.deck.updateServants(this.servants);
+  public getDeckWithHash(hash: string, servants: ServantModel[]): DeckModel {
+    let deck = new DeckModel();
+    let servantIds = DeckService.decode(hash);
+    for (let i = 0; i < DeckModel.size; i++) {
+      let servantId = servantIds[i];
+      for (let servant of servants) {
+        if (servant.id === servantId) {
+          deck.servants[i] = servant;
+          break;
+        }
+      }
+    }
+    return deck;
   }
 
-  public setServant(index: number, servantId: number): void {
-    this.deck.servantIds[index] = servantId;
-    this.deck.updateServants(this.servants);
+  public getUrlWithDeck(deck: DeckModel): string {
+    let servantIds: number[] = deck.servants.map((servant) => {
+      return servant ? servant.id : undefined;
+    });
+    let a = this.$window.document.createElement('a');
+    a.href = this.$window.location.href;
+    return a.protocol + '//'
+      + a.hostname + (a.port ? ':' + a.port : a.port)
+      + '/deck/' + DeckService.encode(servantIds) + '/';
   }
 
-  public unsetServant(index: number): void {
-    this.setServant(index, undefined);
+  private static encode(data: number[]): string {
+    return window.btoa(JSON.stringify(data));
+  }
+
+  private static decode(encodedString: string): number[] {
+    try {
+      return JSON.parse(window.atob(encodedString));
+    } catch(e) {
+      return [];
+    }
   }
 }
 
