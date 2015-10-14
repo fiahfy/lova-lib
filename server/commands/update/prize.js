@@ -11,9 +11,8 @@ module.exports = function(force) {
   return co(function *() {
     // get prizes
     let prizes = yield getPrizes();
-    if (!prizes) {
-      logger.warn('Prize is Nothing');
-      return;
+    if (!prizes.length) {
+      throw new Error('Prize is Nothing');
     }
 
     // check exists if not force update
@@ -21,7 +20,7 @@ module.exports = function(force) {
       let date = prizes[0].date;
       let results = yield findPrizes({date: date});
       if (results.length) {
-        logger.warn('Prize is Almost Exists: date = %s', date.toUTCString());
+        logger.verbose('Prize is Almost Exists: date = %s', date.toUTCString());
         return;
       }
     }
@@ -65,25 +64,28 @@ function getPrizes() {
     // get article id
     let id = yield getRecentPrizeArticleId();
     if (!id) {
-      logger.warn('Prize Notice is Not Found');
-      return null;
+      throw new Error('Prize Notice is Not Found');
     }
     let $ = (yield scraper.fetchArticle(id)).$;
     let prizes = [];
     let panel = $('#mainpanel');
     let date = new Date(panel.find('div.article_title span.date').text());
     date = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
-    panel.find('div.subsection_frame strong').each(function() {
-      let text = $(this).text();
-      let matches = text.match(/([^・：]+)：(.+)[%％]/i);
-      if (matches) {
+    let text = panel.find('div.subsection_frame').text();
+    let matches = text.match(/([^・：]+)：([^%％]+)[%％]/gi);
+    if (!matches.length) {
+      return [];
+    }
+    for (let matchText of matches) {
+      let ms = matchText.match(/([^・：]+)：([^%％]+)[%％]/i);
+      if (ms) {
         prizes.push({
           date: date,
-          name: matches[1].trim(),
-          rate: matches[2].trim() / 100
+          name: ms[1].trim(),
+          rate: ms[2].trim() / 100
         });
       }
-    });
+    }
     return prizes;
   });
 }

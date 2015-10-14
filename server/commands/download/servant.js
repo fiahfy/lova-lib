@@ -33,8 +33,7 @@ function save(servant, force) {
     logger.verbose('Download Servant Image: id = %d', servant.id);
     let url = yield getImageUrlWithServant(servant);
     if (!url) {
-      logger.warn('Image Url is Not Found');
-      return;
+      throw new Error('Image Url is Not Found');
     }
 
     let largeImagePath = `${imageDir}l/${servant.id}.jpg`;
