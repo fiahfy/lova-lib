@@ -12,8 +12,7 @@ module.exports = function(target, date, force) {
       d = new Date(date);
       d = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
       if (isNaN(d.valueOf())) {
-        logger.error('Invalid Date: %s', date);
-        return;
+        throw new Error('Invalid Date: ' + date);
       }
     } else {
       // today if empty
@@ -38,7 +37,7 @@ function updateWinRanking(date, force) {
     if (!force) {
       let results = yield findRanking({mode: 'win', date: date});
       if (results.length) {
-        logger.warn('Servant Win Ranking is Almost Exists: date = %s', date.toUTCString());
+        logger.verbose('Servant Win Ranking is Almost Exists: date = %s', date.toUTCString());
         return;
       }
     }
@@ -61,8 +60,7 @@ function updateWinRanking(date, force) {
     }
 
     if (!data) {
-      logger.error('Servant Win Ranking Data is Nothing');
-      return;
+      throw new Error('Servant Win Ranking Data is Nothing');
     }
 
     // delete
@@ -83,7 +81,7 @@ function updateUsedRanking(date, force) {
     if (!force) {
       let results = yield findRanking({mode: 'used', date: date});
       if (results.length) {
-        logger.warn('Servant Used Ranking is Almost Exists: date = %s', date.toUTCString());
+        logger.verbose('Servant Used Ranking is Almost Exists: date = %s', date.toUTCString());
         return;
       }
     }
@@ -106,8 +104,7 @@ function updateUsedRanking(date, force) {
     }
 
     if (!data) {
-      logger.error('Servant Used Ranking Data is Nothing');
-      return;
+      throw new Error('Servant Used Ranking Data is Nothing');
     }
 
     // delete
