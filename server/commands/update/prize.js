@@ -25,6 +25,9 @@ module.exports = function(force) {
       }
     }
 
+    let summary = prizes.reduce((p, c) => { return p + c.rate * 100; }, 0) / 100;
+    logger[summary === 1 ? 'info' : 'warn']('Total Rate Summary: summary = %s', summary.toFixed(2));
+
     // clean prizes
     logger.info('Truncate Prizes');
     yield truncatePrizes();

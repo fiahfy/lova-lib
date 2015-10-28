@@ -3,7 +3,8 @@
 let co = require('co');
 let fs = require('fs');
 let request = require('request');
-//let lwip = require('lwip');
+var config = require('../../config/app');
+let lwip = config.development ? require('lwip') : undefined;
 let scraper = require('../../utils/scrapers');
 let models = require('../../models');
 let logger = require('../../utils/logger');
