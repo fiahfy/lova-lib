@@ -10,8 +10,9 @@ let LRU = require("lru-cache");
 let cache = LRU({maxAge: 1000 * 60});
 
 let config = {
-  port: process.env.OPENSHIFT_NODEJS_PORT || 3000,
-  ip:   process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1'
+  port:        process.env.OPENSHIFT_NODEJS_PORT || 3000,
+  ip:          process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1',
+  development: process.env.OPENSHIFT_NODEJS_IP === undefined
 };
 
 config.route = function(app) {

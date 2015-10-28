@@ -166,15 +166,24 @@ function getTribeParam(input) {
 function fixServant(servant) {
   // adjust name
   servant.name = servant.name.replace('―', 'ー');
+
   // fix servant tribe
   if (servant.name === 'カイナッツォ') {
     servant.tribe_name = '海種';
+    servant.tribe_id   = 4;
     servant.tribe_code = 4;
   }
   if (servant.name === 'シェラハ') {
     servant.tribe_name = '海種';
+    servant.tribe_id   = 4;
     servant.tribe_code = 20;
   }
+  if (servant.name === '水銀燈') {
+    servant.tribe_name = '不死';
+    servant.tribe_id   = 5;
+    servant.tribe_code = 46;
+  }
+
   // adjust illustration_by
   if (servant.illustration_by === '―') {
     servant.illustration_by = null;
