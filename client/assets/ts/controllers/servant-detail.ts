@@ -20,13 +20,13 @@ class ServantDetailController {
 
   public graphData: {win: any[], used: any[]} = {win: [], used: []};
 
-  public graphXAxisTickFormatFunction = () => {
+  public graphXAxisTickFormatFunction: any = () => {
     return (d) => {
       return d3.time.format('%Y-%m-%d')(new Date(d));
     };
   };
 
-  public graphToolTipContentFunction = () => {
+  public graphToolTipContentFunction: any = () => {
     return (item) => {
       return `${item.point[1].toFixed(2)} %`;
     };
