@@ -24,7 +24,7 @@ exports.modules = [
     'ui',
     'angulartics',
     'angulartics.google.analytics',
-    'nvd3ChartDirectives'
+    'nvd3'
 ];
 angular.module(exports.appName, exports.modules);
 var Locator = (function () {
@@ -398,7 +398,6 @@ var ServantDetailController = (function () {
         this.servantService = servantService;
         this.statisticsService = statisticsService;
         this.scrollService = scrollService;
-        this.graphData = { win: [], used: [] };
         this.graphXAxisTickFormatFunction = function () {
             return function (d) {
                 return d3.time.format('%Y-%m-%d')(new Date(d));
@@ -417,22 +416,55 @@ var ServantDetailController = (function () {
         });
         statisticsService.loadWithId(+$routeParams.id)
             .then(function (statistics) {
-            _this.updateGraphData(statistics);
+            _this.updateGraph(statistics);
         });
     }
-    ServantDetailController.prototype.updateGraphData = function (statistics) {
-        this.graphData.win = [{
-                key: 'Win Rate',
-                values: statistics.win.map(function (ranking) {
-                    return [ranking.date, ranking.score];
-                })
-            }];
-        this.graphData.used = [{
-                key: 'Used Rate',
-                values: statistics.used.map(function (ranking) {
-                    return [ranking.date, ranking.score];
-                })
-            }];
+    ServantDetailController.prototype.updateGraph = function (statistics) {
+        this.graph1Data = [];
+        this.graph1Data.push({
+            key: 'Win Rate',
+            area: true,
+            color: '#1f77b4',
+            values: statistics.win.map(function (ranking) {
+                return { x: ranking.date, y: ranking.score };
+            })
+        });
+        this.graph2Data = [];
+        this.graph2Data.push({
+            key: 'Used Rate',
+            area: true,
+            color: '#9467bd',
+            values: statistics.used.map(function (ranking) {
+                return { x: ranking.date, y: ranking.score };
+            })
+        });
+        this.graph1Options = this.graph2Options = {
+            chart: {
+                type: 'lineChart',
+                height: 350,
+                margin: {
+                    top: 20,
+                    right: 30,
+                    bottom: 50,
+                    left: 50
+                },
+                transitionDuration: 500,
+                interpolate: 'monotone',
+                useInteractiveGuideline: true,
+                xAxis: {
+                    tickFormat: function (d) {
+                        return d3.time.format('%Y-%m-%d')(new Date(d));
+                    }
+                },
+                yAxis: {
+                    axisLabel: 'Rate (%)',
+                    tickFormat: function (d) {
+                        return d3.format('.02f')(d);
+                    },
+                    axisLabelDistance: -10
+                }
+            }
+        };
     };
     ServantDetailController.$inject = [
         '$routeParams',

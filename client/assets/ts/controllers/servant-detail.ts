@@ -18,7 +18,10 @@ class ServantDetailController {
 
   public hash: string;
 
-  public graphData: {win: any[], used: any[]} = {win: [], used: []};
+  public graph1Data: any;
+  public graph1Options: any;
+  public graph2Data: any;
+  public graph2Options: any;
 
   public graphXAxisTickFormatFunction: any = () => {
     return (d) => {
@@ -57,23 +60,57 @@ class ServantDetailController {
 
     statisticsService.loadWithId(+$routeParams.id)
       .then((statistics: StatisticsModel) => {
-        this.updateGraphData(statistics);
+        this.updateGraph(statistics);
       });
   }
 
-  private updateGraphData(statistics: StatisticsModel) {
-    this.graphData.win = [{
+  private updateGraph(statistics: StatisticsModel) {
+    this.graph1Data = [];
+    this.graph1Data.push({
       key: 'Win Rate',
+      area: true,
+      color: '#1f77b4',
       values: statistics.win.map((ranking: RankingModel) => {
-        return [ranking.date, ranking.score];
+        return {x: ranking.date, y: ranking.score};
       })
-    }];
-    this.graphData.used = [{
+    });
+    this.graph2Data = [];
+    this.graph2Data.push({
       key: 'Used Rate',
+      area: true,
+      color: '#9467bd',
       values: statistics.used.map((ranking: RankingModel) => {
-        return [ranking.date, ranking.score];
+        return {x: ranking.date, y: ranking.score};
       })
-    }];
+    });
+
+    this.graph1Options = this.graph2Options = {
+      chart: {
+        type: 'lineChart',
+        height: 350,
+        margin : {
+          top: 20,
+          right: 30,
+          bottom: 50,
+          left: 50
+        },
+        transitionDuration: 500,
+        interpolate: 'monotone',
+        useInteractiveGuideline: true,
+        xAxis: {
+          tickFormat: (d) => {
+            return d3.time.format('%Y-%m-%d')(new Date(d));
+          }
+        },
+        yAxis: {
+          axisLabel: 'Rate (%)',
+          tickFormat: function(d){
+            return d3.format('.02f')(d);
+          },
+          axisLabelDistance: -10
+        }
+      }
+    };
   }
 }
 

@@ -201,39 +201,7 @@
 
   <!-- Statistics -->
   <div class="statistics" ng-if="c.hash == 'statistics'">
-    <nvd3-line-chart
-        data="c.graphData.win"
-        xAxisTickFormat="c.graphXAxisTickFormatFunction()"
-        yAxisTickFormat="yAxisTickFormatFunction()"
-        width=""
-        height="350"
-        showXAxis="true"
-        showYAxis="true"
-        showLegend="true"
-        forcey=""
-        interactive="true"
-        useInteractiveGuideLine="false"
-        tooltips="true"
-        tooltipcontent="c.graphToolTipContentFunction()"
-        isArea="true">
-      <svg></svg>
-    </nvd3-line-chart>
-    <nvd3-line-chart
-        data="c.graphData.used"
-        xAxisTickFormat="c.graphXAxisTickFormatFunction()"
-        yAxisTickFormat="yAxisTickFormatFunction()"
-        width=""
-        height="350"
-        showXAxis="true"
-        showYAxis="true"
-        showLegend="true"
-        forcey=""
-        interactive="true"
-        useInteractiveGuideLine="false"
-        tooltips="true"
-        tooltipcontent="c.graphToolTipContentFunction()"
-        isArea="true">
-      <svg></svg>
-    </nvd3-line-chart>
+    <nvd3 options='c.graph1Options' data='c.graph1Data'></nvd3>
+    <nvd3 options='c.graph2Options' data='c.graph2Data'></nvd3>
   </div>
 </div>
