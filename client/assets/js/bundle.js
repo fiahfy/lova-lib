@@ -23,7 +23,8 @@ exports.modules = [
     //'ui.select2',
     'ui',
     'angulartics',
-    'angulartics.google.analytics'
+    'angulartics.google.analytics',
+    'nvd3ChartDirectives'
 ];
 angular.module(exports.appName, exports.modules);
 var Locator = (function () {
@@ -91,7 +92,7 @@ var FooterController = (function () {
 exports.FooterController = FooterController;
 angular.module(exports.appName).controller('FooterController', FooterController);
 
-},{"./controllers":4,"./directives":10,"./filters":16,"./services":25}],2:[function(require,module,exports){
+},{"./controllers":4,"./directives":10,"./filters":16,"./services":26}],2:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -390,20 +391,54 @@ angular.module('app').directive('lovaRanking', Definition.ddo);
 },{}],7:[function(require,module,exports){
 'use strict';
 var ServantDetailController = (function () {
-    function ServantDetailController($routeParams, servantService, scrollService) {
+    function ServantDetailController($routeParams, $location, servantService, statisticsService, scrollService) {
         var _this = this;
         this.$routeParams = $routeParams;
+        this.$location = $location;
         this.servantService = servantService;
+        this.statisticsService = statisticsService;
         this.scrollService = scrollService;
+        this.graphData = { win: [], used: [] };
+        this.graphXAxisTickFormatFunction = function () {
+            return function (d) {
+                return d3.time.format('%Y-%m-%d')(new Date(d));
+            };
+        };
+        this.graphToolTipContentFunction = function () {
+            return function (item) {
+                return item.point[1].toFixed(2) + " %";
+            };
+        };
+        this.hash = $location.hash() || 'detail';
         servantService.loadWithId(+$routeParams.id)
             .then(function (servant) {
             _this.servant = servant;
             _this.scrollService.restore();
         });
+        statisticsService.loadWithId(+$routeParams.id)
+            .then(function (statistics) {
+            _this.updateGraphData(statistics);
+        });
     }
+    ServantDetailController.prototype.updateGraphData = function (statistics) {
+        this.graphData.win = [{
+                key: 'Win Rate',
+                values: statistics.win.map(function (ranking) {
+                    return [ranking.date, ranking.score];
+                })
+            }];
+        this.graphData.used = [{
+                key: 'Used Rate',
+                values: statistics.used.map(function (ranking) {
+                    return [ranking.date, ranking.score];
+                })
+            }];
+    };
     ServantDetailController.$inject = [
         '$routeParams',
+        '$location',
         'ServantService',
+        'StatisticsService',
         'ScrollService'
     ];
     return ServantDetailController;
@@ -822,7 +857,7 @@ var RankingModel = (function () {
     function RankingModel(obj) {
         this.id = obj.id;
         this.mode = obj.mode;
-        this.date = obj.date;
+        this.date = new Date(obj.date);
         this.servantId = obj.servant_id;
         this.seq = obj.seq;
         this.rank = obj.rank;
@@ -896,6 +931,22 @@ exports.SkillModel = SkillModel;
 
 },{}],24:[function(require,module,exports){
 'use strict';
+var ranking_1 = require('./ranking');
+var StatisticsModel = (function () {
+    function StatisticsModel(obj) {
+        this.win = obj.win.map(function (ranking) {
+            return new ranking_1.RankingModel(ranking);
+        });
+        this.used = obj.used.map(function (ranking) {
+            return new ranking_1.RankingModel(ranking);
+        });
+    }
+    return StatisticsModel;
+})();
+exports.StatisticsModel = StatisticsModel;
+
+},{"./ranking":22}],25:[function(require,module,exports){
+'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
 var deck_1 = require('../models/deck');
@@ -947,15 +998,16 @@ var DeckService = (function () {
 exports.DeckService = DeckService;
 angular.module(app.appName).service('DeckService', DeckService);
 
-},{"../app":1,"../models/deck":20}],25:[function(require,module,exports){
+},{"../app":1,"../models/deck":20}],26:[function(require,module,exports){
 'use strict';
 require('./deck');
 require('./prize');
 require('./ranking');
 require('./scroll');
 require('./servant');
+require('./statistics');
 
-},{"./deck":24,"./prize":26,"./ranking":27,"./scroll":28,"./servant":29}],26:[function(require,module,exports){
+},{"./deck":25,"./prize":27,"./ranking":28,"./scroll":29,"./servant":30,"./statistics":31}],27:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -989,7 +1041,7 @@ var PrizeService = (function () {
 exports.PrizeService = PrizeService;
 angular.module(app.appName).service('PrizeService', PrizeService);
 
-},{"../app":1,"../models/prize":21}],27:[function(require,module,exports){
+},{"../app":1,"../models/prize":21}],28:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -1031,7 +1083,7 @@ var RankingService = (function () {
 exports.RankingService = RankingService;
 angular.module(app.appName).service('RankingService', RankingService);
 
-},{"../app":1,"../models/ranking":22}],28:[function(require,module,exports){
+},{"../app":1,"../models/ranking":22}],29:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -1058,7 +1110,7 @@ var ScrollService = (function () {
 exports.ScrollService = ScrollService;
 angular.module(app.appName).service('ScrollService', ScrollService);
 
-},{"../app":1}],29:[function(require,module,exports){
+},{"../app":1}],30:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -1103,4 +1155,35 @@ var ServantService = (function () {
 exports.ServantService = ServantService;
 angular.module(app.appName).service('ServantService', ServantService);
 
-},{"../app":1,"../models/servant":23}]},{},[1]);
+},{"../app":1,"../models/servant":23}],31:[function(require,module,exports){
+'use strict';
+//import * as angular from 'angular';
+var app = require('../app');
+var statistics_1 = require('../models/statistics');
+var StatisticsService = (function () {
+    function StatisticsService($http, $q) {
+        this.$http = $http;
+        this.$q = $q;
+    }
+    StatisticsService.prototype.loadWithId = function (id) {
+        var deferred = this.$q.defer();
+        this.$http.get("" + StatisticsService.url + id + "/statistics/", { cache: true })
+            .then(function (res) {
+            var statistics = new statistics_1.StatisticsModel(res.data);
+            deferred.resolve(statistics);
+        }, function () {
+            deferred.reject();
+        });
+        return deferred.promise;
+    };
+    StatisticsService.url = './api/servants/';
+    StatisticsService.$inject = [
+        '$http',
+        '$q'
+    ];
+    return StatisticsService;
+})();
+exports.StatisticsService = StatisticsService;
+angular.module(app.appName).service('StatisticsService', StatisticsService);
+
+},{"../app":1,"../models/statistics":24}]},{},[1]);

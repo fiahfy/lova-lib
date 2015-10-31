@@ -15,7 +15,7 @@ export class RankingModel {
   constructor(obj: any) {
     this.id        = obj.id;
     this.mode      = obj.mode;
-    this.date      = obj.date;
+    this.date      = new Date(obj.date);
     this.servantId = obj.servant_id;
     this.seq       = obj.seq;
     this.rank      = obj.rank;

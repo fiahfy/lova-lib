@@ -5,3 +5,4 @@ import './prize';
 import './ranking';
 import './scroll';
 import './servant';
+import './statistics';

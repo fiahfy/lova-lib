@@ -1,7 +1,7 @@
 'use strict';
 
 let client = require('cheerio-httpcli');
-let logger = require('../logger');
+let logger = require('./logger');
 
 // set ua
 client.setBrowser('chrome');

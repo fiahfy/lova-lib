@@ -5,189 +5,235 @@
     </h2>
   </div>
 
-  <div class="row">
-    <div class="col-lg-4 col-md-5 col-sm-5">
-      <div class="col-sm-12" id="servant-detail-logo">
-        <a href="assets/img/l/{{ c.servant.id }}.jpg" target="_self">
-          <img src="assets/img/l/{{ c.servant.id }}.jpg" class="center-block img-rounded img-responsive" />
-        </a>
+  <ul class="nav nav-pills nav-justified">
+    <li role="presentation" ng-class="{'active': c.hash == 'detail'}"><a href="#detail">Detail</a></li>
+    <li role="presentation" ng-class="{'active': c.hash == 'statistics'}"><a href="#statistics">Statistics</a></li>
+  </ul>
+
+  <!-- Detail -->
+  <div class="detail" ng-if="c.hash == 'detail'">
+    <div class="row">
+      <div class="col-lg-4 col-md-5 col-sm-5">
+        <div class="col-sm-12" class="logo">
+          <a href="assets/img/l/{{ c.servant.id }}.jpg" target="_self">
+            <img ng-src="assets/img/l/{{ c.servant.id }}.jpg" class="center-block img-rounded img-responsive" />
+          </a>
+        </div>
+      </div>
+      <div class="col-lg-8 col-md-7 col-sm-7">
+        <div class="row">
+          <div class="col-sm-6">
+            <dl class="row">
+              <dt class="col-xs-3">Tribe</dt>
+              <dd class="col-xs-9"><a href="/servants/?tribe_id={{ c.servant.tribeId|e:'url' }}">{{ c.servant.tribeName }}</a>-{{ c.servant.tribeCode|pad:3:'0' }}</dd>
+            </dl>
+            <dl class="row">
+              <dt class="col-xs-3">Type</dt>
+              <dd class="col-xs-9"><a href="/servants/?q=type:{{ c.servant.type|e:'url' }}">{{ c.servant.type }}</a></dd>
+            </dl>
+            <dl class="row">
+              <dt class="col-xs-3">Cost</dt>
+              <dd class="col-xs-9"><a href="/servants/?q=cost:{{ c.servant.cost|e:'url' }}">{{ c.servant.cost }}</a></dd>
+            </dl>
+          </div>
+          <div class="col-sm-6">
+            <dl class="row">
+              <dt class="col-xs-3">Updated</dt>
+              <dd class="col-xs-9">{{ c.servant.date|date:'yyyy-MM-dd' }}</dd>
+            </dl>
+            <dl class="row">
+              <dt class="col-xs-3">Range</dt>
+              <dd class="col-xs-9"><a href="/servants/?q=range:{{ c.servant.range|e:'url' }}">{{ c.servant.range }}</a></dd>
+            </dl>
+          </div>
+        </div>
+        <dl class="row">
+          <dt class="col-sm-12">Oral Tradition</dt>
+          <dd class="col-sm-12">
+            <div class="well well-sm">
+              <small>{{ c.servant.oralTradition }}</small>
+            </div>
+          </dd>
+        </dl>
+        <div class="row">
+          <dl class="col-sm-6 row">
+            <dt class="col-xs-3">Illust</dt>
+            <dd class="col-xs-9"><a href="/servants/?q=illustrationBy:{{ c.servant.illustrationBy|replace:' ':'+'|e:'url' }}">{{ c.servant.illustrationBy }}</a></dd>
+          </dl>
+          <dl class="col-sm-6 row">
+            <dt class="col-xs-3">CV</dt>
+            <dd class="col-xs-9"><a href="/servants/?q=characterVoice:{{ c.servant.characterVoice|replace:' ':'+'|e:'url' }}">{{ c.servant.characterVoice }}</a></dd>
+          </dl>
+        </div>
+        <div class="status">
+          <dl>
+            <dt><b>Status</b></dt>
+            <dd class="col-xs-12">
+              <table class="table visible-md visible-lg">
+                <thead>
+                <tr>
+                  <th class="">Level</th>
+                  <th class="">HP</th>
+                  <th class="">AP</th>
+                  <th class="">ATK</th>
+                  <th class="">POW</th>
+                  <th class="">DEF</th>
+                  <th class="">RES</th>
+                  <th class="">MS</th>
+                  <th class="">AS</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="status in c.servant.status">
+                  <td class="">{{ status.level }}</td>
+                  <td class="">{{ status.hp }}</td>
+                  <td class="">{{ status.ap }}</td>
+                  <td class="">{{ status.atk }}</td>
+                  <td class="">{{ status.pow }}</td>
+                  <td class="">{{ status.def }}</td>
+                  <td class="">{{ status.res }}</td>
+                  <td class="">{{ status.ms }}</td>
+                  <td class="">{{ status.as|number:2 }}</td>
+                </tr>
+                </tbody>
+              </table>
+              <table class="table hidden-md hidden-lg">
+                <thead>
+                <tr>
+                  <th rowspan="2">Level</th>
+                  <th class="">HP</th>
+                  <th class="">ATK</th>
+                  <th class="">DEF</th>
+                  <th class="">MS</th>
+                </tr>
+                <tr>
+                  <th class="">AP</th>
+                  <th class="">POW</th>
+                  <th class="">RES</th>
+                  <th class="">AS</th>
+                </tr>
+                </thead>
+                <tbody ng-repeat="status in c.servant.status">
+                <tr>
+                  <td rowspan="2">{{ status.level }}</td>
+                  <td class="">{{ status.hp }}</td>
+                  <td class="">{{ status.atk }}</td>
+                  <td class="">{{ status.def }}</td>
+                  <td class="">{{ status.ms }}</td>
+                </tr>
+                <tr>
+                  <td class="">{{ status.ap }}</td>
+                  <td class="">{{ status.pow }}</td>
+                  <td class="">{{ status.res }}</td>
+                  <td class="">{{ status.as|number:2 }}</td>
+                </tr>
+                </tbody>
+              </table>
+            </dd>
+          </dl>
+        </div>
       </div>
     </div>
-    <div class="col-lg-8 col-md-7 col-sm-7">
-      <div class="row">
-        <div class="col-sm-6">
+
+    <div class="skill" class="row">
+      <dl class="col-sm-6">
+        <dt><b>Active Skill</b></dt>
+        <dd ng-if="c.servant.skill.active">
           <dl class="row">
-            <dt class="col-xs-3">Tribe</dt>
-            <dd class="col-xs-9"><a href="/servants/?tribe_id={{ c.servant.tribeId|e:'url' }}">{{ c.servant.tribeName }}</a>-{{ c.servant.tribeCode|pad:3:'0' }}</dd>
+            <dt class="col-xs-3">Name</dt>
+            <dd class="col-xs-9">{{ c.servant.skill.active.name }}</dd>
           </dl>
           <dl class="row">
-            <dt class="col-xs-3">Type</dt>
-            <dd class="col-xs-9"><a href="/servants/?q=type:{{ c.servant.type|e:'url' }}">{{ c.servant.type }}</a></dd>
+            <dt class="col-xs-3">Designation</dt>
+            <dd class="col-xs-9">{{ c.servant.skill.active.designation|replace:',':'・'|default:'-' }}</dd>
           </dl>
           <dl class="row">
-            <dt class="col-xs-3">Cost</dt>
-            <dd class="col-xs-9"><a href="/servants/?q=cost:{{ c.servant.cost|e:'url' }}">{{ c.servant.cost }}</a></dd>
-          </dl>
-        </div>
-        <div class="col-sm-6">
-          <dl class="row">
-            <dt class="col-xs-3">Updated</dt>
-            <dd class="col-xs-9">{{ c.servant.date|date:'yyyy-MM-dd' }}</dd>
+            <dt class="col-xs-3">Effect</dt>
+            <dd class="col-xs-9">{{ c.servant.skill.active.effect|replace:',':'・'|default:'-' }}</dd>
           </dl>
           <dl class="row">
-            <dt class="col-xs-3">Range</dt>
-            <dd class="col-xs-9"><a href="/servants/?q=range:{{ c.servant.range|e:'url' }}">{{ c.servant.range }}</a></dd>
+            <dt class="col-sm-12">Description</dt>
+            <dd class="col-sm-12">
+              <div class="well well-sm">
+                <small ng-bind-html="c.servant.skill.active|skillDescription"></small>
+              </div>
+            </dd>
           </dl>
-        </div>
-      </div>
-      <dl class="row">
-        <dt class="col-sm-12">Oral Tradition</dt>
-        <dd class="col-sm-12">
+        </dd>
+        <dd ng-if="!c.servant.skill.active">
           <div class="well well-sm">
-            <small>{{ c.servant.oralTradition }}</small>
+            <small>None</small>
           </div>
         </dd>
       </dl>
-      <div class="row">
-        <dl class="col-sm-6 row">
-          <dt class="col-xs-3">Illust</dt>
-          <dd class="col-xs-9"><a href="/servants/?q=illustrationBy:{{ c.servant.illustrationBy|replace:' ':'+'|e:'url' }}">{{ c.servant.illustrationBy }}</a></dd>
-        </dl>
-        <dl class="col-sm-6 row">
-          <dt class="col-xs-3">CV</dt>
-          <dd class="col-xs-9"><a href="/servants/?q=characterVoice:{{ c.servant.characterVoice|replace:' ':'+'|e:'url' }}">{{ c.servant.characterVoice }}</a></dd>
-        </dl>
-      </div>
-      <div id="servant-detail-status">
-        <dl>
-          <dt><b>Status</b></dt>
-          <dd class="col-xs-12">
-            <table class="table visible-md visible-lg">
-              <thead>
-              <tr>
-                <th class="">Level</th>
-                <th class="">HP</th>
-                <th class="">AP</th>
-                <th class="">ATK</th>
-                <th class="">POW</th>
-                <th class="">DEF</th>
-                <th class="">RES</th>
-                <th class="">MS</th>
-                <th class="">AS</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr ng-repeat="status in c.servant.status">
-                <td class="">{{ status.level }}</td>
-                <td class="">{{ status.hp }}</td>
-                <td class="">{{ status.ap }}</td>
-                <td class="">{{ status.atk }}</td>
-                <td class="">{{ status.pow }}</td>
-                <td class="">{{ status.def }}</td>
-                <td class="">{{ status.res }}</td>
-                <td class="">{{ status.ms }}</td>
-                <td class="">{{ status.as|number:2 }}</td>
-              </tr>
-              </tbody>
-            </table>
-            <table class="table hidden-md hidden-lg">
-              <thead>
-              <tr>
-                <th rowspan="2">Level</th>
-                <th class="">HP</th>
-                <th class="">ATK</th>
-                <th class="">DEF</th>
-                <th class="">MS</th>
-              </tr>
-              <tr>
-                <th class="">AP</th>
-                <th class="">POW</th>
-                <th class="">RES</th>
-                <th class="">AS</th>
-              </tr>
-              </thead>
-              <tbody ng-repeat="status in c.servant.status">
-              <tr>
-                <td rowspan="2">{{ status.level }}</td>
-                <td class="">{{ status.hp }}</td>
-                <td class="">{{ status.atk }}</td>
-                <td class="">{{ status.def }}</td>
-                <td class="">{{ status.ms }}</td>
-              </tr>
-              <tr>
-                <td class="">{{ status.ap }}</td>
-                <td class="">{{ status.pow }}</td>
-                <td class="">{{ status.res }}</td>
-                <td class="">{{ status.as|number:2 }}</td>
-              </tr>
-              </tbody>
-            </table>
-          </dd>
-        </dl>
-      </div>
+      <dl class="col-sm-6">
+        <dt><b>Passive Skill</b></dt>
+        <dd ng-if="c.servant.skill.passive">
+          <dl class="row">
+            <dt class="col-xs-3">Name</dt>
+            <dd class="col-xs-9">{{ c.servant.skill.passive.name }}</dd>
+          </dl>
+          <dl class="row">
+            <dt class="col-xs-3">Designation</dt>
+            <dd class="col-xs-9">{{ c.servant.skill.passive.designation|replace:',':'・'|default:'-' }}</dd>
+          </dl>
+          <dl class="row">
+            <dt class="col-xs-3">Effect</dt>
+            <dd class="col-xs-9">{{ c.servant.skill.passive.effect|replace:',':'・'|default:'-' }}</dd>
+          </dl>
+          <dl class="row">
+            <dt class="col-sm-12">Description</dt>
+            <dd class="col-sm-12">
+              <div class="well well-sm">
+                <small ng-bind-html="c.servant.skill.passive|skillDescription"></small>
+              </div>
+            </dd>
+          </dl>
+        </dd>
+        <dd ng-if="!c.servant.skill.passive">
+          <div class="well well-sm">
+            <small>None</small>
+          </div>
+        </dd>
+      </dl>
     </div>
   </div>
 
-  <div id="servant-detail-skill" class="row">
-    <dl class="col-sm-6">
-      <dt><b>Active Skill</b></dt>
-      <dd ng-if="c.servant.skill.active">
-        <dl class="row">
-          <dt class="col-xs-3">Name</dt>
-          <dd class="col-xs-9">{{ c.servant.skill.active.name }}</dd>
-        </dl>
-        <dl class="row">
-          <dt class="col-xs-3">Designation</dt>
-          <dd class="col-xs-9">{{ c.servant.skill.active.designation|replace:',':'・'|default:'-' }}</dd>
-        </dl>
-        <dl class="row">
-          <dt class="col-xs-3">Effect</dt>
-          <dd class="col-xs-9">{{ c.servant.skill.active.effect|replace:',':'・'|default:'-' }}</dd>
-        </dl>
-        <dl class="row">
-          <dt class="col-sm-12">Description</dt>
-          <dd class="col-sm-12">
-            <div class="well well-sm">
-              <small ng-bind-html="c.servant.skill.active|skillDescription"></small>
-            </div>
-          </dd>
-        </dl>
-      </dd>
-      <dd ng-if="!c.servant.skill.active">
-        <div class="well well-sm">
-          <small>None</small>
-        </div>
-      </dd>
-    </dl>
-    <dl class="col-sm-6">
-      <dt><b>Passive Skill</b></dt>
-      <dd ng-if="c.servant.skill.passive">
-        <dl class="row">
-          <dt class="col-xs-3">Name</dt>
-          <dd class="col-xs-9">{{ c.servant.skill.passive.name }}</dd>
-        </dl>
-        <dl class="row">
-          <dt class="col-xs-3">Designation</dt>
-          <dd class="col-xs-9">{{ c.servant.skill.passive.designation|replace:',':'・'|default:'-' }}</dd>
-        </dl>
-        <dl class="row">
-          <dt class="col-xs-3">Effect</dt>
-          <dd class="col-xs-9">{{ c.servant.skill.passive.effect|replace:',':'・'|default:'-' }}</dd>
-        </dl>
-        <dl class="row">
-          <dt class="col-sm-12">Description</dt>
-          <dd class="col-sm-12">
-            <div class="well well-sm">
-              <small ng-bind-html="c.servant.skill.passive|skillDescription"></small>
-            </div>
-          </dd>
-        </dl>
-      </dd>
-      <dd ng-if="!c.servant.skill.passive">
-        <div class="well well-sm">
-          <small>None</small>
-        </div>
-      </dd>
-    </dl>
+  <!-- Statistics -->
+  <div class="statistics" ng-if="c.hash == 'statistics'">
+    <nvd3-line-chart
+        data="c.graphData.win"
+        xAxisTickFormat="c.graphXAxisTickFormatFunction()"
+        yAxisTickFormat="yAxisTickFormatFunction()"
+        width=""
+        height="350"
+        showXAxis="true"
+        showYAxis="true"
+        showLegend="true"
+        forcey="[0,100]"
+        interactive="true"
+        useInteractiveGuideLine="false"
+        tooltips="true"
+        tooltipcontent="c.graphToolTipContentFunction()"
+        isArea="true">
+      <svg></svg>
+    </nvd3-line-chart>
+    <nvd3-line-chart
+        data="c.graphData.used"
+        xAxisTickFormat="c.graphXAxisTickFormatFunction()"
+        yAxisTickFormat="yAxisTickFormatFunction()"
+        width=""
+        height="350"
+        showXAxis="true"
+        showYAxis="true"
+        showLegend="true"
+        forcey="[0,10]"
+        interactive="true"
+        useInteractiveGuideLine="false"
+        tooltips="true"
+        tooltipcontent="c.graphToolTipContentFunction()"
+        isArea="true">
+      <svg></svg>
+    </nvd3-line-chart>
   </div>
 </div>
