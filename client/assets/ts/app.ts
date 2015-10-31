@@ -25,7 +25,7 @@ export const modules = [
   'ui',
   'angulartics',
   'angulartics.google.analytics',
-  'nvd3ChartDirectives'
+  'nvd3'
 ];
 
 angular.module(appName, modules);
