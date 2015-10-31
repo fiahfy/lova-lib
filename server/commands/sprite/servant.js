@@ -4,7 +4,7 @@ let co = require('co');
 let fs = require('fs');
 let request = require('request');
 //let lwip = require('lwip');
-let scraper = require('../../utils/scrapers');
+let scraper = require('../../utils/scraper');
 let models = require('../../models');
 
 const imageDir = './client/assets/img/';

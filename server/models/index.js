@@ -28,7 +28,10 @@ process.on('SIGINT', function() {
 
 fs.readdirSync(__dirname).forEach(function(file) {
   if (file !== 'index.js') {
-    let moduleName = file.split('.')[0];
-    module.exports[moduleName] = require('./' + moduleName);
+    let fileName = file.split('.')[0];
+    let moduleName = fileName.replace(/-(\w)/, function(match, p1, offset, string) {
+      return p1.toUpperCase();
+    });
+    module.exports[moduleName] = require('./' + fileName);
   }
 });

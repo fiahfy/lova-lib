@@ -5,7 +5,7 @@ let fs = require('fs');
 let request = require('request');
 var config = require('../../config/app');
 let lwip = config.development ? require('lwip') : undefined;
-let scraper = require('../../utils/scrapers');
+let scraper = require('../../utils/scraper');
 let models = require('../../models');
 let logger = require('../../utils/logger');
 

@@ -1,7 +1,7 @@
 'use strict';
 
 let co = require('co');
-let scraper = require('../../utils/scrapers');
+let scraper = require('../../utils/scraper');
 let models = require('../../models');
 let logger = require('../../utils/logger');
 
