@@ -1,10 +1,20 @@
 #!/bin/bash
 
+IS_MAC=`expr \`uname\` = 'Darwin'`
+LOG_PATH=${OPENSHIFT_LOG_DIR}/cron_hourly_jobs.log
 HOUR=`date -u '+%H'`
 
 # 2015/01/01 21:00:00(UTC) : 2015/01/02 06:00:00(JST)
-if [ ${HOUR} -eq 21 ]; then
-  cd ${OPENSHIFT_REPO_DIR}
-  node cli upr win >> ${OPENSHIFT_LOG_DIR}/cron_hourly_jobs.log 2>&1
-  node cli upr used >> ${OPENSHIFT_LOG_DIR}/cron_hourly_jobs.log 2>&1
+if [ ${HOUR} -ge 21 -a ${HOUR} -le 23 ]; then
+  DATE=`date -u '+%Y-%m-%d'`
+else
+  if [ ${IS_MAC} ]; then
+    DATE=`date -u  -v-1d '+%Y-%m-%d'`
+  else
+    DATE=`date -u '+%Y-%m-%d' -d '1 days ago'`
+  fi
 fi
+
+cd ${OPENSHIFT_REPO_DIR}
+node cli upr win -d ${DATE} >> ${LOG_PATH} 2>&1
+node cli upr used -d ${DATE} >> ${LOG_PATH} 2>&1
