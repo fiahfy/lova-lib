@@ -8,7 +8,7 @@ HOUR=`date -u '+%H'`
 if [ ${HOUR} -ge 21 -a ${HOUR} -le 23 ]; then
   DATE=`date -u '+%Y-%m-%d'`
 else
-  if [ ${IS_MAC} ]; then
+  if [ ${IS_MAC} -eq 1 ]; then
     DATE=`date -u  -v-1d '+%Y-%m-%d'`
   else
     DATE=`date -u '+%Y-%m-%d' -d '1 days ago'`
