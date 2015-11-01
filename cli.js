@@ -30,9 +30,11 @@ commander
   .alias('upr')
   .description('update ranking data')
   .option('-d, --date [date]', 'target date', null, null)
+  .option('--date-from [date]', 'target date from', null, null)
+  .option('--date-to [date]', 'target date to', null, null)
   .option('-f, --force', 'force update', null, null)
   .action(function(opts) {
-    promise = commands.update.ranking(opts.date, opts.force);
+    promise = commands.update.ranking(opts.date, opts.dateFrom, opts.dateTo, opts.force);
   });
 
 commander
