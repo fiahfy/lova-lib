@@ -38,13 +38,17 @@ export class ServantModel {
     this.illustrationBy = obj.illustration_by;
     this.characterVoice = obj.character_voice;
     this.oralTradition  = obj.oral_tradition;
-    this.status = {
-      1:  obj.status[1]  ? new StatusModel(obj.status[1])  : null,
-      20: obj.status[20] ? new StatusModel(obj.status[20]) : null
-    };
-    this.skill = {
-      active:  obj.skill.active  ? new SkillModel(obj.skill.active)  : null,
-      passive: obj.skill.passive ? new SkillModel(obj.skill.passive) : null
+    if (obj.status) {
+      this.status = {
+        1:  obj.status[1]  ? new StatusModel(obj.status[1])  : null,
+        20: obj.status[20] ? new StatusModel(obj.status[20]) : null
+      };
+    }
+    if (obj.skill) {
+      this.skill = {
+        active:  obj.skill.active  ? new SkillModel(obj.skill.active)  : null,
+        passive: obj.skill.passive ? new SkillModel(obj.skill.passive) : null
+      }
     }
   }
 }

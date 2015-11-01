@@ -29,16 +29,18 @@ config.route = function(app) {
     }
   });
   app.use(st('client', {maxage: 10 * 60 * 1000}));
-  app.use(function *(next){
-    let key = crypto.createHash('md5').update(this.path).digest('hex');
-    let value = cache.get(key);
-    if (value) {
-      this.body = value;
-      return;
-    }
-    yield next;
-    cache.set(key, this.body);
-  });
+  if (!config.development) {
+    app.use(function *(next){
+      let key = crypto.createHash('md5').update(this.path).digest('hex');
+      let value = cache.get(key);
+      if (value) {
+        this.body = value;
+        return;
+      }
+      yield next;
+      cache.set(key, this.body);
+    });
+  }
   router.get('/api/', controllers.root);
   router.get('/api/servants/', controllers.servants);
   router.get('/api/servants/:id/', controllers.servants);

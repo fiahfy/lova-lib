@@ -26,13 +26,15 @@ commander
   });
 
 commander
-  .command('update-ranking <target>')
+  .command('update-ranking')
   .alias('upr')
   .description('update ranking data')
   .option('-d, --date [date]', 'target date', null, null)
+  .option('--date-from [date]', 'target date from', null, null)
+  .option('--date-to [date]', 'target date to', null, null)
   .option('-f, --force', 'force update', null, null)
-  .action(function(target, opts) {
-    promise = commands.update.ranking(target, opts.date, opts.force);
+  .action(function(opts) {
+    promise = commands.update.ranking(opts.date, opts.dateFrom, opts.dateTo, opts.force);
   });
 
 commander

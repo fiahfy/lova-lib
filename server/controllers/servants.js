@@ -3,10 +3,11 @@
 let models = require('../models');
 
 function *servants() {
+  let fields = (this.query.fields || '').replace(',', ' ');
   if (this.params.id) {
-    this.body = yield models.servant.findOne({_id: this.params.id}).exec();
+    this.body = yield models.servant.findOne({_id: this.params.id}, fields).exec();
   } else {
-    this.body = yield models.servant.find({}).sort({_id: 1}).exec();
+    this.body = yield models.servant.find({}, fields).sort({_id: 1}).exec();
   }
 }
 

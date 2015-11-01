@@ -5,41 +5,56 @@ let scraper = require('../../utils/scraper');
 let models = require('../../models');
 let logger = require('../../utils/logger');
 
-module.exports = function(target, date, force) {
+module.exports = function(date, dateFrom, dateTo, force) {
   return co(function *() {
-    let d;
+    let from, to;
     if (date) {
-      d = new Date(date);
+      let d = new Date(date);
       d = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
       if (isNaN(d.valueOf())) {
         throw new Error('Invalid Date: ' + date);
       }
+      from = to = d;
+    } else if (dateFrom && dateTo) {
+      from = new Date(dateFrom);
+      from = new Date(Date.UTC(from.getUTCFullYear(), from.getUTCMonth(), from.getUTCDate()));
+      if (isNaN(from.valueOf())) {
+        throw new Error('Invalid Date: ' + dateFrom);
+      }
+      to = new Date(dateTo);
+      to = new Date(Date.UTC(to.getUTCFullYear(), to.getUTCMonth(), to.getUTCDate()));
+      if (isNaN(to.valueOf())) {
+        throw new Error('Invalid Date: ' + dateTo);
+      }
     } else {
       // today if empty
-      d = new Date;
+      let d = new Date;
       d = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
+      from = to = d;
     }
 
-    switch (target) {
-      case 'win':
-        yield updateWinRanking(d, force);
-        break;
-      case 'used':
-        yield updateUsedRanking(d, force);
-        break;
+    let d = from;
+    while (d <= to) {
+      yield updateWinRanking(d, force);
+      yield updateUsedRanking(d, force);
+      d = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate() + 1));
     }
   });
 };
 
 function updateWinRanking(date, force) {
   return co(function *() {
-    // check exists if not force update
-    if (!force) {
-      let results = yield findRanking({mode: 'win', date: date});
-      if (results.length) {
+    let results = yield findRanking({mode: 'win', date: date});
+    if (results.length) {
+      // check exists if not force update
+      if (!force) {
         logger.verbose('Servant Win Ranking is Almost Exists: date = %s', date.toUTCString());
         return;
       }
+
+      // delete
+      logger.info('Delete Servant Win Ranking: date = %s', date.toUTCString());
+      yield deleteRanking({mode: 'win', date: date});
     }
 
     // get ranking
@@ -63,10 +78,6 @@ function updateWinRanking(date, force) {
       throw new Error('Servant Win Ranking Data is Nothing');
     }
 
-    // delete
-    logger.info('Delete Servant Win Ranking: date = %s', date.toUTCString());
-    yield deleteRanking({mode: 'win', date: date});
-
     // insert
     logger.info('Insert Servant Win Ranking');
     for (let d of data) {
@@ -77,13 +88,17 @@ function updateWinRanking(date, force) {
 
 function updateUsedRanking(date, force) {
   return co(function *() {
-    // check exists if not force update
-    if (!force) {
-      let results = yield findRanking({mode: 'used', date: date});
-      if (results.length) {
+    let results = yield findRanking({mode: 'used', date: date});
+    if (results.length) {
+      // check exists if not force update
+      if (!force) {
         logger.verbose('Servant Used Ranking is Almost Exists: date = %s', date.toUTCString());
         return;
       }
+
+      // delete
+      logger.info('Delete Servant Used Ranking: date = %s', date.toUTCString());
+      yield deleteRanking({mode: 'used', date: date});
     }
 
     // get ranking
@@ -106,10 +121,6 @@ function updateUsedRanking(date, force) {
     if (!data) {
       throw new Error('Servant Used Ranking Data is Nothing');
     }
-
-    // delete
-    logger.info('Delete Servant Used Ranking: date = %s', date.toUTCString());
-    yield deleteRanking({mode: 'used', date: date});
 
     // insert
     logger.info('Insert Servant Used Ranking');
@@ -149,7 +160,7 @@ function getUsedRankingWithDate(date) {
   });
 }
 
-function getServantMap(args) {
+function getServantMap() {
   return co(function *() {
     let servants = yield models.servant.find({}).exec();
     let map = {};

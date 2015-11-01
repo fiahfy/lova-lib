@@ -12,7 +12,7 @@ function *servantsStatistics() {
       servant_id: this.params.id,
       mode: mode,
       date: { $gte : d }
-    }).sort({date: 1}).exec();
+    }, 'date score').sort({date: 1}).exec();
   }
   this.body = body;
 }

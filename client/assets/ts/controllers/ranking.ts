@@ -4,6 +4,7 @@
 import * as app from '../app';
 import {ServantService} from '../services/servant';
 import {RankingService} from '../services/ranking';
+import {ScrollService} from '../services/scroll';
 import {ServantModel} from '../models/servant';
 import {RankingModel} from '../models/ranking';
 
@@ -26,7 +27,8 @@ class RankingListController {
     '$location',
     '$routeParams',
     'ServantService',
-    'RankingService'
+    'RankingService',
+    'ScrollService'
   ];
 
   public predicate: string[] = ['seq'];
@@ -38,7 +40,8 @@ class RankingListController {
     private $location: ng.ILocationService,
     private $routeParams: RankingListParams,
     private servantService: ServantService,
-    private rankingService: RankingService
+    private rankingService: RankingService,
+    private scrollService: ScrollService
   ) {
     this.mode = $routeParams.mode ? $routeParams.mode : 'win';
 
@@ -48,6 +51,7 @@ class RankingListController {
       })
       .then((rankings) => {
         this.rankings = rankings;
+        this.scrollService.restore();
       });
 
     $scope.$watch(() => this.mode, (newValue, oldValue) => {
@@ -63,7 +67,7 @@ class RankingListController {
   }
 
   public openServant(servant: ServantModel): void {
-    this.$location.url('/servants/' + servant.id + '/');
+    this.$location.url('/servants/' + servant.id + '/#statistics');
   }
 }
 

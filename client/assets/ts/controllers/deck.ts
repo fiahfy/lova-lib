@@ -130,19 +130,29 @@ class DeckController {
     this.tribeId = tribeId;
     this.tribeName = tribeName;
     this.filter.tribeId = this.tribeId ? this.tribeId : undefined;
+    this.flashLazyLoad();
   }
 
   public selectType(type: string, typeName: string): void {
     this.type = typeName;
     this.filter.type = type ? type : undefined;
+    this.flashLazyLoad();
   }
 
   public changeQuery(): void {
     this.filter.name = this.q;
+    this.flashLazyLoad();
   }
 
   public openServant(servantId: number): void {
     this.$window.open('/servants/' + servantId + '/', '_blank');
+  }
+
+  private flashLazyLoad() {
+    // force call scroll event
+    let top = angular.element(this.$window.document).scrollTop();
+    angular.element(this.$window.document).scrollTop(top+1);
+    angular.element(this.$window.document).scrollTop(top);
   }
 }
 

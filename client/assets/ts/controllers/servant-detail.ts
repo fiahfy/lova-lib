@@ -74,6 +74,15 @@ class ServantDetailController {
         return {x: ranking.date, y: ranking.score};
       })
     });
+    this.graph1Data.push({
+      key: 'Average',
+      area: false,
+      color: '#ff7f0e',
+      values: statistics.win.map((ranking: RankingModel) => {
+        return {x: ranking.date, y: 50};
+      })
+    });
+
     this.graph2Data = [];
     this.graph2Data.push({
       key: 'Used Rate',
@@ -81,6 +90,15 @@ class ServantDetailController {
       color: '#9467bd',
       values: statistics.used.map((ranking: RankingModel) => {
         return {x: ranking.date, y: ranking.score};
+      })
+    });
+    this.graph2Data.push({
+      key: 'Average',
+      area: false,
+      color: '#ff7f0e',
+      values: statistics.win.map((ranking: RankingModel) => {
+        // TODO: servants count取得
+        return {x: ranking.date, y: 100 / 221};
       })
     });
 

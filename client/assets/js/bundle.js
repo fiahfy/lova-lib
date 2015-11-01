@@ -205,16 +205,25 @@ var DeckController = (function () {
         this.tribeId = tribeId;
         this.tribeName = tribeName;
         this.filter.tribeId = this.tribeId ? this.tribeId : undefined;
+        this.flashLazyLoad();
     };
     DeckController.prototype.selectType = function (type, typeName) {
         this.type = typeName;
         this.filter.type = type ? type : undefined;
+        this.flashLazyLoad();
     };
     DeckController.prototype.changeQuery = function () {
         this.filter.name = this.q;
+        this.flashLazyLoad();
     };
     DeckController.prototype.openServant = function (servantId) {
         this.$window.open('/servants/' + servantId + '/', '_blank');
+    };
+    DeckController.prototype.flashLazyLoad = function () {
+        // force call scroll event
+        var top = angular.element(this.$window.document).scrollTop();
+        angular.element(this.$window.document).scrollTop(top + 1);
+        angular.element(this.$window.document).scrollTop(top);
     };
     DeckController.$inject = [
         '$window',
@@ -330,13 +339,14 @@ angular.module('app').directive('lovaPrize', Definition.ddo);
 },{}],6:[function(require,module,exports){
 'use strict';
 var RankingListController = (function () {
-    function RankingListController($scope, $location, $routeParams, servantService, rankingService) {
+    function RankingListController($scope, $location, $routeParams, servantService, rankingService, scrollService) {
         var _this = this;
         this.$scope = $scope;
         this.$location = $location;
         this.$routeParams = $routeParams;
         this.servantService = servantService;
         this.rankingService = rankingService;
+        this.scrollService = scrollService;
         this.modeOptions = [
             { key: 'win', value: 'Win Rate' },
             { key: 'used', value: 'Used Rate' }
@@ -350,6 +360,7 @@ var RankingListController = (function () {
         })
             .then(function (rankings) {
             _this.rankings = rankings;
+            _this.scrollService.restore();
         });
         $scope.$watch(function () { return _this.mode; }, function (newValue, oldValue) {
             if (typeof newValue === 'undefined' || typeof oldValue === 'undefined' || newValue == oldValue) {
@@ -362,14 +373,15 @@ var RankingListController = (function () {
         this.$location.url(this.$location.search('mode', mode).url());
     };
     RankingListController.prototype.openServant = function (servant) {
-        this.$location.url('/servants/' + servant.id + '/');
+        this.$location.url('/servants/' + servant.id + '/#statistics');
     };
     RankingListController.$inject = [
         '$scope',
         '$location',
         '$routeParams',
         'ServantService',
-        'RankingService'
+        'RankingService',
+        'ScrollService'
     ];
     return RankingListController;
 })();
@@ -429,6 +441,14 @@ var ServantDetailController = (function () {
                 return { x: ranking.date, y: ranking.score };
             })
         });
+        this.graph1Data.push({
+            key: 'Average',
+            area: false,
+            color: '#ff7f0e',
+            values: statistics.win.map(function (ranking) {
+                return { x: ranking.date, y: 50 };
+            })
+        });
         this.graph2Data = [];
         this.graph2Data.push({
             key: 'Used Rate',
@@ -436,6 +456,15 @@ var ServantDetailController = (function () {
             color: '#9467bd',
             values: statistics.used.map(function (ranking) {
                 return { x: ranking.date, y: ranking.score };
+            })
+        });
+        this.graph2Data.push({
+            key: 'Average',
+            area: false,
+            color: '#ff7f0e',
+            values: statistics.win.map(function (ranking) {
+                // TODO: servants count取得
+                return { x: ranking.date, y: 100 / 221 };
             })
         });
         this.graph1Options = this.graph2Options = {
@@ -915,14 +944,18 @@ var ServantModel = (function () {
         this.illustrationBy = obj.illustration_by;
         this.characterVoice = obj.character_voice;
         this.oralTradition = obj.oral_tradition;
-        this.status = {
-            1: obj.status[1] ? new StatusModel(obj.status[1]) : null,
-            20: obj.status[20] ? new StatusModel(obj.status[20]) : null
-        };
-        this.skill = {
-            active: obj.skill.active ? new SkillModel(obj.skill.active) : null,
-            passive: obj.skill.passive ? new SkillModel(obj.skill.passive) : null
-        };
+        if (obj.status) {
+            this.status = {
+                1: obj.status[1] ? new StatusModel(obj.status[1]) : null,
+                20: obj.status[20] ? new StatusModel(obj.status[20]) : null
+            };
+        }
+        if (obj.skill) {
+            this.skill = {
+                active: obj.skill.active ? new SkillModel(obj.skill.active) : null,
+                passive: obj.skill.passive ? new SkillModel(obj.skill.passive) : null
+            };
+        }
     }
     Object.defineProperty(ServantModel.prototype, "tribeNameAndCode", {
         get: function () {
@@ -1130,8 +1163,12 @@ var ScrollService = (function () {
         });
     }
     ScrollService.prototype.restore = function () {
+        var _this = this;
         var top = this.positions[this.$location.path()] || 0;
-        angular.element(this.$window).scrollTop(top);
+        // TODO: wait 100ms (not working with 0ms, 1ms)
+        this.$window.setTimeout(function () {
+            angular.element(_this.$window).scrollTop(top);
+        }, 100);
     };
     ScrollService.$inject = [
         '$location',
@@ -1154,7 +1191,7 @@ var ServantService = (function () {
     }
     ServantService.prototype.load = function () {
         var deferred = this.$q.defer();
-        this.$http.get(ServantService.url, { cache: true })
+        this.$http.get(ServantService.url + "?fields=-oral_tradition", { cache: true })
             .then(function (res) {
             var servants = [];
             res.data.forEach(function (servant) {
