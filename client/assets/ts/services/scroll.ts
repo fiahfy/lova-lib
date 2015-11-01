@@ -22,7 +22,10 @@ export class ScrollService {
 
   public restore(): void {
     let top = this.positions[this.$location.path()] || 0;
-    angular.element(this.$window).scrollTop(top);
+    // TODO: wait 100ms (not working with 0ms, 1ms)
+    this.$window.setTimeout(() => {
+      angular.element(this.$window).scrollTop(top);
+    }, 100);
   }
 }
 

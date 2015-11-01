@@ -5,7 +5,7 @@ let scraper = require('../../utils/scraper');
 let models = require('../../models');
 let logger = require('../../utils/logger');
 
-module.exports = function(target, date, force) {
+module.exports = function(date, force) {
   return co(function *() {
     let d;
     if (date) {
@@ -20,14 +20,8 @@ module.exports = function(target, date, force) {
       d = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
     }
 
-    switch (target) {
-      case 'win':
-        yield updateWinRanking(d, force);
-        break;
-      case 'used':
-        yield updateUsedRanking(d, force);
-        break;
-    }
+    yield updateWinRanking(d, force);
+    yield updateUsedRanking(d, force);
   });
 };
 
