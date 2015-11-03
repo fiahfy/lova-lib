@@ -5,6 +5,18 @@ let logger = require('../../utils/logger');
 let scraper = require('../../utils/scraper');
 let models = require('../../models');
 
+// map and queue set
+const mapAndQueues = [
+  {map: 'all',       queue: 'all'},
+  {map: 'all',       queue: 'normal'},
+  {map: 'all',       queue: 'league'},
+  {map: 'vermilion', queue: 'all'},
+  {map: 'vermilion', queue: 'normal'},
+  {map: 'vermilion', queue: 'solo'},
+  {map: 'braze',     queue: 'all'},
+  {map: 'braze',     queue: 'normal'}
+];
+
 module.exports = function(date, dateFrom, dateTo, force) {
   return co(function *() {
     let from, to;
@@ -39,18 +51,20 @@ module.exports = function(date, dateFrom, dateTo, force) {
     let d = from;
     while (d <= to) {
       for (let mode of ['win', 'used']) {
-        yield updateRanking(d, mode, servantMap, force);
+        for (let maq of mapAndQueues) {
+          yield updateRanking(d, mode, maq.map, maq.queue, servantMap, force);
+        }
       }
       d = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate() + 1));
     }
   });
 };
 
-function updateRanking(date, mode, servantMap, force) {
+function updateRanking(date, mode, map, queue, servantMap, force) {
   return co(function *() {
-    logger.verbose('Update Servant Ranking Begin: date = %s (%s)', date.toUTCString(), mode);
+    logger.verbose('Update Servant Ranking Begin: date = %s (%s, %s, %s)', date.toUTCString(), mode, map, queue);
 
-    let results = yield findRanking({mode: mode, date: date});
+    let results = yield findRanking({date: date, mode: mode, map: map, queue: queue});
     if (results.length) {
       // check exists if not force update
       if (!force) {
@@ -60,26 +74,28 @@ function updateRanking(date, mode, servantMap, force) {
 
       // delete
       logger.info('Delete Servant Ranking');
-      yield deleteRanking({mode: mode, date: date});
+      yield deleteRanking({date: date, mode: mode, map: map, queue: queue});
     }
 
     // get ranking
-    let rankings = yield getRanking(date, mode);
+    let rankings = yield getRanking(date, mode, map, queue);
+    if (!rankings) {
+      logger.warn('Servant Ranking Data is Nothing');
+      return;
+    }
 
     let data = [];
     for (let r of rankings) {
       data.push({
-        mode: mode,
         date: date,
+        mode: mode,
+        map: map,
+        queue: queue,
         servant_id: servantMap[r.tribe][Number(r.id)],
         seq: r.seq,
         rank: r.rank,
         score: r.score
       });
-    }
-
-    if (!data) {
-      throw new Error('Servant Ranking Data is Nothing');
     }
 
     // insert
@@ -106,10 +122,12 @@ function insertRanking(args) {
   });
 }
 
-function getRanking(date, mode) {
+function getRanking(date, mode, map, queue) {
   return co(function *() {
-    let body = (yield scraper.fetchServantRanking(date, mode)).body;
+    let body = (yield scraper.fetchServantRanking(date, mode, map, queue)).body;
     return JSON.parse(body.match(/^\w+\((.*)\);$/i)[1]);
+  }).then(null, () => {
+    return null;
   });
 }
 
