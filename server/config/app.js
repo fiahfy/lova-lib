@@ -17,8 +17,7 @@ let config = {
 
 config.route = function(app) {
   app.use(function *(next) {
-    console.log(this.path);
-    if (this.path.indexOf('/api/')) {
+    if (this.path.indexOf('/api/') > -1) {
       // server
       yield next;
     } else if (this.path.indexOf('.') > -1) {
@@ -32,14 +31,18 @@ config.route = function(app) {
   app.use(st('client', {maxage: 10 * 60 * 1000}));
   if (!config.development) {
     app.use(function *(next){
-      let key = crypto.createHash('md5').update(this.path).digest('hex');
-      let value = cache.get(key);
-      if (value) {
-        this.body = value;
-        return;
+      if (this.path.indexOf('.') > -1) {
+        yield next;
+      } else {
+        let key = crypto.createHash('md5').update(this.path).digest('hex');
+        let value = cache.get(key);
+        if (value) {
+          this.body = value;
+          return;
+        }
+        yield next;
+        cache.set(key, this.body);
       }
-      yield next;
-      cache.set(key, this.body);
     });
   }
   router.get('/sitemap.xml', controllers.sitemap);
