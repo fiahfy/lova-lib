@@ -1,9 +1,9 @@
 'use strict';
 
 let co = require('co');
+let logger = require('../../utils/logger');
 let scraper = require('../../utils/scraper');
 let models = require('../../models');
-let logger = require('../../utils/logger');
 
 module.exports = function(date, dateFrom, dateTo, force) {
   return co(function *() {
@@ -33,41 +33,45 @@ module.exports = function(date, dateFrom, dateTo, force) {
       from = to = d;
     }
 
+    // get servant map to convert servant id
+    let servantMap = yield getServantMap();
+
     let d = from;
     while (d <= to) {
-      yield updateWinRanking(d, force);
-      yield updateUsedRanking(d, force);
+      for (let mode of ['win', 'used']) {
+        yield updateRanking(d, mode, servantMap, force);
+      }
       d = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate() + 1));
     }
   });
 };
 
-function updateWinRanking(date, force) {
+function updateRanking(date, mode, servantMap, force) {
   return co(function *() {
-    let results = yield findRanking({mode: 'win', date: date});
+    logger.verbose('Update Servant Ranking Begin: date = %s (%s)', date.toUTCString(), mode);
+
+    let results = yield findRanking({mode: mode, date: date});
     if (results.length) {
       // check exists if not force update
       if (!force) {
-        logger.verbose('Servant Win Ranking is Almost Exists: date = %s', date.toUTCString());
+        logger.verbose('Servant Ranking is Almost Exists');
         return;
       }
 
       // delete
-      logger.info('Delete Servant Win Ranking: date = %s', date.toUTCString());
-      yield deleteRanking({mode: 'win', date: date});
+      logger.info('Delete Servant Ranking');
+      yield deleteRanking({mode: mode, date: date});
     }
 
     // get ranking
-    let rankings = yield getWinRankingWithDate(date);
-    // get servant map to convert servant id
-    let map = yield getServantMap();
+    let rankings = yield getRanking(date, mode);
 
     let data = [];
     for (let r of rankings) {
       data.push({
-        mode: 'win',
+        mode: mode,
         date: date,
-        servant_id: map[r.tribe][Number(r.id)],
+        servant_id: servantMap[r.tribe][Number(r.id)],
         seq: r.seq,
         rank: r.rank,
         score: r.score
@@ -75,55 +79,11 @@ function updateWinRanking(date, force) {
     }
 
     if (!data) {
-      throw new Error('Servant Win Ranking Data is Nothing');
+      throw new Error('Servant Ranking Data is Nothing');
     }
 
     // insert
-    logger.info('Insert Servant Win Ranking');
-    for (let d of data) {
-      yield insertRanking(d);
-    }
-  });
-}
-
-function updateUsedRanking(date, force) {
-  return co(function *() {
-    let results = yield findRanking({mode: 'used', date: date});
-    if (results.length) {
-      // check exists if not force update
-      if (!force) {
-        logger.verbose('Servant Used Ranking is Almost Exists: date = %s', date.toUTCString());
-        return;
-      }
-
-      // delete
-      logger.info('Delete Servant Used Ranking: date = %s', date.toUTCString());
-      yield deleteRanking({mode: 'used', date: date});
-    }
-
-    // get ranking
-    let rankings = yield getUsedRankingWithDate(date);
-    // get servant map to convert servant id
-    let map = yield getServantMap();
-
-    let data = [];
-    for (let r of rankings) {
-      data.push({
-        mode: 'used',
-        date: date,
-        servant_id: map[r.tribe][Number(r.id)],
-        seq: r.seq,
-        rank: r.rank,
-        score: r.score
-      });
-    }
-
-    if (!data) {
-      throw new Error('Servant Used Ranking Data is Nothing');
-    }
-
-    // insert
-    logger.info('Insert Servant Used Ranking');
+    logger.info('Insert Servant Ranking');
     for (let d of data) {
       yield insertRanking(d);
     }
@@ -146,16 +106,9 @@ function insertRanking(args) {
   });
 }
 
-function getWinRankingWithDate(date) {
+function getRanking(date, mode) {
   return co(function *() {
-    let body = (yield scraper.fetchServantWinRanking(date)).body;
-    return JSON.parse(body.match(/^\w+\((.*)\);$/i)[1]);
-  });
-}
-
-function getUsedRankingWithDate(date) {
-  return co(function *() {
-    let body = (yield scraper.fetchServantUsedRanking(date)).body;
+    let body = (yield scraper.fetchServantRanking(date, mode)).body;
     return JSON.parse(body.match(/^\w+\((.*)\);$/i)[1]);
   });
 }

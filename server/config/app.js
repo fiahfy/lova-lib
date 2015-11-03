@@ -17,7 +17,8 @@ let config = {
 
 config.route = function(app) {
   app.use(function *(next) {
-    if (this.path.indexOf('/api/') === 0) {
+    console.log(this.path);
+    if (this.path.indexOf('/api/')) {
       // server
       yield next;
     } else if (this.path.indexOf('.') > -1) {
@@ -41,6 +42,7 @@ config.route = function(app) {
       cache.set(key, this.body);
     });
   }
+  router.get('/sitemap.xml', controllers.sitemap);
   router.get('/api/', controllers.root);
   router.get('/api/servants/', controllers.servants);
   router.get('/api/servants/:id/', controllers.servants);

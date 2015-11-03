@@ -3,11 +3,11 @@
 let co = require('co');
 let fs = require('fs');
 let request = require('request');
-var config = require('../../config/app');
+let config = require('../../config/app');
 let lwip = config.development ? require('lwip') : undefined;
+let logger = require('../../utils/logger');
 let scraper = require('../../utils/scraper');
 let models = require('../../models');
-let logger = require('../../utils/logger');
 
 const imageDir = './client/assets/img/';
 
