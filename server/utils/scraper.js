@@ -41,28 +41,31 @@ function fetchAllServantList() {
   return fetch(url);
 }
 
-function fetchServantWinRanking(date) {
+function fetchServantRanking(date, mode) {
   let d = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
   d.setUTCDate(d.getUTCDate() + 1);
-  var dateString = d.getUTCFullYear() + ('00' + (d.getUTCMonth() + 1)).slice(-2) + ('00' + d.getUTCDate()).slice(-2) + '0500';
-  let url = `http://cache.lova.jp/ranking/servantWinRate_weekly_all_all_all/${dateString}/page1.json`;
-  return fetch(url);
-}
-
-function fetchServantUsedRanking(date) {
-  let d = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
-  d.setUTCDate(d.getUTCDate() + 1);
-  var dateString = d.getUTCFullYear() + ('00' + (d.getUTCMonth() + 1)).slice(-2) + ('00' + d.getUTCDate()).slice(-2) + '0500';
-  let url = `http://cache.lova.jp/ranking/servantUsedRate_weekly_all_all_all/${dateString}/page1.json`;
+  let dateString = d.getUTCFullYear() + ('00' + (d.getUTCMonth() + 1)).slice(-2) + ('00' + d.getUTCDate()).slice(-2) + '0500';
+  let path;
+  switch (mode) {
+    case 'win':
+      path = 'servantWinRate_weekly_all_all_all';
+      break;
+    case 'used':
+      path = 'servantUsedRate_weekly_all_all_all';
+      break;
+  }
+  if (!path) {
+    return null;
+  }
+  let url = `http://cache.lova.jp/ranking/${path}/${dateString}/page1.json`;
   return fetch(url);
 }
 
 module.exports = {
-  fetch:                   fetch,
-  fetchArticle:            fetchArticle,
-  fetchNotice:             fetchNotice,
-  fetchServant:            fetchServant,
-  fetchAllServantList:     fetchAllServantList,
-  fetchServantWinRanking:  fetchServantWinRanking,
-  fetchServantUsedRanking: fetchServantUsedRanking
+  fetch:               fetch,
+  fetchArticle:        fetchArticle,
+  fetchNotice:         fetchNotice,
+  fetchServant:        fetchServant,
+  fetchAllServantList: fetchAllServantList,
+  fetchServantRanking: fetchServantRanking
 };
