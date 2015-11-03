@@ -42,7 +42,7 @@
   "bundleDependencies": [],
   "private": true,
   "scripts": {
-    "start": "PWD=`pwd`; forever start -w --minUptime 1000 --spinSleepTime 1000 -a -l ${PWD}/tmp/forever/forever.log server.js",
+    "start": "PWD=`pwd`; forever start -w --minUptime 1000 --spinSleepTime 1000 -a -l ${PWD}/tmp/forever/forever.log --watchDirectory ${PWD}/server/ server.js",
     "poststart": "mongod --fork --logpath /dev/null --dbpath tmp/mongodb/data",
     "prestop": "mongo admin --eval 'db.shutdownServer()' > /dev/null",
     "stop": "forever stop server.js",

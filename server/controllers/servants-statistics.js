@@ -10,8 +10,10 @@ function *servantsStatistics() {
   for (let mode of ['win', 'used']) {
     body[mode] = yield models.servantranking.find({
       servant_id: this.params.id,
+      date: { $gte : d },
       mode: mode,
-      date: { $gte : d }
+      map: 'all',
+      queue: 'all'
     }, 'date score').sort({date: 1}).exec();
   }
   this.body = body;

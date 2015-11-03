@@ -6,8 +6,10 @@ let Schema = mongoose.Schema;
 
 let ServantrankingShema = new Schema({
   _id:              { type: Number, require: true, unique: true },
-  mode:             { type: String, require: true },
   date:             { type: Date,   require: true },
+  mode:             { type: String, require: true },
+  map:              { type: String, require: true },
+  queue:            { type: String, require: true },
   servant_id:       { type: Number, require: true },
   seq:              { type: Number, require: true },
   rank:             { type: Number, require: true },
