@@ -48,7 +48,7 @@
     "stop": "forever stop server.js",
     "tail": "forever logs -f server.js",
     "dump": "mongodump --host=127.0.0.1 --port=27017 -u admin -d lova -o tmp/mongodb/dump",
-    "restore": "mongorestore --host=127.0.0.1 --port=27017 -d lova --drop tmp/mongodb/dump"
+    "restore": "mongorestore --host=127.0.0.1 --port=27017 -d lova --drop tmp/mongodb/dump/lova"
   },
   "main": "server.js"
 }
