@@ -488,7 +488,7 @@ var ServantDetailController = (function () {
             key: 'Average',
             area: false,
             color: '#ff7f0e',
-            values: statistics.win.map(function (ranking) {
+            values: statistics.used.map(function (ranking) {
                 // TODO: servants count取得
                 return { x: ranking.date, y: 100 / 221 };
             })

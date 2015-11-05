@@ -122,7 +122,7 @@ class ServantDetailController {
       key: 'Average',
       area: false,
       color: '#ff7f0e',
-      values: statistics.win.map((ranking: RankingModel) => {
+      values: statistics.used.map((ranking: RankingModel) => {
         // TODO: servants count取得
         return {x: ranking.date, y: 100 / 221};
       })
