@@ -19,9 +19,9 @@ export class StatisticsService {
   ) {
   }
 
-  public loadWithId(id: number): ng.IPromise<StatisticsModel> {
+  public loadWithId(id: number, map: string, queue: string): ng.IPromise<StatisticsModel> {
     let deferred = this.$q.defer();
-    this.$http.get(`${StatisticsService.url}${id}/statistics/`, {cache: true})
+    this.$http.get(`${StatisticsService.url}${id}/statistics/?map=${map}&queue=${queue}`, {cache: true})
       .then((res: any) => {
         let statistics = new StatisticsModel(res.data);
         deferred.resolve(statistics);

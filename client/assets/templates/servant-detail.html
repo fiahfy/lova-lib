@@ -201,6 +201,25 @@
 
   <!-- Statistics -->
   <div class="statistics" ng-if="c.hash == 'statistics'">
+    <form class="form-horizontal">
+      <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">Map</label>
+        <div class="col-xs-12 col-sm-10 text-left">
+          <label class="radio radio-inline" ng-repeat="mapOption in c.mapOptions">
+            <input type="radio" name="map" value="{{ mapOption.key }}" ng-model="c.map" ng-change="c.updateStatistics()">{{ mapOption.value }}
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">Queue</label>
+        <div class="col-xs-12 col-sm-10 text-left">
+          <label class="radio radio-inline" ng-repeat="queueOption in c.queueOptions">
+            <input type="radio" name="queue" value="{{ queueOption.key }}" ng-model="c.queue" ng-change="c.updateStatistics()">{{ queueOption.value }}
+          </label>
+        </div>
+      </div>
+    </form>
+
     <nvd3 options='c.graph1Options' data='c.graph1Data'></nvd3>
     <nvd3 options='c.graph2Options' data='c.graph2Data'></nvd3>
   </div>

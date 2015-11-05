@@ -65,7 +65,7 @@ function fetchServantRanking(date, mode, map, queue) {
     case 'all-normal':
       path += '_all_normal_all';
       break;
-    case 'all-league':
+    case 'all-solo':
       path += '_all_league_all';
       break;
     case 'vermilion-all':

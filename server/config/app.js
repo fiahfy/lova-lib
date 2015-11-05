@@ -1,6 +1,5 @@
 'use strict';
 
-let controllers = require('../controllers');
 let router = require('koa-router')();
 let st = require('koa-static');
 let send = require('koa-send');
@@ -8,6 +7,8 @@ let crypto = require('crypto');
 
 let LRU = require("lru-cache");
 let cache = LRU({maxAge: 1000 * 60});
+
+let controllers = require('../controllers');
 
 let config = {
   port:        process.env.OPENSHIFT_NODEJS_PORT || 3000,
@@ -34,7 +35,7 @@ config.route = function(app) {
       if (this.path.indexOf('.') > -1) {
         yield next;
       } else {
-        let key = crypto.createHash('md5').update(this.path).digest('hex');
+        let key = crypto.createHash('md5').update(this.url).digest('hex');
         let value = cache.get(key);
         if (value) {
           this.body = value;
