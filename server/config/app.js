@@ -35,7 +35,7 @@ config.route = function(app) {
       if (this.path.indexOf('.') > -1) {
         yield next;
       } else {
-        let key = crypto.createHash('md5').update(this.path).digest('hex');
+        let key = crypto.createHash('md5').update(this.url).digest('hex');
         let value = cache.get(key);
         if (value) {
           this.body = value;
