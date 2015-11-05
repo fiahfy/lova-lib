@@ -9,7 +9,7 @@ let models = require('../../models');
 const mapAndQueues = [
   {map: 'all',       queue: 'all'},
   {map: 'all',       queue: 'normal'},
-  {map: 'all',       queue: 'league'},
+  {map: 'all',       queue: 'solo'},
   {map: 'vermilion', queue: 'all'},
   {map: 'vermilion', queue: 'normal'},
   {map: 'vermilion', queue: 'solo'},
