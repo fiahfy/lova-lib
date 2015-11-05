@@ -12,8 +12,6 @@ interface DeckParams extends ng.route.IRouteParamsService {
 }
 
 class DeckController {
-  public servants: ServantModel[];
-
   public tribeIdOptions: {key: number; value: string;}[] = [
     {key: 0, value: 'Select Tribe...'},
     {key: 1, value: '人獣'},
@@ -22,19 +20,17 @@ class DeckController {
     {key: 4, value: '海種'},
     {key: 5, value: '不死'}
   ];
-
   public typeOptions: {key: string; value: string;}[] = [
     {key: '', value: 'Select Type...'}
   ];
 
+  public servants: ServantModel[];
+  public deck: DeckModel;
+  public url: string;
   public tribeId: number;
-
   public tribeName: string = 'Select Tribe...';
-
   public type: string = this.typeOptions[0].value;
-
   public q: string;
-
   public filter: {
     tribeId: number;
     type: string;
@@ -44,14 +40,8 @@ class DeckController {
     type: undefined,
     name: undefined
   };
-
   public predicate: string[] = ['tribeId', 'tribeCode'];
-
   public reverse: boolean = false;
-
-  public url: string;
-
-  public deck: DeckModel;
 
   public static $inject = [
     '$window',

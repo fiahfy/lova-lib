@@ -14,21 +14,31 @@ interface ServantDetailParams extends ng.route.IRouteParamsService {
 }
 
 class ServantDetailController {
+  public mapOptions: {key: string; value: string;}[] = [
+    {key: 'all',       value: 'All'},
+    {key: 'vermilion', value: 'Vermilion'},
+    {key: 'braze',     value: 'Braze'}
+  ];
+  public queueOptions: {key: string; value: string;}[] = [
+    {key: 'all',    value: 'All'},
+    {key: 'normal', value: 'Normal'},
+    {key: 'solo',   value: 'Solo'}
+  ];
+
   public servant: ServantModel;
-
+  public id: number;
   public hash: string;
-
+  public map: string = 'all';
+  public queue: string = 'all';
   public graph1Data: any;
   public graph1Options: any;
   public graph2Data: any;
   public graph2Options: any;
-
   public graphXAxisTickFormatFunction: any = () => {
     return (d) => {
       return d3.time.format('%Y-%m-%d')(new Date(d));
     };
   };
-
   public graphToolTipContentFunction: any = () => {
     return (item) => {
       return `${item.point[1].toFixed(2)} %`;
@@ -36,6 +46,7 @@ class ServantDetailController {
   };
 
   public static $inject = [
+    '$window',
     '$routeParams',
     '$location',
     'ServantService',
@@ -44,21 +55,36 @@ class ServantDetailController {
   ];
 
   constructor(
+    private $window: ng.IWindowService,
     private $routeParams: ServantDetailParams,
     private $location: ng.ILocationService,
     private servantService: ServantService,
     private statisticsService: StatisticsService,
     private scrollService: ScrollService
   ) {
+    this.id = +$routeParams.id;
     this.hash = $location.hash() || 'detail';
 
-    servantService.loadWithId(+$routeParams.id)
+    servantService.loadWithId(this.id)
       .then((servant: ServantModel) => {
         this.servant = servant;
         this.scrollService.restore();
       });
 
-    statisticsService.loadWithId(+$routeParams.id)
+    statisticsService.loadWithId(this.id, this.map, this.queue)
+      .then((statistics: StatisticsModel) => {
+        this.updateGraph(statistics);
+      });
+
+    angular.element($window.document).ready(() => {
+      $window.setTimeout(() => {
+        angular.element(':radio')['radiocheck']();
+      }, 0);
+    });
+  }
+
+  public updateStatistics() {
+    this.statisticsService.loadWithId(this.id, this.map, this.queue)
       .then((statistics: StatisticsModel) => {
         this.updateGraph(statistics);
       });

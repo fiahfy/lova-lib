@@ -13,14 +13,15 @@ interface RankingListParams extends ng.route.IRouteParamsService {
 }
 
 class RankingListController {
-  public rankings: RankingModel[];
-
   public modeOptions: {key: string; value: string;}[] = [
-    {key: 'win', value: 'Win Rate'},
+    {key: 'win',  value: 'Win Rate'},
     {key: 'used', value: 'Used Rate'}
   ];
 
+  public rankings: RankingModel[];
   public mode: string;
+  public predicate: string[] = ['seq'];
+  public reverse: boolean = false;
 
   public static $inject = [
     '$scope',
@@ -30,10 +31,6 @@ class RankingListController {
     'RankingService',
     'ScrollService'
   ];
-
-  public predicate: string[] = ['seq'];
-
-  public reverse: boolean = false;
 
   constructor(
     private $scope: ng.IScope,

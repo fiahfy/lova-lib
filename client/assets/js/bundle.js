@@ -264,11 +264,11 @@ var PrizeController = (function () {
     function PrizeController(prizeService) {
         var _this = this;
         this.prizeService = prizeService;
-        this.times = 10;
         this.viewOptions = [
             { key: 0, icon: 'fui-list-numbered' },
             { key: 1, icon: 'fui-list-thumbnailed' }
         ];
+        this.times = 10;
         this.view = 0;
         prizeService.load()
             .then(function (prizes) {
@@ -403,13 +403,26 @@ angular.module('app').directive('lovaRanking', Definition.ddo);
 },{}],7:[function(require,module,exports){
 'use strict';
 var ServantDetailController = (function () {
-    function ServantDetailController($routeParams, $location, servantService, statisticsService, scrollService) {
+    function ServantDetailController($window, $routeParams, $location, servantService, statisticsService, scrollService) {
         var _this = this;
+        this.$window = $window;
         this.$routeParams = $routeParams;
         this.$location = $location;
         this.servantService = servantService;
         this.statisticsService = statisticsService;
         this.scrollService = scrollService;
+        this.mapOptions = [
+            { key: 'all', value: 'All' },
+            { key: 'vermilion', value: 'Vermilion' },
+            { key: 'braze', value: 'Braze' }
+        ];
+        this.queueOptions = [
+            { key: 'all', value: 'All' },
+            { key: 'normal', value: 'Normal' },
+            { key: 'solo', value: 'Solo' }
+        ];
+        this.map = 'all';
+        this.queue = 'all';
         this.graphXAxisTickFormatFunction = function () {
             return function (d) {
                 return d3.time.format('%Y-%m-%d')(new Date(d));
@@ -420,17 +433,30 @@ var ServantDetailController = (function () {
                 return item.point[1].toFixed(2) + " %";
             };
         };
+        this.id = +$routeParams.id;
         this.hash = $location.hash() || 'detail';
-        servantService.loadWithId(+$routeParams.id)
+        servantService.loadWithId(this.id)
             .then(function (servant) {
             _this.servant = servant;
             _this.scrollService.restore();
         });
-        statisticsService.loadWithId(+$routeParams.id)
+        statisticsService.loadWithId(this.id, this.map, this.queue)
             .then(function (statistics) {
             _this.updateGraph(statistics);
         });
+        angular.element($window.document).ready(function () {
+            $window.setTimeout(function () {
+                angular.element(':radio')['radiocheck']();
+            }, 0);
+        });
     }
+    ServantDetailController.prototype.updateStatistics = function () {
+        var _this = this;
+        this.statisticsService.loadWithId(this.id, this.map, this.queue)
+            .then(function (statistics) {
+            _this.updateGraph(statistics);
+        });
+    };
     ServantDetailController.prototype.updateGraph = function (statistics) {
         this.graph1Data = [];
         this.graph1Data.push({
@@ -496,6 +522,7 @@ var ServantDetailController = (function () {
         };
     };
     ServantDetailController.$inject = [
+        '$window',
         '$routeParams',
         '$location',
         'ServantService',
@@ -1234,9 +1261,9 @@ var StatisticsService = (function () {
         this.$http = $http;
         this.$q = $q;
     }
-    StatisticsService.prototype.loadWithId = function (id) {
+    StatisticsService.prototype.loadWithId = function (id, map, queue) {
         var deferred = this.$q.defer();
-        this.$http.get("" + StatisticsService.url + id + "/statistics/", { cache: true })
+        this.$http.get("" + StatisticsService.url + id + "/statistics/?map=" + map + "&queue=" + queue, { cache: true })
             .then(function (res) {
             var statistics = new statistics_1.StatisticsModel(res.data);
             deferred.resolve(statistics);

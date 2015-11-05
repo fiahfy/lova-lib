@@ -195,7 +195,21 @@ img {
     margin: 0 auto;
     *width: auto;
 }
-
+#servant-detail .statistics>form>div>label {
+    font-size: 90%;
+    font-weight: 400;
+    line-height: 25px;
+    color: #c0c1c2;
+}
+#servant-detail .statistics .radio+.radio {
+    margin: 0 0 0 20px;
+}
+#servant-detail .statistics .form-horizontal .radio {
+    min-height: 0;
+}
+#servant-detail .statistics .form-group {
+    margin-bottom: 10px;
+}
 
 /* Deck */
 #deck>.input-group>span>* {

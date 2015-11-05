@@ -13,13 +13,10 @@ interface ServantListParams extends ng.route.IRouteParamsService {
 }
 
 class ServantListController {
-  public servants: ServantModel[];
-
   public viewOptions: {key: number; icon: string;}[] = [
     {key: 0, icon: 'fui-list-large-thumbnails'},
     {key: 1, icon: 'fui-list-columned'}
   ];
-
   public tribeIdOptions: {key: number; value: string;}[] = [
     {key: 0, value: 'Select Tribe...'},
     {key: 1, value: '人獣'},
@@ -29,12 +26,10 @@ class ServantListController {
     {key: 5, value: '不死'}
   ];
 
+  public servants: ServantModel[];
   public view: number;
-
   public tribeId: number;
-
   public q: string;
-
   public filter: { [key: string]: string; } = {
     tribeId: undefined,
     name: undefined,
@@ -44,9 +39,7 @@ class ServantListController {
     illustrationBy: undefined,
     characterVoice: undefined
   };
-
   public predicate: string[] = ['tribeId', 'tribeCode'];
-
   public reverse: boolean = false;
 
   public static $inject = [

@@ -6,21 +6,16 @@ import {PrizeService} from '../services/prize';
 import {PrizeModel} from '../models/prize';
 
 class PrizeController {
-  public prizes: PrizeModel[];
-
-  public results: PrizeModel[];
-
-  public resultSummary: {prize: PrizeModel; count: number;}[];
-
-  public resultTimes: number;
-
-  public times: number = 10;
-
   public viewOptions: {key: number; icon: string;}[] = [
     {key: 0, icon: 'fui-list-numbered'},
     {key: 1, icon: 'fui-list-thumbnailed'}
   ];
 
+  public prizes: PrizeModel[];
+  public results: PrizeModel[];
+  public resultSummary: {prize: PrizeModel; count: number;}[];
+  public times: number = 10;
+  public resultTimes: number;
   public view: number = 0;
 
   public static $inject = [

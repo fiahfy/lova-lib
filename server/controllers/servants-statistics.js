@@ -12,8 +12,8 @@ function *servantsStatistics() {
       servant_id: this.params.id,
       date: { $gte : d },
       mode: mode,
-      map: 'all',
-      queue: 'all'
+      map: this.query.map || 'all',
+      queue: this.query.queue || 'all'
     }, 'date score').sort({date: 1}).exec();
   }
   this.body = body;
