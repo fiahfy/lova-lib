@@ -1,12 +1,11 @@
 <!DOCTYPE html>
-<html ng-app="app">
+<html ng-app="app" ng-controller="RootController as c">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,user-scalable=0,initial-scale=1" />
   <meta name="google-site-verification" content="6bN-eixW9drVZ1XveP3McIv2g2162XyXxQE9XJNtW9c" />
-  <meta name="description" content="Tool Site for Lord of Vermilion Arena" />
-  <meta name="keywords" content="deck,simulator,デッキ,シミュレータ" />
-  <title>LoVA Tool</title>
+  <meta name="description" content="{{ c.description }}" />
+  <title>{{ c.title }}</title>
   <base href="/">
   <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css" />
@@ -59,7 +58,7 @@
 
 <ng-view></ng-view>
 
-<footer class="footer" ng-controller="FooterController as c">
+<footer class="footer">
   <div>
     <div class="container">
       <p class="text-center text-muted">

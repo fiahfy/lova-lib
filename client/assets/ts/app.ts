@@ -91,13 +91,56 @@ import './directives';
 import './services';
 import './filters';
 
-export class FooterController {
+import {ServantService} from './services/servant';
+import {ServantModel, SkillModel, StatusModel} from './models/servant';
+
+export class RootController {
   public now: Date;
 
+  public title: string;
+  public description: string;
+
+  public static $inject = [
+    '$scope',
+    '$location',
+    'ServantService'
+  ];
+
   constructor(
+    private $scope: ng.IScope,
+    private $location: ng.ILocationService,
+    private servantService: ServantService
   ) {
     this.now = new Date();
+
+    $scope.$on('$routeChangeSuccess', (event, current, previous) => {
+      let path = $location.path().match(/^\/(\w+)\//)[1];
+      switch (path) {
+        case 'deck':
+        case 'ranking':
+        case 'prize':
+        case 'about':
+          this.title = `${path.charAt(0).toUpperCase() + path.slice(1)} : LoVA Tool`;
+          this.description = 'Tool Site for Lord of Vermilion Arena';
+          return;
+        case 'servants':
+          this.title = `${path.charAt(0).toUpperCase() + path.slice(1)} : LoVA Tool`;
+          this.description = 'Tool Site for Lord of Vermilion Arena';
+          break;
+      }
+      let matches = $location.path().match(/^\/servants\/(\d+)\//);
+      if (!matches) {
+        return;
+      }
+      let id = +matches[1];
+
+      servantService.loadWithId(id)
+        .then((servant: ServantModel) => {
+          this.title = `Servant ${servant.tribeName}-${('000'+servant.tribeCode).slice(-3)} ${servant.name} : LoVA Tool`;
+          this.description = `${servant.oralTradition}`;
+        });
+    });
   }
 }
 
-angular.module(appName).controller('FooterController', FooterController);
+angular.module(appName).controller('RootController', RootController);

@@ -83,14 +83,49 @@ require('./controllers');
 require('./directives');
 require('./services');
 require('./filters');
-var FooterController = (function () {
-    function FooterController() {
+var RootController = (function () {
+    function RootController($scope, $location, servantService) {
+        var _this = this;
+        this.$scope = $scope;
+        this.$location = $location;
+        this.servantService = servantService;
         this.now = new Date();
+        $scope.$on('$routeChangeSuccess', function (event, current, previous) {
+            var path = $location.path().match(/^\/(\w+)\//)[1];
+            switch (path) {
+                case 'deck':
+                case 'ranking':
+                case 'prize':
+                case 'about':
+                    _this.title = (path.charAt(0).toUpperCase() + path.slice(1)) + " : LoVA Tool";
+                    _this.description = 'Tool Site for Lord of Vermilion Arena';
+                    return;
+                case 'servants':
+                    _this.title = (path.charAt(0).toUpperCase() + path.slice(1)) + " : LoVA Tool";
+                    _this.description = 'Tool Site for Lord of Vermilion Arena';
+                    break;
+            }
+            var matches = $location.path().match(/^\/servants\/(\d+)\//);
+            if (!matches) {
+                return;
+            }
+            var id = +matches[1];
+            servantService.loadWithId(id)
+                .then(function (servant) {
+                _this.title = "Servant " + servant.tribeName + "-" + ('000' + servant.tribeCode).slice(-3) + " " + servant.name + " : LoVA Tool";
+                _this.description = "" + servant.oralTradition;
+            });
+        });
     }
-    return FooterController;
+    RootController.$inject = [
+        '$scope',
+        '$location',
+        'ServantService'
+    ];
+    return RootController;
 })();
-exports.FooterController = FooterController;
-angular.module(exports.appName).controller('FooterController', FooterController);
+exports.RootController = RootController;
+angular.module(exports.appName).controller('RootController', RootController);
 
 },{"./controllers":4,"./directives":10,"./filters":16,"./services":26}],2:[function(require,module,exports){
 'use strict';
