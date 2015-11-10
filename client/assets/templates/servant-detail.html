@@ -38,8 +38,12 @@
           </div>
           <div class="col-sm-6">
             <dl class="row">
+              <dt class="col-xs-3">Released</dt>
+              <dd class="col-xs-9">{{ c.servant.release_date|date:'yyyy-MM-dd' }}</dd>
+            </dl>
+            <dl class="row">
               <dt class="col-xs-3">Updated</dt>
-              <dd class="col-xs-9">{{ c.servant.date|date:'yyyy-MM-dd' }}</dd>
+              <dd class="col-xs-9">{{ c.servant.update_date|date:'yyyy-MM-dd' }}</dd>
             </dl>
             <dl class="row">
               <dt class="col-xs-3">Range</dt>
