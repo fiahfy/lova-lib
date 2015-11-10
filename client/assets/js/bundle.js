@@ -615,7 +615,6 @@ var ServantListController = (function () {
         };
         this.predicate = ['tribeId', 'tribeCode'];
         this.reverse = false;
-        this.view = $routeParams.view ? +$routeParams.view : 0;
         this.tribeId = $routeParams.tribe_id ? +$routeParams.tribe_id : 0;
         this.q = $routeParams.q ? $routeParams.q : '';
         this.updateFilter();

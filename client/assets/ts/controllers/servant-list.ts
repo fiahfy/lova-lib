@@ -7,7 +7,6 @@ import {ScrollService} from '../services/scroll';
 import {ServantModel, SkillModel, StatusModel} from '../models/servant';
 
 interface ServantListParams extends ng.route.IRouteParamsService {
-  view: string;
   tribe_id: string;
   q: string;
 }
@@ -27,7 +26,6 @@ class ServantListController {
   ];
 
   public servants: ServantModel[];
-  public view: number;
   public tribeId: number;
   public q: string;
   public filter: { [key: string]: string; } = {
@@ -59,7 +57,6 @@ class ServantListController {
     private servantService: ServantService,
     private scrollService: ScrollService
   ) {
-    this.view = $routeParams.view ? +$routeParams.view : 0;
     this.tribeId = $routeParams.tribe_id ? +$routeParams.tribe_id : 0;
     this.q = $routeParams.q ? $routeParams.q : '';
     this.updateFilter();

@@ -31,19 +31,24 @@ function findServants(args) {
 
 function save(servant, force) {
   return co(function *() {
-    logger.verbose('Download Servant Image: id = %d', servant.id);
-    let url = yield getImageUrlWithServant(servant);
-    if (!url) {
-      throw new Error('Image Url is Not Found');
-    }
+    logger.verbose('Begin Download Servant Image: id = %d', servant.id);
 
+    let clipImagePath = `${imageDir}clip/${servant.id}.jpg`;
     let largeImagePath = `${imageDir}l/${servant.id}.jpg`;
     let middleImagePath = `${imageDir}m/${servant.id}.jpg`;
 
-    if (!force && (yield exists(largeImagePath)) && (yield exists(middleImagePath))) {
+    if (!force && (yield exists(clipImagePath)) && (yield exists(largeImagePath)) && (yield exists(middleImagePath))) {
       logger.verbose('Image File is Almost Exists');
       return;
     }
+
+    let clipUrl = yield getClipImageUrlWithServant(servant);
+    let url = yield getImageUrlWithServant(servant);
+    if (!clipUrl || !url) {
+      throw new Error('Image Url is Not Found');
+    }
+
+    yield download(clipUrl, clipImagePath);
 
     yield download(url, largeImagePath);
 
@@ -57,6 +62,16 @@ function getImageUrlWithServant(servant) {
   return co(function *() {
     let $ = (yield scraper.fetchServant(servant.tribe_name, servant.name)).$;
     return $('#rendered-body').find('> div:first-child img').attr('src');
+  });
+}
+
+function getClipImageUrlWithServant(servant) {
+  return co(function *() {
+    let $ = (yield scraper.fetchAllServantList()).$;
+    let tribeNameAndCode = `${servant.tribe_name}-${('000'+servant.tribe_code).slice(-3)}`;
+    return $('#content_1001_1').next().next()
+      .find(`table tbody tr td:contains(${tribeNameAndCode})`).prev().prev()
+      .find('a img').attr('src');
   });
 }
 

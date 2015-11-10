@@ -151,6 +151,24 @@ img {
 #servant>div>.btn-toolbar {
     margin-bottom: 20px;
 }
+#servant table>tbody>tr>td.clip {
+    width: 37px;
+}
+#servant table>tbody>tr>td.clip.tribe-1 {
+    background-image: url(/assets/img/clip/spr-1.jpg);
+}
+#servant table>tbody>tr>td.clip.tribe-2 {
+    background-image: url(/assets/img/clip/spr-2.jpg);
+}
+#servant table>tbody>tr>td.clip.tribe-3 {
+    background-image: url(/assets/img/clip/spr-3.jpg);
+}
+#servant table>tbody>tr>td.clip.tribe-4 {
+    background-image: url(/assets/img/clip/spr-4.jpg);
+}
+#servant table>tbody>tr>td.clip.tribe-5 {
+    background-image: url(/assets/img/clip/spr-5.jpg);
+}
 
 /* Servant Detail */
 #servant-detail ul.nav {
