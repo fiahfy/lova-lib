@@ -16,4 +16,4 @@ else
 fi
 
 cd ${OPENSHIFT_REPO_DIR}
-node cli upr -d ${DATE} >> ${LOG_PATH} 2>&1
+node cli uprs -d ${DATE} >> ${LOG_PATH} 2>&1

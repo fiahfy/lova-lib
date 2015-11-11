@@ -26,15 +26,27 @@ commander
   });
 
 commander
-  .command('update-ranking')
-  .alias('upr')
-  .description('update ranking data')
+  .command('update-ranking-servant')
+  .alias('uprs')
+  .description('update ranking servant data')
   .option('-d, --date [date]', 'target date', null, null)
   .option('--date-from [date]', 'target date from', null, null)
   .option('--date-to [date]', 'target date to', null, null)
   .option('-f, --force', 'force update', null, null)
   .action(function(opts) {
-    promise = commands.update.ranking(opts.date, opts.dateFrom, opts.dateTo, opts.force);
+    promise = commands.update.ranking.servant(opts.date, opts.dateFrom, opts.dateTo, opts.force);
+  });
+
+commander
+  .command('update-ranking-spell')
+  .alias('uprp')
+  .description('update ranking spell data')
+  .option('-d, --date [date]', 'target date', null, null)
+  .option('--date-from [date]', 'target date from', null, null)
+  .option('--date-to [date]', 'target date to', null, null)
+  .option('-f, --force', 'force update', null, null)
+  .action(function(opts) {
+    promise = commands.update.ranking.spell(opts.date, opts.dateFrom, opts.dateTo, opts.force);
   });
 
 commander
