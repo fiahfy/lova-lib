@@ -83,6 +83,9 @@ function fetchServantRanking(date, mode, map, queue) {
     case 'braze-normal':
       path += '_5vs5_normal_all';
       break;
+    case 'braze-solo':
+      path += '_5vs5_league_all';
+      break;
     default:
       return null;
   }

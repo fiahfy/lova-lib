@@ -1,9 +1,9 @@
 'use strict';
 
 let co = require('co');
-let logger = require('../../utils/logger');
-let scraper = require('../../utils/scraper');
-let models = require('../../models');
+let logger = require('../../../utils/logger');
+let scraper = require('../../../utils/scraper');
+let models = require('../../../models');
 
 // map and queue set
 const mapAndQueues = [
@@ -14,7 +14,8 @@ const mapAndQueues = [
   {map: 'vermilion', queue: 'normal'},
   {map: 'vermilion', queue: 'solo'},
   {map: 'braze',     queue: 'all'},
-  {map: 'braze',     queue: 'normal'}
+  {map: 'braze',     queue: 'normal'},
+  {map: 'braze',     queue: 'solo'}
 ];
 
 module.exports = function(date, dateFrom, dateTo, force) {
