@@ -26,8 +26,8 @@ function updateOne(url, force) {
     // find servant
     let row = yield findServant({tribe_name: servant.tribe_name, tribe_code: servant.tribe_code});
     if (row) {
-      logger.verbose('Compare Update Date: new = %j, current = %j', servant.date.toUTCString(), row.date.toUTCString());
-      if (servant.date <= row.date && !force) {
+      logger.verbose('Compare Update Date: new = %j, current = %j', servant.update_date.toUTCString(), row.update_date.toUTCString());
+      if (servant.update_date <= row.update_date && !force) {
         logger.verbose('Skip Update Servant: id = %s, tribe_name = %s, tribe_code = %s, name = %s',
           row._id, servant.tribe_name, servant.tribe_code, servant.name);
         return;
@@ -103,7 +103,8 @@ function getServantWithUrl(url) {
     servant.type            = table1.find('tr:nth-child(1) td:nth-child(4)').text().trim();
     servant.cost            = Number(table1.find('tr:nth-child(2) td:nth-child(2)').text());
     servant.range           = Number(table1.find('tr:nth-child(2) td:nth-child(4)').text().replace(/^.*[（\(]([^）\)]*)[）\)].*$/i, '$1'));
-    servant.date            = parseDateString($('.servant_table').prev().text().trim().replace(/^.*：.*：(\d+)$/i, '$1'));
+    servant.release_date    = parseDateString($('.servant_table').prev().text().trim().replace(/^.*：([^\/\s]+).*：.*$/i, '$1'));
+    servant.update_date     = parseDateString($('.servant_table').prev().text().trim().replace(/^.*：.*：(\d+)$/i, '$1'));
     servant.illustration_by = table1.find('tr:nth-child(3) td:nth-child(2)').text().trim();
     servant.character_voice = table1.find('tr:nth-child(3) td:nth-child(4)').text().trim();
     servant.oral_tradition  = $('#content_1001_0').next().text();
@@ -155,6 +156,20 @@ function getServantWithUrl(url) {
 }
 
 function parseDateString(input) {
+  let date = new Date(Date.UTC(Number(input.slice(0, 4)), Number(input.slice(4, 6)) - 1, Number(input.slice(6, 8))));
+  if (!isNaN(date.valueOf())) {
+    return date;
+  }
+  switch (input) {
+    case 'α1':  input = '20141017'; break;
+    case 'α2':  input = '20141222'; break;
+    case 'CBT': input = '20150421'; break;
+    case 'OBT': input = '20150604'; break;
+    case '正式': input = '20150617'; break;
+    default:
+      logger.warn('Invalid Date: input = %s', input);
+      break;
+  }
   return new Date(Date.UTC(Number(input.slice(0, 4)), Number(input.slice(4, 6)) - 1, Number(input.slice(6, 8))));
 }
 

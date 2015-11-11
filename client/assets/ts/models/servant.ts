@@ -9,7 +9,8 @@ export class ServantModel {
   public name: string;
   public cost: number;
   public range: number;
-  public date: Date;
+  public release_date: Date;
+  public update_date: Date;
   public illustrationBy: string;
   public characterVoice: string;
   public oralTradition: string;
@@ -27,14 +28,15 @@ export class ServantModel {
 
   constructor(obj: any) {
     this.id             = obj.id;
-    this.tribeId         = obj.tribe_id;
-    this.tribeName       = obj.tribe_name;
-    this.tribeCode       = obj.tribe_code;
+    this.tribeId        = obj.tribe_id;
+    this.tribeName      = obj.tribe_name;
+    this.tribeCode      = obj.tribe_code;
     this.type           = obj.type;
     this.name           = obj.name;
     this.cost           = obj.cost;
     this.range          = obj.range;
-    this.date           = new Date(obj.date);
+    this.release_date   = new Date(obj.release_date);
+    this.update_date    = new Date(obj.update_date);
     this.illustrationBy = obj.illustration_by;
     this.characterVoice = obj.character_voice;
     this.oralTradition  = obj.oral_tradition;
