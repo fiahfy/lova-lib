@@ -75,12 +75,12 @@ function getPrizes() {
     let date = new Date(panel.find('div.article_title span.date').text());
     date = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
     let text = panel.find('div.subsection_frame').text();
-    let matches = text.match(/([^・：]+)：([^%％]+)[%％]/gi);
+    let matches = text.match(/・([^：]+)：([^%％]+)[%％]/gi);
     if (!matches.length) {
       return [];
     }
     for (let matchText of matches) {
-      let ms = matchText.match(/([^・：]+)：([^%％]+)[%％]/i);
+      let ms = matchText.match(/・([^：]+)：([^%％]+)[%％]/i);
       if (ms) {
         prizes.push({
           date: date,

@@ -58,37 +58,29 @@ function fetchServantRanking(date, mode, map, queue) {
       path = 'servantUsedRate_weekly';
       break;
   }
-  switch (`${map}-${queue}`) {
-    case 'all-all':
-      path += '_all_all_all';
+  switch (map) {
+    case 'all':
+      path += '_all';
       break;
-    case 'all-normal':
-      path += '_all_normal_all';
+    case 'vermilion':
+      path += '_7vs7';
       break;
-    case 'all-solo':
-      path += '_all_league_all';
+    case 'braze':
+      path += '_5vs5';
       break;
-    case 'vermilion-all':
-      path += '_7vs7_all_all';
-      break;
-    case 'vermilion-normal':
-      path += '_7vs7_normal_all';
-      break;
-    case 'vermilion-solo':
-      path += '_7vs7_league_all';
-      break;
-    case 'braze-all':
-      path += '_5vs5_all_all';
-      break;
-    case 'braze-normal':
-      path += '_5vs5_normal_all';
-      break;
-    case 'braze-solo':
-      path += '_5vs5_league_all';
-      break;
-    default:
-      return null;
   }
+  switch (queue) {
+    case 'all':
+      path += '_all';
+      break;
+    case 'normal':
+      path += '_normal';
+      break;
+    case 'solo':
+      path += '_league';
+      break;
+  }
+  path += '_all';
   let url = `${cacheSiteBasePath}ranking/${path}/${dateString}/page1.json`;
   return fetch(url);
 }

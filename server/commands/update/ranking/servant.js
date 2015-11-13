@@ -5,18 +5,8 @@ let logger = require('../../../utils/logger');
 let scraper = require('../../../utils/scraper');
 let models = require('../../../models');
 
-// map and queue set
-const mapAndQueues = [
-  {map: 'all',       queue: 'all'},
-  {map: 'all',       queue: 'normal'},
-  {map: 'all',       queue: 'solo'},
-  {map: 'vermilion', queue: 'all'},
-  {map: 'vermilion', queue: 'normal'},
-  {map: 'vermilion', queue: 'solo'},
-  {map: 'braze',     queue: 'all'},
-  {map: 'braze',     queue: 'normal'},
-  {map: 'braze',     queue: 'solo'}
-];
+const maps = ['all', 'vermilion', 'braze'];
+const queues = ['all', 'normal', 'solo'];
 
 module.exports = function(date, dateFrom, dateTo, force) {
   return co(function *() {
@@ -52,8 +42,10 @@ module.exports = function(date, dateFrom, dateTo, force) {
     let d = from;
     while (d <= to) {
       for (let mode of ['win', 'used']) {
-        for (let maq of mapAndQueues) {
-          yield updateRanking(d, mode, maq.map, maq.queue, servantMap, force);
+        for (let map of maps) {
+          for (let queue of queues) {
+            yield updateRanking(d, mode, map, queue, servantMap, force);
+          }
         }
       }
       d = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate() + 1));
