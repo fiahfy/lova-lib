@@ -93,11 +93,44 @@ function fetchServantRanking(date, mode, map, queue) {
   return fetch(url);
 }
 
+function fetchSpellRanking(date, map, queue) {
+  let d = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
+  d.setUTCDate(d.getUTCDate() + 1);
+  let dateString = d.getUTCFullYear() + ('00' + (d.getUTCMonth() + 1)).slice(-2) + ('00' + d.getUTCDate()).slice(-2) + '0500';
+  let path = 'ultimatespell_weekly';
+  switch (map) {
+    case 'all':
+      path += '_all';
+      break;
+    case 'vermilion':
+      path += '_7vs7';
+      break;
+    case 'braze':
+      path += '_5vs5';
+      break;
+  }
+  switch (queue) {
+    case 'all':
+      path += '_all';
+      break;
+    case 'normal':
+      path += '_normal';
+      break;
+    case 'solo':
+      path += '_league';
+      break;
+  }
+  path += '_all';
+  let url = `${cacheSiteBasePath}ranking/${path}/${dateString}/page1.json`;
+  return fetch(url);
+}
+
 module.exports = {
   fetch:               fetch,
   fetchArticle:        fetchArticle,
   fetchNotice:         fetchNotice,
   fetchServant:        fetchServant,
   fetchAllServantList: fetchAllServantList,
-  fetchServantRanking: fetchServantRanking
+  fetchServantRanking: fetchServantRanking,
+  fetchSpellRanking:   fetchSpellRanking
 };
