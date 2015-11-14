@@ -66,6 +66,9 @@ class Router {
       when('/ranking/', {
         template: '<lova-ranking></lova-ranking>'
       }).
+      when('/chart/', {
+        template: '<lova-chart></lova-chart>'
+      }).
       when('/prize/', {
         template: '<lova-prize></lova-prize>'
       }).

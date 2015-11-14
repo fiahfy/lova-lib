@@ -19,8 +19,8 @@ module.exports = function(id, force) {
     } else {
       servants = yield findServants({});
     }
-    for (let i = 0; i < servants.length; i++) {
-      yield save(servants[i], force);
+    for (let servant of servants) {
+      yield save(servant, force);
     }
   });
 };

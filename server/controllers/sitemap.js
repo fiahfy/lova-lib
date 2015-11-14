@@ -12,9 +12,9 @@ function *sitemap() {
   urls.push('/ranking/');
   urls.push('/prize/');
   urls.push('/about/');
-  for (let servant of servants) {
-    urls.push(`/servants/${servant.id}/`);
-  }
+  servants.forEach((e) => {
+    urls.push(`/servants/${e.id}/`);
+  });
 
   urls = urls.map((loc) => {
     return {loc: `http://lova-fiahfy.rhcloud.com${loc}`};
