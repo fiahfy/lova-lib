@@ -12,10 +12,6 @@ interface ServantListParams extends ng.route.IRouteParamsService {
 }
 
 class ServantListController {
-  public viewOptions: {key: number; icon: string;}[] = [
-    {key: 0, icon: 'fui-list-large-thumbnails'},
-    {key: 1, icon: 'fui-list-columned'}
-  ];
   public tribeIdOptions: {key: number; value: string;}[] = [
     {key: 0, value: 'Select Tribe...'},
     {key: 1, value: '人獣'},
@@ -68,7 +64,9 @@ class ServantListController {
       });
 
     $scope.$watch(() => this.tribeId, (newValue, oldValue) => {
-      if (typeof newValue === 'undefined' || typeof oldValue === 'undefined' || newValue == oldValue) {
+      if (typeof newValue === 'undefined'
+        || typeof oldValue === 'undefined'
+        || newValue == oldValue) {
         return;
       }
       this.selectTribeId(this.tribeId);

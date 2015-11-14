@@ -165,10 +165,10 @@ angular.module('app').directive('lovaAbout', Definition.ddo);
 
 },{"../app":1}],3:[function(require,module,exports){
 'use strict';
+var spell_1 = require('../services/spell');
 var ChartController = (function () {
-    function ChartController(spellStatisticService, scrollService) {
+    function ChartController(spellStatisticService) {
         this.spellStatisticService = spellStatisticService;
-        this.scrollService = scrollService;
         this.updateStatistics();
     }
     ChartController.prototype.updateStatistics = function () {
@@ -184,7 +184,7 @@ var ChartController = (function () {
         this.updateDate = null;
         this.graphData = this.statistics.map(function (e) {
             return {
-                key: ChartController.getSpellName(e.spellId),
+                key: spell_1.SpellService.getSpellNameWithId(e.spellId),
                 values: e.data.map(function (statistics) {
                     if (!_this.updateDate || statistics.date.getTime() > _this.updateDate.getTime()) {
                         _this.updateDate = statistics.date;
@@ -196,7 +196,7 @@ var ChartController = (function () {
         this.graphOptions = {
             chart: {
                 type: 'lineChart',
-                height: 700,
+                height: 500,
                 margin: {
                     top: 20,
                     right: 30,
@@ -221,22 +221,8 @@ var ChartController = (function () {
             }
         };
     };
-    ChartController.getSpellName = function (spellId) {
-        return [,
-            'キュアオール',
-            'リターンゲート',
-            'パワーライズ',
-            'クイックドライブ',
-            'リザレクション',
-            'フォースフィールド',
-            'クレアボヤンス',
-            'クロノフリーズ',
-            'リモートサモン'
-        ][spellId];
-    };
     ChartController.$inject = [
-        'SpellStatisticService',
-        'ScrollService'
+        'SpellStatisticService'
     ];
     return ChartController;
 })();
@@ -255,7 +241,7 @@ var Definition = (function () {
 })();
 angular.module('app').directive('lovaChart', Definition.ddo);
 
-},{}],4:[function(require,module,exports){
+},{"../services/spell":35}],4:[function(require,module,exports){
 'use strict';
 var DeckController = (function () {
     function DeckController($window, $location, $routeParams, servantService, deckService) {
@@ -697,10 +683,6 @@ var ServantListController = (function () {
         this.$routeParams = $routeParams;
         this.servantService = servantService;
         this.scrollService = scrollService;
-        this.viewOptions = [
-            { key: 0, icon: 'fui-list-large-thumbnails' },
-            { key: 1, icon: 'fui-list-columned' }
-        ];
         this.tribeIdOptions = [
             { key: 0, value: 'Select Tribe...' },
             { key: 1, value: '人獣' },
@@ -729,7 +711,9 @@ var ServantListController = (function () {
             _this.scrollService.restore();
         });
         $scope.$watch(function () { return _this.tribeId; }, function (newValue, oldValue) {
-            if (typeof newValue === 'undefined' || typeof oldValue === 'undefined' || newValue == oldValue) {
+            if (typeof newValue === 'undefined'
+                || typeof oldValue === 'undefined'
+                || newValue == oldValue) {
                 return;
             }
             _this.selectTribeId(_this.tribeId);
@@ -1482,4 +1466,30 @@ var SpellStatisticService = (function () {
 exports.SpellStatisticService = SpellStatisticService;
 angular.module(app.appName).service('SpellStatisticService', SpellStatisticService);
 
-},{"../app":1,"../models/spell-statistic":26}]},{},[1]);
+},{"../app":1,"../models/spell-statistic":26}],35:[function(require,module,exports){
+'use strict';
+//import * as angular from 'angular';
+var app = require('../app');
+var SpellService = (function () {
+    function SpellService() {
+    }
+    SpellService.getSpellNameWithId = function (spellId) {
+        return [,
+            'キュアオール',
+            'リターンゲート',
+            'パワーライズ',
+            'クイックドライブ',
+            'リザレクション',
+            'フォースフィールド',
+            'クレアボヤンス',
+            'クロノフリーズ',
+            'リモートサモン'
+        ][spellId] || 'unknown';
+    };
+    SpellService.$inject = [];
+    return SpellService;
+})();
+exports.SpellService = SpellService;
+angular.module(app.appName).service('SpellService', SpellService);
+
+},{"../app":1}]},{},[1]);

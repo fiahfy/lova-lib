@@ -2,8 +2,8 @@
 
 //import * as angular from 'angular';
 import * as app from '../app';
+import {SpellService} from '../services/spell';
 import {SpellStatisticService} from '../services/spell-statistic';
-import {ScrollService} from '../services/scroll';
 import {SpellStatisticModel, SpellStatisticsModel} from '../models/spell-statistic';
 
 class ChartController {
@@ -13,13 +13,11 @@ class ChartController {
   public updateDate: Date;
 
   public static $inject = [
-    'SpellStatisticService',
-    'ScrollService'
+    'SpellStatisticService'
   ];
 
   constructor(
-    private spellStatisticService: SpellStatisticService,
-    private scrollService: ScrollService
+    private spellStatisticService: SpellStatisticService
   ) {
     this.updateStatistics();
   }
@@ -36,7 +34,7 @@ class ChartController {
     this.updateDate = null;
     this.graphData = this.statistics.map((e) => {
       return {
-        key: ChartController.getSpellName(e.spellId),
+        key: SpellService.getSpellNameWithId(e.spellId),
         values: e.data.map((statistics:SpellStatisticModel) => {
           if (!this.updateDate || statistics.date.getTime() > this.updateDate.getTime()) {
             this.updateDate = statistics.date;
@@ -49,7 +47,7 @@ class ChartController {
     this.graphOptions = {
       chart: {
         type: 'lineChart',
-        height: 700,
+        height: 500,
         margin : {
           top: 20,
           right: 30,
@@ -73,20 +71,6 @@ class ChartController {
         }
       }
     };
-  }
-
-  private static getSpellName(spellId: number): string {
-    return [,
-      'キュアオール',
-      'リターンゲート',
-      'パワーライズ',
-      'クイックドライブ',
-      'リザレクション',
-      'フォースフィールド',
-      'クレアボヤンス',
-      'クロノフリーズ',
-      'リモートサモン'
-    ][spellId];
   }
 }
 
