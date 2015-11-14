@@ -127,7 +127,7 @@ function getSpellIdWithName(name) {
     'リザレクション',
     'フォースフィールド',
     'クレアボヤンス',
-    'クレアボヤンス',
+    'クロノフリーズ',
     'リモートサモン'
   ].indexOf(name);
 }

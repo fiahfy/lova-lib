@@ -8,6 +8,9 @@ import {SpellStatisticModel, SpellStatisticsModel} from '../models/spell-statist
 
 class ChartController {
   public statistics: SpellStatisticsModel[];
+  public graphData: any;
+  public graphOptions: any;
+  public updateDate: Date;
 
   public static $inject = [
     'SpellStatisticService',
@@ -18,7 +21,11 @@ class ChartController {
     private spellStatisticService: SpellStatisticService,
     private scrollService: ScrollService
   ) {
-    spellStatisticService.load()
+    this.updateStatistics();
+  }
+
+  private updateStatistics() {
+    this.spellStatisticService.load()
       .then((statistics: SpellStatisticsModel[]) => {
         this.statistics = statistics;
         this.updateGraph();
@@ -26,7 +33,60 @@ class ChartController {
   }
 
   private updateGraph() {
-    console.log(this.statistics);
+    this.updateDate = null;
+    this.graphData = this.statistics.map((e) => {
+      return {
+        key: ChartController.getSpellName(e.spellId),
+        values: e.data.map((statistics:SpellStatisticModel) => {
+          if (!this.updateDate || statistics.date.getTime() > this.updateDate.getTime()) {
+            this.updateDate = statistics.date;
+          }
+          return {x: statistics.date, y: statistics.score};
+        })
+      }
+    });
+
+    this.graphOptions = {
+      chart: {
+        type: 'lineChart',
+        height: 350,
+        margin : {
+          top: 20,
+          right: 30,
+          bottom: 50,
+          left: 50
+        },
+        transitionDuration: 500,
+        interpolate: 'monotone',
+        useInteractiveGuideline: true,
+        xAxis: {
+          tickFormat: (d) => {
+            return d3.time.format('%Y-%m-%d')(new Date(d));
+          }
+        },
+        yAxis: {
+          axisLabel: 'Rate (%)',
+          tickFormat: function(d){
+            return d3.format('.02f')(d);
+          },
+          axisLabelDistance: -10
+        }
+      }
+    };
+  }
+
+  private static getSpellName(spellId: number): string {
+    return [,
+      'キュアオール',
+      'リターンゲート',
+      'パワーライズ',
+      'クイックドライブ',
+      'リザレクション',
+      'フォースフィールド',
+      'クレアボヤンス',
+      'クロノフリーズ',
+      'リモートサモン'
+    ][spellId];
   }
 }
 

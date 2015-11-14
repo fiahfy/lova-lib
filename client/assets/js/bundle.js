@@ -159,17 +159,72 @@ angular.module('app').directive('lovaAbout', Definition.ddo);
 'use strict';
 var ChartController = (function () {
     function ChartController(spellStatisticService, scrollService) {
-        var _this = this;
         this.spellStatisticService = spellStatisticService;
         this.scrollService = scrollService;
-        spellStatisticService.load()
+        this.updateStatistics();
+    }
+    ChartController.prototype.updateStatistics = function () {
+        var _this = this;
+        this.spellStatisticService.load()
             .then(function (statistics) {
             _this.statistics = statistics;
             _this.updateGraph();
         });
-    }
+    };
     ChartController.prototype.updateGraph = function () {
-        console.log(this.statistics);
+        var _this = this;
+        this.updateDate = null;
+        this.graphData = this.statistics.map(function (e) {
+            return {
+                key: ChartController.getSpellName(e.spellId),
+                values: e.data.map(function (statistics) {
+                    if (!_this.updateDate || statistics.date.getTime() > _this.updateDate.getTime()) {
+                        _this.updateDate = statistics.date;
+                    }
+                    return { x: statistics.date, y: statistics.score };
+                })
+            };
+        });
+        this.graphOptions = {
+            chart: {
+                type: 'lineChart',
+                height: 350,
+                margin: {
+                    top: 20,
+                    right: 30,
+                    bottom: 50,
+                    left: 50
+                },
+                transitionDuration: 500,
+                interpolate: 'monotone',
+                useInteractiveGuideline: true,
+                xAxis: {
+                    tickFormat: function (d) {
+                        return d3.time.format('%Y-%m-%d')(new Date(d));
+                    }
+                },
+                yAxis: {
+                    axisLabel: 'Rate (%)',
+                    tickFormat: function (d) {
+                        return d3.format('.02f')(d);
+                    },
+                    axisLabelDistance: -10
+                }
+            }
+        };
+    };
+    ChartController.getSpellName = function (spellId) {
+        return [,
+            'キュアオール',
+            'リターンゲート',
+            'パワーライズ',
+            'クイックドライブ',
+            'リザレクション',
+            'フォースフィールド',
+            'クレアボヤンス',
+            'クロノフリーズ',
+            'リモートサモン'
+        ][spellId];
     };
     ChartController.$inject = [
         'SpellStatisticService',
