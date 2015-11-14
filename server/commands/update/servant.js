@@ -13,8 +13,8 @@ module.exports = function(url, force) {
     }
 
     let urls = yield getServantUrls();
-    for (let i = 0; i < urls.length; i++) {
-      yield updateOne(urls[i], force);
+    for (let url of urls) {
+      yield updateOne(url, force);
     }
   });
 };

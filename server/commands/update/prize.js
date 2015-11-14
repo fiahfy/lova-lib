@@ -44,8 +44,7 @@ function findPrizes(args) {
 
 function insertPrizes(prizes) {
   return co(function *() {
-    for (let i = 0; i < prizes.length; i++) {
-      let prize = prizes[i];
+    for (let prize of prizes) {
       prize._id = i + 1;
       yield insertPrize(prize);
     }

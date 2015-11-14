@@ -3,10 +3,10 @@
 //import * as angular from 'angular';
 import * as app from '../app';
 import {ServantService} from '../services/servant';
-import {StatisticsService} from '../services/statistics';
+import {ServantStatisticService} from '../services/servant-statistic';
 import {ScrollService} from '../services/scroll';
 import {ServantModel, SkillModel, StatusModel} from '../models/servant';
-import {StatisticsModel} from '../models/statistics';
+import {ServantStatisticModel} from '../models/servant-statistic';
 import {RankingModel} from '../models/ranking';
 
 interface ServantDetailParams extends ng.route.IRouteParamsService {
@@ -30,6 +30,8 @@ class ServantDetailController {
   public hash: string;
   public map: string = 'all';
   public queue: string = 'all';
+  public statistics1: ServantStatisticModel[];
+  public statistics2: ServantStatisticModel[];
   public graph1Data: any;
   public graph1Options: any;
   public graph2Data: any;
@@ -50,7 +52,7 @@ class ServantDetailController {
     '$routeParams',
     '$location',
     'ServantService',
-    'StatisticsService',
+    'ServantStatisticService',
     'ScrollService'
   ];
 
@@ -59,7 +61,7 @@ class ServantDetailController {
     private $routeParams: ServantDetailParams,
     private $location: ng.ILocationService,
     private servantService: ServantService,
-    private statisticsService: StatisticsService,
+    private servantStatisticService: ServantStatisticService,
     private scrollService: ScrollService
   ) {
     this.id = +$routeParams.id;
@@ -71,10 +73,7 @@ class ServantDetailController {
         this.scrollService.restore();
       });
 
-    statisticsService.loadWithId(this.id, this.map, this.queue)
-      .then((statistics: StatisticsModel) => {
-        this.updateGraph(statistics);
-      });
+    this.updateStatistics();
 
     angular.element($window.document).ready(() => {
       $window.setTimeout(() => {
@@ -83,20 +82,24 @@ class ServantDetailController {
     });
   }
 
-  public updateStatistics() {
-    this.statisticsService.loadWithId(this.id, this.map, this.queue)
-      .then((statistics: StatisticsModel) => {
-        this.updateGraph(statistics);
+  private updateStatistics() {
+    this.servantStatisticService.loadWithId(this.id, 'win', this.map, this.queue)
+      .then((statistics: ServantStatisticModel[]) => {
+        this.statistics1 = statistics;
+        return this.servantStatisticService.loadWithId(this.id, 'used', this.map, this.queue);
+      }).then((statistics: ServantStatisticModel[]) => {
+        this.statistics2 = statistics;
+        this.updateGraph();
       });
   }
 
-  private updateGraph(statistics: StatisticsModel) {
+  private updateGraph() {
     this.graph1Data = [];
     this.graph1Data.push({
       key: 'Win Rate',
       area: true,
       color: '#1f77b4',
-      values: statistics.win.map((ranking: RankingModel) => {
+      values: this.statistics1.map((ranking: RankingModel) => {
         return {x: ranking.date, y: ranking.score};
       })
     });
@@ -104,7 +107,7 @@ class ServantDetailController {
       key: 'Average',
       area: false,
       color: '#ff7f0e',
-      values: statistics.win.map((ranking: RankingModel) => {
+      values: this.statistics1.map((ranking: RankingModel) => {
         return {x: ranking.date, y: 50};
       })
     });
@@ -114,7 +117,7 @@ class ServantDetailController {
       key: 'Used Rate',
       area: true,
       color: '#9467bd',
-      values: statistics.used.map((ranking: RankingModel) => {
+      values: this.statistics2.map((ranking: RankingModel) => {
         return {x: ranking.date, y: ranking.score};
       })
     });
@@ -122,7 +125,7 @@ class ServantDetailController {
       key: 'Average',
       area: false,
       color: '#ff7f0e',
-      values: statistics.used.map((ranking: RankingModel) => {
+      values: this.statistics2.map((ranking: RankingModel) => {
         // TODO: servants count取得
         return {x: ranking.date, y: 100 / 221};
       })

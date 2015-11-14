@@ -7,6 +7,8 @@ let Schema = mongoose.Schema;
 let SpellrankingShema = new Schema({
   _id:              { type: Number, require: true, unique: true },
   date:             { type: Date,   require: true },
+  map:              { type: String, require: true },
+  queue:            { type: String, require: true },
   spell_id:         { type: Number, require: true },
   seq:              { type: Number, require: true },
   rank:             { type: Number, require: true },
