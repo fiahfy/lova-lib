@@ -10,6 +10,7 @@ function *sitemap() {
   urls.push('/');
   urls.push('/deck/');
   urls.push('/ranking/');
+  urls.push('/chart/');
   urls.push('/prize/');
   urls.push('/about/');
   servants.forEach((e) => {
