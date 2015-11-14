@@ -118,17 +118,25 @@ export class RootController {
 
     $scope.$on('$routeChangeSuccess', (event, current, previous) => {
       let path = $location.path().match(/^\/(\w+)\//)[1];
+      this.title = `${path.charAt(0).toUpperCase() + path.slice(1)} : LoVA Tool`;
+      this.description = 'Tool Site for Lord of Vermilion Arena';
       switch (path) {
         case 'deck':
+          this.description = 'Deck Simulator for Lord of Vermilion Arena';
+          return;
         case 'ranking':
+          this.description = 'Servant Ranking Data for Lord of Vermilion Arena';
+          return;
+        case 'chart':
+          this.description = 'Chart Data for Lord of Vermilion Arena';
+          return;
         case 'prize':
+          this.description = 'Prize Simulator for Lord of Vermilion Arena';
+          return;
         case 'about':
-          this.title = `${path.charAt(0).toUpperCase() + path.slice(1)} : LoVA Tool`;
-          this.description = 'Tool Site for Lord of Vermilion Arena';
           return;
         case 'servants':
-          this.title = `${path.charAt(0).toUpperCase() + path.slice(1)} : LoVA Tool`;
-          this.description = 'Tool Site for Lord of Vermilion Arena';
+          this.description = 'Servant List for Lord of Vermilion Arena';
           break;
       }
       let matches = $location.path().match(/^\/servants\/(\d+)\//);

@@ -95,17 +95,25 @@ var RootController = (function () {
         this.now = new Date();
         $scope.$on('$routeChangeSuccess', function (event, current, previous) {
             var path = $location.path().match(/^\/(\w+)\//)[1];
+            _this.title = (path.charAt(0).toUpperCase() + path.slice(1)) + " : LoVA Tool";
+            _this.description = 'Tool Site for Lord of Vermilion Arena';
             switch (path) {
                 case 'deck':
+                    _this.description = 'Deck Simulator for Lord of Vermilion Arena';
+                    return;
                 case 'ranking':
+                    _this.description = 'Servant Ranking Data for Lord of Vermilion Arena';
+                    return;
+                case 'chart':
+                    _this.description = 'Chart Data for Lord of Vermilion Arena';
+                    return;
                 case 'prize':
+                    _this.description = 'Prize Simulator for Lord of Vermilion Arena';
+                    return;
                 case 'about':
-                    _this.title = (path.charAt(0).toUpperCase() + path.slice(1)) + " : LoVA Tool";
-                    _this.description = 'Tool Site for Lord of Vermilion Arena';
                     return;
                 case 'servants':
-                    _this.title = (path.charAt(0).toUpperCase() + path.slice(1)) + " : LoVA Tool";
-                    _this.description = 'Tool Site for Lord of Vermilion Arena';
+                    _this.description = 'Servant List for Lord of Vermilion Arena';
                     break;
             }
             var matches = $location.path().match(/^\/servants\/(\d+)\//);
