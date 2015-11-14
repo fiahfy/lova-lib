@@ -1,10 +1,10 @@
 <div class="container" id="servant">
   <div class="page-header">
-    <h2>Chart
-      <small>Updated {{ c.updateDate|date:'yyyy-MM-dd' }}</small>
-    </h2>
+    <h2>Chart</h2>
   </div>
 
-  <h3>Spell Statistics</h3>
+  <h3>Spell Statistics
+    <small>Updated {{ c.updateDate|date:'yyyy-MM-dd' }}</small>
+  </h3>
   <nvd3 options='c.graphOptions' data='c.graphData'></nvd3>
 </div>

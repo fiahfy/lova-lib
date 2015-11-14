@@ -188,7 +188,7 @@ var ChartController = (function () {
         this.graphOptions = {
             chart: {
                 type: 'lineChart',
-                height: 350,
+                height: 700,
                 margin: {
                     top: 20,
                     right: 30,
@@ -204,7 +204,7 @@ var ChartController = (function () {
                     }
                 },
                 yAxis: {
-                    axisLabel: 'Rate (%)',
+                    axisLabel: 'Used Rate (%)',
                     tickFormat: function (d) {
                         return d3.format('.02f')(d);
                     },
