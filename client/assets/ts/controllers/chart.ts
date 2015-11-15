@@ -23,7 +23,7 @@ class ChartController {
   }
 
   private updateStatistics() {
-    this.spellStatisticService.load()
+    this.spellStatisticService.load('month', 'all', 'all')
       .then((statistics: SpellStatisticsModel[]) => {
         this.statistics = statistics;
         this.updateGraph();

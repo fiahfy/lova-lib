@@ -38,32 +38,32 @@ var Locator = (function () {
 })();
 var Router = (function () {
     function Router(routerProvider) {
-        routerProvider.
-            when('/deck/', {
+        routerProvider
+            .when('/deck/', {
             template: '<lova-deck></lova-deck>'
-        }).
-            when('/deck/:hash/', {
+        })
+            .when('/deck/:hash/', {
             template: '<lova-deck></lova-deck>'
-        }).
-            when('/servants/', {
+        })
+            .when('/servants/', {
             template: '<lova-servant-list></lova-servant-list>'
-        }).
-            when('/servants/:id/', {
+        })
+            .when('/servants/:id/', {
             template: '<lova-servant-detail></lova-servant-detail>'
-        }).
-            when('/ranking/', {
+        })
+            .when('/ranking/', {
             template: '<lova-ranking></lova-ranking>'
-        }).
-            when('/chart/', {
+        })
+            .when('/chart/', {
             template: '<lova-chart></lova-chart>'
-        }).
-            when('/prize/', {
+        })
+            .when('/prize/', {
             template: '<lova-prize></lova-prize>'
-        }).
-            when('/about/', {
+        })
+            .when('/about/', {
             template: '<lova-about></lova-about>'
-        }).
-            otherwise({
+        })
+            .otherwise({
             redirectTo: '/deck/'
         });
     }
@@ -173,7 +173,7 @@ var ChartController = (function () {
     }
     ChartController.prototype.updateStatistics = function () {
         var _this = this;
-        this.spellStatisticService.load()
+        this.spellStatisticService.load('month', 'all', 'all')
             .then(function (statistics) {
             _this.statistics = statistics;
             _this.updateGraph();
@@ -574,11 +574,12 @@ var ServantDetailController = (function () {
     }
     ServantDetailController.prototype.updateStatistics = function () {
         var _this = this;
-        this.servantStatisticService.loadWithId(this.id, 'win', this.map, this.queue)
+        this.servantStatisticService.loadWithId(this.id, 'win', 'month', this.map, this.queue)
             .then(function (statistics) {
             _this.statistics1 = statistics;
-            return _this.servantStatisticService.loadWithId(_this.id, 'used', _this.map, _this.queue);
-        }).then(function (statistics) {
+            return _this.servantStatisticService.loadWithId(_this.id, 'used', 'month', _this.map, _this.queue);
+        })
+            .then(function (statistics) {
             _this.statistics2 = statistics;
             _this.updateGraph();
         });
@@ -1082,16 +1083,22 @@ exports.RankingModel = RankingModel;
 'use strict';
 var ServantStatisticModel = (function () {
     function ServantStatisticModel(obj) {
-        this.id = obj.id;
         this.date = new Date(obj.date);
-        this.servantId = obj.servant_id;
-        this.seq = obj.seq;
-        this.rank = obj.rank;
         this.score = obj.score;
     }
     return ServantStatisticModel;
 })();
 exports.ServantStatisticModel = ServantStatisticModel;
+var ServantStatisticsModel = (function () {
+    function ServantStatisticsModel(obj) {
+        this.servantId = obj.spell_id;
+        this.data = obj.data.map(function (e) {
+            return new ServantStatisticModel(e);
+        });
+    }
+    return ServantStatisticsModel;
+})();
+exports.ServantStatisticsModel = ServantStatisticsModel;
 
 },{}],25:[function(require,module,exports){
 'use strict';
@@ -1164,11 +1171,7 @@ exports.SkillModel = SkillModel;
 'use strict';
 var SpellStatisticModel = (function () {
     function SpellStatisticModel(obj) {
-        this.id = obj.id;
         this.date = new Date(obj.date);
-        this.spellId = obj.spell_id;
-        this.seq = obj.seq;
-        this.rank = obj.rank;
         this.score = obj.score;
     }
     return SpellStatisticModel;
@@ -1365,12 +1368,25 @@ var ServantStatisticService = (function () {
         this.$http = $http;
         this.$q = $q;
     }
-    ServantStatisticService.prototype.loadWithId = function (id, mode, map, queue) {
+    ServantStatisticService.prototype.loadWithId = function (id, mode, term, map, queue) {
         var deferred = this.$q.defer();
-        this.$http.get("" + ServantStatisticService.url + id + "/statistics/?mode=" + mode + "&map=" + map + "&queue=" + queue, { cache: true })
+        this.$http.get("" + ServantStatisticService.url + id + "/statistics/?mode=" + mode + "&term=" + term + "&map=" + map + "&queue=" + queue, { cache: true })
             .then(function (res) {
             var statistics = res.data.map(function (e) {
                 return new servant_statistic_1.ServantStatisticModel(e);
+            });
+            deferred.resolve(statistics);
+        }, function () {
+            deferred.reject();
+        });
+        return deferred.promise;
+    };
+    ServantStatisticService.prototype.load = function (mode, term, map, queue) {
+        var deferred = this.$q.defer();
+        this.$http.get(ServantStatisticService.url + "statistics/?mode=" + mode + "&term=" + term + "&map=" + map + "&queue=" + queue, { cache: true })
+            .then(function (res) {
+            var statistics = res.data.map(function (e) {
+                return new servant_statistic_1.ServantStatisticsModel(e);
             });
             deferred.resolve(statistics);
         }, function () {
@@ -1402,9 +1418,8 @@ var ServantService = (function () {
         var deferred = this.$q.defer();
         this.$http.get(ServantService.url + "?fields=-oral_tradition", { cache: true })
             .then(function (res) {
-            var servants = [];
-            res.data.forEach(function (servant) {
-                servants.push(new servant_1.ServantModel(servant));
+            var servants = res.data.map(function (e) {
+                return new servant_1.ServantModel(e);
             });
             deferred.resolve(servants);
         }, function () {
@@ -1443,9 +1458,9 @@ var SpellStatisticService = (function () {
         this.$http = $http;
         this.$q = $q;
     }
-    SpellStatisticService.prototype.load = function () {
+    SpellStatisticService.prototype.load = function (term, map, queue) {
         var deferred = this.$q.defer();
-        this.$http.get(SpellStatisticService.url + "statistics/?map=all&queue=all", { cache: true })
+        this.$http.get(SpellStatisticService.url + "statistics/?term=" + term + "&map=" + map + "&queue=" + queue, { cache: true })
             .then(function (res) {
             var statistics = res.data.map(function (e) {
                 return new spell_statistic_1.SpellStatisticsModel(e);

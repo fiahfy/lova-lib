@@ -22,9 +22,8 @@ export class ServantService {
     let deferred = this.$q.defer();
     this.$http.get(`${ServantService.url}?fields=-oral_tradition`, {cache: true})
       .then((res: any) => {
-        let servants: ServantModel[] = [];
-        res.data.forEach((servant: any) => {
-          servants.push(new ServantModel(servant));
+        let servants = res.data.map((e) => {
+          return new ServantModel(e);
         });
         deferred.resolve(servants);
       }, () => {

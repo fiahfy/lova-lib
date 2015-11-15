@@ -83,11 +83,12 @@ class ServantDetailController {
   }
 
   private updateStatistics() {
-    this.servantStatisticService.loadWithId(this.id, 'win', this.map, this.queue)
+    this.servantStatisticService.loadWithId(this.id, 'win', 'month', this.map, this.queue)
       .then((statistics: ServantStatisticModel[]) => {
         this.statistics1 = statistics;
-        return this.servantStatisticService.loadWithId(this.id, 'used', this.map, this.queue);
-      }).then((statistics: ServantStatisticModel[]) => {
+        return this.servantStatisticService.loadWithId(this.id, 'used', 'month', this.map, this.queue);
+      })
+      .then((statistics: ServantStatisticModel[]) => {
         this.statistics2 = statistics;
         this.updateGraph();
       });
