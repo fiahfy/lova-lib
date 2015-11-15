@@ -11,7 +11,7 @@ function lazyImage(): ng.IDirective {
         //noinspection TaskProblemsInspection
         element['lazyload']();
         // todo: 一回目の変更時だけ初期表示がされない(/deck)
-      }, 0);
+      });
     }
   };
 }

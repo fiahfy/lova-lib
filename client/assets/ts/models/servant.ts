@@ -9,11 +9,13 @@ export class ServantModel {
   public name: string;
   public cost: number;
   public range: number;
-  public release_date: Date;
-  public update_date: Date;
+  public releaseDate: Date;
+  public updateDate: Date;
   public illustrationBy: string;
   public characterVoice: string;
   public oralTradition: string;
+  public winRate: number;
+  public usedRate: number;
   public status: {
     1: StatusModel;
     20: StatusModel;
@@ -35,11 +37,13 @@ export class ServantModel {
     this.name           = obj.name;
     this.cost           = obj.cost;
     this.range          = obj.range;
-    this.release_date   = new Date(obj.release_date);
-    this.update_date    = new Date(obj.update_date);
+    this.releaseDate    = new Date(obj.release_date);
+    this.updateDate     = new Date(obj.update_date);
     this.illustrationBy = obj.illustration_by;
     this.characterVoice = obj.character_voice;
     this.oralTradition  = obj.oral_tradition;
+    this.winRate        = obj.win_rate;
+    this.usedRate       = obj.used_rate;
     if (obj.status) {
       this.status = {
         1:  obj.status[1]  ? new StatusModel(obj.status[1])  : null,

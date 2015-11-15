@@ -63,10 +63,7 @@ class Router {
       .when('/servants/:id/', {
         template: '<lova-servant-detail></lova-servant-detail>'
       })
-      .when('/ranking/', {
-        template: '<lova-ranking></lova-ranking>'
-      })
-      .when('/chart/', {
+      .when('/charts/', {
         template: '<lova-chart></lova-chart>'
       })
       .when('/prize/', {
@@ -124,11 +121,8 @@ export class RootController {
         case 'deck':
           this.description = 'Deck Simulator for Lord of Vermilion Arena';
           return;
-        case 'ranking':
-          this.description = 'Servant Ranking Data for Lord of Vermilion Arena';
-          return;
-        case 'chart':
-          this.description = 'Chart Data for Lord of Vermilion Arena';
+        case 'charts':
+          this.description = 'Charts for Lord of Vermilion Arena';
           return;
         case 'prize':
           this.description = 'Prize Simulator for Lord of Vermilion Arena';
@@ -136,7 +130,7 @@ export class RootController {
         case 'about':
           return;
         case 'servants':
-          this.description = 'Servant List for Lord of Vermilion Arena';
+          this.description = 'Servants for Lord of Vermilion Arena';
           break;
       }
       let matches = $location.path().match(/^\/servants\/(\d+)\//);

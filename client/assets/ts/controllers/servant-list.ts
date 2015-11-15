@@ -61,6 +61,16 @@ class ServantListController {
       .then((servants) => {
         this.servants = servants;
         this.scrollService.restore();
+        $window.setTimeout(() => {
+          angular.element('table.table').DataTable({
+            paging: false,
+            searching: false,
+            columnDefs: [
+              { orderable: false, targets: 1 },
+              { orderSequence: ['desc', 'asc'], targets: [6, 7, 8, 9] },
+            ]
+          });
+        });
       });
 
     $scope.$watch(() => this.tribeId, (newValue, oldValue) => {

@@ -152,7 +152,7 @@ img {
     margin-bottom: 20px;
 }
 #servant table>tbody>tr>td.clip {
-    width: 37px;
+    width: 1%;
 }
 #servant table>tbody>tr>td.clip.tribe-1 {
     background-image: url(/assets/img/clip/spr-1.jpg);
