@@ -20,11 +20,10 @@ export class ServantService {
 
   public load(): ng.IPromise<ServantModel[]> {
     let deferred = this.$q.defer();
-    this.$http.get(`${ServantService.url}?fields=-oral_tradition`, {cache: true})
+    this.$http.get(`${ServantService.url}?with_statistic&fields=-oral_tradition`, {cache: true})
       .then((res: any) => {
-        let servants: ServantModel[] = [];
-        res.data.forEach((servant: any) => {
-          servants.push(new ServantModel(servant));
+        let servants = res.data.map((e) => {
+          return new ServantModel(e);
         });
         deferred.resolve(servants);
       }, () => {

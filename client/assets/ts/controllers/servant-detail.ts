@@ -7,7 +7,6 @@ import {ServantStatisticService} from '../services/servant-statistic';
 import {ScrollService} from '../services/scroll';
 import {ServantModel, SkillModel, StatusModel} from '../models/servant';
 import {ServantStatisticModel} from '../models/servant-statistic';
-import {RankingModel} from '../models/ranking';
 
 interface ServantDetailParams extends ng.route.IRouteParamsService {
   id: string;
@@ -78,16 +77,17 @@ class ServantDetailController {
     angular.element($window.document).ready(() => {
       $window.setTimeout(() => {
         angular.element(':radio')['radiocheck']();
-      }, 0);
+      });
     });
   }
 
   private updateStatistics() {
-    this.servantStatisticService.loadWithId(this.id, 'win', this.map, this.queue)
+    this.servantStatisticService.loadWithId(this.id, 'win', 'month', this.map, this.queue)
       .then((statistics: ServantStatisticModel[]) => {
         this.statistics1 = statistics;
-        return this.servantStatisticService.loadWithId(this.id, 'used', this.map, this.queue);
-      }).then((statistics: ServantStatisticModel[]) => {
+        return this.servantStatisticService.loadWithId(this.id, 'used', 'month', this.map, this.queue);
+      })
+      .then((statistics: ServantStatisticModel[]) => {
         this.statistics2 = statistics;
         this.updateGraph();
       });
@@ -99,16 +99,16 @@ class ServantDetailController {
       key: 'Win Rate',
       area: true,
       color: '#1f77b4',
-      values: this.statistics1.map((ranking: RankingModel) => {
-        return {x: ranking.date, y: ranking.score};
+      values: this.statistics1.map((statistic: ServantStatisticModel) => {
+        return {x: statistic.date, y: statistic.score};
       })
     });
     this.graph1Data.push({
       key: 'Average',
       area: false,
       color: '#ff7f0e',
-      values: this.statistics1.map((ranking: RankingModel) => {
-        return {x: ranking.date, y: 50};
+      values: this.statistics1.map((statistic: ServantStatisticModel) => {
+        return {x: statistic.date, y: 50};
       })
     });
 
@@ -117,17 +117,17 @@ class ServantDetailController {
       key: 'Used Rate',
       area: true,
       color: '#9467bd',
-      values: this.statistics2.map((ranking: RankingModel) => {
-        return {x: ranking.date, y: ranking.score};
+      values: this.statistics2.map((statistic: ServantStatisticModel) => {
+        return {x: statistic.date, y: statistic.score};
       })
     });
     this.graph2Data.push({
       key: 'Average',
       area: false,
       color: '#ff7f0e',
-      values: this.statistics2.map((ranking: RankingModel) => {
+      values: this.statistics2.map((statistic: ServantStatisticModel) => {
         // TODO: servants count取得
-        return {x: ranking.date, y: 100 / 221};
+        return {x: statistic.date, y: 100 / 221};
       })
     });
 

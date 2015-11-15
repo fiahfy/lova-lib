@@ -1,19 +1,23 @@
 'use strict';
 
 export class ServantStatisticModel {
-  public id: number;
   public date: Date;
-  public servantId: number;
-  public seq: number;
-  public rank: number;
   public score: number;
 
   constructor(obj: any) {
-    this.id        = obj.id;
     this.date      = new Date(obj.date);
-    this.servantId = obj.servant_id;
-    this.seq       = obj.seq;
-    this.rank      = obj.rank;
     this.score     = obj.score;
+  }
+}
+
+export class ServantStatisticsModel {
+  public servantId: number;
+  public data: ServantStatisticModel[];
+
+  constructor(obj: any) {
+    this.servantId = obj.spell_id;
+    this.data = obj.data.map((e) => {
+      return new ServantStatisticModel(e);
+    });
   }
 }

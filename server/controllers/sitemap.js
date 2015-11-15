@@ -8,11 +8,10 @@ function *sitemap() {
 
   let urls = [];
   urls.push('/');
-  urls.push('/deck/');
-  urls.push('/ranking/');
-  urls.push('/chart/');
-  urls.push('/prize/');
   urls.push('/about/');
+  urls.push('/charts/');
+  urls.push('/deck/');
+  urls.push('/prize/');
   servants.forEach((e) => {
     urls.push(`/servants/${e.id}/`);
   });

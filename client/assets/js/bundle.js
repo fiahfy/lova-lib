@@ -38,32 +38,29 @@ var Locator = (function () {
 })();
 var Router = (function () {
     function Router(routerProvider) {
-        routerProvider.
-            when('/deck/', {
+        routerProvider
+            .when('/deck/', {
             template: '<lova-deck></lova-deck>'
-        }).
-            when('/deck/:hash/', {
+        })
+            .when('/deck/:hash/', {
             template: '<lova-deck></lova-deck>'
-        }).
-            when('/servants/', {
+        })
+            .when('/servants/', {
             template: '<lova-servant-list></lova-servant-list>'
-        }).
-            when('/servants/:id/', {
+        })
+            .when('/servants/:id/', {
             template: '<lova-servant-detail></lova-servant-detail>'
-        }).
-            when('/ranking/', {
-            template: '<lova-ranking></lova-ranking>'
-        }).
-            when('/chart/', {
+        })
+            .when('/charts/', {
             template: '<lova-chart></lova-chart>'
-        }).
-            when('/prize/', {
+        })
+            .when('/prize/', {
             template: '<lova-prize></lova-prize>'
-        }).
-            when('/about/', {
+        })
+            .when('/about/', {
             template: '<lova-about></lova-about>'
-        }).
-            otherwise({
+        })
+            .otherwise({
             redirectTo: '/deck/'
         });
     }
@@ -101,11 +98,8 @@ var RootController = (function () {
                 case 'deck':
                     _this.description = 'Deck Simulator for Lord of Vermilion Arena';
                     return;
-                case 'ranking':
-                    _this.description = 'Servant Ranking Data for Lord of Vermilion Arena';
-                    return;
-                case 'chart':
-                    _this.description = 'Chart Data for Lord of Vermilion Arena';
+                case 'charts':
+                    _this.description = 'Charts for Lord of Vermilion Arena';
                     return;
                 case 'prize':
                     _this.description = 'Prize Simulator for Lord of Vermilion Arena';
@@ -113,7 +107,7 @@ var RootController = (function () {
                 case 'about':
                     return;
                 case 'servants':
-                    _this.description = 'Servant List for Lord of Vermilion Arena';
+                    _this.description = 'Servants for Lord of Vermilion Arena';
                     break;
             }
             var matches = $location.path().match(/^\/servants\/(\d+)\//);
@@ -138,7 +132,7 @@ var RootController = (function () {
 exports.RootController = RootController;
 angular.module(exports.appName).controller('RootController', RootController);
 
-},{"./controllers":5,"./directives":11,"./filters":17,"./services":28}],2:[function(require,module,exports){
+},{"./controllers":5,"./directives":10,"./filters":16,"./services":26}],2:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -165,15 +159,15 @@ angular.module('app').directive('lovaAbout', Definition.ddo);
 
 },{"../app":1}],3:[function(require,module,exports){
 'use strict';
+var spell_1 = require('../services/spell');
 var ChartController = (function () {
-    function ChartController(spellStatisticService, scrollService) {
+    function ChartController(spellStatisticService) {
         this.spellStatisticService = spellStatisticService;
-        this.scrollService = scrollService;
         this.updateStatistics();
     }
     ChartController.prototype.updateStatistics = function () {
         var _this = this;
-        this.spellStatisticService.load()
+        this.spellStatisticService.load('month', 'all', 'all')
             .then(function (statistics) {
             _this.statistics = statistics;
             _this.updateGraph();
@@ -184,7 +178,7 @@ var ChartController = (function () {
         this.updateDate = null;
         this.graphData = this.statistics.map(function (e) {
             return {
-                key: ChartController.getSpellName(e.spellId),
+                key: spell_1.SpellService.getSpellNameWithId(e.spellId),
                 values: e.data.map(function (statistics) {
                     if (!_this.updateDate || statistics.date.getTime() > _this.updateDate.getTime()) {
                         _this.updateDate = statistics.date;
@@ -196,7 +190,7 @@ var ChartController = (function () {
         this.graphOptions = {
             chart: {
                 type: 'lineChart',
-                height: 700,
+                height: 500,
                 margin: {
                     top: 20,
                     right: 30,
@@ -221,22 +215,8 @@ var ChartController = (function () {
             }
         };
     };
-    ChartController.getSpellName = function (spellId) {
-        return [,
-            'キュアオール',
-            'リターンゲート',
-            'パワーライズ',
-            'クイックドライブ',
-            'リザレクション',
-            'フォースフィールド',
-            'クレアボヤンス',
-            'クロノフリーズ',
-            'リモートサモン'
-        ][spellId];
-    };
     ChartController.$inject = [
-        'SpellStatisticService',
-        'ScrollService'
+        'SpellStatisticService'
     ];
     return ChartController;
 })();
@@ -255,7 +235,7 @@ var Definition = (function () {
 })();
 angular.module('app').directive('lovaChart', Definition.ddo);
 
-},{}],4:[function(require,module,exports){
+},{"../services/spell":32}],4:[function(require,module,exports){
 'use strict';
 var DeckController = (function () {
     function DeckController($window, $location, $routeParams, servantService, deckService) {
@@ -393,11 +373,10 @@ require('./about');
 require('./chart');
 require('./deck');
 require('./prize');
-require('./ranking');
 require('./servant-detail');
 require('./servant-list');
 
-},{"./about":2,"./chart":3,"./deck":4,"./prize":6,"./ranking":7,"./servant-detail":8,"./servant-list":9}],6:[function(require,module,exports){
+},{"./about":2,"./chart":3,"./deck":4,"./prize":6,"./servant-detail":7,"./servant-list":8}],6:[function(require,module,exports){
 'use strict';
 var PrizeController = (function () {
     function PrizeController(prizeService) {
@@ -477,70 +456,6 @@ angular.module('app').directive('lovaPrize', Definition.ddo);
 
 },{}],7:[function(require,module,exports){
 'use strict';
-var RankingListController = (function () {
-    function RankingListController($scope, $location, $routeParams, servantService, rankingService, scrollService) {
-        var _this = this;
-        this.$scope = $scope;
-        this.$location = $location;
-        this.$routeParams = $routeParams;
-        this.servantService = servantService;
-        this.rankingService = rankingService;
-        this.scrollService = scrollService;
-        this.modeOptions = [
-            { key: 'win', value: 'Win Rate' },
-            { key: 'used', value: 'Used Rate' }
-        ];
-        this.predicate = ['seq'];
-        this.reverse = false;
-        this.mode = $routeParams.mode ? $routeParams.mode : 'win';
-        servantService.load()
-            .then(function (servants) {
-            return rankingService.load(_this.mode, servants);
-        })
-            .then(function (rankings) {
-            _this.rankings = rankings;
-            _this.scrollService.restore();
-        });
-        $scope.$watch(function () { return _this.mode; }, function (newValue, oldValue) {
-            if (typeof newValue === 'undefined' || typeof oldValue === 'undefined' || newValue == oldValue) {
-                return;
-            }
-            _this.selectMode(_this.mode);
-        }, true);
-    }
-    RankingListController.prototype.selectMode = function (mode) {
-        this.$location.url(this.$location.search('mode', mode).url());
-    };
-    RankingListController.prototype.openServant = function (servant) {
-        this.$location.url('/servants/' + servant.id + '/#statistics');
-    };
-    RankingListController.$inject = [
-        '$scope',
-        '$location',
-        '$routeParams',
-        'ServantService',
-        'RankingService',
-        'ScrollService'
-    ];
-    return RankingListController;
-})();
-var Definition = (function () {
-    function Definition() {
-    }
-    Definition.ddo = function () {
-        return {
-            controller: RankingListController,
-            controllerAs: 'c',
-            restrict: 'E',
-            templateUrl: '/assets/templates/ranking.html'
-        };
-    };
-    return Definition;
-})();
-angular.module('app').directive('lovaRanking', Definition.ddo);
-
-},{}],8:[function(require,module,exports){
-'use strict';
 var ServantDetailController = (function () {
     function ServantDetailController($window, $routeParams, $location, servantService, servantStatisticService, scrollService) {
         var _this = this;
@@ -583,16 +498,17 @@ var ServantDetailController = (function () {
         angular.element($window.document).ready(function () {
             $window.setTimeout(function () {
                 angular.element(':radio')['radiocheck']();
-            }, 0);
+            });
         });
     }
     ServantDetailController.prototype.updateStatistics = function () {
         var _this = this;
-        this.servantStatisticService.loadWithId(this.id, 'win', this.map, this.queue)
+        this.servantStatisticService.loadWithId(this.id, 'win', 'month', this.map, this.queue)
             .then(function (statistics) {
             _this.statistics1 = statistics;
-            return _this.servantStatisticService.loadWithId(_this.id, 'used', _this.map, _this.queue);
-        }).then(function (statistics) {
+            return _this.servantStatisticService.loadWithId(_this.id, 'used', 'month', _this.map, _this.queue);
+        })
+            .then(function (statistics) {
             _this.statistics2 = statistics;
             _this.updateGraph();
         });
@@ -603,16 +519,16 @@ var ServantDetailController = (function () {
             key: 'Win Rate',
             area: true,
             color: '#1f77b4',
-            values: this.statistics1.map(function (ranking) {
-                return { x: ranking.date, y: ranking.score };
+            values: this.statistics1.map(function (statistic) {
+                return { x: statistic.date, y: statistic.score };
             })
         });
         this.graph1Data.push({
             key: 'Average',
             area: false,
             color: '#ff7f0e',
-            values: this.statistics1.map(function (ranking) {
-                return { x: ranking.date, y: 50 };
+            values: this.statistics1.map(function (statistic) {
+                return { x: statistic.date, y: 50 };
             })
         });
         this.graph2Data = [];
@@ -620,17 +536,17 @@ var ServantDetailController = (function () {
             key: 'Used Rate',
             area: true,
             color: '#9467bd',
-            values: this.statistics2.map(function (ranking) {
-                return { x: ranking.date, y: ranking.score };
+            values: this.statistics2.map(function (statistic) {
+                return { x: statistic.date, y: statistic.score };
             })
         });
         this.graph2Data.push({
             key: 'Average',
             area: false,
             color: '#ff7f0e',
-            values: this.statistics2.map(function (ranking) {
+            values: this.statistics2.map(function (statistic) {
                 // TODO: servants count取得
-                return { x: ranking.date, y: 100 / 221 };
+                return { x: statistic.date, y: 100 / 221 };
             })
         });
         this.graph1Options = this.graph2Options = {
@@ -686,7 +602,7 @@ var Definition = (function () {
 })();
 angular.module('app').directive('lovaServantDetail', Definition.ddo);
 
-},{}],9:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 'use strict';
 var ServantListController = (function () {
     function ServantListController($scope, $window, $location, $routeParams, servantService, scrollService) {
@@ -697,10 +613,6 @@ var ServantListController = (function () {
         this.$routeParams = $routeParams;
         this.servantService = servantService;
         this.scrollService = scrollService;
-        this.viewOptions = [
-            { key: 0, icon: 'fui-list-large-thumbnails' },
-            { key: 1, icon: 'fui-list-columned' }
-        ];
         this.tribeIdOptions = [
             { key: 0, value: 'Select Tribe...' },
             { key: 1, value: '人獣' },
@@ -727,9 +639,21 @@ var ServantListController = (function () {
             .then(function (servants) {
             _this.servants = servants;
             _this.scrollService.restore();
+            $window.setTimeout(function () {
+                angular.element('table.table').DataTable({
+                    paging: false,
+                    searching: false,
+                    columnDefs: [
+                        { orderable: false, targets: 1 },
+                        { orderSequence: ['desc', 'asc'], targets: [6, 7, 8, 9] },
+                    ]
+                });
+            });
         });
         $scope.$watch(function () { return _this.tribeId; }, function (newValue, oldValue) {
-            if (typeof newValue === 'undefined' || typeof oldValue === 'undefined' || newValue == oldValue) {
+            if (typeof newValue === 'undefined'
+                || typeof oldValue === 'undefined'
+                || newValue == oldValue) {
                 return;
             }
             _this.selectTribeId(_this.tribeId);
@@ -792,7 +716,7 @@ var Definition = (function () {
 })();
 angular.module('app').directive('lovaServantList', Definition.ddo);
 
-},{}],10:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -818,14 +742,14 @@ function fittable() {
 }
 angular.module(app.appName).directive('lovaFittable', fittable);
 
-},{"../app":1}],11:[function(require,module,exports){
+},{"../app":1}],10:[function(require,module,exports){
 'use strict';
 require('./fittable');
 require('./lazy-image');
 require('./skill-popover');
 require('./skill-popover-content');
 
-},{"./fittable":10,"./lazy-image":12,"./skill-popover":14,"./skill-popover-content":13}],12:[function(require,module,exports){
+},{"./fittable":9,"./lazy-image":11,"./skill-popover":13,"./skill-popover-content":12}],11:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -837,13 +761,13 @@ function lazyImage() {
                 //noinspection TaskProblemsInspection
                 element['lazyload']();
                 // todo: 一回目の変更時だけ初期表示がされない(/deck)
-            }, 0);
+            });
         }
     };
 }
 angular.module(app.appName).directive('lovaLazyImage', lazyImage);
 
-},{"../app":1}],13:[function(require,module,exports){
+},{"../app":1}],12:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -860,7 +784,7 @@ function skillPopoverContent() {
 }
 angular.module(app.appName).directive('lovaSkillPopoverContent', skillPopoverContent);
 
-},{"../app":1}],14:[function(require,module,exports){
+},{"../app":1}],13:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -906,7 +830,7 @@ function skillPopover($window) {
 }
 angular.module(app.appName).directive('lovaSkillPopover', skillPopover);
 
-},{"../app":1}],15:[function(require,module,exports){
+},{"../app":1}],14:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -917,7 +841,7 @@ function def() {
 }
 angular.module(app.appName).filter('default', def);
 
-},{"../app":1}],16:[function(require,module,exports){
+},{"../app":1}],15:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -929,7 +853,7 @@ function escape() {
 angular.module(app.appName).filter('escape', escape);
 angular.module(app.appName).filter('e', escape);
 
-},{"../app":1}],17:[function(require,module,exports){
+},{"../app":1}],16:[function(require,module,exports){
 'use strict';
 require('./default');
 require('./escape');
@@ -937,7 +861,7 @@ require('./pad');
 require('./replace');
 require('./skill-description');
 
-},{"./default":15,"./escape":16,"./pad":18,"./replace":19,"./skill-description":20}],18:[function(require,module,exports){
+},{"./default":14,"./escape":15,"./pad":17,"./replace":18,"./skill-description":19}],17:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -951,7 +875,7 @@ function pad() {
 }
 angular.module(app.appName).filter('pad', pad);
 
-},{"../app":1}],19:[function(require,module,exports){
+},{"../app":1}],18:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -966,7 +890,7 @@ function replace() {
 }
 angular.module(app.appName).filter('replace', replace);
 
-},{"../app":1}],20:[function(require,module,exports){
+},{"../app":1}],19:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -996,7 +920,7 @@ function skillDescription($sce) {
 }
 angular.module(app.appName).filter('skillDescription', skillDescription);
 
-},{"../app":1}],21:[function(require,module,exports){
+},{"../app":1}],20:[function(require,module,exports){
 'use strict';
 var DeckModel = (function () {
     function DeckModel() {
@@ -1065,7 +989,7 @@ var DeckModel = (function () {
 })();
 exports.DeckModel = DeckModel;
 
-},{}],22:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 'use strict';
 var PrizeModel = (function () {
     function PrizeModel(obj) {
@@ -1078,38 +1002,28 @@ var PrizeModel = (function () {
 })();
 exports.PrizeModel = PrizeModel;
 
-},{}],23:[function(require,module,exports){
-'use strict';
-var RankingModel = (function () {
-    function RankingModel(obj) {
-        this.id = obj.id;
-        this.mode = obj.mode;
-        this.date = new Date(obj.date);
-        this.servantId = obj.servant_id;
-        this.seq = obj.seq;
-        this.rank = obj.rank;
-        this.score = obj.score;
-    }
-    return RankingModel;
-})();
-exports.RankingModel = RankingModel;
-
-},{}],24:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 'use strict';
 var ServantStatisticModel = (function () {
     function ServantStatisticModel(obj) {
-        this.id = obj.id;
         this.date = new Date(obj.date);
-        this.servantId = obj.servant_id;
-        this.seq = obj.seq;
-        this.rank = obj.rank;
         this.score = obj.score;
     }
     return ServantStatisticModel;
 })();
 exports.ServantStatisticModel = ServantStatisticModel;
+var ServantStatisticsModel = (function () {
+    function ServantStatisticsModel(obj) {
+        this.servantId = obj.spell_id;
+        this.data = obj.data.map(function (e) {
+            return new ServantStatisticModel(e);
+        });
+    }
+    return ServantStatisticsModel;
+})();
+exports.ServantStatisticsModel = ServantStatisticsModel;
 
-},{}],25:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 'use strict';
 var ServantModel = (function () {
     function ServantModel(obj) {
@@ -1121,11 +1035,13 @@ var ServantModel = (function () {
         this.name = obj.name;
         this.cost = obj.cost;
         this.range = obj.range;
-        this.release_date = new Date(obj.release_date);
-        this.update_date = new Date(obj.update_date);
+        this.releaseDate = new Date(obj.release_date);
+        this.updateDate = new Date(obj.update_date);
         this.illustrationBy = obj.illustration_by;
         this.characterVoice = obj.character_voice;
         this.oralTradition = obj.oral_tradition;
+        this.winRate = obj.win_rate;
+        this.usedRate = obj.used_rate;
         if (obj.status) {
             this.status = {
                 1: obj.status[1] ? new StatusModel(obj.status[1]) : null,
@@ -1176,15 +1092,11 @@ var SkillModel = (function () {
 })();
 exports.SkillModel = SkillModel;
 
-},{}],26:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 'use strict';
 var SpellStatisticModel = (function () {
     function SpellStatisticModel(obj) {
-        this.id = obj.id;
         this.date = new Date(obj.date);
-        this.spellId = obj.spell_id;
-        this.seq = obj.seq;
-        this.rank = obj.rank;
         this.score = obj.score;
     }
     return SpellStatisticModel;
@@ -1201,7 +1113,7 @@ var SpellStatisticsModel = (function () {
 })();
 exports.SpellStatisticsModel = SpellStatisticsModel;
 
-},{}],27:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -1254,17 +1166,16 @@ var DeckService = (function () {
 exports.DeckService = DeckService;
 angular.module(app.appName).service('DeckService', DeckService);
 
-},{"../app":1,"../models/deck":21}],28:[function(require,module,exports){
+},{"../app":1,"../models/deck":20}],26:[function(require,module,exports){
 'use strict';
 require('./deck');
 require('./prize');
-require('./ranking');
 require('./scroll');
 require('./servant');
 require('./servant-statistic');
 require('./spell-statistic');
 
-},{"./deck":27,"./prize":29,"./ranking":30,"./scroll":31,"./servant":33,"./servant-statistic":32,"./spell-statistic":34}],29:[function(require,module,exports){
+},{"./deck":25,"./prize":27,"./scroll":28,"./servant":30,"./servant-statistic":29,"./spell-statistic":31}],27:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -1298,49 +1209,7 @@ var PrizeService = (function () {
 exports.PrizeService = PrizeService;
 angular.module(app.appName).service('PrizeService', PrizeService);
 
-},{"../app":1,"../models/prize":22}],30:[function(require,module,exports){
-'use strict';
-//import * as angular from 'angular';
-var app = require('../app');
-var ranking_1 = require('../models/ranking');
-var RankingService = (function () {
-    function RankingService($http, $q) {
-        this.$http = $http;
-        this.$q = $q;
-    }
-    RankingService.prototype.load = function (mode, servants) {
-        var deferred = this.$q.defer();
-        this.$http.get("" + RankingService.url + mode + "/latest/", { cache: true })
-            .then(function (res) {
-            var rankings = [];
-            res.data.forEach(function (ranking) {
-                var rankingModel = new ranking_1.RankingModel(ranking);
-                for (var _i = 0; _i < servants.length; _i++) {
-                    var servant = servants[_i];
-                    if (rankingModel.servantId === servant.id) {
-                        rankingModel.servant = servant;
-                        break;
-                    }
-                }
-                rankings.push(rankingModel);
-            });
-            deferred.resolve(rankings);
-        }, function () {
-            deferred.reject();
-        });
-        return deferred.promise;
-    };
-    RankingService.url = './api/ranking/servants/';
-    RankingService.$inject = [
-        '$http',
-        '$q'
-    ];
-    return RankingService;
-})();
-exports.RankingService = RankingService;
-angular.module(app.appName).service('RankingService', RankingService);
-
-},{"../app":1,"../models/ranking":23}],31:[function(require,module,exports){
+},{"../app":1,"../models/prize":21}],28:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -1371,7 +1240,7 @@ var ScrollService = (function () {
 exports.ScrollService = ScrollService;
 angular.module(app.appName).service('ScrollService', ScrollService);
 
-},{"../app":1}],32:[function(require,module,exports){
+},{"../app":1}],29:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -1381,12 +1250,25 @@ var ServantStatisticService = (function () {
         this.$http = $http;
         this.$q = $q;
     }
-    ServantStatisticService.prototype.loadWithId = function (id, mode, map, queue) {
+    ServantStatisticService.prototype.loadWithId = function (id, mode, term, map, queue) {
         var deferred = this.$q.defer();
-        this.$http.get("" + ServantStatisticService.url + id + "/statistics/?mode=" + mode + "&map=" + map + "&queue=" + queue, { cache: true })
+        this.$http.get("" + ServantStatisticService.url + id + "/statistics/?mode=" + mode + "&term=" + term + "&map=" + map + "&queue=" + queue, { cache: true })
             .then(function (res) {
             var statistics = res.data.map(function (e) {
                 return new servant_statistic_1.ServantStatisticModel(e);
+            });
+            deferred.resolve(statistics);
+        }, function () {
+            deferred.reject();
+        });
+        return deferred.promise;
+    };
+    ServantStatisticService.prototype.load = function (mode, term, map, queue) {
+        var deferred = this.$q.defer();
+        this.$http.get(ServantStatisticService.url + "statistics/?mode=" + mode + "&term=" + term + "&map=" + map + "&queue=" + queue, { cache: true })
+            .then(function (res) {
+            var statistics = res.data.map(function (e) {
+                return new servant_statistic_1.ServantStatisticsModel(e);
             });
             deferred.resolve(statistics);
         }, function () {
@@ -1404,7 +1286,7 @@ var ServantStatisticService = (function () {
 exports.ServantStatisticService = ServantStatisticService;
 angular.module(app.appName).service('ServantStatisticService', ServantStatisticService);
 
-},{"../app":1,"../models/servant-statistic":24}],33:[function(require,module,exports){
+},{"../app":1,"../models/servant-statistic":22}],30:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -1416,11 +1298,10 @@ var ServantService = (function () {
     }
     ServantService.prototype.load = function () {
         var deferred = this.$q.defer();
-        this.$http.get(ServantService.url + "?fields=-oral_tradition", { cache: true })
+        this.$http.get(ServantService.url + "?with_statistic&fields=-oral_tradition", { cache: true })
             .then(function (res) {
-            var servants = [];
-            res.data.forEach(function (servant) {
-                servants.push(new servant_1.ServantModel(servant));
+            var servants = res.data.map(function (e) {
+                return new servant_1.ServantModel(e);
             });
             deferred.resolve(servants);
         }, function () {
@@ -1449,7 +1330,7 @@ var ServantService = (function () {
 exports.ServantService = ServantService;
 angular.module(app.appName).service('ServantService', ServantService);
 
-},{"../app":1,"../models/servant":25}],34:[function(require,module,exports){
+},{"../app":1,"../models/servant":23}],31:[function(require,module,exports){
 'use strict';
 //import * as angular from 'angular';
 var app = require('../app');
@@ -1459,9 +1340,9 @@ var SpellStatisticService = (function () {
         this.$http = $http;
         this.$q = $q;
     }
-    SpellStatisticService.prototype.load = function () {
+    SpellStatisticService.prototype.load = function (term, map, queue) {
         var deferred = this.$q.defer();
-        this.$http.get(SpellStatisticService.url + "statistics/?map=all&queue=all", { cache: true })
+        this.$http.get(SpellStatisticService.url + "statistics/?term=" + term + "&map=" + map + "&queue=" + queue, { cache: true })
             .then(function (res) {
             var statistics = res.data.map(function (e) {
                 return new spell_statistic_1.SpellStatisticsModel(e);
@@ -1482,4 +1363,30 @@ var SpellStatisticService = (function () {
 exports.SpellStatisticService = SpellStatisticService;
 angular.module(app.appName).service('SpellStatisticService', SpellStatisticService);
 
-},{"../app":1,"../models/spell-statistic":26}]},{},[1]);
+},{"../app":1,"../models/spell-statistic":24}],32:[function(require,module,exports){
+'use strict';
+//import * as angular from 'angular';
+var app = require('../app');
+var SpellService = (function () {
+    function SpellService() {
+    }
+    SpellService.getSpellNameWithId = function (spellId) {
+        return [,
+            'キュアオール',
+            'リターンゲート',
+            'パワーライズ',
+            'クイックドライブ',
+            'リザレクション',
+            'フォースフィールド',
+            'クレアボヤンス',
+            'クロノフリーズ',
+            'リモートサモン'
+        ][spellId] || 'unknown';
+    };
+    SpellService.$inject = [];
+    return SpellService;
+})();
+exports.SpellService = SpellService;
+angular.module(app.appName).service('SpellService', SpellService);
+
+},{"../app":1}]},{},[1]);

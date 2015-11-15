@@ -1,6 +1,6 @@
 <div class="container" id="servant">
   <div class="page-header">
-    <h2>Servant</h2>
+    <h2>Servants</h2>
   </div>
 
   <div class="clearfix">
@@ -26,15 +26,10 @@
         <th class="">Cost</th>
         <th class="hidden-xs">Type</th>
         <th class="">Servant Name</th>
-        <th class="hidden-xs hidden-sm">Range</th>
-        <th class="hidden-xs hidden-sm">HP</th>
-        <th class="hidden-xs hidden-sm">AP</th>
-        <th class="hidden-xs hidden-sm">ATK</th>
-        <th class="hidden-xs hidden-sm">POW</th>
-        <th class="hidden-xs hidden-sm">DEF</th>
-        <th class="hidden-xs hidden-sm">RES</th>
-        <th class="hidden-xs hidden-sm">MS</th>
-        <th class="hidden-xs hidden-sm">AS</th>
+        <th class="hidden-xs hidden-sm">Win Rate</th>
+        <th class="hidden-xs hidden-sm">Used Rate</th>
+        <th class="hidden-xs hidden-sm">Released</th>
+        <th class="hidden-xs hidden-sm">Updated</th>
       </tr>
       </thead>
       <tbody>
@@ -46,15 +41,10 @@
         <td class="">{{ servant.cost }}</td>
         <td class="hidden-xs">{{ servant.type }}</td>
         <td class="">{{ servant.name }}</td>
-        <td class="hidden-xs hidden-sm">{{ servant.range }}</td>
-        <td class="hidden-xs hidden-sm">{{ servant.status[1].hp }}</td>
-        <td class="hidden-xs hidden-sm">{{ servant.status[1].ap }}</td>
-        <td class="hidden-xs hidden-sm">{{ servant.status[1].atk }}</td>
-        <td class="hidden-xs hidden-sm">{{ servant.status[1].pow }}</td>
-        <td class="hidden-xs hidden-sm">{{ servant.status[1].def }}</td>
-        <td class="hidden-xs hidden-sm">{{ servant.status[1].res }}</td>
-        <td class="hidden-xs hidden-sm">{{ servant.status[1].ms }}</td>
-        <td class="hidden-xs hidden-sm">{{ servant.status[1].as|number:2 }}</td>
+        <td class="hidden-xs hidden-sm">{{ servant.winRate|number:2 }}</td>
+        <td class="hidden-xs hidden-sm">{{ servant.usedRate|number:2 }}</td>
+        <td class="hidden-xs hidden-sm">{{ servant.releaseDate|date:'yyyy-MM-dd' }}</td>
+        <td class="hidden-xs hidden-sm">{{ servant.updateDate|date:'yyyy-MM-dd' }}</td>
       </tr>
       </tbody>
     </table>

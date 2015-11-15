@@ -18,9 +18,9 @@ export class SpellStatisticService {
   ) {
   }
 
-  public load(): ng.IPromise<SpellStatisticsModel[]> {
+  public load(term: string, map: string, queue: string): ng.IPromise<SpellStatisticsModel[]> {
     let deferred = this.$q.defer();
-    this.$http.get(`${SpellStatisticService.url}statistics/?map=all&queue=all`, {cache: true})
+    this.$http.get(`${SpellStatisticService.url}statistics/?term=${term}&map=${map}&queue=${queue}`, {cache: true})
       .then((res: any) => {
         let statistics = res.data.map((e) => {
           return new SpellStatisticsModel(e);

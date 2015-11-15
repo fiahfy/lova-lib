@@ -50,32 +50,29 @@ class Router {
   constructor(
     routerProvider: ng.route.IRouteProvider
   ) {
-    routerProvider.
-      when('/deck/', {
+    routerProvider
+      .when('/deck/', {
         template: '<lova-deck></lova-deck>'
-      }).
-      when('/deck/:hash/', {
+      })
+      .when('/deck/:hash/', {
         template: '<lova-deck></lova-deck>'
-      }).
-      when('/servants/', {
+      })
+      .when('/servants/', {
         template: '<lova-servant-list></lova-servant-list>'
-      }).
-      when('/servants/:id/', {
+      })
+      .when('/servants/:id/', {
         template: '<lova-servant-detail></lova-servant-detail>'
-      }).
-      when('/ranking/', {
-        template: '<lova-ranking></lova-ranking>'
-      }).
-      when('/chart/', {
+      })
+      .when('/charts/', {
         template: '<lova-chart></lova-chart>'
-      }).
-      when('/prize/', {
+      })
+      .when('/prize/', {
         template: '<lova-prize></lova-prize>'
-      }).
-      when('/about/', {
+      })
+      .when('/about/', {
         template: '<lova-about></lova-about>'
-      }).
-      otherwise({
+      })
+      .otherwise({
         redirectTo: '/deck/'
       });
   }
@@ -124,11 +121,8 @@ export class RootController {
         case 'deck':
           this.description = 'Deck Simulator for Lord of Vermilion Arena';
           return;
-        case 'ranking':
-          this.description = 'Servant Ranking Data for Lord of Vermilion Arena';
-          return;
-        case 'chart':
-          this.description = 'Chart Data for Lord of Vermilion Arena';
+        case 'charts':
+          this.description = 'Charts for Lord of Vermilion Arena';
           return;
         case 'prize':
           this.description = 'Prize Simulator for Lord of Vermilion Arena';
@@ -136,7 +130,7 @@ export class RootController {
         case 'about':
           return;
         case 'servants':
-          this.description = 'Servant List for Lord of Vermilion Arena';
+          this.description = 'Servants for Lord of Vermilion Arena';
           break;
       }
       let matches = $location.path().match(/^\/servants\/(\d+)\//);
