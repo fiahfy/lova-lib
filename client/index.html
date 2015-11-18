@@ -1,18 +1,19 @@
 <!DOCTYPE html>
-<html ng-app="app" ng-controller="RootController as c">
+<html>
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,user-scalable=0,initial-scale=1" />
   <meta name="google-site-verification" content="6bN-eixW9drVZ1XveP3McIv2g2162XyXxQE9XJNtW9c" />
-  <meta name="description" content="{{ c.description }}" />
-  <title ng-bind="c.title"></title>
-  <base href="/">
+  <meta name="description" content="" />
+  <title></title>
+  <base href="/" />
   <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
+  <!--<link rel="stylesheet" href="./assets/css/app.css" />-->
+<!--
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css" />
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/datatables/1.10.10/css/jquery.dataTables.min.css" />
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/flat-ui/2.2.2/css/flat-ui.min.css" />
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.1/nv.d3.min.css" />
-  <link rel="stylesheet" href="./assets/css/app.css" />
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/datatables/1.10.10/js/jquery.dataTables.min.js"></script>
@@ -29,10 +30,12 @@
   <script src="./assets/js/libs/ngDraggable.js"></script>
   <script src="./assets/js/libs/angular-nvd3.js"></script>
   <script src="./assets/js/analytics.js"></script>
-  <script src="./assets/js/bundle.js"></script>
+-->
+  <script src="./assets/js/bundle.js" defer></script>
 </head>
 <body>
-
+  <div id="app"></div>
+<!--
 <nav class="navbar navbar-default">
   <div class="container">
     <div class="navbar-header">
@@ -69,6 +72,6 @@
     </div>
   </div>
 </footer>
-
+-->
 </body>
 </html>
