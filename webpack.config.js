@@ -1,9 +1,27 @@
+var webpack = require('webpack');
+
 module.exports = {
+  devtool: 'source-map',
   entry: './client/assets/js/AppBootstrap.js',
   output: {
     path: './client/assets/build/',
-    filename: '../js/bundle.js'
+    filename: '../js/bundle.js',
+//    chunkFilename: '../js/[name]-[chunkhash].js',
   },
+  plugins: [
+//    new webpack.NoErrorsPlugin(),
+////    new webpack.optimize.UglifyJsPlugin(),
+//    new webpack.optimize.OccurenceOrderPlugin(),
+//    new webpack.optimize.DedupePlugin(),
+//    //new webpack.optimize.LimitChunkCountPlugin({maxChunks: 15}),
+////    new webpack.optimize.MinChunkSizePlugin({minChunkSize: 10000}),
+//    new webpack.DefinePlugin({
+//      'process.env': {
+//        // This has effect on the react lib size
+//        'NODE_ENV': JSON.stringify('production')
+//      }
+//    })
+  ],
   module: {
     loaders: [
       { test: /\.css$/, loader: 'style!css' },
