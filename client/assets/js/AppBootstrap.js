@@ -5,10 +5,6 @@ import createBrowserHistory from 'history/lib/createBrowserHistory'
 import CommentBox from './components/CommentComponents';
 import App from './components/App';
 
-import 'bootstrap/dist/css/bootstrap.css';
-import 'flat-ui/css/flat-ui.css';
-import '../css/app.css';
-
 //class App extends React.Component {
 //  render() {
 //    return (
