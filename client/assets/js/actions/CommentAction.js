@@ -1,5 +1,5 @@
-import AppConstants from '../AppConstants';
-import AppDispatcher from '../AppDispatcher';
+import AppConstants from '../constants';
+import AppDispatcher from '../dispatcher';
 import CommentAPIUtils from '../utils/CommentAPIUtils';
 
 export default class CommentAction {

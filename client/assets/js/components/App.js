@@ -13,9 +13,9 @@ export default class App extends React.Component {
                       data-toggle="collapse" data-target="#navbar"
                       aria-expanded="false" aria-controls="navbar">
                 <span className="sr-only">Toggle navigation</span>
-                <span className="icon-bar"></span>
-                <span className="icon-bar"></span>
-                <span className="icon-bar"></span>
+                <span className="icon-bar" />
+                <span className="icon-bar" />
+                <span className="icon-bar" />
               </button>
               <a className="navbar-brand" href="/">LoVA Tool</a>
             </div>

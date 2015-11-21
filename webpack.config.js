@@ -4,8 +4,8 @@ module.exports = {
   debug: true,
   devtool: 'source-map',
   entry: {
-    main: './client/assets/js/AppBootstrap.js',
-    style: './client/assets/js/AppStyleLoader.js'
+    main: './client/assets/js/bootstrap.js',
+    style: './client/assets/js/loader.js'
   },
   output: {
     path: './client/assets/',
@@ -28,6 +28,12 @@ module.exports = {
       compress: {
         warnings: false
       }
+    }),
+    new webpack.ProvidePlugin({
+      //$: 'jquery',
+      jQuery: 'jquery',
+      //'window.$': 'jquery',
+      'window.jQuery': 'jquery'
     })
   ],
   module: {
@@ -51,9 +57,18 @@ module.exports = {
         query: {
           presets: ['es2015', 'stage-0', 'react']
         }
+      },
+      {
+        test: /flat-ui\.js$/,
+        loader: 'imports?this=>window'
       }
     ]
   },
+  //externals: {
+  //  // require("jquery") is external and available
+  //  //  on the global var jQuery
+  //  jquery: "jQuery"
+  //}
   // devServer: {
   //   proxy: {
   //     '/assets': {
