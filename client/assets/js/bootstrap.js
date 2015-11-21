@@ -4,6 +4,8 @@ import {Router, Route, Link, IndexRoute} from 'react-router'
 import createBrowserHistory from 'history/lib/createBrowserHistory'
 import CommentBox from './components/CommentComponents';
 import App from './components/app';
+import Prize from './components/prize';
+import About from './components/about';
 
 import 'jquery/dist/jquery';
 import 'flat-ui/dist/js/flat-ui';
@@ -32,7 +34,8 @@ let history = createBrowserHistory();
 let routes = (
   <Route path="/" component={App}>
     <IndexRoute component={Home} />
-    <Route path="comments/" component={NotFound} />
+    <Route path="prize/" component={Prize} />
+    <Route path="about/" component={About} />
     <Route path="*" component={NotFound} />
   </Route>
 );

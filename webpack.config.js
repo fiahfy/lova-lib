@@ -14,21 +14,21 @@ module.exports = {
     chunkFilename: "js/[id].bundle.js"
   },
   plugins: [
-    new webpack.NoErrorsPlugin(),
-    new webpack.DefinePlugin({
-      'process.env': {
-        'NODE_ENV': JSON.stringify('production')
-      }
-    }),
+    //new webpack.NoErrorsPlugin(),
+    //new webpack.DefinePlugin({
+    //  'process.env': {
+    //    'NODE_ENV': JSON.stringify('production')
+    //  }
+    //}),
     //  new webpack.optimize.LimitChunkCountPlugin({maxChunks: 15}),
     //  new webpack.optimize.MinChunkSizePlugin({minChunkSize: 100000}),
-    new webpack.optimize.DedupePlugin(),
-    new webpack.optimize.OccurenceOrderPlugin(),
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false
-      }
-    }),
+    //new webpack.optimize.DedupePlugin(),
+    //new webpack.optimize.OccurenceOrderPlugin(),
+    //new webpack.optimize.UglifyJsPlugin({
+    //  compress: {
+    //    warnings: false
+    //  }
+    //}),
     new webpack.ProvidePlugin({
       //$: 'jquery',
       jQuery: 'jquery',
@@ -61,6 +61,10 @@ module.exports = {
       {
         test: /flat-ui\.js$/,
         loader: 'imports?this=>window'
+      },
+      {
+        test: /fetch\.js$/,
+        loader: 'imports?this=>global!exports?global.fetch'
       }
     ]
   },
