@@ -1,8 +1,8 @@
-import React from 'react';
+import React, {Component} from 'react';
 import PrizeAction from '../actions/prize';
 import PrizeStore from '../stores/prize';
 
-export default class Prize extends React.Component {
+export default class Prize extends Component {
   state = {prizes: []};
   constructor() {
     super();

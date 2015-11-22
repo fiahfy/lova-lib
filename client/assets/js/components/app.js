@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {Link} from 'react-router'
 
-export default class App extends React.Component {
+export default class App extends Component {
   render() {
     let year = (new Date()).getFullYear();
     return (

@@ -25459,8 +25459,8 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var App = (function (_React$Component) {
-	  _inherits(App, _React$Component);
+	var App = (function (_Component) {
+	  _inherits(App, _Component);
 	
 	  function App() {
 	    _classCallCheck(this, App);
@@ -25584,7 +25584,7 @@
 	  }]);
 	
 	  return App;
-	})(_react2.default.Component);
+	})(_react.Component);
 	
 	exports.default = App;
 
@@ -25620,8 +25620,8 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var Prize = (function (_React$Component) {
-	  _inherits(Prize, _React$Component);
+	var Prize = (function (_Component) {
+	  _inherits(Prize, _Component);
 	
 	  function Prize() {
 	    _classCallCheck(this, Prize);
@@ -25800,7 +25800,7 @@
 	  }]);
 	
 	  return Prize;
-	})(_react2.default.Component);
+	})(_react.Component);
 	
 	exports.default = Prize;
 
@@ -26355,8 +26355,8 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var About = (function (_React$Component) {
-	  _inherits(About, _React$Component);
+	var About = (function (_Component) {
+	  _inherits(About, _Component);
 	
 	  function About() {
 	    _classCallCheck(this, About);
@@ -26417,7 +26417,7 @@
 	  }]);
 	
 	  return About;
-	})(_react2.default.Component);
+	})(_react.Component);
 	
 	exports.default = About;
 
