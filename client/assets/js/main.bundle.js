@@ -25499,8 +25499,8 @@
 	                _react2.default.createElement('span', { className: 'icon-bar' })
 	              ),
 	              _react2.default.createElement(
-	                'a',
-	                { className: 'navbar-brand', href: '/' },
+	                _reactRouter.Link,
+	                { className: 'navbar-brand', to: '/' },
 	                'LoVA Tool'
 	              )
 	            ),

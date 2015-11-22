@@ -17,7 +17,7 @@ export default class App extends React.Component {
                 <span className="icon-bar" />
                 <span className="icon-bar" />
               </button>
-              <a className="navbar-brand" href="/">LoVA Tool</a>
+              <Link className="navbar-brand" to="/">LoVA Tool</Link>
             </div>
             <div id="navbar" className="collapse navbar-collapse">
               <ul className="nav navbar-nav">
