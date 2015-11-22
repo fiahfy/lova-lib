@@ -4,22 +4,22 @@ import AppDispatcher from '../dispatcher';
 
 const CHANGE_EVENT = 'change';
 
-export default new (class PrizeStore extends EventEmitter {
-  prizes = [];
+export default new (class PrizeLotStore extends EventEmitter {
+  results = [];
   constructor() {
     super();
 
     AppDispatcher.register((action) => {
       switch (action.actionType) {
-        case AppConstants.ActionTypes.FETCH_PRIZES:
-          this._fetch(action);
+        case AppConstants.ActionTypes.DRAW_PRIZE_LOTS:
+          this._draw(action);
           break;
       }
       this.emit(CHANGE_EVENT);
     });
   }
-  _fetch(action) {
-    this.prizes = action.prizes;
+  _draw(action) {
+    this.results = action.results;
   }
   addChangeListener(callback) {
     this.on(CHANGE_EVENT, callback);

@@ -8,14 +8,14 @@ export default class PrizeAction {
       .then((response) => {
         return response.json();
       }).then((json) => {
-        PrizeAction.receive(json);
+        PrizeAction._receive(json);
       }).catch((error) => {
         console.error(error);
       });
   }
-  static receive(prizes) {
+  static _receive(prizes) {
     AppDispatcher.dispatch({
-      actionType: AppConstants.ActionTypes.RECEIVE_PRIZES,
+      actionType: AppConstants.ActionTypes.FETCH_PRIZES,
       prizes: prizes
     });
   }

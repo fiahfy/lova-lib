@@ -24931,7 +24931,8 @@
 	  ActionTypes: (0, _keymirror2.default)({
 	    CREATE: null,
 	    LOADED: null,
-	    RECEIVE_PRIZES: null
+	    FETCH_PRIZES: null,
+	    DRAW_PRIZE_LOTS: null
 	  })
 	};
 
@@ -25608,9 +25609,17 @@
 	
 	var _prize2 = _interopRequireDefault(_prize);
 	
+	var _prizeLot = __webpack_require__(459);
+	
+	var _prizeLot2 = _interopRequireDefault(_prizeLot);
+	
 	var _prize3 = __webpack_require__(221);
 	
 	var _prize4 = _interopRequireDefault(_prize3);
+	
+	var _prizeLot3 = __webpack_require__(458);
+	
+	var _prizeLot4 = _interopRequireDefault(_prizeLot3);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -25628,31 +25637,46 @@
 	
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Prize).call(this));
 	
-	    _this.state = { prizes: [] };
+	    _this.state = {
+	      prizes: [],
+	      lotResults: []
+	    };
 	
 	    _this._onChange = _this._onChange.bind(_this);
 	    return _this;
 	  }
 	
 	  _createClass(Prize, [{
+	    key: '_onClick',
+	    value: function _onClick() {
+	      _prizeLot2.default.draw(10);
+	    }
+	  }, {
 	    key: '_onChange',
 	    value: function _onChange() {
-	      this.setState({ prizes: _prize4.default.prizes });
+	      this.setState({
+	        prizes: _prize4.default.prizes,
+	        lotResults: _prizeLot4.default.results
+	      });
 	    }
 	  }, {
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
 	      _prize4.default.addChangeListener(this._onChange);
+	      _prizeLot4.default.addChangeListener(this._onChange);
 	      _prize2.default.fetch();
 	    }
 	  }, {
 	    key: 'componentWillUnmount',
 	    value: function componentWillUnmount() {
 	      _prize4.default.removeChangeListener(this._onChange);
+	      _prizeLot4.default.removeChangeListener(this._onChange);
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var updated = this.state.prizes[0] ? new Intl.DateTimeFormat().format(new Date(this.state.prizes[0].date)) : '';
+	
 	      var prizeNodes = this.state.prizes.map(function (prize) {
 	        return _react2.default.createElement(
 	          'tr',
@@ -25666,6 +25690,25 @@
 	            'td',
 	            { className: '' },
 	            prize.rate.toFixed(3)
+	          )
+	        );
+	      });
+	
+	      var i = 0;
+	      var lotResultsNodes = this.state.lotResults.map(function (result) {
+	        i++;
+	        return _react2.default.createElement(
+	          'tr',
+	          { key: i },
+	          _react2.default.createElement(
+	            'td',
+	            { className: '' },
+	            i
+	          ),
+	          _react2.default.createElement(
+	            'td',
+	            { className: '' },
+	            result.name
 	          )
 	        );
 	      });
@@ -25706,7 +25749,7 @@
 	                { className: 'input-group-btn' },
 	                _react2.default.createElement(
 	                  'button',
-	                  { className: 'btn btn-primary' },
+	                  { className: 'btn btn-primary', onClick: this._onClick.bind(this) },
 	                  'Draw'
 	                )
 	              )
@@ -25737,6 +25780,38 @@
 	                  )
 	                )
 	              ),
+	              _react2.default.createElement(
+	                'tbody',
+	                null,
+	                lotResultsNodes
+	              )
+	            ),
+	            _react2.default.createElement(
+	              'table',
+	              { className: 'table table-hover' },
+	              _react2.default.createElement(
+	                'thead',
+	                null,
+	                _react2.default.createElement(
+	                  'tr',
+	                  null,
+	                  _react2.default.createElement(
+	                    'th',
+	                    { className: '' },
+	                    'Name'
+	                  ),
+	                  _react2.default.createElement(
+	                    'th',
+	                    { className: '' },
+	                    'Count'
+	                  ),
+	                  _react2.default.createElement(
+	                    'th',
+	                    { className: '' },
+	                    'Rate'
+	                  )
+	                )
+	              ),
 	              _react2.default.createElement('tbody', null)
 	            )
 	          ),
@@ -25753,7 +25828,8 @@
 	                _react2.default.createElement(
 	                  'small',
 	                  null,
-	                  'Updated \'yyyy-MM-dd\''
+	                  'Updated ',
+	                  updated
 	                ),
 	                _react2.default.createElement(
 	                  'small',
@@ -25843,16 +25919,16 @@
 	      return (0, _whatwgFetch2.default)('/api/prizes/').then(function (response) {
 	        return response.json();
 	      }).then(function (json) {
-	        PrizeAction.receive(json);
+	        PrizeAction._receive(json);
 	      }).catch(function (error) {
 	        console.error(error);
 	      });
 	    }
 	  }, {
-	    key: 'receive',
-	    value: function receive(prizes) {
+	    key: '_receive',
+	    value: function _receive(prizes) {
 	      _dispatcher2.default.dispatch({
-	        actionType: _constants2.default.ActionTypes.RECEIVE_PRIZES,
+	        actionType: _constants2.default.ActionTypes.FETCH_PRIZES,
 	        prizes: prizes
 	      });
 	    }
@@ -26302,8 +26378,8 @@
 	
 	    _dispatcher2.default.register(function (action) {
 	      switch (action.actionType) {
-	        case _constants2.default.ActionTypes.RECEIVE_PRIZES:
-	          _this._receive(action);
+	        case _constants2.default.ActionTypes.FETCH_PRIZES:
+	          _this._fetch(action);
 	          break;
 	      }
 	      _this.emit(CHANGE_EVENT);
@@ -26312,8 +26388,8 @@
 	  }
 	
 	  _createClass(PrizeStore, [{
-	    key: '_receive',
-	    value: function _receive(action) {
+	    key: '_fetch',
+	    value: function _fetch(action) {
 	      this.prizes = action.prizes;
 	    }
 	  }, {
@@ -48465,6 +48541,378 @@
 	/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {module.exports = __webpack_amd_options__;
 	
 	/* WEBPACK VAR INJECTION */}.call(exports, {}))
+
+/***/ },
+/* 227 */,
+/* 228 */,
+/* 229 */,
+/* 230 */,
+/* 231 */,
+/* 232 */,
+/* 233 */,
+/* 234 */,
+/* 235 */,
+/* 236 */,
+/* 237 */,
+/* 238 */,
+/* 239 */,
+/* 240 */,
+/* 241 */,
+/* 242 */,
+/* 243 */,
+/* 244 */,
+/* 245 */,
+/* 246 */,
+/* 247 */,
+/* 248 */,
+/* 249 */,
+/* 250 */,
+/* 251 */,
+/* 252 */,
+/* 253 */,
+/* 254 */,
+/* 255 */,
+/* 256 */,
+/* 257 */,
+/* 258 */,
+/* 259 */,
+/* 260 */,
+/* 261 */,
+/* 262 */,
+/* 263 */,
+/* 264 */,
+/* 265 */,
+/* 266 */,
+/* 267 */,
+/* 268 */,
+/* 269 */,
+/* 270 */,
+/* 271 */,
+/* 272 */,
+/* 273 */,
+/* 274 */,
+/* 275 */,
+/* 276 */,
+/* 277 */,
+/* 278 */,
+/* 279 */,
+/* 280 */,
+/* 281 */,
+/* 282 */,
+/* 283 */,
+/* 284 */,
+/* 285 */,
+/* 286 */,
+/* 287 */,
+/* 288 */,
+/* 289 */,
+/* 290 */,
+/* 291 */,
+/* 292 */,
+/* 293 */,
+/* 294 */,
+/* 295 */,
+/* 296 */,
+/* 297 */,
+/* 298 */,
+/* 299 */,
+/* 300 */,
+/* 301 */,
+/* 302 */,
+/* 303 */,
+/* 304 */,
+/* 305 */,
+/* 306 */,
+/* 307 */,
+/* 308 */,
+/* 309 */,
+/* 310 */,
+/* 311 */,
+/* 312 */,
+/* 313 */,
+/* 314 */,
+/* 315 */,
+/* 316 */,
+/* 317 */,
+/* 318 */,
+/* 319 */,
+/* 320 */,
+/* 321 */,
+/* 322 */,
+/* 323 */,
+/* 324 */,
+/* 325 */,
+/* 326 */,
+/* 327 */,
+/* 328 */,
+/* 329 */,
+/* 330 */,
+/* 331 */,
+/* 332 */,
+/* 333 */,
+/* 334 */,
+/* 335 */,
+/* 336 */,
+/* 337 */,
+/* 338 */,
+/* 339 */,
+/* 340 */,
+/* 341 */,
+/* 342 */,
+/* 343 */,
+/* 344 */,
+/* 345 */,
+/* 346 */,
+/* 347 */,
+/* 348 */,
+/* 349 */,
+/* 350 */,
+/* 351 */,
+/* 352 */,
+/* 353 */,
+/* 354 */,
+/* 355 */,
+/* 356 */,
+/* 357 */,
+/* 358 */,
+/* 359 */,
+/* 360 */,
+/* 361 */,
+/* 362 */,
+/* 363 */,
+/* 364 */,
+/* 365 */,
+/* 366 */,
+/* 367 */,
+/* 368 */,
+/* 369 */,
+/* 370 */,
+/* 371 */,
+/* 372 */,
+/* 373 */,
+/* 374 */,
+/* 375 */,
+/* 376 */,
+/* 377 */,
+/* 378 */,
+/* 379 */,
+/* 380 */,
+/* 381 */,
+/* 382 */,
+/* 383 */,
+/* 384 */,
+/* 385 */,
+/* 386 */,
+/* 387 */,
+/* 388 */,
+/* 389 */,
+/* 390 */,
+/* 391 */,
+/* 392 */,
+/* 393 */,
+/* 394 */,
+/* 395 */,
+/* 396 */,
+/* 397 */,
+/* 398 */,
+/* 399 */,
+/* 400 */,
+/* 401 */,
+/* 402 */,
+/* 403 */,
+/* 404 */,
+/* 405 */,
+/* 406 */,
+/* 407 */,
+/* 408 */,
+/* 409 */,
+/* 410 */,
+/* 411 */,
+/* 412 */,
+/* 413 */,
+/* 414 */,
+/* 415 */,
+/* 416 */,
+/* 417 */,
+/* 418 */,
+/* 419 */,
+/* 420 */,
+/* 421 */,
+/* 422 */,
+/* 423 */,
+/* 424 */,
+/* 425 */,
+/* 426 */,
+/* 427 */,
+/* 428 */,
+/* 429 */,
+/* 430 */,
+/* 431 */,
+/* 432 */,
+/* 433 */,
+/* 434 */,
+/* 435 */,
+/* 436 */,
+/* 437 */,
+/* 438 */,
+/* 439 */,
+/* 440 */,
+/* 441 */,
+/* 442 */,
+/* 443 */,
+/* 444 */,
+/* 445 */,
+/* 446 */,
+/* 447 */,
+/* 448 */,
+/* 449 */,
+/* 450 */,
+/* 451 */,
+/* 452 */,
+/* 453 */,
+/* 454 */,
+/* 455 */,
+/* 456 */,
+/* 457 */,
+/* 458 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _events = __webpack_require__(208);
+	
+	var _constants = __webpack_require__(209);
+	
+	var _constants2 = _interopRequireDefault(_constants);
+	
+	var _dispatcher = __webpack_require__(211);
+	
+	var _dispatcher2 = _interopRequireDefault(_dispatcher);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var CHANGE_EVENT = 'change';
+	
+	exports.default = new ((function (_EventEmitter) {
+	  _inherits(PrizeLotStore, _EventEmitter);
+	
+	  function PrizeLotStore() {
+	    _classCallCheck(this, PrizeLotStore);
+	
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(PrizeLotStore).call(this));
+	
+	    _this.results = [];
+	
+	    _dispatcher2.default.register(function (action) {
+	      switch (action.actionType) {
+	        case _constants2.default.ActionTypes.DRAW_PRIZE_LOTS:
+	          _this._draw(action);
+	          break;
+	      }
+	      _this.emit(CHANGE_EVENT);
+	    });
+	    return _this;
+	  }
+	
+	  _createClass(PrizeLotStore, [{
+	    key: '_draw',
+	    value: function _draw(action) {
+	      this.results = action.results;
+	    }
+	  }, {
+	    key: 'addChangeListener',
+	    value: function addChangeListener(callback) {
+	      this.on(CHANGE_EVENT, callback);
+	    }
+	  }, {
+	    key: 'removeChangeListener',
+	    value: function removeChangeListener(callback) {
+	      this.removeListener(CHANGE_EVENT, callback);
+	    }
+	  }]);
+	
+	  return PrizeLotStore;
+	})(_events.EventEmitter))();
+
+/***/ },
+/* 459 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _constants = __webpack_require__(209);
+	
+	var _constants2 = _interopRequireDefault(_constants);
+	
+	var _dispatcher = __webpack_require__(211);
+	
+	var _dispatcher2 = _interopRequireDefault(_dispatcher);
+	
+	var _prize = __webpack_require__(221);
+	
+	var _prize2 = _interopRequireDefault(_prize);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var PrizeLotAction = (function () {
+	  function PrizeLotAction() {
+	    _classCallCheck(this, PrizeLotAction);
+	  }
+	
+	  _createClass(PrizeLotAction, null, [{
+	    key: 'draw',
+	    value: function draw(times) {
+	      var prizes = _prize2.default.prizes;
+	
+	      var totalRate = 0;
+	      var lots = prizes.map(function (e) {
+	        totalRate += e.rate;
+	        return { rate: totalRate, prize: e };
+	      });
+	
+	      var results = [];
+	      for (var i = 0; i < times; i++) {
+	        var rate = Math.random() * totalRate;
+	        for (var j = 0; j < lots.length; j++) {
+	          var lot = lots[j];
+	          if (rate <= lot.rate) {
+	            results.push(lot.prize);
+	            break;
+	          }
+	        }
+	      }
+	
+	      _dispatcher2.default.dispatch({
+	        actionType: _constants2.default.ActionTypes.DRAW_PRIZE_LOTS,
+	        results: results
+	      });
+	    }
+	  }]);
+	
+	  return PrizeLotAction;
+	})();
+	
+	exports.default = PrizeLotAction;
 
 /***/ }
 /******/ ]);
