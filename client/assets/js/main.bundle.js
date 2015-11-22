@@ -25900,10 +25900,6 @@
 	
 	var _dispatcher2 = _interopRequireDefault(_dispatcher);
 	
-	var _whatwgFetch = __webpack_require__(220);
-	
-	var _whatwgFetch2 = _interopRequireDefault(_whatwgFetch);
-	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -25916,20 +25912,8 @@
 	  _createClass(PrizeAction, null, [{
 	    key: 'fetch',
 	    value: function fetch() {
-	      return (0, _whatwgFetch2.default)('/api/prizes/').then(function (response) {
-	        return response.json();
-	      }).then(function (json) {
-	        PrizeAction._receive(json);
-	      }).catch(function (error) {
-	        console.error(error);
-	      });
-	    }
-	  }, {
-	    key: '_receive',
-	    value: function _receive(prizes) {
 	      _dispatcher2.default.dispatch({
-	        actionType: _constants2.default.ActionTypes.FETCH_PRIZES,
-	        prizes: prizes
+	        actionType: _constants2.default.ActionTypes.FETCH_PRIZES
 	      });
 	    }
 	  }]);
@@ -26348,6 +26332,10 @@
 	
 	var _events = __webpack_require__(208);
 	
+	var _whatwgFetch = __webpack_require__(220);
+	
+	var _whatwgFetch2 = _interopRequireDefault(_whatwgFetch);
+	
 	var _constants = __webpack_require__(209);
 	
 	var _constants2 = _interopRequireDefault(_constants);
@@ -26382,7 +26370,6 @@
 	          _this._fetch(action);
 	          break;
 	      }
-	      _this.emit(CHANGE_EVENT);
 	    });
 	    return _this;
 	  }
@@ -26390,7 +26377,16 @@
 	  _createClass(PrizeStore, [{
 	    key: '_fetch',
 	    value: function _fetch(action) {
-	      this.prizes = action.prizes;
+	      var _this2 = this;
+	
+	      (0, _whatwgFetch2.default)('/api/prizes/').then(function (response) {
+	        return response.json();
+	      }).then(function (json) {
+	        _this2.prizes = json;
+	        _this2.emit(CHANGE_EVENT);
+	      }).catch(function (error) {
+	        console.error(error);
+	      });
 	    }
 	  }, {
 	    key: 'addChangeListener',
@@ -48795,6 +48791,10 @@
 	
 	var _dispatcher2 = _interopRequireDefault(_dispatcher);
 	
+	var _prize = __webpack_require__(221);
+	
+	var _prize2 = _interopRequireDefault(_prize);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -48821,7 +48821,6 @@
 	          _this._draw(action);
 	          break;
 	      }
-	      _this.emit(CHANGE_EVENT);
 	    });
 	    return _this;
 	  }
@@ -48829,7 +48828,29 @@
 	  _createClass(PrizeLotStore, [{
 	    key: '_draw',
 	    value: function _draw(action) {
-	      this.results = action.results;
+	      var times = action.times;
+	      var prizes = _prize2.default.prizes;
+	
+	      var totalRate = 0;
+	      var lots = prizes.map(function (e) {
+	        totalRate += e.rate;
+	        return { rate: totalRate, prize: e };
+	      });
+	
+	      var results = [];
+	      for (var i = 0; i < times; i++) {
+	        var rate = Math.random() * totalRate;
+	        for (var j = 0; j < lots.length; j++) {
+	          var lot = lots[j];
+	          if (rate <= lot.rate) {
+	            results.push(lot.prize);
+	            break;
+	          }
+	        }
+	      }
+	
+	      this.results = results;
+	      this.emit(CHANGE_EVENT);
 	    }
 	  }, {
 	    key: 'addChangeListener',
@@ -48866,10 +48887,6 @@
 	
 	var _dispatcher2 = _interopRequireDefault(_dispatcher);
 	
-	var _prize = __webpack_require__(221);
-	
-	var _prize2 = _interopRequireDefault(_prize);
-	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -48882,29 +48899,9 @@
 	  _createClass(PrizeLotAction, null, [{
 	    key: 'draw',
 	    value: function draw(times) {
-	      var prizes = _prize2.default.prizes;
-	
-	      var totalRate = 0;
-	      var lots = prizes.map(function (e) {
-	        totalRate += e.rate;
-	        return { rate: totalRate, prize: e };
-	      });
-	
-	      var results = [];
-	      for (var i = 0; i < times; i++) {
-	        var rate = Math.random() * totalRate;
-	        for (var j = 0; j < lots.length; j++) {
-	          var lot = lots[j];
-	          if (rate <= lot.rate) {
-	            results.push(lot.prize);
-	            break;
-	          }
-	        }
-	      }
-	
 	      _dispatcher2.default.dispatch({
 	        actionType: _constants2.default.ActionTypes.DRAW_PRIZE_LOTS,
-	        results: results
+	        times: times
 	      });
 	    }
 	  }]);

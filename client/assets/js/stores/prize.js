@@ -1,4 +1,5 @@
 import {EventEmitter} from 'events';
+import fetch from 'whatwg-fetch';
 import AppConstants from '../constants';
 import AppDispatcher from '../dispatcher';
 
@@ -15,11 +16,18 @@ export default new (class PrizeStore extends EventEmitter {
           this._fetch(action);
           break;
       }
-      this.emit(CHANGE_EVENT);
     });
   }
   _fetch(action) {
-    this.prizes = action.prizes;
+    fetch('/api/prizes/')
+      .then((response) => {
+        return response.json();
+      }).then((json) => {
+        this.prizes = json;
+        this.emit(CHANGE_EVENT);
+      }).catch((error) => {
+        console.error(error);
+      });
   }
   addChangeListener(callback) {
     this.on(CHANGE_EVENT, callback);
