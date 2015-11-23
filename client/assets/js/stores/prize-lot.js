@@ -7,6 +7,7 @@ const CHANGE_EVENT = 'change';
 
 export default new (class PrizeLotStore extends EventEmitter {
   results = [];
+  resultsSummary = [];
   constructor() {
     super();
 
@@ -42,6 +43,23 @@ export default new (class PrizeLotStore extends EventEmitter {
     }
 
     this.results = results;
+
+    let summary = this.results.reduce((p, c) => {
+      if (!p[c.id]) {
+        p[c.id] = {prize: c, count: 0, rate: 0};
+      }
+      p[c.id].count++;
+      p[c.id].rate = p[c.id].count / times;
+      return p;
+    }, {});
+    this.resultsSummary = Object.keys(summary).map((id) => {
+      return {
+        prize: summary[id].prize,
+        count: summary[id].count,
+        rate: summary[id].rate
+      };
+    });
+
     this.emit(CHANGE_EVENT);
   }
   addChangeListener(callback) {

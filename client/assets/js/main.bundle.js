@@ -25605,6 +25605,10 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
+	var _classnames = __webpack_require__(460);
+	
+	var _classnames2 = _interopRequireDefault(_classnames);
+	
 	var _prize = __webpack_require__(219);
 	
 	var _prize2 = _interopRequireDefault(_prize);
@@ -25638,8 +25642,10 @@
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Prize).call(this));
 	
 	    _this.state = {
+	      view: 0,
 	      prizes: [],
-	      lotResults: []
+	      lotResults: [],
+	      lotResultsSummary: []
 	    };
 	
 	    _this._onChange = _this._onChange.bind(_this);
@@ -25647,16 +25653,25 @@
 	  }
 	
 	  _createClass(Prize, [{
-	    key: '_onClick',
-	    value: function _onClick() {
-	      _prizeLot2.default.draw(10);
+	    key: '_onClickView',
+	    value: function _onClickView(view) {
+	      this.setState({ view: view });
+	    }
+	  }, {
+	    key: '_onClickDraw',
+	    value: function _onClickDraw() {
+	      var times = this.refs.times.value;
+	      times = Math.min(Math.max(1, times), 1000);
+	      this.refs.times.value = times;
+	      _prizeLot2.default.draw(times);
 	    }
 	  }, {
 	    key: '_onChange',
 	    value: function _onChange() {
 	      this.setState({
 	        prizes: _prize4.default.prizes,
-	        lotResults: _prizeLot4.default.results
+	        lotResults: _prizeLot4.default.results,
+	        lotResultsSummary: _prizeLot4.default.resultsSummary
 	      });
 	    }
 	  }, {
@@ -25675,6 +25690,17 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var _this2 = this;
+	
+	      var viewOptionNodes = [{ key: 0, icon: 'fui-list-numbered' }, { key: 1, icon: 'fui-list-thumbnailed' }].map(function (e) {
+	        var cls = (0, _classnames2.default)('btn', 'btn-primary', { active: e.key === _this2.state.view });
+	        return _react2.default.createElement(
+	          'a',
+	          { key: 'view-' + e.key, className: cls, onClick: _this2._onClickView.bind(_this2, e.key) },
+	          _react2.default.createElement('span', { className: e.icon })
+	        );
+	      });
+	
 	      var updated = this.state.prizes[0] ? new Intl.DateTimeFormat().format(new Date(this.state.prizes[0].date)) : '';
 	
 	      var prizeNodes = this.state.prizes.map(function (prize) {
@@ -25696,10 +25722,9 @@
 	
 	      var i = 0;
 	      var lotResultsNodes = this.state.lotResults.map(function (result) {
-	        i++;
 	        return _react2.default.createElement(
 	          'tr',
-	          { key: i },
+	          { key: 'result-' + i++ },
 	          _react2.default.createElement(
 	            'td',
 	            { className: '' },
@@ -25712,6 +25737,93 @@
 	          )
 	        );
 	      });
+	
+	      var j = 0;
+	      var lotResultsSummaryNodes = this.state.lotResultsSummary.map(function (result) {
+	        return _react2.default.createElement(
+	          'tr',
+	          { key: 'result-summary-' + j++ },
+	          _react2.default.createElement(
+	            'td',
+	            { className: '' },
+	            result.prize.name
+	          ),
+	          _react2.default.createElement(
+	            'td',
+	            { className: '' },
+	            result.count
+	          ),
+	          _react2.default.createElement(
+	            'td',
+	            { className: '' },
+	            result.rate.toFixed(3)
+	          )
+	        );
+	      });
+	
+	      var lotNodes = undefined;
+	      if (this.state.view === 0) {
+	        lotNodes = _react2.default.createElement(
+	          'table',
+	          { className: 'table table-hover' },
+	          _react2.default.createElement(
+	            'thead',
+	            null,
+	            _react2.default.createElement(
+	              'tr',
+	              null,
+	              _react2.default.createElement(
+	                'th',
+	                { className: '' },
+	                '#'
+	              ),
+	              _react2.default.createElement(
+	                'th',
+	                { className: '' },
+	                'Name'
+	              )
+	            )
+	          ),
+	          _react2.default.createElement(
+	            'tbody',
+	            null,
+	            lotResultsNodes
+	          )
+	        );
+	      } else {
+	        lotNodes = _react2.default.createElement(
+	          'table',
+	          { className: 'table table-hover' },
+	          _react2.default.createElement(
+	            'thead',
+	            null,
+	            _react2.default.createElement(
+	              'tr',
+	              null,
+	              _react2.default.createElement(
+	                'th',
+	                { className: '' },
+	                'Name'
+	              ),
+	              _react2.default.createElement(
+	                'th',
+	                { className: '' },
+	                'Count'
+	              ),
+	              _react2.default.createElement(
+	                'th',
+	                { className: '' },
+	                'Rate'
+	              )
+	            )
+	          ),
+	          _react2.default.createElement(
+	            'tbody',
+	            null,
+	            lotResultsSummaryNodes
+	          )
+	        );
+	      }
 	
 	      return _react2.default.createElement(
 	        'div',
@@ -25743,13 +25855,13 @@
 	            _react2.default.createElement(
 	              'div',
 	              { className: 'input-group pull-left' },
-	              _react2.default.createElement('input', { type: 'text', className: 'form-control', min: '1', max: '1000', placeholder: '1-1000' }),
+	              _react2.default.createElement('input', { type: 'text', className: 'form-control', min: '1', max: '1000', placeholder: '1-1000', ref: 'times', defaultValue: '10' }),
 	              _react2.default.createElement(
 	                'span',
 	                { className: 'input-group-btn' },
 	                _react2.default.createElement(
 	                  'button',
-	                  { className: 'btn btn-primary', onClick: this._onClick.bind(this) },
+	                  { className: 'btn btn-primary', onClick: this._onClickDraw.bind(this) },
 	                  'Draw'
 	                )
 	              )
@@ -25757,63 +25869,13 @@
 	            _react2.default.createElement(
 	              'div',
 	              { className: 'btn-toolbar pull-right' },
-	              _react2.default.createElement('div', { className: 'btn-group' })
-	            ),
-	            _react2.default.createElement(
-	              'table',
-	              { className: 'table table-hover' },
 	              _react2.default.createElement(
-	                'thead',
-	                null,
-	                _react2.default.createElement(
-	                  'tr',
-	                  null,
-	                  _react2.default.createElement(
-	                    'th',
-	                    { className: '' },
-	                    '#'
-	                  ),
-	                  _react2.default.createElement(
-	                    'th',
-	                    { className: '' },
-	                    'Name'
-	                  )
-	                )
-	              ),
-	              _react2.default.createElement(
-	                'tbody',
-	                null,
-	                lotResultsNodes
+	                'div',
+	                { className: 'btn-group' },
+	                viewOptionNodes
 	              )
 	            ),
-	            _react2.default.createElement(
-	              'table',
-	              { className: 'table table-hover' },
-	              _react2.default.createElement(
-	                'thead',
-	                null,
-	                _react2.default.createElement(
-	                  'tr',
-	                  null,
-	                  _react2.default.createElement(
-	                    'th',
-	                    { className: '' },
-	                    'Name'
-	                  ),
-	                  _react2.default.createElement(
-	                    'th',
-	                    { className: '' },
-	                    'Count'
-	                  ),
-	                  _react2.default.createElement(
-	                    'th',
-	                    { className: '' },
-	                    'Rate'
-	                  )
-	                )
-	              ),
-	              _react2.default.createElement('tbody', null)
-	            )
+	            lotNodes
 	          ),
 	          _react2.default.createElement(
 	            'div',
@@ -48814,6 +48876,7 @@
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(PrizeLotStore).call(this));
 	
 	    _this.results = [];
+	    _this.resultsSummary = [];
 	
 	    _dispatcher2.default.register(function (action) {
 	      switch (action.actionType) {
@@ -48850,6 +48913,23 @@
 	      }
 	
 	      this.results = results;
+	
+	      var summary = this.results.reduce(function (p, c) {
+	        if (!p[c.id]) {
+	          p[c.id] = { prize: c, count: 0, rate: 0 };
+	        }
+	        p[c.id].count++;
+	        p[c.id].rate = p[c.id].count / times;
+	        return p;
+	      }, {});
+	      this.resultsSummary = Object.keys(summary).map(function (id) {
+	        return {
+	          prize: summary[id].prize,
+	          count: summary[id].count,
+	          rate: summary[id].rate
+	        };
+	      });
+	
 	      this.emit(CHANGE_EVENT);
 	    }
 	  }, {
@@ -48910,6 +48990,60 @@
 	})();
 	
 	exports.default = PrizeLotAction;
+
+/***/ },
+/* 460 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	  Copyright (c) 2015 Jed Watson.
+	  Licensed under the MIT License (MIT), see
+	  http://jedwatson.github.io/classnames
+	*/
+	/* global define */
+	
+	(function () {
+		'use strict';
+	
+		var hasOwn = {}.hasOwnProperty;
+	
+		function classNames () {
+			var classes = '';
+	
+			for (var i = 0; i < arguments.length; i++) {
+				var arg = arguments[i];
+				if (!arg) continue;
+	
+				var argType = typeof arg;
+	
+				if (argType === 'string' || argType === 'number') {
+					classes += ' ' + arg;
+				} else if (Array.isArray(arg)) {
+					classes += ' ' + classNames.apply(null, arg);
+				} else if (argType === 'object') {
+					for (var key in arg) {
+						if (hasOwn.call(arg, key) && arg[key]) {
+							classes += ' ' + key;
+						}
+					}
+				}
+			}
+	
+			return classes.substr(1);
+		}
+	
+		if (typeof module !== 'undefined' && module.exports) {
+			module.exports = classNames;
+		} else if (true) {
+			// register as 'classnames', consistent with npm package name
+			!(__WEBPACK_AMD_DEFINE_RESULT__ = function () {
+				return classNames;
+			}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+		} else {
+			window.classNames = classNames;
+		}
+	}());
+
 
 /***/ }
 /******/ ]);
