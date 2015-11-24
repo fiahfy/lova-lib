@@ -25860,7 +25860,8 @@
 	            _react2.default.createElement(
 	              'div',
 	              { className: 'input-group pull-left' },
-	              _react2.default.createElement('input', { type: 'text', className: 'form-control', min: '1', max: '1000', placeholder: '1-1000', ref: 'times', defaultValue: '10' }),
+	              _react2.default.createElement('input', { type: 'text', className: 'form-control', min: '1', max: '1000', placeholder: '1-1000',
+	                ref: 'times', defaultValue: '10' }),
 	              _react2.default.createElement(
 	                'span',
 	                { className: 'input-group-btn' },
@@ -49056,6 +49057,8 @@
 
 	'use strict';
 	
+	var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; })();
+	
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 	
 	Object.defineProperty(exports, "__esModule", {
@@ -49069,6 +49072,10 @@
 	var _classnames = __webpack_require__(460);
 	
 	var _classnames2 = _interopRequireDefault(_classnames);
+	
+	var _jquery = __webpack_require__(223);
+	
+	var _jquery2 = _interopRequireDefault(_jquery);
 	
 	var _history = __webpack_require__(464);
 	
@@ -49107,14 +49114,14 @@
 	  }
 	
 	  _createClass(Servant, [{
-	    key: '_onClickView',
-	    value: function _onClickView(view) {
-	      this.setState({ view: view });
-	    }
-	  }, {
 	    key: '_handleServantClick',
 	    value: function _handleServantClick(servantId) {
 	      _history2.default.pushState(null, '/servants/' + servantId + '/');
+	    }
+	  }, {
+	    key: '_handleQueryChange',
+	    value: function _handleQueryChange() {
+	      this.forceUpdate();
 	    }
 	  }, {
 	    key: '_onChange',
@@ -49124,8 +49131,46 @@
 	      });
 	    }
 	  }, {
+	    key: '_createServantsFilter',
+	    value: function _createServantsFilter() {
+	      var query = this.props.location.query;
+	
+	      var filters = [];
+	
+	      var q = this.refs.q ? this.refs.q.value : query.q;
+	      if (q) {
+	        filters = q.split(/[\s　]/i).map(function (e) {
+	          var _e$split = e.split(':');
+	
+	          var _e$split2 = _slicedToArray(_e$split, 2);
+	
+	          var key = _e$split2[0];
+	          var value = _e$split2[1];
+	
+	          if (!value) {
+	            return { key: 'name', value: key };
+	          }
+	          return { key: key, value: value.replace('+', ' ') };
+	        });
+	      }
+	
+	      if (query.tribe_id > 0) {
+	        filters.push({ key: 'tribe_id', value: query.tribe_id });
+	      }
+	
+	      return function (servant) {
+	        return filters.every(function (filter) {
+	          return servant[filter.key].toString().indexOf(filter.value) > -1;
+	        });
+	      };
+	    }
+	  }, {
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
+	      // TODO: dont use jquery
+	      (0, _jquery2.default)(this.refs.uiSelect).select2().on('select2-selecting', function (e) {
+	        _history2.default.pushState(null, '/servants/?tribe_id=' + e.val);
+	      });
 	      _servant4.default.addChangeListener(this._onChange);
 	      _servant2.default.fetchAll();
 	    }
@@ -49139,7 +49184,17 @@
 	    value: function render() {
 	      var _this2 = this;
 	
-	      var servantNodes = this.state.servants.map(function (servant) {
+	      var query = this.props.location.query;
+	
+	      var tribeIdOptionNodes = [{ key: 0, value: 'Select Tribe...' }, { key: 1, value: '人獣' }, { key: 2, value: '神族' }, { key: 3, value: '魔種' }, { key: 4, value: '海種' }, { key: 5, value: '不死' }].map(function (e) {
+	        return _react2.default.createElement(
+	          'option',
+	          { key: 'tribe-id-' + e.key, value: e.key },
+	          e.value
+	        );
+	      });
+	
+	      var servantNodes = this.state.servants.filter(this._createServantsFilter()).map(function (servant) {
 	        var cls = (0, _classnames2.default)('clip', 'tribe-' + servant.tribe_id);
 	        var style = { backgroundPositionX: -40 * (servant.tribe_code - 1) + 'px' };
 	        return _react2.default.createElement(
@@ -49216,14 +49271,19 @@
 	          _react2.default.createElement(
 	            'div',
 	            { className: 'pull-left' },
-	            _react2.default.createElement('select', { className: 'form-control select select-primary select-block mbl', 'ui-select2': true })
+	            _react2.default.createElement(
+	              'select',
+	              { className: 'form-control select select-primary select-block mbl',
+	                ref: 'uiSelect', defaultValue: query.tribe_id },
+	              tribeIdOptionNodes
+	            )
 	          )
 	        ),
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'form-group' },
-	          _react2.default.createElement('input', { type: 'text', placeholder: 'Input Keyword...', className: 'form-control'
-	          })
+	          _react2.default.createElement('input', { type: 'text', placeholder: 'Input Keyword...', className: 'form-control',
+	            ref: 'q', defaultValue: query.q, onChange: this._handleQueryChange.bind(this) })
 	        ),
 	        _react2.default.createElement(
 	          'div',

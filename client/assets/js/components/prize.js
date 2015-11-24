@@ -131,7 +131,8 @@ export default class Prize extends Component {
             </div>
 
             <div className="input-group pull-left">
-              <input type="text" className="form-control" min="1" max="1000" placeholder="1-1000" ref="times" defaultValue="10" />
+              <input type="text" className="form-control" min="1" max="1000" placeholder="1-1000"
+                     ref="times" defaultValue="10" />
               <span className="input-group-btn">
                 <button className="btn btn-primary" onClick={this._handleDrawClick.bind(this)}>Draw</button>
               </span>
@@ -150,7 +151,9 @@ export default class Prize extends Component {
             <div className="clearfix">
               <h3>Prize List
                 <small>Updated {updated}</small>
-                <small className="pull-right"><a href="http://lova.jp/prizelist/">to Official Prize List Page</a></small>
+                <small className="pull-right">
+                  <a href="http://lova.jp/prizelist/">to Official Prize List Page</a>
+                </small>
               </h3>
             </div>
 

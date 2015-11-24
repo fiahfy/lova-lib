@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import classNames from 'classnames';
+import jQuery from 'jquery';
 import History from '../history';
 import ServantAction from '../actions/servant';
 import ServantStore from '../stores/servant';
@@ -12,18 +13,47 @@ export default class Servant extends Component {
     super();
     this._onChange = this._onChange.bind(this);
   }
-  _onClickView(view) {
-    this.setState({view: view});
-  }
   _handleServantClick(servantId) {
     History.pushState(null, `/servants/${servantId}/`);
+  }
+  _handleQueryChange() {
+    this.forceUpdate();
   }
   _onChange() {
     this.setState({
       servants: ServantStore.servants
     });
   }
+  _createServantsFilter() {
+    let {query} = this.props.location;
+    let filters = [];
+
+    let q = this.refs.q ? this.refs.q.value : query.q;
+    if (q) {
+      filters = q.split(/[\s　]/i).map((e) => {
+        let [key, value] = e.split(':');
+        if (!value) {
+          return {key: 'name', value: key};
+        }
+        return {key: key, value: value.replace('+', ' ')};
+      });
+    }
+
+    if (query.tribe_id > 0) {
+      filters.push({key: 'tribe_id', value: query.tribe_id});
+    }
+
+    return (servant) => {
+      return filters.every((filter) => {
+        return servant[filter.key].toString().indexOf(filter.value) > -1;
+      });
+    };
+  }
   componentDidMount() {
+    // TODO: dont use jquery
+    jQuery(this.refs.uiSelect).select2().on('select2-selecting', (e) => {
+      History.pushState(null, `/servants/?tribe_id=${e.val}`);
+    });
     ServantStore.addChangeListener(this._onChange);
     ServantAction.fetchAll();
   }
@@ -31,7 +61,24 @@ export default class Servant extends Component {
     ServantStore.removeChangeListener(this._onChange);
   }
   render() {
-    let servantNodes = this.state.servants.map((servant) => {
+    let {query} = this.props.location;
+
+    let tribeIdOptionNodes = [
+      {key: 0, value: 'Select Tribe...'},
+      {key: 1, value: '人獣'},
+      {key: 2, value: '神族'},
+      {key: 3, value: '魔種'},
+      {key: 4, value: '海種'},
+      {key: 5, value: '不死'}
+    ].map((e) => {
+      return (
+        <option key={`tribe-id-${e.key}`} value={e.key}>
+          {e.value}
+        </option>
+      );
+    });
+
+    let servantNodes = this.state.servants.filter(this._createServantsFilter()).map((servant) => {
       let cls = classNames('clip', `tribe-${servant.tribe_id}`);
       let style = {backgroundPositionX: `${-40*(servant.tribe_code-1)}px`};
       return (
@@ -58,15 +105,16 @@ export default class Servant extends Component {
 
         <div className="clearfix">
           <div className="pull-left">
-            <select className="form-control select select-primary select-block mbl" ui-select2>
-              {/*<option ng-repeat="option in c.tribeIdOptions" value="{{ option.key }}">{{ option.value }}</option>*/}
+            <select className="form-control select select-primary select-block mbl"
+                    ref="uiSelect" defaultValue={query.tribe_id}>
+              {tribeIdOptionNodes}
             </select>
           </div>
         </div>
 
         <div className="form-group">
           <input type="text" placeholder="Input Keyword..." className="form-control"
-                  />
+                 ref="q" defaultValue={query.q} onChange={this._handleQueryChange.bind(this)} />
         </div>
 
         <div>
