@@ -151,6 +151,9 @@ img {
 #servant>div>.btn-toolbar {
     margin-bottom: 20px;
 }
+#servant table>tbody>tr {
+    cursor: pointer;
+}
 #servant table>tbody>tr>td.clip {
     width: 1%;
 }

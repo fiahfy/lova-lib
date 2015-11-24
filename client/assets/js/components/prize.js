@@ -16,10 +16,10 @@ export default class Prize extends Component {
     super();
     this._onChange = this._onChange.bind(this);
   }
-  _onClickView(view) {
+  _handleViewClick(view) {
     this.setState({view: view});
   }
-  _onClickDraw() {
+  _handleDrawClick() {
     let times = this.refs.times.value;
     times = Math.min(Math.max(1, times), 1000);
     this.refs.times.value = times;
@@ -35,7 +35,7 @@ export default class Prize extends Component {
   componentDidMount() {
     PrizeStore.addChangeListener(this._onChange);
     PrizeLotStore.addChangeListener(this._onChange);
-    PrizeAction.fetch();
+    PrizeAction.fetchAll();
   }
   componentWillUnmount() {
     PrizeStore.removeChangeListener(this._onChange);
@@ -48,7 +48,7 @@ export default class Prize extends Component {
     ].map((e) => {
       let cls = classNames('btn', 'btn-primary', {active: e.key === this.state.view});
       return (
-        <a key={`view-${e.key}`} className={cls} onClick={this._onClickView.bind(this, e.key)}>
+        <a key={`view-${e.key}`} className={cls} onClick={this._handleViewClick.bind(this, e.key)}>
           <span className={e.icon} />
         </a>
       );
@@ -133,7 +133,7 @@ export default class Prize extends Component {
             <div className="input-group pull-left">
               <input type="text" className="form-control" min="1" max="1000" placeholder="1-1000" ref="times" defaultValue="10" />
               <span className="input-group-btn">
-                <button className="btn btn-primary" onClick={this._onClickDraw.bind(this)}>Draw</button>
+                <button className="btn btn-primary" onClick={this._handleDrawClick.bind(this)}>Draw</button>
               </span>
             </div>
 

@@ -2,7 +2,7 @@ var webpack = require('webpack');
 
 module.exports = {
   debug: true,
-  devtool: 'source-map',
+  devtool: 'eval',
   entry: {
     main: './client/assets/js/bootstrap.js',
     style: './client/assets/js/loader.js'

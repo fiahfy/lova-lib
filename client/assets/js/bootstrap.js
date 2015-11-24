@@ -1,9 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Router, Route, Link, IndexRoute} from 'react-router'
-import createBrowserHistory from 'history/lib/createBrowserHistory'
+import {Router, Route, Link, IndexRedirect, Redirect} from 'react-router'
+import History from './history';
 import CommentBox from './components/CommentComponents';
 import App from './components/app';
+import Servant from './components/servant';
 import Prize from './components/prize';
 import About from './components/about';
 
@@ -30,17 +31,17 @@ class NotFound extends React.Component {
   }
 }
 
-let history = createBrowserHistory();
 let routes = (
   <Route path="/" component={App}>
-    <IndexRoute component={Home} />
+    <IndexRedirect to="about/" />
+    <Route path="servants/" component={Servant} />
     <Route path="prize/" component={Prize} />
     <Route path="about/" component={About} />
-    <Route path="*" component={NotFound} />
+    <Redirect from="*" to="/" />
   </Route>
 );
 
 ReactDOM.render(
-  <Router routes={routes} history={history} />,
+  <Router routes={routes} history={History} />,
   document.querySelector('#app')
 );

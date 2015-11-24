@@ -5,25 +5,25 @@ import AppDispatcher from '../dispatcher';
 
 const CHANGE_EVENT = 'change';
 
-export default new (class PrizeStore extends EventEmitter {
-  prizes = [];
+export default new (class ServantStore extends EventEmitter {
+  servants = [];
   constructor() {
     super();
 
     AppDispatcher.register((action) => {
       switch (action.actionType) {
-        case AppConstants.ActionTypes.FETCH_PRIZES:
+        case AppConstants.ActionTypes.FETCH_SERVANTS:
           this._fetchAll(action);
           break;
       }
     });
   }
   _fetchAll(action) {
-    fetch('/api/prizes/')
+    fetch('/api/servants/?with_statistic&fields=-oral_tradition')
       .then((response) => {
         return response.json();
       }).then((json) => {
-        this.prizes = json;
+        this.servants = json;
         this.emit(CHANGE_EVENT);
       }).catch((error) => {
         console.error(error);

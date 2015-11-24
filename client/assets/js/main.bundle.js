@@ -58,9 +58,9 @@
 	
 	var _reactRouter = __webpack_require__(159);
 	
-	var _createBrowserHistory = __webpack_require__(205);
+	var _history = __webpack_require__(464);
 	
-	var _createBrowserHistory2 = _interopRequireDefault(_createBrowserHistory);
+	var _history2 = _interopRequireDefault(_history);
 	
 	var _CommentComponents = __webpack_require__(206);
 	
@@ -69,6 +69,10 @@
 	var _app = __webpack_require__(217);
 	
 	var _app2 = _interopRequireDefault(_app);
+	
+	var _servant = __webpack_require__(461);
+	
+	var _servant2 = _interopRequireDefault(_servant);
 	
 	var _prize = __webpack_require__(218);
 	
@@ -136,17 +140,17 @@
 	  return NotFound;
 	})(_react2.default.Component);
 	
-	var history = (0, _createBrowserHistory2.default)();
 	var routes = _react2.default.createElement(
 	  _reactRouter.Route,
 	  { path: '/', component: _app2.default },
-	  _react2.default.createElement(_reactRouter.IndexRoute, { component: Home }),
+	  _react2.default.createElement(_reactRouter.IndexRedirect, { to: 'about/' }),
+	  _react2.default.createElement(_reactRouter.Route, { path: 'servants/', component: _servant2.default }),
 	  _react2.default.createElement(_reactRouter.Route, { path: 'prize/', component: _prize2.default }),
 	  _react2.default.createElement(_reactRouter.Route, { path: 'about/', component: _about2.default }),
-	  _react2.default.createElement(_reactRouter.Route, { path: '*', component: NotFound })
+	  _react2.default.createElement(_reactRouter.Redirect, { from: '*', to: '/' })
 	);
 	
-	_reactDom2.default.render(_react2.default.createElement(_reactRouter.Router, { routes: routes, history: history }), document.querySelector('#app'));
+	_reactDom2.default.render(_react2.default.createElement(_reactRouter.Router, { routes: routes, history: _history2.default }), document.querySelector('#app'));
 
 /***/ },
 /* 1 */
@@ -24931,6 +24935,7 @@
 	  ActionTypes: (0, _keymirror2.default)({
 	    CREATE: null,
 	    LOADED: null,
+	    FETCH_SERVANTS: null,
 	    FETCH_PRIZES: null,
 	    DRAW_PRIZE_LOTS: null
 	  })
@@ -25653,13 +25658,13 @@
 	  }
 	
 	  _createClass(Prize, [{
-	    key: '_onClickView',
-	    value: function _onClickView(view) {
+	    key: '_handleViewClick',
+	    value: function _handleViewClick(view) {
 	      this.setState({ view: view });
 	    }
 	  }, {
-	    key: '_onClickDraw',
-	    value: function _onClickDraw() {
+	    key: '_handleDrawClick',
+	    value: function _handleDrawClick() {
 	      var times = this.refs.times.value;
 	      times = Math.min(Math.max(1, times), 1000);
 	      this.refs.times.value = times;
@@ -25679,7 +25684,7 @@
 	    value: function componentDidMount() {
 	      _prize4.default.addChangeListener(this._onChange);
 	      _prizeLot4.default.addChangeListener(this._onChange);
-	      _prize2.default.fetch();
+	      _prize2.default.fetchAll();
 	    }
 	  }, {
 	    key: 'componentWillUnmount',
@@ -25696,7 +25701,7 @@
 	        var cls = (0, _classnames2.default)('btn', 'btn-primary', { active: e.key === _this2.state.view });
 	        return _react2.default.createElement(
 	          'a',
-	          { key: 'view-' + e.key, className: cls, onClick: _this2._onClickView.bind(_this2, e.key) },
+	          { key: 'view-' + e.key, className: cls, onClick: _this2._handleViewClick.bind(_this2, e.key) },
 	          _react2.default.createElement('span', { className: e.icon })
 	        );
 	      });
@@ -25861,7 +25866,7 @@
 	                { className: 'input-group-btn' },
 	                _react2.default.createElement(
 	                  'button',
-	                  { className: 'btn btn-primary', onClick: this._onClickDraw.bind(this) },
+	                  { className: 'btn btn-primary', onClick: this._handleDrawClick.bind(this) },
 	                  'Draw'
 	                )
 	              )
@@ -25972,8 +25977,8 @@
 	  }
 	
 	  _createClass(PrizeAction, null, [{
-	    key: 'fetch',
-	    value: function fetch() {
+	    key: 'fetchAll',
+	    value: function fetchAll() {
 	      _dispatcher2.default.dispatch({
 	        actionType: _constants2.default.ActionTypes.FETCH_PRIZES
 	      });
@@ -26429,7 +26434,7 @@
 	    _dispatcher2.default.register(function (action) {
 	      switch (action.actionType) {
 	        case _constants2.default.ActionTypes.FETCH_PRIZES:
-	          _this._fetch(action);
+	          _this._fetchAll(action);
 	          break;
 	      }
 	    });
@@ -26437,8 +26442,8 @@
 	  }
 	
 	  _createClass(PrizeStore, [{
-	    key: '_fetch',
-	    value: function _fetch(action) {
+	    key: '_fetchAll',
+	    value: function _fetchAll(action) {
 	      var _this2 = this;
 	
 	      (0, _whatwgFetch2.default)('/api/prizes/').then(function (response) {
@@ -49044,6 +49049,403 @@
 		}
 	}());
 
+
+/***/ },
+/* 461 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _classnames = __webpack_require__(460);
+	
+	var _classnames2 = _interopRequireDefault(_classnames);
+	
+	var _history = __webpack_require__(464);
+	
+	var _history2 = _interopRequireDefault(_history);
+	
+	var _servant = __webpack_require__(463);
+	
+	var _servant2 = _interopRequireDefault(_servant);
+	
+	var _servant3 = __webpack_require__(462);
+	
+	var _servant4 = _interopRequireDefault(_servant3);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Servant = (function (_Component) {
+	  _inherits(Servant, _Component);
+	
+	  function Servant() {
+	    _classCallCheck(this, Servant);
+	
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Servant).call(this));
+	
+	    _this.state = {
+	      servants: []
+	    };
+	
+	    _this._onChange = _this._onChange.bind(_this);
+	    return _this;
+	  }
+	
+	  _createClass(Servant, [{
+	    key: '_onClickView',
+	    value: function _onClickView(view) {
+	      this.setState({ view: view });
+	    }
+	  }, {
+	    key: '_handleServantClick',
+	    value: function _handleServantClick(servantId) {
+	      _history2.default.pushState(null, '/servants/' + servantId + '/');
+	    }
+	  }, {
+	    key: '_onChange',
+	    value: function _onChange() {
+	      this.setState({
+	        servants: _servant4.default.servants
+	      });
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      _servant4.default.addChangeListener(this._onChange);
+	      _servant2.default.fetchAll();
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      _servant4.default.removeChangeListener(this._onChange);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+	
+	      var servantNodes = this.state.servants.map(function (servant) {
+	        var cls = (0, _classnames2.default)('clip', 'tribe-' + servant.tribe_id);
+	        var style = { backgroundPositionX: -40 * (servant.tribe_code - 1) + 'px' };
+	        return _react2.default.createElement(
+	          'tr',
+	          { key: servant.id, onClick: _this2._handleServantClick.bind(_this2, servant.id) },
+	          _react2.default.createElement(
+	            'th',
+	            { className: 'hidden-xs', scope: 'row' },
+	            servant.id
+	          ),
+	          _react2.default.createElement(
+	            'td',
+	            { className: cls, style: style },
+	            '　'
+	          ),
+	          _react2.default.createElement(
+	            'td',
+	            { className: '' },
+	            servant.tribe_name + '-' + ('000' + servant.tribe_code).slice(-3)
+	          ),
+	          _react2.default.createElement(
+	            'td',
+	            { className: '' },
+	            servant.cost
+	          ),
+	          _react2.default.createElement(
+	            'td',
+	            { className: 'hidden-xs' },
+	            servant.type
+	          ),
+	          _react2.default.createElement(
+	            'td',
+	            { className: '' },
+	            servant.name
+	          ),
+	          _react2.default.createElement(
+	            'td',
+	            { className: 'hidden-xs hidden-sm' },
+	            servant.win_rate.toFixed(2)
+	          ),
+	          _react2.default.createElement(
+	            'td',
+	            { className: 'hidden-xs hidden-sm' },
+	            servant.used_rate.toFixed(2)
+	          ),
+	          _react2.default.createElement(
+	            'td',
+	            { className: 'hidden-xs hidden-sm' },
+	            new Intl.DateTimeFormat().format(new Date(servant.release_date))
+	          ),
+	          _react2.default.createElement(
+	            'td',
+	            { className: 'hidden-xs hidden-sm' },
+	            new Intl.DateTimeFormat().format(new Date(servant.update_date))
+	          )
+	        );
+	      });
+	
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'container', id: 'servant' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'page-header' },
+	          _react2.default.createElement(
+	            'h2',
+	            null,
+	            'Servants'
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'clearfix' },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'pull-left' },
+	            _react2.default.createElement('select', { className: 'form-control select select-primary select-block mbl', 'ui-select2': true })
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'form-group' },
+	          _react2.default.createElement('input', { type: 'text', placeholder: 'Input Keyword...', className: 'form-control'
+	          })
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          null,
+	          _react2.default.createElement(
+	            'table',
+	            { className: 'table table-hover' },
+	            _react2.default.createElement(
+	              'thead',
+	              null,
+	              _react2.default.createElement(
+	                'tr',
+	                null,
+	                _react2.default.createElement(
+	                  'th',
+	                  { className: 'hidden-xs' },
+	                  '#'
+	                ),
+	                _react2.default.createElement('th', { className: '' }),
+	                _react2.default.createElement(
+	                  'th',
+	                  { className: '' },
+	                  'Tribe'
+	                ),
+	                _react2.default.createElement(
+	                  'th',
+	                  { className: '' },
+	                  'Cost'
+	                ),
+	                _react2.default.createElement(
+	                  'th',
+	                  { className: 'hidden-xs' },
+	                  'Type'
+	                ),
+	                _react2.default.createElement(
+	                  'th',
+	                  { className: '' },
+	                  'Servant Name'
+	                ),
+	                _react2.default.createElement(
+	                  'th',
+	                  { className: 'hidden-xs hidden-sm' },
+	                  'Win Rate'
+	                ),
+	                _react2.default.createElement(
+	                  'th',
+	                  { className: 'hidden-xs hidden-sm' },
+	                  'Used Rate'
+	                ),
+	                _react2.default.createElement(
+	                  'th',
+	                  { className: 'hidden-xs hidden-sm' },
+	                  'Released'
+	                ),
+	                _react2.default.createElement(
+	                  'th',
+	                  { className: 'hidden-xs hidden-sm' },
+	                  'Updated'
+	                )
+	              )
+	            ),
+	            _react2.default.createElement(
+	              'tbody',
+	              null,
+	              servantNodes
+	            )
+	          )
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return Servant;
+	})(_react.Component);
+	
+	exports.default = Servant;
+
+/***/ },
+/* 462 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _events = __webpack_require__(208);
+	
+	var _whatwgFetch = __webpack_require__(220);
+	
+	var _whatwgFetch2 = _interopRequireDefault(_whatwgFetch);
+	
+	var _constants = __webpack_require__(209);
+	
+	var _constants2 = _interopRequireDefault(_constants);
+	
+	var _dispatcher = __webpack_require__(211);
+	
+	var _dispatcher2 = _interopRequireDefault(_dispatcher);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var CHANGE_EVENT = 'change';
+	
+	exports.default = new ((function (_EventEmitter) {
+	  _inherits(ServantStore, _EventEmitter);
+	
+	  function ServantStore() {
+	    _classCallCheck(this, ServantStore);
+	
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ServantStore).call(this));
+	
+	    _this.servants = [];
+	
+	    _dispatcher2.default.register(function (action) {
+	      switch (action.actionType) {
+	        case _constants2.default.ActionTypes.FETCH_SERVANTS:
+	          _this._fetchAll(action);
+	          break;
+	      }
+	    });
+	    return _this;
+	  }
+	
+	  _createClass(ServantStore, [{
+	    key: '_fetchAll',
+	    value: function _fetchAll(action) {
+	      var _this2 = this;
+	
+	      (0, _whatwgFetch2.default)('/api/servants/?with_statistic&fields=-oral_tradition').then(function (response) {
+	        return response.json();
+	      }).then(function (json) {
+	        _this2.servants = json;
+	        _this2.emit(CHANGE_EVENT);
+	      }).catch(function (error) {
+	        console.error(error);
+	      });
+	    }
+	  }, {
+	    key: 'addChangeListener',
+	    value: function addChangeListener(callback) {
+	      this.on(CHANGE_EVENT, callback);
+	    }
+	  }, {
+	    key: 'removeChangeListener',
+	    value: function removeChangeListener(callback) {
+	      this.removeListener(CHANGE_EVENT, callback);
+	    }
+	  }]);
+	
+	  return ServantStore;
+	})(_events.EventEmitter))();
+
+/***/ },
+/* 463 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _constants = __webpack_require__(209);
+	
+	var _constants2 = _interopRequireDefault(_constants);
+	
+	var _dispatcher = __webpack_require__(211);
+	
+	var _dispatcher2 = _interopRequireDefault(_dispatcher);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var ServantAction = (function () {
+	  function ServantAction() {
+	    _classCallCheck(this, ServantAction);
+	  }
+	
+	  _createClass(ServantAction, null, [{
+	    key: 'fetchAll',
+	    value: function fetchAll() {
+	      _dispatcher2.default.dispatch({
+	        actionType: _constants2.default.ActionTypes.FETCH_SERVANTS
+	      });
+	    }
+	  }]);
+	
+	  return ServantAction;
+	})();
+	
+	exports.default = ServantAction;
+
+/***/ },
+/* 464 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createBrowserHistory = __webpack_require__(205);
+	
+	var _createBrowserHistory2 = _interopRequireDefault(_createBrowserHistory);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = (0, _createBrowserHistory2.default)();
 
 /***/ }
 /******/ ]);
