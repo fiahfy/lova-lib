@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 
 export default class About extends Component {
   render() {
-    let mail = 'd.fiahfy@gmail.com';
+    const mail = 'd.fiahfy@gmail.com';
     return (
       <div className="container" id="about">
         <div className="page-header">

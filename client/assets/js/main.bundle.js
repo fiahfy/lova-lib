@@ -62,10 +62,6 @@
 	
 	var _history2 = _interopRequireDefault(_history);
 	
-	var _CommentComponents = __webpack_require__(206);
-	
-	var _CommentComponents2 = _interopRequireDefault(_CommentComponents);
-	
 	var _app = __webpack_require__(217);
 	
 	var _app2 = _interopRequireDefault(_app);
@@ -74,6 +70,10 @@
 	
 	var _servant2 = _interopRequireDefault(_servant);
 	
+	var _servantDetail = __webpack_require__(465);
+	
+	var _servantDetail2 = _interopRequireDefault(_servantDetail);
+	
 	var _prize = __webpack_require__(218);
 	
 	var _prize2 = _interopRequireDefault(_prize);
@@ -81,8 +81,6 @@
 	var _about = __webpack_require__(222);
 	
 	var _about2 = _interopRequireDefault(_about);
-	
-	__webpack_require__(223);
 	
 	__webpack_require__(224);
 	
@@ -145,6 +143,7 @@
 	  { path: '/', component: _app2.default },
 	  _react2.default.createElement(_reactRouter.IndexRedirect, { to: 'about/' }),
 	  _react2.default.createElement(_reactRouter.Route, { path: 'servants/', component: _servant2.default }),
+	  _react2.default.createElement(_reactRouter.Route, { path: 'servants/:id/', component: _servantDetail2.default }),
 	  _react2.default.createElement(_reactRouter.Route, { path: 'prize/', component: _prize2.default }),
 	  _react2.default.createElement(_reactRouter.Route, { path: 'about/', component: _about2.default }),
 	  _react2.default.createElement(_reactRouter.Redirect, { from: '*', to: '/' })
@@ -24330,288 +24329,8 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 206 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _react = __webpack_require__(1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _CommentStore = __webpack_require__(207);
-	
-	var _CommentStore2 = _interopRequireDefault(_CommentStore);
-	
-	var _CommentAction = __webpack_require__(215);
-	
-	var _CommentAction2 = _interopRequireDefault(_CommentAction);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var CommentBox = (function (_React$Component) {
-	  _inherits(CommentBox, _React$Component);
-	
-	  function CommentBox(props) {
-	    _classCallCheck(this, CommentBox);
-	
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(CommentBox).call(this, props));
-	
-	    _this.state = { data: [] };
-	
-	    _this._onChange = _this._onChange.bind(_this);
-	    return _this;
-	  }
-	
-	  _createClass(CommentBox, [{
-	    key: '_onSubmit',
-	    value: function _onSubmit(comment) {
-	      _CommentAction2.default.create(comment.author, comment.text);
-	      //this.setState({data: CommentStore.getComments()});
-	    }
-	  }, {
-	    key: '_onChange',
-	    value: function _onChange() {
-	      this.setState({ data: _CommentStore2.default.getAll() });
-	    }
-	  }, {
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      _CommentStore2.default.addChangeListener(this._onChange);
-	      _CommentAction2.default.load();
-	    }
-	  }, {
-	    key: 'componentWillUnmount',
-	    value: function componentWillUnmount() {
-	      _CommentStore2.default.removeChangeListener(this._onChange);
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      return _react2.default.createElement(
-	        'div',
-	        { className: 'commentBox' },
-	        _react2.default.createElement(
-	          'h1',
-	          null,
-	          'Comments'
-	        ),
-	        _react2.default.createElement(CommentList, { data: this.state.data }),
-	        _react2.default.createElement(CommentForm, { onSubmit: this._onSubmit.bind(this) })
-	      );
-	    }
-	  }]);
-	
-	  return CommentBox;
-	})(_react2.default.Component);
-	
-	exports.default = CommentBox;
-	
-	var CommentList = (function (_React$Component2) {
-	  _inherits(CommentList, _React$Component2);
-	
-	  function CommentList() {
-	    _classCallCheck(this, CommentList);
-	
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(CommentList).apply(this, arguments));
-	  }
-	
-	  _createClass(CommentList, [{
-	    key: 'render',
-	    value: function render() {
-	      var commentNodes = this.props.data.map(function (comment) {
-	        return _react2.default.createElement(
-	          Comment,
-	          { author: comment.author, key: comment.id },
-	          comment.text
-	        );
-	      });
-	      return _react2.default.createElement(
-	        'div',
-	        { className: 'commentList' },
-	        commentNodes
-	      );
-	    }
-	  }]);
-	
-	  return CommentList;
-	})(_react2.default.Component);
-	
-	var CommentForm = (function (_React$Component3) {
-	  _inherits(CommentForm, _React$Component3);
-	
-	  function CommentForm() {
-	    _classCallCheck(this, CommentForm);
-	
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(CommentForm).apply(this, arguments));
-	  }
-	
-	  _createClass(CommentForm, [{
-	    key: '_onSubmit',
-	    value: function _onSubmit(e) {
-	      e.preventDefault();
-	      var author = this.refs.author.value.trim();
-	      var text = this.refs.text.value.trim();
-	      if (!text || !author) {
-	        return;
-	      }
-	      this.props.onSubmit({ author: author, text: text });
-	      this.refs.author.value = '';
-	      this.refs.text.value = '';
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      return _react2.default.createElement(
-	        'form',
-	        { className: 'commentForm', onSubmit: this._onSubmit.bind(this) },
-	        _react2.default.createElement('input', { type: 'text', placeholder: 'Your name', ref: 'author' }),
-	        _react2.default.createElement('input', { type: 'text', placeholder: 'Say something...', ref: 'text' }),
-	        _react2.default.createElement('input', { type: 'submit', value: 'Post' })
-	      );
-	    }
-	  }]);
-	
-	  return CommentForm;
-	})(_react2.default.Component);
-	
-	var Comment = (function (_React$Component4) {
-	  _inherits(Comment, _React$Component4);
-	
-	  function Comment() {
-	    _classCallCheck(this, Comment);
-	
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Comment).apply(this, arguments));
-	  }
-	
-	  _createClass(Comment, [{
-	    key: '_rawMarkup',
-	    value: function _rawMarkup() {
-	      var rawMarkup = marked(this.props.children.toString(), { sanitize: true });
-	      return { __html: rawMarkup };
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      return _react2.default.createElement(
-	        'div',
-	        { className: 'comment' },
-	        _react2.default.createElement(
-	          'h2',
-	          { className: 'commentAuthor' },
-	          this.props.author
-	        ),
-	        _react2.default.createElement('span', { dangerouslySetInnerHTML: this._rawMarkup() })
-	      );
-	    }
-	  }]);
-	
-	  return Comment;
-	})(_react2.default.Component);
-
-/***/ },
-/* 207 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _events = __webpack_require__(208);
-	
-	var _constants = __webpack_require__(209);
-	
-	var _constants2 = _interopRequireDefault(_constants);
-	
-	var _dispatcher = __webpack_require__(211);
-	
-	var _dispatcher2 = _interopRequireDefault(_dispatcher);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var CHANGE_EVENT = 'change';
-	
-	exports.default = new ((function (_EventEmitter) {
-	  _inherits(CommentStore, _EventEmitter);
-	
-	  function CommentStore() {
-	    _classCallCheck(this, CommentStore);
-	
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(CommentStore).call(this));
-	
-	    _this.comments = [];
-	
-	    _dispatcher2.default.register(function (action) {
-	      switch (action.actionType) {
-	        case _constants2.default.ActionTypes.CREATE:
-	          _this._add(action);
-	          break;
-	        case _constants2.default.ActionTypes.LOADED:
-	          _this._loaded(action);
-	          break;
-	      }
-	      _this.emit(CHANGE_EVENT);
-	    });
-	    return _this;
-	  }
-	
-	  _createClass(CommentStore, [{
-	    key: '_add',
-	    value: function _add(action) {
-	      this.comments.push({
-	        id: Date.now(),
-	        author: action.author,
-	        text: action.text
-	      });
-	    }
-	  }, {
-	    key: '_loaded',
-	    value: function _loaded(action) {
-	      this.comments = action.comments;
-	    }
-	  }, {
-	    key: 'getAll',
-	    value: function getAll() {
-	      return this.comments;
-	    }
-	  }, {
-	    key: 'addChangeListener',
-	    value: function addChangeListener(callback) {
-	      this.on(CHANGE_EVENT, callback);
-	    }
-	  }, {
-	    key: 'removeChangeListener',
-	    value: function removeChangeListener(callback) {
-	      this.removeListener(CHANGE_EVENT, callback);
-	    }
-	  }]);
-	
-	  return CommentStore;
-	})(_events.EventEmitter))();
-
-/***/ },
+/* 206 */,
+/* 207 */,
 /* 208 */
 /***/ function(module, exports) {
 
@@ -24933,8 +24652,7 @@
 	
 	exports.default = {
 	  ActionTypes: (0, _keymirror2.default)({
-	    CREATE: null,
-	    LOADED: null,
+	    FETCH_SERVANT: null,
 	    FETCH_SERVANTS: null,
 	    FETCH_PRIZES: null,
 	    DRAW_PRIZE_LOTS: null
@@ -25323,123 +25041,8 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 215 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _constants = __webpack_require__(209);
-	
-	var _constants2 = _interopRequireDefault(_constants);
-	
-	var _dispatcher = __webpack_require__(211);
-	
-	var _dispatcher2 = _interopRequireDefault(_dispatcher);
-	
-	var _CommentAPIUtils = __webpack_require__(216);
-	
-	var _CommentAPIUtils2 = _interopRequireDefault(_CommentAPIUtils);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	var CommentAction = (function () {
-	  function CommentAction() {
-	    _classCallCheck(this, CommentAction);
-	  }
-	
-	  _createClass(CommentAction, null, [{
-	    key: 'create',
-	    value: function create(author, text) {
-	      _dispatcher2.default.dispatch({
-	        actionType: _constants2.default.ActionTypes.CREATE,
-	        author: author,
-	        text: text
-	      });
-	      _CommentAPIUtils2.default.create(author, text);
-	    }
-	  }, {
-	    key: 'load',
-	    value: function load() {
-	      _CommentAPIUtils2.default.getAll();
-	    }
-	  }, {
-	    key: 'loaded',
-	    value: function loaded(comments) {
-	      _dispatcher2.default.dispatch({
-	        actionType: _constants2.default.ActionTypes.LOADED,
-	        comments: comments
-	      });
-	    }
-	  }]);
-	
-	  return CommentAction;
-	})();
-	
-	exports.default = CommentAction;
-
-/***/ },
-/* 216 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _CommentAction = __webpack_require__(215);
-	
-	var _CommentAction2 = _interopRequireDefault(_CommentAction);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	var CommentAPIUtils = (function () {
-	  function CommentAPIUtils() {
-	    _classCallCheck(this, CommentAPIUtils);
-	  }
-	
-	  _createClass(CommentAPIUtils, null, [{
-	    key: 'getAll',
-	    value: function getAll() {
-	      var comments = JSON.parse(localStorage.getItem('comments')) || [];
-	      _CommentAction2.default.loaded(comments);
-	    }
-	  }, {
-	    key: 'create',
-	    value: function create(author, text) {
-	      var comment = {
-	        id: Date.now(),
-	        author: author,
-	        text: text
-	      };
-	      var comments = JSON.parse(localStorage.getItem('comments')) || [];
-	      comments.push(comment);
-	      // delay 2sec
-	      setTimeout(function () {
-	        localStorage.setItem('comments', JSON.stringify(comments));
-	        _CommentAction2.default.loaded(comments);
-	      }, 2000);
-	    }
-	  }]);
-	
-	  return CommentAPIUtils;
-	})();
-	
-	exports.default = CommentAPIUtils;
-
-/***/ },
+/* 215 */,
+/* 216 */,
 /* 217 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -25668,15 +25271,15 @@
 	      var times = this.refs.times.value;
 	      times = Math.min(Math.max(1, times), 1000);
 	      this.refs.times.value = times;
-	      _prizeLot2.default.draw(times);
+	      _prizeLot2.default.drawLots(times);
 	    }
 	  }, {
 	    key: '_onChange',
 	    value: function _onChange() {
 	      this.setState({
-	        prizes: _prize4.default.prizes,
-	        lotResults: _prizeLot4.default.results,
-	        lotResultsSummary: _prizeLot4.default.resultsSummary
+	        prizes: _prize4.default.getPrizes(),
+	        lotResults: _prizeLot4.default.getResults(),
+	        lotResultsSummary: _prizeLot4.default.getResultsSummary()
 	      });
 	    }
 	  }, {
@@ -25684,7 +25287,7 @@
 	    value: function componentDidMount() {
 	      _prize4.default.addChangeListener(this._onChange);
 	      _prizeLot4.default.addChangeListener(this._onChange);
-	      _prize2.default.fetchAll();
+	      _prize2.default.fetchPrizes();
 	    }
 	  }, {
 	    key: 'componentWillUnmount',
@@ -25725,15 +25328,14 @@
 	        );
 	      });
 	
-	      var i = 0;
-	      var lotResultsNodes = this.state.lotResults.map(function (result) {
+	      var lotResultsNodes = this.state.lotResults.map(function (result, index) {
 	        return _react2.default.createElement(
 	          'tr',
-	          { key: 'result-' + i++ },
+	          { key: 'result-' + index },
 	          _react2.default.createElement(
 	            'td',
 	            { className: '' },
-	            i
+	            index + 1
 	          ),
 	          _react2.default.createElement(
 	            'td',
@@ -25743,11 +25345,10 @@
 	        );
 	      });
 	
-	      var j = 0;
-	      var lotResultsSummaryNodes = this.state.lotResultsSummary.map(function (result) {
+	      var lotResultsSummaryNodes = this.state.lotResultsSummary.map(function (result, index) {
 	        return _react2.default.createElement(
 	          'tr',
-	          { key: 'result-summary-' + j++ },
+	          { key: 'result-summary-' + index },
 	          _react2.default.createElement(
 	            'td',
 	            { className: '' },
@@ -25978,8 +25579,8 @@
 	  }
 	
 	  _createClass(PrizeAction, null, [{
-	    key: 'fetchAll',
-	    value: function fetchAll() {
+	    key: 'fetchPrizes',
+	    value: function fetchPrizes() {
 	      _dispatcher2.default.dispatch({
 	        actionType: _constants2.default.ActionTypes.FETCH_PRIZES
 	      });
@@ -26435,7 +26036,7 @@
 	    _dispatcher2.default.register(function (action) {
 	      switch (action.actionType) {
 	        case _constants2.default.ActionTypes.FETCH_PRIZES:
-	          _this._fetchAll(action);
+	          _this._fetchPrizes();
 	          break;
 	      }
 	    });
@@ -26443,8 +26044,8 @@
 	  }
 	
 	  _createClass(PrizeStore, [{
-	    key: '_fetchAll',
-	    value: function _fetchAll(action) {
+	    key: '_fetchPrizes',
+	    value: function _fetchPrizes() {
 	      var _this2 = this;
 	
 	      (0, _whatwgFetch2.default)('/api/prizes/').then(function (response) {
@@ -26465,6 +26066,11 @@
 	    key: 'removeChangeListener',
 	    value: function removeChangeListener(callback) {
 	      this.removeListener(CHANGE_EVENT, callback);
+	    }
+	  }, {
+	    key: 'getPrizes',
+	    value: function getPrizes() {
+	      return this.prizes;
 	    }
 	  }]);
 	
@@ -48887,7 +48493,7 @@
 	    _dispatcher2.default.register(function (action) {
 	      switch (action.actionType) {
 	        case _constants2.default.ActionTypes.DRAW_PRIZE_LOTS:
-	          _this._draw(action);
+	          _this._drawLots(action.times);
 	          break;
 	      }
 	    });
@@ -48895,9 +48501,8 @@
 	  }
 	
 	  _createClass(PrizeLotStore, [{
-	    key: '_draw',
-	    value: function _draw(action) {
-	      var times = action.times;
+	    key: '_drawLots',
+	    value: function _drawLots(times) {
 	      var prizes = _prize2.default.prizes;
 	
 	      var totalRate = 0;
@@ -48948,6 +48553,16 @@
 	    value: function removeChangeListener(callback) {
 	      this.removeListener(CHANGE_EVENT, callback);
 	    }
+	  }, {
+	    key: 'getResults',
+	    value: function getResults() {
+	      return this.results;
+	    }
+	  }, {
+	    key: 'getResultsSummary',
+	    value: function getResultsSummary() {
+	      return this.resultsSummary;
+	    }
 	  }]);
 	
 	  return PrizeLotStore;
@@ -48983,8 +48598,8 @@
 	  }
 	
 	  _createClass(PrizeLotAction, null, [{
-	    key: 'draw',
-	    value: function draw(times) {
+	    key: 'drawLots',
+	    value: function drawLots(times) {
 	      _dispatcher2.default.dispatch({
 	        actionType: _constants2.default.ActionTypes.DRAW_PRIZE_LOTS,
 	        times: times
@@ -49127,7 +48742,7 @@
 	    key: '_onChange',
 	    value: function _onChange() {
 	      this.setState({
-	        servants: _servant4.default.servants
+	        servants: _servant4.default.getServants()
 	      });
 	    }
 	  }, {
@@ -49150,6 +48765,7 @@
 	          if (!value) {
 	            return { key: 'name', value: key };
 	          }
+	          // TODO: parse query [type:"aaa bbb"] instead of [type:aaa+bbb]
 	          return { key: key, value: value.replace('+', ' ') };
 	        });
 	      }
@@ -49172,7 +48788,7 @@
 	        _history2.default.pushState(null, '/servants/?tribe_id=' + e.val);
 	      });
 	      _servant4.default.addChangeListener(this._onChange);
-	      _servant2.default.fetchAll();
+	      _servant2.default.fetchServants();
 	    }
 	  }, {
 	    key: 'componentWillUnmount',
@@ -49409,8 +49025,11 @@
 	
 	    _dispatcher2.default.register(function (action) {
 	      switch (action.actionType) {
+	        case _constants2.default.ActionTypes.FETCH_SERVANT:
+	          _this._fetchServant(action.id);
+	          break;
 	        case _constants2.default.ActionTypes.FETCH_SERVANTS:
-	          _this._fetchAll(action);
+	          _this._fetchServants();
 	          break;
 	      }
 	    });
@@ -49418,15 +49037,37 @@
 	  }
 	
 	  _createClass(ServantStore, [{
-	    key: '_fetchAll',
-	    value: function _fetchAll(action) {
+	    key: '_fetchServant',
+	    value: function _fetchServant(id) {
 	      var _this2 = this;
 	
+	      if (this.getServant(id)) {
+	        this.emit(CHANGE_EVENT);
+	        return;
+	      }
+	      (0, _whatwgFetch2.default)('/api/servants/' + id + '/?with_statistic&fields=-oral_tradition').then(function (response) {
+	        return response.json();
+	      }).then(function (json) {
+	        _this2.servants = [json];
+	        _this2.emit(CHANGE_EVENT);
+	      }).catch(function (error) {
+	        console.error(error);
+	      });
+	    }
+	  }, {
+	    key: '_fetchServants',
+	    value: function _fetchServants() {
+	      var _this3 = this;
+	
+	      if (this.getServants().length) {
+	        this.emit(CHANGE_EVENT);
+	        return;
+	      }
 	      (0, _whatwgFetch2.default)('/api/servants/?with_statistic&fields=-oral_tradition').then(function (response) {
 	        return response.json();
 	      }).then(function (json) {
-	        _this2.servants = json;
-	        _this2.emit(CHANGE_EVENT);
+	        _this3.servants = json;
+	        _this3.emit(CHANGE_EVENT);
 	      }).catch(function (error) {
 	        console.error(error);
 	      });
@@ -49440,6 +49081,20 @@
 	    key: 'removeChangeListener',
 	    value: function removeChangeListener(callback) {
 	      this.removeListener(CHANGE_EVENT, callback);
+	    }
+	  }, {
+	    key: 'getServant',
+	    value: function getServant(id) {
+	      return this.servants.filter(function (servant) {
+	        return id == servant.id;
+	      }).reduce(function (previous, current) {
+	        return current;
+	      }, null);
+	    }
+	  }, {
+	    key: 'getServants',
+	    value: function getServants() {
+	      return this.servants;
 	    }
 	  }]);
 	
@@ -49476,8 +49131,16 @@
 	  }
 	
 	  _createClass(ServantAction, null, [{
-	    key: 'fetchAll',
-	    value: function fetchAll() {
+	    key: 'fetchServant',
+	    value: function fetchServant(id) {
+	      _dispatcher2.default.dispatch({
+	        actionType: _constants2.default.ActionTypes.FETCH_SERVANT,
+	        id: id
+	      });
+	    }
+	  }, {
+	    key: 'fetchServants',
+	    value: function fetchServants() {
 	      _dispatcher2.default.dispatch({
 	        actionType: _constants2.default.ActionTypes.FETCH_SERVANTS
 	      });
@@ -49506,6 +49169,512 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	exports.default = (0, _createBrowserHistory2.default)();
+
+/***/ },
+/* 465 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _classnames = __webpack_require__(460);
+	
+	var _classnames2 = _interopRequireDefault(_classnames);
+	
+	var _history = __webpack_require__(464);
+	
+	var _history2 = _interopRequireDefault(_history);
+	
+	var _servant = __webpack_require__(463);
+	
+	var _servant2 = _interopRequireDefault(_servant);
+	
+	var _servant3 = __webpack_require__(462);
+	
+	var _servant4 = _interopRequireDefault(_servant3);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var ServantDetail = (function (_Component) {
+	  _inherits(ServantDetail, _Component);
+	
+	  function ServantDetail() {
+	    _classCallCheck(this, ServantDetail);
+	
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ServantDetail).call(this));
+	
+	    _this.state = {
+	      servant: null
+	    };
+	
+	    _this._onChange = _this._onChange.bind(_this);
+	    return _this;
+	  }
+	
+	  _createClass(ServantDetail, [{
+	    key: '_handleQueryChange',
+	    value: function _handleQueryChange() {
+	      this.forceUpdate();
+	    }
+	  }, {
+	    key: '_onChange',
+	    value: function _onChange() {
+	      this.setState({
+	        servant: _servant4.default.getServant(this.props.params.id)
+	      });
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      _servant4.default.addChangeListener(this._onChange);
+	      _servant2.default.fetchServant(this.props.params.id);
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      _servant4.default.removeChangeListener(this._onChange);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var query = this.props.location.query;
+	
+	      var servant = this.state.servant || {};
+	
+	      console.log(servant);
+	      var skillNodes = (servant.skill || []).map(function (skill) {
+	        return _react2.default.createElement(
+	          'tr',
+	          null,
+	          _react2.default.createElement(
+	            'td',
+	            { className: '' },
+	            skill.level
+	          ),
+	          _react2.default.createElement(
+	            'td',
+	            { className: '' },
+	            skill.hp
+	          ),
+	          _react2.default.createElement(
+	            'td',
+	            { className: '' },
+	            skill.ap
+	          ),
+	          _react2.default.createElement(
+	            'td',
+	            { className: '' },
+	            skill.atk
+	          ),
+	          _react2.default.createElement(
+	            'td',
+	            { className: '' },
+	            skill.pow
+	          ),
+	          _react2.default.createElement(
+	            'td',
+	            { className: '' },
+	            skill.def
+	          ),
+	          _react2.default.createElement(
+	            'td',
+	            { className: '' },
+	            skill.res
+	          ),
+	          _react2.default.createElement(
+	            'td',
+	            { className: '' },
+	            skill.ms
+	          ),
+	          _react2.default.createElement(
+	            'td',
+	            { className: '' },
+	            skill.as.toFixed(2)
+	          )
+	        );
+	      });
+	
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'container', id: 'servant-detail' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'page-header' },
+	          _react2.default.createElement(
+	            'h2',
+	            null,
+	            servant.name,
+	            _react2.default.createElement(
+	              'small',
+	              { className: 'pull-right' },
+	              _react2.default.createElement(
+	                'a',
+	                { href: 'http://wiki.4gamer.net/lova/使い魔/' + servant.tribe_name + '/' + servant.name + '/' },
+	                'to Official Servant Page'
+	              )
+	            )
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'ul',
+	          { className: 'nav nav-pills nav-justified' },
+	          _react2.default.createElement(
+	            'li',
+	            { role: 'presentation', 'ng-className': '{\'active\': c.hash == \'detail\'}' },
+	            _react2.default.createElement(
+	              'a',
+	              { href: '#detail' },
+	              'Detail'
+	            )
+	          ),
+	          _react2.default.createElement(
+	            'li',
+	            { role: 'presentation', 'ng-className': '{\'active\': c.hash == \'statistics\'}' },
+	            _react2.default.createElement(
+	              'a',
+	              { href: '#statistics' },
+	              'Statistics'
+	            )
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'detail' },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'row' },
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'col-lg-4 col-md-5 col-sm-5' },
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'col-sm-12', className: 'logo' },
+	                _react2.default.createElement(
+	                  'a',
+	                  { href: 'assets/img/l/{{ c.servant.id }}.jpg', target: '_self' },
+	                  _react2.default.createElement('img', { src: servant.id ? 'assets/img/l/' + servant.id + '.jpg' : '',
+	                    className: 'center-block img-rounded img-responsive' })
+	                )
+	              )
+	            ),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'col-lg-8 col-md-7 col-sm-7' },
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'row' },
+	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'col-sm-6' },
+	                  _react2.default.createElement(
+	                    'dl',
+	                    { className: 'row' },
+	                    _react2.default.createElement(
+	                      'dt',
+	                      { className: 'col-xs-3' },
+	                      'Tribe'
+	                    ),
+	                    _react2.default.createElement(
+	                      'dd',
+	                      { className: 'col-xs-9' },
+	                      _react2.default.createElement(
+	                        'a',
+	                        { href: '/servants/?tribe_id=' + servant.tribe_id },
+	                        servant.tribe_name
+	                      ),
+	                      '-',
+	                      ('000' + servant.tribe_code).slice(-3)
+	                    )
+	                  ),
+	                  _react2.default.createElement(
+	                    'dl',
+	                    { className: 'row' },
+	                    _react2.default.createElement(
+	                      'dt',
+	                      { className: 'col-xs-3' },
+	                      'Type'
+	                    ),
+	                    _react2.default.createElement(
+	                      'dd',
+	                      { className: 'col-xs-9' },
+	                      _react2.default.createElement(
+	                        'a',
+	                        { href: '/servants/?q=type:' + servant.type },
+	                        servant.type
+	                      )
+	                    )
+	                  ),
+	                  _react2.default.createElement(
+	                    'dl',
+	                    { className: 'row' },
+	                    _react2.default.createElement(
+	                      'dt',
+	                      { className: 'col-xs-3' },
+	                      'Cost'
+	                    ),
+	                    _react2.default.createElement(
+	                      'dd',
+	                      { className: 'col-xs-9' },
+	                      _react2.default.createElement(
+	                        'a',
+	                        { href: '/servants/?q=cost:' + servant.cost },
+	                        servant.cost
+	                      )
+	                    )
+	                  )
+	                ),
+	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'col-sm-6' },
+	                  _react2.default.createElement(
+	                    'dl',
+	                    { className: 'row' },
+	                    _react2.default.createElement(
+	                      'dt',
+	                      { className: 'col-xs-3' },
+	                      'Released'
+	                    ),
+	                    _react2.default.createElement(
+	                      'dd',
+	                      { className: 'col-xs-9' },
+	                      new Intl.DateTimeFormat().format(new Date(servant.release_date || new Date()))
+	                    )
+	                  ),
+	                  _react2.default.createElement(
+	                    'dl',
+	                    { className: 'row' },
+	                    _react2.default.createElement(
+	                      'dt',
+	                      { className: 'col-xs-3' },
+	                      'Updated'
+	                    ),
+	                    _react2.default.createElement(
+	                      'dd',
+	                      { className: 'col-xs-9' },
+	                      new Intl.DateTimeFormat().format(new Date(servant.update_date || new Date()))
+	                    )
+	                  ),
+	                  _react2.default.createElement(
+	                    'dl',
+	                    { className: 'row' },
+	                    _react2.default.createElement(
+	                      'dt',
+	                      { className: 'col-xs-3' },
+	                      'Range'
+	                    ),
+	                    _react2.default.createElement(
+	                      'dd',
+	                      { className: 'col-xs-9' },
+	                      _react2.default.createElement(
+	                        'a',
+	                        { href: '/servants/?q=range:' + servant.range },
+	                        servant.range
+	                      )
+	                    )
+	                  )
+	                )
+	              ),
+	              _react2.default.createElement(
+	                'dl',
+	                { className: 'row' },
+	                _react2.default.createElement(
+	                  'dt',
+	                  { className: 'col-sm-12' },
+	                  'Oral Tradition'
+	                ),
+	                _react2.default.createElement(
+	                  'dd',
+	                  { className: 'col-sm-12' },
+	                  _react2.default.createElement(
+	                    'div',
+	                    { className: 'well well-sm' },
+	                    _react2.default.createElement(
+	                      'small',
+	                      null,
+	                      servant.oral_tradition
+	                    )
+	                  )
+	                )
+	              ),
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'row' },
+	                _react2.default.createElement(
+	                  'dl',
+	                  { className: 'col-sm-6 row' },
+	                  _react2.default.createElement(
+	                    'dt',
+	                    { className: 'col-xs-3' },
+	                    'Illust'
+	                  ),
+	                  _react2.default.createElement(
+	                    'dd',
+	                    { className: 'col-xs-9' },
+	                    _react2.default.createElement(
+	                      'a',
+	                      { href: '/servants/?q=illustrationBy:' + (servant.illustration_by || '').replace(' ', '+') },
+	                      servant.illustrationBy
+	                    )
+	                  )
+	                ),
+	                _react2.default.createElement(
+	                  'dl',
+	                  { className: 'col-sm-6 row' },
+	                  _react2.default.createElement(
+	                    'dt',
+	                    { className: 'col-xs-3' },
+	                    'CV'
+	                  ),
+	                  _react2.default.createElement(
+	                    'dd',
+	                    { className: 'col-xs-9' },
+	                    _react2.default.createElement(
+	                      'a',
+	                      { href: '/servants/?q=characterVoice:' + (servant.character_voice || '').replace(' ', '+') },
+	                      servant.characterVoice
+	                    )
+	                  )
+	                )
+	              ),
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'status' },
+	                _react2.default.createElement(
+	                  'dl',
+	                  null,
+	                  _react2.default.createElement(
+	                    'dt',
+	                    null,
+	                    _react2.default.createElement(
+	                      'b',
+	                      null,
+	                      'Status'
+	                    )
+	                  ),
+	                  _react2.default.createElement(
+	                    'dd',
+	                    { className: 'col-xs-12' },
+	                    _react2.default.createElement(
+	                      'table',
+	                      { className: 'table visible-md visible-lg' },
+	                      _react2.default.createElement(
+	                        'thead',
+	                        null,
+	                        _react2.default.createElement(
+	                          'tr',
+	                          null,
+	                          _react2.default.createElement(
+	                            'th',
+	                            { className: '' },
+	                            'Level'
+	                          ),
+	                          _react2.default.createElement(
+	                            'th',
+	                            { className: '' },
+	                            'HP'
+	                          ),
+	                          _react2.default.createElement(
+	                            'th',
+	                            { className: '' },
+	                            'AP'
+	                          ),
+	                          _react2.default.createElement(
+	                            'th',
+	                            { className: '' },
+	                            'ATK'
+	                          ),
+	                          _react2.default.createElement(
+	                            'th',
+	                            { className: '' },
+	                            'POW'
+	                          ),
+	                          _react2.default.createElement(
+	                            'th',
+	                            { className: '' },
+	                            'DEF'
+	                          ),
+	                          _react2.default.createElement(
+	                            'th',
+	                            { className: '' },
+	                            'RES'
+	                          ),
+	                          _react2.default.createElement(
+	                            'th',
+	                            { className: '' },
+	                            'MS'
+	                          ),
+	                          _react2.default.createElement(
+	                            'th',
+	                            { className: '' },
+	                            'AS'
+	                          )
+	                        )
+	                      ),
+	                      _react2.default.createElement(
+	                        'tbody',
+	                        null,
+	                        skillNodes
+	                      )
+	                    )
+	                  )
+	                )
+	              )
+	            )
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'skill', className: 'row' },
+	            _react2.default.createElement(
+	              'dl',
+	              { className: 'col-sm-6' },
+	              _react2.default.createElement(
+	                'dt',
+	                null,
+	                _react2.default.createElement(
+	                  'b',
+	                  null,
+	                  'Active Skill'
+	                )
+	              )
+	            ),
+	            _react2.default.createElement(
+	              'dl',
+	              { className: 'col-sm-6' },
+	              _react2.default.createElement(
+	                'dt',
+	                null,
+	                _react2.default.createElement(
+	                  'b',
+	                  null,
+	                  'Passive Skill'
+	                )
+	              )
+	            )
+	          )
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return ServantDetail;
+	})(_react.Component);
+	
+	exports.default = ServantDetail;
 
 /***/ }
 /******/ ]);

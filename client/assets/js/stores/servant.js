@@ -12,13 +12,35 @@ export default new (class ServantStore extends EventEmitter {
 
     AppDispatcher.register((action) => {
       switch (action.actionType) {
+        case AppConstants.ActionTypes.FETCH_SERVANT:
+          this._fetchServant(action.id);
+          break;
         case AppConstants.ActionTypes.FETCH_SERVANTS:
-          this._fetchAll(action);
+          this._fetchServants();
           break;
       }
     });
   }
-  _fetchAll(action) {
+  _fetchServant(id) {
+    if (this.getServant(id)) {
+      this.emit(CHANGE_EVENT);
+      return;
+    }
+    fetch(`/api/servants/${id}/?with_statistic&fields=-oral_tradition`)
+      .then((response) => {
+        return response.json();
+      }).then((json) => {
+      this.servants = [json];
+      this.emit(CHANGE_EVENT);
+    }).catch((error) => {
+      console.error(error);
+    });
+  }
+  _fetchServants() {
+    if (this.getServants().length) {
+      this.emit(CHANGE_EVENT);
+      return;
+    }
     fetch('/api/servants/?with_statistic&fields=-oral_tradition')
       .then((response) => {
         return response.json();
@@ -34,5 +56,15 @@ export default new (class ServantStore extends EventEmitter {
   }
   removeChangeListener(callback) {
     this.removeListener(CHANGE_EVENT, callback);
+  }
+  getServant(id) {
+    return this.servants.filter((servant) => {
+      return id == servant.id;
+    }).reduce((previous, current) => {
+      return current;
+    }, null);
+  }
+  getServants() {
+    return this.servants;
   }
 })();

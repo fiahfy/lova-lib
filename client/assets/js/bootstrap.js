@@ -2,13 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {Router, Route, Link, IndexRedirect, Redirect} from 'react-router'
 import History from './history';
-import CommentBox from './components/CommentComponents';
 import App from './components/app';
 import Servant from './components/servant';
+import ServantDetail from './components/servant-detail';
 import Prize from './components/prize';
 import About from './components/about';
 
-import 'jquery/dist/jquery';
 import 'flat-ui/dist/js/flat-ui';
 
 class Home extends React.Component {
@@ -31,10 +30,11 @@ class NotFound extends React.Component {
   }
 }
 
-let routes = (
+const routes = (
   <Route path="/" component={App}>
     <IndexRedirect to="about/" />
     <Route path="servants/" component={Servant} />
+    <Route path="servants/:id/" component={ServantDetail} />
     <Route path="prize/" component={Prize} />
     <Route path="about/" component={About} />
     <Redirect from="*" to="/" />

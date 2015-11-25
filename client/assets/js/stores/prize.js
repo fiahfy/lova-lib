@@ -13,12 +13,12 @@ export default new (class PrizeStore extends EventEmitter {
     AppDispatcher.register((action) => {
       switch (action.actionType) {
         case AppConstants.ActionTypes.FETCH_PRIZES:
-          this._fetchAll(action);
+          this._fetchPrizes();
           break;
       }
     });
   }
-  _fetchAll(action) {
+  _fetchPrizes() {
     fetch('/api/prizes/')
       .then((response) => {
         return response.json();
@@ -34,5 +34,8 @@ export default new (class PrizeStore extends EventEmitter {
   }
   removeChangeListener(callback) {
     this.removeListener(CHANGE_EVENT, callback);
+  }
+  getPrizes() {
+    return this.prizes;
   }
 })();

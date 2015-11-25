@@ -21,20 +21,21 @@ export default class Servant extends Component {
   }
   _onChange() {
     this.setState({
-      servants: ServantStore.servants
+      servants: ServantStore.getServants()
     });
   }
   _createServantsFilter() {
-    let {query} = this.props.location;
+    const {query} = this.props.location;
     let filters = [];
 
-    let q = this.refs.q ? this.refs.q.value : query.q;
+    const q = this.refs.q ? this.refs.q.value : query.q;
     if (q) {
       filters = q.split(/[\s　]/i).map((e) => {
-        let [key, value] = e.split(':');
+        const [key, value] = e.split(':');
         if (!value) {
           return {key: 'name', value: key};
         }
+        // TODO: parse query [type:"aaa bbb"] instead of [type:aaa+bbb]
         return {key: key, value: value.replace('+', ' ')};
       });
     }
@@ -55,15 +56,15 @@ export default class Servant extends Component {
       History.pushState(null, `/servants/?tribe_id=${e.val}`);
     });
     ServantStore.addChangeListener(this._onChange);
-    ServantAction.fetchAll();
+    ServantAction.fetchServants();
   }
   componentWillUnmount() {
     ServantStore.removeChangeListener(this._onChange);
   }
   render() {
-    let {query} = this.props.location;
+    const {query} = this.props.location;
 
-    let tribeIdOptionNodes = [
+    const tribeIdOptionNodes = [
       {key: 0, value: 'Select Tribe...'},
       {key: 1, value: '人獣'},
       {key: 2, value: '神族'},
@@ -78,9 +79,9 @@ export default class Servant extends Component {
       );
     });
 
-    let servantNodes = this.state.servants.filter(this._createServantsFilter()).map((servant) => {
-      let cls = classNames('clip', `tribe-${servant.tribe_id}`);
-      let style = {backgroundPositionX: `${-40*(servant.tribe_code-1)}px`};
+    const servantNodes = this.state.servants.filter(this._createServantsFilter()).map((servant) => {
+      const cls = classNames('clip', `tribe-${servant.tribe_id}`);
+      const style = {backgroundPositionX: `${-40*(servant.tribe_code-1)}px`};
       return (
         <tr key={servant.id} onClick={this._handleServantClick.bind(this, servant.id)}>
           <th className="hidden-xs" scope="row">{servant.id}</th>

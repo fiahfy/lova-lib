@@ -3,7 +3,7 @@ import {Link} from 'react-router'
 
 export default class App extends Component {
   render() {
-    let year = (new Date()).getFullYear();
+    const year = (new Date()).getFullYear();
     return (
       <div>
         <nav className="navbar navbar-default">

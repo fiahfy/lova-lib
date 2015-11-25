@@ -23,30 +23,30 @@ export default class Prize extends Component {
     let times = this.refs.times.value;
     times = Math.min(Math.max(1, times), 1000);
     this.refs.times.value = times;
-    PrizeLotAction.draw(times);
+    PrizeLotAction.drawLots(times);
   }
   _onChange() {
     this.setState({
-      prizes: PrizeStore.prizes,
-      lotResults: PrizeLotStore.results,
-      lotResultsSummary: PrizeLotStore.resultsSummary
+      prizes: PrizeStore.getPrizes(),
+      lotResults: PrizeLotStore.getResults(),
+      lotResultsSummary: PrizeLotStore.getResultsSummary()
     });
   }
   componentDidMount() {
     PrizeStore.addChangeListener(this._onChange);
     PrizeLotStore.addChangeListener(this._onChange);
-    PrizeAction.fetchAll();
+    PrizeAction.fetchPrizes();
   }
   componentWillUnmount() {
     PrizeStore.removeChangeListener(this._onChange);
     PrizeLotStore.removeChangeListener(this._onChange);
   }
   render() {
-    let viewOptionNodes = [
+    const viewOptionNodes = [
       {key: 0, icon: 'fui-list-numbered'},
       {key: 1, icon: 'fui-list-thumbnailed'}
     ].map((e) => {
-      let cls = classNames('btn', 'btn-primary', {active: e.key === this.state.view});
+      const cls = classNames('btn', 'btn-primary', {active: e.key === this.state.view});
       return (
         <a key={`view-${e.key}`} className={cls} onClick={this._handleViewClick.bind(this, e.key)}>
           <span className={e.icon} />
@@ -54,9 +54,9 @@ export default class Prize extends Component {
       );
     });
 
-    let updated = this.state.prizes[0] ? new Intl.DateTimeFormat().format(new Date(this.state.prizes[0].date)) : '';
+    const updated = this.state.prizes[0] ? new Intl.DateTimeFormat().format(new Date(this.state.prizes[0].date)) : '';
 
-    let prizeNodes = this.state.prizes.map((prize) => {
+    const prizeNodes = this.state.prizes.map((prize) => {
       return (
         <tr key={prize.id}>
           <td className="">{prize.name}</td>
@@ -65,20 +65,18 @@ export default class Prize extends Component {
       );
     });
 
-    let i = 0;
-    let lotResultsNodes = this.state.lotResults.map((result) => {
+    const lotResultsNodes = this.state.lotResults.map((result, index) => {
       return (
-        <tr key={`result-${i++}`}>
-          <td className="">{i}</td>
+        <tr key={`result-${index}`}>
+          <td className="">{index+1}</td>
           <td className="">{result.name}</td>
         </tr>
       );
     });
 
-    let j = 0;
-    let lotResultsSummaryNodes = this.state.lotResultsSummary.map((result) => {
+    const lotResultsSummaryNodes = this.state.lotResultsSummary.map((result, index) => {
       return (
-        <tr key={`result-summary-${j++}`}>
+        <tr key={`result-summary-${index}`}>
           <td className="">{result.prize.name}</td>
           <td className="">{result.count}</td>
           <td className="">{result.rate.toFixed(3)}</td>

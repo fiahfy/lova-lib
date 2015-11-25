@@ -14,17 +14,16 @@ export default new (class PrizeLotStore extends EventEmitter {
     AppDispatcher.register((action) => {
       switch (action.actionType) {
         case AppConstants.ActionTypes.DRAW_PRIZE_LOTS:
-          this._draw(action);
+          this._drawLots(action.times);
           break;
       }
     });
   }
-  _draw(action) {
-    let times = action.times;
-    let prizes = PrizeStore.prizes;
+  _drawLots(times) {
+    const prizes = PrizeStore.prizes;
 
     let totalRate = 0;
-    let lots = prizes.map((e) => {
+    const lots = prizes.map((e) => {
       totalRate += e.rate;
       return {rate: totalRate, prize: e}
     });
@@ -32,9 +31,9 @@ export default new (class PrizeLotStore extends EventEmitter {
 
     let results = [];
     for (let i = 0; i < times; i++) {
-      let rate = Math.random() * totalRate;
+      const rate = Math.random() * totalRate;
       for (let j = 0; j < lots.length; j++) {
-        let lot = lots[j];
+        const lot = lots[j];
         if (rate <= lot.rate) {
           results.push(lot.prize);
           break;
@@ -44,7 +43,7 @@ export default new (class PrizeLotStore extends EventEmitter {
 
     this.results = results;
 
-    let summary = this.results.reduce((p, c) => {
+    const summary = this.results.reduce((p, c) => {
       if (!p[c.id]) {
         p[c.id] = {prize: c, count: 0, rate: 0};
       }
@@ -67,5 +66,11 @@ export default new (class PrizeLotStore extends EventEmitter {
   }
   removeChangeListener(callback) {
     this.removeListener(CHANGE_EVENT, callback);
+  }
+  getResults() {
+    return this.results;
+  }
+  getResultsSummary() {
+    return this.resultsSummary;
   }
 })();
