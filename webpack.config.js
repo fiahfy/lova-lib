@@ -2,7 +2,7 @@ var webpack = require('webpack');
 
 module.exports = {
   debug: true,
-  devtool: 'eval',
+  devtool: 'source-map',
   entry: {
     main: './client/assets/js/bootstrap.js',
     style: './client/assets/js/loader.js'
@@ -30,9 +30,9 @@ module.exports = {
     //  }
     //}),
     new webpack.ProvidePlugin({
-      //$: 'jquery',
+      $: 'jquery',
+      _: 'lodash',
       jQuery: 'jquery',
-      //'window.$': 'jquery',
       'window.jQuery': 'jquery'
     })
   ],

@@ -43,22 +43,22 @@ export default class Prize extends Component {
   }
   render() {
     const viewOptionNodes = [
-      {key: 0, icon: 'fui-list-numbered'},
-      {key: 1, icon: 'fui-list-thumbnailed'}
-    ].map((e) => {
-      const cls = classNames('btn', 'btn-primary', {active: e.key === this.state.view});
+      {value: 0, iconClassName: 'fui-list-numbered'},
+      {value: 1, iconClassName: 'fui-list-thumbnailed'}
+    ].map((option) => {
+      const cls = classNames('btn', 'btn-primary', {active: option.value === this.state.view});
       return (
-        <a key={`view-${e.key}`} className={cls} onClick={this._handleViewClick.bind(this, e.key)}>
-          <span className={e.icon} />
+        <a key={`view-${option.value}`} className={cls} onClick={this._handleViewClick.bind(this, option.value)}>
+          <span className={option.iconClassName} />
         </a>
       );
     });
 
-    const updated = this.state.prizes[0] ? new Intl.DateTimeFormat().format(new Date(this.state.prizes[0].date)) : '';
+    const updated = _.first(this.state.prizes) ? new Intl.DateTimeFormat().format(new Date(_.first(this.state.prizes).date)) : '';
 
-    const prizeNodes = this.state.prizes.map((prize) => {
+    const prizeNodes = this.state.prizes.map((prize, index) => {
       return (
-        <tr key={prize.id}>
+        <tr key={index}>
           <td className="">{prize.name}</td>
           <td className="">{prize.rate.toFixed(3)}</td>
         </tr>
@@ -67,7 +67,7 @@ export default class Prize extends Component {
 
     const lotResultsNodes = this.state.lotResults.map((result, index) => {
       return (
-        <tr key={`result-${index}`}>
+        <tr key={index}>
           <td className="">{index+1}</td>
           <td className="">{result.name}</td>
         </tr>
@@ -76,7 +76,7 @@ export default class Prize extends Component {
 
     const lotResultsSummaryNodes = this.state.lotResultsSummary.map((result, index) => {
       return (
-        <tr key={`result-summary-${index}`}>
+        <tr key={index}>
           <td className="">{result.prize.name}</td>
           <td className="">{result.count}</td>
           <td className="">{result.rate.toFixed(3)}</td>

@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import classNames from 'classnames';
-import jQuery from 'jquery';
 import History from '../history';
 import ServantAction from '../actions/servant';
 import ServantStore from '../stores/servant';
@@ -30,8 +29,8 @@ export default class Servant extends Component {
 
     const q = this.refs.q ? this.refs.q.value : query.q;
     if (q) {
-      filters = q.split(/[\s　]/i).map((e) => {
-        const [key, value] = e.split(':');
+      filters = q.split(/[\s　]/i).map((element) => {
+        const [key, value] = element.split(':');
         if (!value) {
           return {key: 'name', value: key};
         }
@@ -52,7 +51,7 @@ export default class Servant extends Component {
   }
   componentDidMount() {
     // TODO: dont use jquery
-    jQuery(this.refs.uiSelect).select2().on('select2-selecting', (e) => {
+    $('#servant').find('select').select2().on('select2-selecting', (e) => {
       History.pushState(null, `/servants/?tribe_id=${e.val}`);
     });
     ServantStore.addChangeListener(this._onChange);
@@ -65,16 +64,16 @@ export default class Servant extends Component {
     const {query} = this.props.location;
 
     const tribeIdOptionNodes = [
-      {key: 0, value: 'Select Tribe...'},
-      {key: 1, value: '人獣'},
-      {key: 2, value: '神族'},
-      {key: 3, value: '魔種'},
-      {key: 4, value: '海種'},
-      {key: 5, value: '不死'}
-    ].map((e) => {
+      {value: 0, name: 'Select Tribe...'},
+      {value: 1, name: '人獣'},
+      {value: 2, name: '神族'},
+      {value: 3, name: '魔種'},
+      {value: 4, name: '海種'},
+      {value: 5, name: '不死'}
+    ].map((option, index) => {
       return (
-        <option key={`tribe-id-${e.key}`} value={e.key}>
-          {e.value}
+        <option key={index} value={option.value}>
+          {option.name}
         </option>
       );
     });
@@ -86,7 +85,7 @@ export default class Servant extends Component {
         <tr key={servant.id} onClick={this._handleServantClick.bind(this, servant.id)}>
           <th className="hidden-xs" scope="row">{servant.id}</th>
           <td className={cls} style={style}>　</td>
-          <td className="">{`${servant.tribe_name}-${`000${servant.tribe_code}`.slice(-3)}`}</td>
+          <td className="">{`${servant.tribe_name}-${_.padLeft(servant.tribe_code, 3, 0)}`}</td>
           <td className="">{servant.cost}</td>
           <td className="hidden-xs">{servant.type}</td>
           <td className="">{servant.name}</td>
@@ -107,7 +106,7 @@ export default class Servant extends Component {
         <div className="clearfix">
           <div className="pull-left">
             <select className="form-control select select-primary select-block mbl"
-                    ref="uiSelect" defaultValue={query.tribe_id}>
+                    defaultValue={query.tribe_id}>
               {tribeIdOptionNodes}
             </select>
           </div>

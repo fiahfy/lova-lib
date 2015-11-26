@@ -22,10 +22,10 @@ export default new (class ServantStore extends EventEmitter {
     });
   }
   _fetchServant(id) {
-    if (this.getServant(id)) {
-      this.emit(CHANGE_EVENT);
-      return;
-    }
+    //if (this.getServant(id)) {
+    //  this.emit(CHANGE_EVENT);
+    //  return;
+    //}
     fetch(`/api/servants/${id}/?with_statistic&fields=-oral_tradition`)
       .then((response) => {
         return response.json();
@@ -37,10 +37,10 @@ export default new (class ServantStore extends EventEmitter {
     });
   }
   _fetchServants() {
-    if (this.getServants().length) {
-      this.emit(CHANGE_EVENT);
-      return;
-    }
+    //if (this.getServants().length) {
+    //  this.emit(CHANGE_EVENT);
+    //  return;
+    //}
     fetch('/api/servants/?with_statistic&fields=-oral_tradition')
       .then((response) => {
         return response.json();
