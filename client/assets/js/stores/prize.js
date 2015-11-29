@@ -19,6 +19,8 @@ export default new (class PrizeStore extends EventEmitter {
     });
   }
   _fetchPrizes() {
+    this.emit(CHANGE_EVENT);
+
     fetch('/api/prizes/')
       .then((response) => {
         return response.json();

@@ -22,25 +22,21 @@ export default new (class ServantStore extends EventEmitter {
     });
   }
   _fetchServant(id) {
-    //if (this.getServant(id)) {
-    //  this.emit(CHANGE_EVENT);
-    //  return;
-    //}
+    this.emit(CHANGE_EVENT);
+
     fetch(`/api/servants/${id}/?with_statistic`)
       .then((response) => {
         return response.json();
       }).then((json) => {
-      this.servants = [json];
+      this.servants = _.reject(this.servants, {id: id}).concat([json]);
       this.emit(CHANGE_EVENT);
     }).catch((error) => {
       console.error(error);
     });
   }
   _fetchServants() {
-    //if (this.getServants().length) {
-    //  this.emit(CHANGE_EVENT);
-    //  return;
-    //}
+    this.emit(CHANGE_EVENT);
+
     fetch('/api/servants/?with_statistic')
       .then((response) => {
         return response.json();

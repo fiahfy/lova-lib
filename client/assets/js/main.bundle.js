@@ -46986,14 +46986,12 @@
 	    value: function _fetchServant(id) {
 	      var _this2 = this;
 	
-	      //if (this.getServant(id)) {
-	      //  this.emit(CHANGE_EVENT);
-	      //  return;
-	      //}
+	      this.emit(CHANGE_EVENT);
+	
 	      (0, _whatwgFetch2.default)('/api/servants/' + id + '/?with_statistic').then(function (response) {
 	        return response.json();
 	      }).then(function (json) {
-	        _this2.servants = [json];
+	        _this2.servants = _.reject(_this2.servants, { id: id }).concat([json]);
 	        _this2.emit(CHANGE_EVENT);
 	      }).catch(function (error) {
 	        console.error(error);
@@ -47004,10 +47002,8 @@
 	    value: function _fetchServants() {
 	      var _this3 = this;
 	
-	      //if (this.getServants().length) {
-	      //  this.emit(CHANGE_EVENT);
-	      //  return;
-	      //}
+	      this.emit(CHANGE_EVENT);
+	
 	      (0, _whatwgFetch2.default)('/api/servants/?with_statistic').then(function (response) {
 	        return response.json();
 	      }).then(function (json) {
@@ -72151,6 +72147,8 @@
 	    value: function _fetchPrizes() {
 	      var _this2 = this;
 	
+	      this.emit(CHANGE_EVENT);
+	
 	      (0, _whatwgFetch2.default)('/api/prizes/').then(function (response) {
 	        return response.json();
 	      }).then(function (json) {
@@ -85300,9 +85298,9 @@
 	  _createClass(ServantStatisticAction, null, [{
 	    key: 'fetchServantStatistics',
 	    value: function fetchServantStatistics(args) {
-	      args = args || {};
-	      args.actionType = _constants2.default.ActionTypes.FETCH_SERVANT_STATISTICS;
-	      _dispatcher2.default.dispatch(args);
+	      var params = args || {};
+	      params.actionType = _constants2.default.ActionTypes.FETCH_SERVANT_STATISTICS;
+	      _dispatcher2.default.dispatch(params);
 	    }
 	  }]);
 	
