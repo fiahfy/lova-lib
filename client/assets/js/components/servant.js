@@ -85,7 +85,7 @@ export default class Servant extends Component {
     });
 
     const servantNodes = _.filter(this.state.servants, this._getPredicate()).sort((a, b) => {
-      return a.id - b.id;
+      return (a.tribe_id * 1000 + a.tribe_code) - (b.tribe_id * 1000 + b.tribe_code);
     }).map((servant, index) => {
       const cls = classNames('clip', `tribe-${servant.tribe_id}`);
       const style = {backgroundPositionX: `${-40*(servant.tribe_code-1)}px`};

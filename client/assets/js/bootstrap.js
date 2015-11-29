@@ -5,35 +5,18 @@ import History from './history';
 import App from './components/app';
 import Servant from './components/servant';
 import ServantDetail from './components/servant-detail';
+import Deck from './components/deck';
 import Chart from './components/chart';
 import Prize from './components/prize';
 import About from './components/about';
 
 import 'flat-ui/dist/js/flat-ui';
-
-class Home extends React.Component {
-  render() {
-    return (
-      <div>
-        Home
-      </div>
-    )
-  }
-}
-
-class NotFound extends React.Component {
-  render() {
-    return (
-      <div>
-        not found
-      </div>
-    )
-  }
-}
+import 'jquery-lazyload';
 
 const routes = (
   <Route path="/" component={App}>
-    <IndexRedirect to="about/" />
+    <IndexRedirect to="deck/" />
+    <Route path="deck/" component={Deck} />
     <Route path="servants/" component={Servant} />
     <Route path="servants/:id/" component={ServantDetail} />
     <Route path="charts/" component={Chart} />

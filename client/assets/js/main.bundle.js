@@ -46,8 +46,6 @@
 
 	'use strict';
 	
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-	
 	var _react = __webpack_require__(1);
 	
 	var _react2 = _interopRequireDefault(_react);
@@ -74,6 +72,10 @@
 	
 	var _servantDetail2 = _interopRequireDefault(_servantDetail);
 	
+	var _deck = __webpack_require__(287);
+	
+	var _deck2 = _interopRequireDefault(_deck);
+	
 	var _chart = __webpack_require__(283);
 	
 	var _chart2 = _interopRequireDefault(_chart);
@@ -88,64 +90,15 @@
 	
 	__webpack_require__(233);
 	
+	__webpack_require__(288);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var Home = (function (_React$Component) {
-	  _inherits(Home, _React$Component);
-	
-	  function Home() {
-	    _classCallCheck(this, Home);
-	
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Home).apply(this, arguments));
-	  }
-	
-	  _createClass(Home, [{
-	    key: 'render',
-	    value: function render() {
-	      return _react2.default.createElement(
-	        'div',
-	        null,
-	        'Home'
-	      );
-	    }
-	  }]);
-	
-	  return Home;
-	})(_react2.default.Component);
-	
-	var NotFound = (function (_React$Component2) {
-	  _inherits(NotFound, _React$Component2);
-	
-	  function NotFound() {
-	    _classCallCheck(this, NotFound);
-	
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(NotFound).apply(this, arguments));
-	  }
-	
-	  _createClass(NotFound, [{
-	    key: 'render',
-	    value: function render() {
-	      return _react2.default.createElement(
-	        'div',
-	        null,
-	        'not found'
-	      );
-	    }
-	  }]);
-	
-	  return NotFound;
-	})(_react2.default.Component);
 	
 	var routes = _react2.default.createElement(
 	  _reactRouter.Route,
 	  { path: '/', component: _app2.default },
-	  _react2.default.createElement(_reactRouter.IndexRedirect, { to: 'about/' }),
+	  _react2.default.createElement(_reactRouter.IndexRedirect, { to: 'deck/' }),
+	  _react2.default.createElement(_reactRouter.Route, { path: 'deck/', component: _deck2.default }),
 	  _react2.default.createElement(_reactRouter.Route, { path: 'servants/', component: _servant2.default }),
 	  _react2.default.createElement(_reactRouter.Route, { path: 'servants/:id/', component: _servantDetail2.default }),
 	  _react2.default.createElement(_reactRouter.Route, { path: 'charts/', component: _chart2.default }),
@@ -24658,7 +24611,7 @@
 	      });
 	
 	      var servantNodes = _.filter(this.state.servants, this._getPredicate()).sort(function (a, b) {
-	        return a.id - b.id;
+	        return a.tribe_id * 1000 + a.tribe_code - (b.tribe_id * 1000 + b.tribe_code);
 	      }).map(function (servant, index) {
 	        var cls = (0, _classnames2.default)('clip', 'tribe-' + servant.tribe_id);
 	        var style = { backgroundPositionX: -40 * (servant.tribe_code - 1) + 'px' };
@@ -85779,6 +85732,628 @@
 	
 	  return SpellStore;
 	})(_events.EventEmitter))();
+
+/***/ },
+/* 287 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(_, $) {'use strict';
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _classnames = __webpack_require__(212);
+	
+	var _classnames2 = _interopRequireDefault(_classnames);
+	
+	var _history = __webpack_require__(205);
+	
+	var _history2 = _interopRequireDefault(_history);
+	
+	var _servant = __webpack_require__(213);
+	
+	var _servant2 = _interopRequireDefault(_servant);
+	
+	var _servant3 = __webpack_require__(220);
+	
+	var _servant4 = _interopRequireDefault(_servant3);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Deck = (function (_Component) {
+	  _inherits(Deck, _Component);
+	
+	  function Deck() {
+	    _classCallCheck(this, Deck);
+	
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Deck).call(this));
+	
+	    _this.state = {
+	      deck: null,
+	      servants: []
+	    };
+	
+	    _this._onChange = _this._onChange.bind(_this);
+	    return _this;
+	  }
+	
+	  _createClass(Deck, [{
+	    key: '_onChange',
+	    value: function _onChange() {
+	      this.setState({
+	        servants: _servant4.default.getServants()
+	      });
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      _servant4.default.addChangeListener(this._onChange);
+	      _servant2.default.fetchServants();
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      _servant4.default.removeChangeListener(this._onChange);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(DeckForm, null),
+	        _react2.default.createElement(DeckContainer, { servants: this.state.servants }),
+	        _react2.default.createElement(DeckServant, { servants: this.state.servants })
+	      );
+	    }
+	  }]);
+	
+	  return Deck;
+	})(_react.Component);
+	
+	exports.default = Deck;
+	
+	var DeckForm = (function (_Component2) {
+	  _inherits(DeckForm, _Component2);
+	
+	  function DeckForm() {
+	    _classCallCheck(this, DeckForm);
+	
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(DeckForm).apply(this, arguments));
+	  }
+	
+	  _createClass(DeckForm, [{
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'container', id: 'deck' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'page-header' },
+	          _react2.default.createElement(
+	            'h2',
+	            null,
+	            'Deck'
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'input-group' },
+	          _react2.default.createElement('input', { type: 'text', className: 'form-control', placeholder: '' }),
+	          _react2.default.createElement(
+	            'span',
+	            { className: 'input-group-btn' },
+	            _react2.default.createElement(
+	              'a',
+	              { href: '', className: 'visible-xs btn btn-primary', onclick: 'return false;' },
+	              'Hold to Copy'
+	            ),
+	            _react2.default.createElement(
+	              'button',
+	              { className: 'hidden-xs btn btn-primary copy-clipboard',
+	                'data-toggle': 'tooltip', 'data-placement': 'bottom',
+	                'data-clipboard-text': '' },
+	              'Copy'
+	            )
+	          )
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return DeckForm;
+	})(_react.Component);
+	
+	var DeckContainer = (function (_Component3) {
+	  _inherits(DeckContainer, _Component3);
+	
+	  function DeckContainer() {
+	    _classCallCheck(this, DeckContainer);
+	
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(DeckContainer).apply(this, arguments));
+	  }
+	
+	  _createClass(DeckContainer, [{
+	    key: 'render',
+	    value: function render() {
+	      var cardNodes = [].map(function (card, index) {
+	        var servant = undefined;
+	        var cls = (0, _classnames2.default)('card', 'tribe-');
+	        var bgImage = index <= 5 ? 'deck.png' : 'side-board.png';
+	        var deckImage = servant ? servant.id + '.jpg' : 'blank.png';
+	        return _react2.default.createElement(
+	          'div',
+	          { className: cls },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'background' },
+	            _react2.default.createElement('img', { src: '/assets/img/m/' + bgImage, className: 'img-rounded img-responsive' })
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'content' },
+	            _react2.default.createElement('img', { src: '/assets/img/m/' + deckImage, className: 'img-rounded img-responsive' }),
+	            _react2.default.createElement(
+	              'span',
+	              null,
+	              'Cost ',
+	              servant.cost
+	            )
+	          )
+	        );
+	      });
+	
+	      var tribeIdOptionNodes = _.uniq(this.props.servants, function (value, key) {
+	        return value.tribe_id;
+	      }).map(function (servant, index) {
+	        return _react2.default.createElement(
+	          'li',
+	          { key: index },
+	          _react2.default.createElement(
+	            'a',
+	            null,
+	            servant.tribe_name
+	          )
+	        );
+	      });
+	
+	      var typeOptionNodes = _.uniq(this.props.servants, function (value, key) {
+	        return value.type;
+	      }).map(function (servant, index) {
+	        return _react2.default.createElement(
+	          'li',
+	          { key: index },
+	          _react2.default.createElement(
+	            'a',
+	            null,
+	            servant.type
+	          )
+	        );
+	      });
+	
+	      var tribeName = '';
+	      var type = '';
+	
+	      return _react2.default.createElement(
+	        'div',
+	        { id: 'deck-container' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'container' },
+	          _react2.default.createElement(
+	            'dl',
+	            { className: 'row col-xs-6 col-sm-2' },
+	            _react2.default.createElement(
+	              'dt',
+	              { className: '' },
+	              'Mana'
+	            ),
+	            _react2.default.createElement(
+	              'dd',
+	              { className: '' },
+	              '10',
+	              _react2.default.createElement(
+	                'span',
+	                null,
+	                ' + 10'
+	              )
+	            )
+	          ),
+	          _react2.default.createElement(
+	            'dl',
+	            { className: 'row col-xs-6 col-sm-10' },
+	            _react2.default.createElement(
+	              'dt',
+	              { className: '' },
+	              'Total Mana'
+	            ),
+	            _react2.default.createElement(
+	              'dd',
+	              { className: '' },
+	              '10'
+	            )
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'container hidden-xs' },
+	          cardNodes
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'container input-group hidden-xs' },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'input-group-btn' },
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'btn-group' },
+	              _react2.default.createElement(
+	                'button',
+	                { type: 'button', className: 'btn btn-primary dropdown-toggle',
+	                  'data-toggle': 'dropdown', 'aria-haspopup': 'true', 'aria-expanded': 'false' },
+	                tribeName,
+	                ' ',
+	                _react2.default.createElement('span', { className: 'caret' })
+	              ),
+	              _react2.default.createElement(
+	                'ul',
+	                { className: 'dropdown-menu' },
+	                tribeIdOptionNodes
+	              )
+	            ),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'btn-group' },
+	              _react2.default.createElement(
+	                'button',
+	                { type: 'button', className: 'btn btn-primary dropdown-toggle',
+	                  'data-toggle': 'dropdown', 'aria-haspopup': 'true', 'aria-expanded': 'false' },
+	                type,
+	                ' ',
+	                _react2.default.createElement('span', { className: 'caret' })
+	              ),
+	              _react2.default.createElement(
+	                'ul',
+	                { className: 'dropdown-menu' },
+	                typeOptionNodes
+	              )
+	            )
+	          ),
+	          _react2.default.createElement('input', { type: 'text', value: '', placeholder: 'Input Keyword...', className: 'form-control' })
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return DeckContainer;
+	})(_react.Component);
+	
+	var DeckServant = (function (_Component4) {
+	  _inherits(DeckServant, _Component4);
+	
+	  function DeckServant() {
+	    _classCallCheck(this, DeckServant);
+	
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(DeckServant).apply(this, arguments));
+	  }
+	
+	  _createClass(DeckServant, [{
+	    key: 'componentDidUpdate',
+	    value: function componentDidUpdate() {
+	      setTimeout(function () {
+	        // TODO: dont use jquery
+	        $('.lazy').lazyload();
+	      }, 1);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var servantNodes = this.props.servants.sort(function (a, b) {
+	        return a.tribe_id * 1000 + a.tribe_code - (b.tribe_id * 1000 + b.tribe_code);
+	      }).map(function (servant, index) {
+	        var cls = (0, _classnames2.default)('card', 'tribe-' + servant.tribe_id, { setted: false });
+	        return _react2.default.createElement(
+	          'div',
+	          { key: index, className: cls },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'background' },
+	            _react2.default.createElement('img', { src: '/assets/img/m/blank.png', className: 'img-rounded img-responsive' })
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'content' },
+	            _react2.default.createElement('img', { 'data-original': '/assets/img/m/' + servant.id + '.jpg',
+	              src: '/assets/img/m/blank.png', className: 'img-rounded img-responsive lazy' }),
+	            _react2.default.createElement(
+	              'span',
+	              null,
+	              'Cost ',
+	              servant.cost
+	            )
+	          )
+	        );
+	      });
+	
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'container', id: 'deck-servants' },
+	        _react2.default.createElement(
+	          'div',
+	          null,
+	          servantNodes
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return DeckServant;
+	})(_react.Component);
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(210), __webpack_require__(209)))
+
+/***/ },
+/* 288 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(jQuery) {/*!
+	 * Lazy Load - jQuery plugin for lazy loading images
+	 *
+	 * Copyright (c) 2007-2015 Mika Tuupola
+	 *
+	 * Licensed under the MIT license:
+	 *   http://www.opensource.org/licenses/mit-license.php
+	 *
+	 * Project home:
+	 *   http://www.appelsiini.net/projects/lazyload
+	 *
+	 * Version:  1.9.7
+	 *
+	 */
+	
+	(function($, window, document, undefined) {
+	    var $window = $(window);
+	
+	    $.fn.lazyload = function(options) {
+	        var elements = this;
+	        var $container;
+	        var settings = {
+	            threshold       : 0,
+	            failure_limit   : 0,
+	            event           : "scroll",
+	            effect          : "show",
+	            container       : window,
+	            data_attribute  : "original",
+	            skip_invisible  : false,
+	            appear          : null,
+	            load            : null,
+	            placeholder     : "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAANSURBVBhXYzh8+PB/AAffA0nNPuCLAAAAAElFTkSuQmCC"
+	        };
+	
+	        function update() {
+	            var counter = 0;
+	
+	            elements.each(function() {
+	                var $this = $(this);
+	                if (settings.skip_invisible && !$this.is(":visible")) {
+	                    return;
+	                }
+	                if ($.abovethetop(this, settings) ||
+	                    $.leftofbegin(this, settings)) {
+	                        /* Nothing. */
+	                } else if (!$.belowthefold(this, settings) &&
+	                    !$.rightoffold(this, settings)) {
+	                        $this.trigger("appear");
+	                        /* if we found an image we'll load, reset the counter */
+	                        counter = 0;
+	                } else {
+	                    if (++counter > settings.failure_limit) {
+	                        return false;
+	                    }
+	                }
+	            });
+	
+	        }
+	
+	        if(options) {
+	            /* Maintain BC for a couple of versions. */
+	            if (undefined !== options.failurelimit) {
+	                options.failure_limit = options.failurelimit;
+	                delete options.failurelimit;
+	            }
+	            if (undefined !== options.effectspeed) {
+	                options.effect_speed = options.effectspeed;
+	                delete options.effectspeed;
+	            }
+	
+	            $.extend(settings, options);
+	        }
+	
+	        /* Cache container as jQuery as object. */
+	        $container = (settings.container === undefined ||
+	                      settings.container === window) ? $window : $(settings.container);
+	
+	        /* Fire one scroll event per scroll. Not one scroll event per image. */
+	        if (0 === settings.event.indexOf("scroll")) {
+	            $container.bind(settings.event, function() {
+	                return update();
+	            });
+	        }
+	
+	        this.each(function() {
+	            var self = this;
+	            var $self = $(self);
+	
+	            self.loaded = false;
+	
+	            /* If no src attribute given use data:uri. */
+	            if ($self.attr("src") === undefined || $self.attr("src") === false) {
+	                if ($self.is("img")) {
+	                    $self.attr("src", settings.placeholder);
+	                }
+	            }
+	
+	            /* When appear is triggered load original image. */
+	            $self.one("appear", function() {
+	                if (!this.loaded) {
+	                    if (settings.appear) {
+	                        var elements_left = elements.length;
+	                        settings.appear.call(self, elements_left, settings);
+	                    }
+	                    $("<img />")
+	                        .bind("load", function() {
+	
+	                            var original = $self.attr("data-" + settings.data_attribute);
+	                            $self.hide();
+	                            if ($self.is("img")) {
+	                                $self.attr("src", original);
+	                            } else {
+	                                $self.css("background-image", "url('" + original + "')");
+	                            }
+	                            $self[settings.effect](settings.effect_speed);
+	
+	                            self.loaded = true;
+	
+	                            /* Remove image from array so it is not looped next time. */
+	                            var temp = $.grep(elements, function(element) {
+	                                return !element.loaded;
+	                            });
+	                            elements = $(temp);
+	
+	                            if (settings.load) {
+	                                var elements_left = elements.length;
+	                                settings.load.call(self, elements_left, settings);
+	                            }
+	                        })
+	                        .attr("src", $self.attr("data-" + settings.data_attribute));
+	                }
+	            });
+	
+	            /* When wanted event is triggered load original image */
+	            /* by triggering appear.                              */
+	            if (0 !== settings.event.indexOf("scroll")) {
+	                $self.bind(settings.event, function() {
+	                    if (!self.loaded) {
+	                        $self.trigger("appear");
+	                    }
+	                });
+	            }
+	        });
+	
+	        /* Check if something appears when window is resized. */
+	        $window.bind("resize", function() {
+	            update();
+	        });
+	
+	        /* With IOS5 force loading images when navigating with back button. */
+	        /* Non optimal workaround. */
+	        if ((/(?:iphone|ipod|ipad).*os 5/gi).test(navigator.appVersion)) {
+	            $window.bind("pageshow", function(event) {
+	                if (event.originalEvent && event.originalEvent.persisted) {
+	                    elements.each(function() {
+	                        $(this).trigger("appear");
+	                    });
+	                }
+	            });
+	        }
+	
+	        /* Force initial check if images should appear. */
+	        $(document).ready(function() {
+	            update();
+	        });
+	
+	        return this;
+	    };
+	
+	    /* Convenience methods in jQuery namespace.           */
+	    /* Use as  $.belowthefold(element, {threshold : 100, container : window}) */
+	
+	    $.belowthefold = function(element, settings) {
+	        var fold;
+	
+	        if (settings.container === undefined || settings.container === window) {
+	            fold = (window.innerHeight ? window.innerHeight : $window.height()) + $window.scrollTop();
+	        } else {
+	            fold = $(settings.container).offset().top + $(settings.container).height();
+	        }
+	
+	        return fold <= $(element).offset().top - settings.threshold;
+	    };
+	
+	    $.rightoffold = function(element, settings) {
+	        var fold;
+	
+	        if (settings.container === undefined || settings.container === window) {
+	            fold = $window.width() + $window.scrollLeft();
+	        } else {
+	            fold = $(settings.container).offset().left + $(settings.container).width();
+	        }
+	
+	        return fold <= $(element).offset().left - settings.threshold;
+	    };
+	
+	    $.abovethetop = function(element, settings) {
+	        var fold;
+	
+	        if (settings.container === undefined || settings.container === window) {
+	            fold = $window.scrollTop();
+	        } else {
+	            fold = $(settings.container).offset().top;
+	        }
+	
+	        return fold >= $(element).offset().top + settings.threshold  + $(element).height();
+	    };
+	
+	    $.leftofbegin = function(element, settings) {
+	        var fold;
+	
+	        if (settings.container === undefined || settings.container === window) {
+	            fold = $window.scrollLeft();
+	        } else {
+	            fold = $(settings.container).offset().left;
+	        }
+	
+	        return fold >= $(element).offset().left + settings.threshold + $(element).width();
+	    };
+	
+	    $.inviewport = function(element, settings) {
+	         return !$.rightoffold(element, settings) && !$.leftofbegin(element, settings) &&
+	                !$.belowthefold(element, settings) && !$.abovethetop(element, settings);
+	     };
+	
+	    /* Custom selectors for your convenience.   */
+	    /* Use as $("img:below-the-fold").something() or */
+	    /* $("img").filter(":below-the-fold").something() which is faster */
+	
+	    $.extend($.expr[":"], {
+	        "below-the-fold" : function(a) { return $.belowthefold(a, {threshold : 0}); },
+	        "above-the-top"  : function(a) { return !$.belowthefold(a, {threshold : 0}); },
+	        "right-of-screen": function(a) { return $.rightoffold(a, {threshold : 0}); },
+	        "left-of-screen" : function(a) { return !$.rightoffold(a, {threshold : 0}); },
+	        "in-viewport"    : function(a) { return $.inviewport(a, {threshold : 0}); },
+	        /* Maintain BC for couple of versions. */
+	        "above-the-fold" : function(a) { return !$.belowthefold(a, {threshold : 0}); },
+	        "right-of-fold"  : function(a) { return $.rightoffold(a, {threshold : 0}); },
+	        "left-of-fold"   : function(a) { return !$.rightoffold(a, {threshold : 0}); }
+	    });
+	
+	})(jQuery, window, document);
+	
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(209)))
 
 /***/ }
 /******/ ]);
