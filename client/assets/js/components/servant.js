@@ -23,31 +23,37 @@ export default class Servant extends Component {
       servants: ServantStore.getServants()
     });
   }
-  _createServantsFilter() {
+  _getPredicate() {
     const {query} = this.props.location;
-    let filters = [];
+    let filters = {};
 
     const q = this.refs.q ? this.refs.q.value : query.q;
     if (q) {
-      filters = q.split(/[\s　]/i).map((element) => {
-        const [key, value] = element.split(':');
+      let i = 0;
+      let map = new Map();
+      filters = q.replace(/"[^"]*"/g, (match) => {
+        map.set(i, match.replace(/^"(.*)"$/, "$1"));
+        return `@${i++}@`;
+      }).split(/[\s　]/i).map((element) => {
+        return element.replace(/@(\d+)@/, (match, i) => {
+          return map.get(+i);
+        });
+      }).reduce((p, c) => {
+        const [key, value] = c.split(':');
         if (!value) {
-          return {key: 'name', value: key};
+          p['name'] = value;
+          return p;
         }
-        // TODO: parse query [type:"aaa bbb"] instead of [type:aaa+bbb]
-        return {key: key, value: value.replace('+', ' ')};
-      });
+        p[_.snakeCase(key)] = isNaN(value) ? value : +value;
+        return p
+      }, filters);
     }
 
     if (query.tribe_id > 0) {
-      filters.push({key: 'tribe_id', value: query.tribe_id});
+      filters['tribe_id'] = +query.tribe_id;
     }
 
-    return (servant) => {
-      return filters.every((filter) => {
-        return servant[filter.key].toString().indexOf(filter.value) > -1;
-      });
-    };
+    return filters;
   }
   componentDidMount() {
     // TODO: dont use jquery
@@ -78,7 +84,7 @@ export default class Servant extends Component {
       );
     });
 
-    const servantNodes = this.state.servants.filter(this._createServantsFilter()).map((servant) => {
+    const servantNodes = _.filter(this.state.servants, this._getPredicate()).map((servant) => {
       const cls = classNames('clip', `tribe-${servant.tribe_id}`);
       const style = {backgroundPositionX: `${-40*(servant.tribe_code-1)}px`};
       return (

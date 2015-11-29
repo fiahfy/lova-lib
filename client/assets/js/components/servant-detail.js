@@ -1,9 +1,12 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router'
 import classNames from 'classnames';
+import NVD3Chart from 'react-nvd3';
 import History from '../history';
 import ServantAction from '../actions/servant';
+import ServantStatisticAction from '../actions/servant-statistic';
 import ServantStore from '../stores/servant';
+import ServantStatisticStore from '../stores/servant-statistic';
 
 export default class ServantDetail extends Component {
   state = {
@@ -13,17 +16,14 @@ export default class ServantDetail extends Component {
     super();
     this._onChange = this._onChange.bind(this);
   }
-  _handleQueryChange() {
-    this.forceUpdate();
-  }
   _onChange() {
     this.setState({
-      servant: ServantStore.getServant(this.props.params.id)
+      servant: ServantStore.getServant(+this.props.params.id)
     });
   }
   componentDidMount() {
     ServantStore.addChangeListener(this._onChange);
-    ServantAction.fetchServant(this.props.params.id);
+    ServantAction.fetchServant(+this.props.params.id);
   }
   componentWillUnmount() {
     ServantStore.removeChangeListener(this._onChange);
@@ -69,6 +69,9 @@ export default class ServantDetail extends Component {
 }
 
 class DetailSection extends Component {
+  _wrapQuoteIfNeed(value) {
+    return value.indexOf(' ') > -1 ? `"${value}"` : value;
+  }
   render() {
     const servant = this.props.servant || {};
 
@@ -155,7 +158,7 @@ class DetailSection extends Component {
               <dl className="col-sm-6 row">
                 <dt className="col-xs-3">Illust</dt>
                 <dd className="col-xs-9">
-                  <a href={`/servants/?q=illustrationBy:${(servant.illustration_by || '').replace(' ', '+')}`}>
+                  <a href={`/servants/?q=illustrationBy:${this._wrapQuoteIfNeed(servant.illustration_by || '')}`}>
                     {servant.illustration_by}
                   </a>
                 </dd>
@@ -163,7 +166,7 @@ class DetailSection extends Component {
               <dl className="col-sm-6 row">
                 <dt className="col-xs-3">CV</dt>
                 <dd className="col-xs-9">
-                  <a href={`/servants/?q=characterVoice:${(servant.character_voice || '').replace(' ', '+')}`}>
+                  <a href={`/servants/?q=characterVoice:${this._wrapQuoteIfNeed(servant.character_voice || '')}`}>
                     {servant.character_voice}
                   </a>
                 </dd>
@@ -329,9 +332,146 @@ class SkillItem extends Component {
 }
 
 class StatisticsSection extends Component {
+  state = {
+    map: 'all',
+    queue: 'all',
+    statistics: []
+  };
+  constructor() {
+    super();
+    this._onChange = this._onChange.bind(this);
+  }
+  _getWinChart() {
+    let datum = [];
+    datum.push({
+      key: 'Win Rate',
+      area: true,
+      color: '#1f77b4',
+      values: _.filter(this.state.statistics, {mode: 'win'}).map((statistic) => {
+        return {x: new Date(statistic.date), y: statistic.score};
+      })
+    });
+    datum.push({
+      key: 'Average',
+      area: false,
+      color: '#ff7f0e',
+      values: _.filter(this.state.statistics, {mode: 'win'}).map((statistic) => {
+        return {x: new Date(statistic.date), y: 50};
+      })
+    });
+
+    return {
+      type: 'lineChart',
+      datum: datum,
+      width: '100%',
+      height: 350,
+      margin : {
+        top: 20,
+        right: 30,
+        bottom: 50,
+        left: 50
+      },
+      transitionDuration: 500,
+      interpolate: 'monotone',
+      useInteractiveGuideline: true,
+      xAxis: {
+        tickFormat: (d) => {
+          return d3.time.format('%Y-%m-%d')(new Date(d));
+        }
+      },
+      yAxis: {
+        axisLabel: 'Rate (%)',
+        tickFormat: function(d){
+          return d3.format('.02f')(d);
+        },
+        axisLabelDistance: -10
+      }
+    };
+  }
+  _getUsedChart() {
+    let datum = [];
+    datum.push({
+      key: 'Used Rate',
+      area: true,
+      color: '#9467bd',
+      values: _.filter(this.state.statistics, {mode: 'used'}).map((statistic) => {
+        return {x: new Date(statistic.date), y: statistic.score};
+      })
+    });
+    datum.push({
+      key: 'Average',
+      area: false,
+      color: '#ff7f0e',
+      values: _.filter(this.state.statistics, {mode: 'used'}).map((statistic) => {
+        return {x: new Date(statistic.date), y: 100 / 221};
+      })
+    });
+
+    return {
+      type: 'lineChart',
+      datum: datum,
+      width: '100%',
+      height: 350,
+      margin : {
+        top: 20,
+        right: 30,
+        bottom: 50,
+        left: 50
+      },
+      transitionDuration: 500,
+      interpolate: 'monotone',
+      useInteractiveGuideline: true,
+      xAxis: {
+        tickFormat: (d) => {
+          return d3.time.format('%Y-%m-%d')(new Date(d));
+        }
+      },
+      yAxis: {
+        axisLabel: 'Rate (%)',
+        tickFormat: function(d){
+          return d3.format('.02f')(d);
+        },
+        axisLabelDistance: -10
+      }
+    };
+  }
+  _handleOptionClick(e) {
+    const options = _.reduce(this.refs, (previous, value, key) => {
+      if (value.checked) {
+        previous[value.name] = value.value;
+      }
+      return previous;
+    }, {});
+    this.setState(options);
+    ServantStatisticAction.fetchServantStatistics({
+      servant_id: +this.props.servant.id,
+      map: options.map,
+      queue: options.queue,
+      term: 'month'
+    });
+  }
+  _onChange() {
+    this.setState({
+      statistics: ServantStatisticStore.getServantStatistics({
+        servant_id: +this.props.servant.id,
+        map: this.state.map,
+        queue: this.state.queue
+      })
+    });
+  }
   componentDidMount() {
     // TODO: dont use jquery
     $('.statistics :radio').radiocheck();
+    ServantStatisticStore.addChangeListener(this._onChange);
+    ServantStatisticAction.fetchServantStatistics({
+      servant_id: +this.props.servant.id,
+      map: this.state.map,
+      queue: this.state.queue,
+      term: 'month'
+    });
+  }
+  componentWillUnmount() {
+    ServantStatisticStore.removeChangeListener(this._onChange);
   }
   render() {
     const mapOptionNodes = [
@@ -342,7 +482,7 @@ class StatisticsSection extends Component {
       const active = option.value === 'all';
       return (
         <label key={index} className="radio radio-inline">
-          <input type="radio" name="map" value={option.value} defaultChecked={active} />{option.name}
+          <input ref={`map-${option.value}`} type="radio" name="map" value={option.value} defaultChecked={active} onClick={this._handleOptionClick.bind(this)} />{option.name}
         </label>
       );
     });
@@ -355,10 +495,13 @@ class StatisticsSection extends Component {
       const active = option.value === 'all';
       return (
         <label key={index} className="radio radio-inline">
-          <input type="radio" name="queue" value={option.value} defaultChecked={active} />{option.name}
+          <input ref={`queue-${option.value}`} type="radio" name="queue" value={option.value} defaultChecked={active} onClick={this._handleOptionClick.bind(this)} />{option.name}
         </label>
       );
     });
+
+    const winChart = this._getWinChart();
+    const usedChart = this._getUsedChart();
 
     return (
       <div className="statistics">
@@ -376,9 +519,9 @@ class StatisticsSection extends Component {
             </div>
           </div>
         </form>
-        {/*
-        <nvd3 options='c.graph1Options' data='c.graph1Data'></nvd3>
-        <nvd3 options='c.graph2Options' data='c.graph2Data'></nvd3>*/}
+
+        <NVD3Chart {...winChart} />
+        <NVD3Chart {...usedChart} />
       </div>
     );
   }

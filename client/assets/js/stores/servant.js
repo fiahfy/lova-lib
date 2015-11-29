@@ -26,7 +26,7 @@ export default new (class ServantStore extends EventEmitter {
     //  this.emit(CHANGE_EVENT);
     //  return;
     //}
-    fetch(`/api/servants/${id}/?with_statistic&fields=-oral_tradition`)
+    fetch(`/api/servants/${id}/?with_statistic`)
       .then((response) => {
         return response.json();
       }).then((json) => {
@@ -41,7 +41,7 @@ export default new (class ServantStore extends EventEmitter {
     //  this.emit(CHANGE_EVENT);
     //  return;
     //}
-    fetch('/api/servants/?with_statistic&fields=-oral_tradition')
+    fetch('/api/servants/?with_statistic')
       .then((response) => {
         return response.json();
       }).then((json) => {
@@ -58,11 +58,7 @@ export default new (class ServantStore extends EventEmitter {
     this.removeListener(CHANGE_EVENT, callback);
   }
   getServant(id) {
-    return this.servants.filter((servant) => {
-      return id == servant.id;
-    }).reduce((previous, current) => {
-      return current;
-    }, null);
+    return _.first(_.filter(this.servants, {id: id})) || null;
   }
   getServants() {
     return this.servants;

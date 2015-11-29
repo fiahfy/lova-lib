@@ -57,7 +57,6 @@ config.route = function(app) {
   router.get('/api/ranking/servants/:id/:mode/:year/:month/:date/', controllers.ranking.servants);
   ///
   router.get('/api/servants/statistics/', controllers.servantsStatistics);
-  router.get('/api/servants/:id/statistics/', controllers.servantsStatistics);
   router.get('/api/spells/statistics/', controllers.spellsStatistics);
   app.use(router.routes());
 };

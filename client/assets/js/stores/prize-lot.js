@@ -51,11 +51,11 @@ export default new (class PrizeLotStore extends EventEmitter {
       p[c.id].rate = p[c.id].count / times;
       return p;
     }, {});
-    this.resultsSummary = Object.keys(summary).map((id) => {
+    this.resultsSummary = _.map(summary, (value) => {
       return {
-        prize: summary[id].prize,
-        count: summary[id].count,
-        rate: summary[id].rate
+        prize: value.prize,
+        count: value.count,
+        rate: value.rate
       };
     });
 

@@ -2,7 +2,7 @@
 
 let models = require('../models');
 
-function *servantsStatistics() {
+function *spellStatistics() {
   let d = (yield models.spellranking.findOne({}).sort({date: -1}).exec()).date || new Date();
   switch (this.query.term) {
     case 'day':
@@ -48,4 +48,4 @@ function *servantsStatistics() {
   });
 }
 
-module.exports = servantsStatistics;
+module.exports = spellStatistics;
