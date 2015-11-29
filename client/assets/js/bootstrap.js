@@ -5,6 +5,7 @@ import History from './history';
 import App from './components/app';
 import Servant from './components/servant';
 import ServantDetail from './components/servant-detail';
+import Chart from './components/chart';
 import Prize from './components/prize';
 import About from './components/about';
 
@@ -35,6 +36,7 @@ const routes = (
     <IndexRedirect to="about/" />
     <Route path="servants/" component={Servant} />
     <Route path="servants/:id/" component={ServantDetail} />
+    <Route path="charts/" component={Chart} />
     <Route path="prize/" component={Prize} />
     <Route path="about/" component={About} />
     <Redirect from="*" to="/" />

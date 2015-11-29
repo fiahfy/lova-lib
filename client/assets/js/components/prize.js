@@ -54,7 +54,8 @@ export default class Prize extends Component {
       );
     });
 
-    const updated = _.first(this.state.prizes) ? new Intl.DateTimeFormat().format(new Date(_.first(this.state.prizes).date)) : '';
+    const prize = _.first(this.state.prizes);
+    const updated = prize ? new Intl.DateTimeFormat().format(new Date(prize.date)) : '';
 
     const prizeNodes = this.state.prizes.map((prize, index) => {
       return (

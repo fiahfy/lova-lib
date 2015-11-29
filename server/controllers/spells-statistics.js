@@ -1,5 +1,6 @@
 'use strict';
 
+let _ = require('lodash');
 let models = require('../models');
 
 function *spellStatistics() {
@@ -11,41 +12,12 @@ function *spellStatistics() {
       d = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate() - 30));
   }
 
-  let map = this.query.map || 'all';
-  let queue = this.query.queue || 'all';
-
-  if (!isNaN(this.params.id)) {
-    this.body = yield models.spellranking.find({
-      spell_id: this.params.id,
-      date: { $gte : d },
-      map: map,
-      queue: queue
-    }, '-_id date score').sort({date: 1}).exec();
-    return;
-  }
-
-  let data = yield models.spellranking.find({
-    date: { $gte : d },
-    map: map,
-    queue: queue
-  }, '-_id spell_id date score').sort({date: 1}).exec();
-
-  let hash = data.reduce((prev, current) => {
-    let spellId = current.spell_id;
-    if (!prev[spellId]) {
-      prev[spellId] = [];
-    }
-    current.spell_id = undefined;
-    prev[spellId].push(current);
-    return prev;
-  }, {});
-
-  this.body = Object.keys(hash).map((spellId) => {
-    return {
-      spell_id: spellId,
-      data: hash[spellId]
-    };
+  let params = _.pick(this.query, (value, key) => {
+    return ['servant_id', 'map', 'queue'].indexOf(key) > -1;
   });
+  params.date = {$gte: d};
+
+  this.body = yield models.spellranking.find(params, '-_id spell_id date map queue score').sort({date: 1}).exec();
 }
 
 module.exports = spellStatistics;

@@ -74,6 +74,10 @@
 	
 	var _servantDetail2 = _interopRequireDefault(_servantDetail);
 	
+	var _chart = __webpack_require__(283);
+	
+	var _chart2 = _interopRequireDefault(_chart);
+	
 	var _prize = __webpack_require__(227);
 	
 	var _prize2 = _interopRequireDefault(_prize);
@@ -144,6 +148,7 @@
 	  _react2.default.createElement(_reactRouter.IndexRedirect, { to: 'about/' }),
 	  _react2.default.createElement(_reactRouter.Route, { path: 'servants/', component: _servant2.default }),
 	  _react2.default.createElement(_reactRouter.Route, { path: 'servants/:id/', component: _servantDetail2.default }),
+	  _react2.default.createElement(_reactRouter.Route, { path: 'charts/', component: _chart2.default }),
 	  _react2.default.createElement(_reactRouter.Route, { path: 'prize/', component: _prize2.default }),
 	  _react2.default.createElement(_reactRouter.Route, { path: 'about/', component: _about2.default }),
 	  _react2.default.createElement(_reactRouter.Redirect, { from: '*', to: '/' })
@@ -24652,12 +24657,14 @@
 	        );
 	      });
 	
-	      var servantNodes = _.filter(this.state.servants, this._getPredicate()).map(function (servant) {
+	      var servantNodes = _.filter(this.state.servants, this._getPredicate()).sort(function (a, b) {
+	        return a.id - b.id;
+	      }).map(function (servant, index) {
 	        var cls = (0, _classnames2.default)('clip', 'tribe-' + servant.tribe_id);
 	        var style = { backgroundPositionX: -40 * (servant.tribe_code - 1) + 'px' };
 	        return _react2.default.createElement(
 	          'tr',
-	          { key: servant.id, onClick: _this2._handleServantClick.bind(_this2, servant.id) },
+	          { key: index, onClick: _this2._handleServantClick.bind(_this2, servant.id) },
 	          _react2.default.createElement(
 	            'th',
 	            { className: 'hidden-xs', scope: 'row' },
@@ -46536,6 +46543,7 @@
 	    FETCH_SERVANT: null,
 	    FETCH_SERVANTS: null,
 	    FETCH_SERVANT_STATISTICS: null,
+	    FETCH_SPELL_STATISTICS: null,
 	    FETCH_PRIZES: null,
 	    DRAW_PRIZE_LOTS: null
 	  })
@@ -48676,8 +48684,7 @@
 	      _servantStatistic2.default.fetchServantStatistics({
 	        servant_id: +this.props.servant.id,
 	        map: options.map,
-	        queue: options.queue,
-	        term: 'month'
+	        queue: options.queue
 	      });
 	    }
 	  }, {
@@ -48700,8 +48707,7 @@
 	      _servantStatistic2.default.fetchServantStatistics({
 	        servant_id: +this.props.servant.id,
 	        map: this.state.map,
-	        queue: this.state.queue,
-	        term: 'month'
+	        queue: this.state.queue
 	      });
 	    }
 	  }, {
@@ -71758,7 +71764,8 @@
 	        );
 	      });
 	
-	      var updated = _.first(this.state.prizes) ? new Intl.DateTimeFormat().format(new Date(_.first(this.state.prizes).date)) : '';
+	      var prize = _.first(this.state.prizes);
+	      var updated = prize ? new Intl.DateTimeFormat().format(new Date(prize.date)) : '';
 	
 	      var prizeNodes = this.state.prizes.map(function (prize, index) {
 	        return _react2.default.createElement(
@@ -85413,6 +85420,365 @@
 	  return ServantStatisticStore;
 	})(_events.EventEmitter))();
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(210)))
+
+/***/ },
+/* 281 */,
+/* 282 */,
+/* 283 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(_) {'use strict';
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _classnames = __webpack_require__(212);
+	
+	var _classnames2 = _interopRequireDefault(_classnames);
+	
+	var _reactNvd = __webpack_require__(224);
+	
+	var _reactNvd2 = _interopRequireDefault(_reactNvd);
+	
+	var _spellStatistic = __webpack_require__(284);
+	
+	var _spellStatistic2 = _interopRequireDefault(_spellStatistic);
+	
+	var _spellStatistic3 = __webpack_require__(285);
+	
+	var _spellStatistic4 = _interopRequireDefault(_spellStatistic3);
+	
+	var _spell = __webpack_require__(286);
+	
+	var _spell2 = _interopRequireDefault(_spell);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Chart = (function (_Component) {
+	  _inherits(Chart, _Component);
+	
+	  function Chart() {
+	    _classCallCheck(this, Chart);
+	
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Chart).call(this));
+	
+	    _this.state = {
+	      spellStatistics: []
+	    };
+	
+	    _this._onChange = _this._onChange.bind(_this);
+	    return _this;
+	  }
+	
+	  _createClass(Chart, [{
+	    key: '_getSpellChart',
+	    value: function _getSpellChart() {
+	      var _this2 = this;
+	
+	      var datum = _.uniq(_.pluck(this.state.spellStatistics, 'spell_id')).sort(function (a, b) {
+	        return a - b;
+	      }).map(function (spell_id) {
+	        return {
+	          key: _spell2.default.getSpellName(spell_id),
+	          values: _.filter(_this2.state.spellStatistics, { spell_id: spell_id }).map(function (statistic) {
+	            return { x: new Date(statistic.date), y: statistic.score };
+	          })
+	        };
+	      });
+	
+	      return {
+	        type: 'lineChart',
+	        datum: datum,
+	        width: '100%',
+	        height: 500,
+	        margin: {
+	          top: 20,
+	          right: 30,
+	          bottom: 50,
+	          left: 50
+	        },
+	        transitionDuration: 500,
+	        interpolate: 'monotone',
+	        useInteractiveGuideline: true,
+	        xAxis: {
+	          tickFormat: function tickFormat(d) {
+	            return d3.time.format('%Y-%m-%d')(new Date(d));
+	          }
+	        },
+	        yAxis: {
+	          axisLabel: 'Used Rate (%)',
+	          tickFormat: function tickFormat(d) {
+	            return d3.format('.02f')(d);
+	          },
+	          axisLabelDistance: -10
+	        }
+	      };
+	    }
+	  }, {
+	    key: '_onChange',
+	    value: function _onChange() {
+	      this.setState({
+	        spellStatistics: _spellStatistic4.default.getSpellStatistics({
+	          map: 'all',
+	          queue: 'all'
+	        })
+	      });
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      _spellStatistic4.default.addChangeListener(this._onChange);
+	      _spellStatistic2.default.fetchSpellStatistics({
+	        map: 'all',
+	        queue: 'all'
+	      });
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      _spellStatistic4.default.removeChangeListener(this._onChange);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var statistic = _.last(this.state.spellStatistics);
+	      var updated = statistic ? new Intl.DateTimeFormat().format(new Date(statistic.date)) : '';
+	
+	      var spellChart = this._getSpellChart();
+	
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'container', id: 'charts' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'page-header' },
+	          _react2.default.createElement(
+	            'h2',
+	            null,
+	            'Charts'
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'h3',
+	          null,
+	          'Spell Statistics',
+	          _react2.default.createElement(
+	            'small',
+	            null,
+	            'Updated ',
+	            updated
+	          )
+	        ),
+	        _react2.default.createElement(_reactNvd2.default, spellChart)
+	      );
+	    }
+	  }]);
+	
+	  return Chart;
+	})(_react.Component);
+	
+	exports.default = Chart;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(210)))
+
+/***/ },
+/* 284 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _constants = __webpack_require__(214);
+	
+	var _constants2 = _interopRequireDefault(_constants);
+	
+	var _dispatcher = __webpack_require__(216);
+	
+	var _dispatcher2 = _interopRequireDefault(_dispatcher);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var SpellStatisticAction = (function () {
+	  function SpellStatisticAction() {
+	    _classCallCheck(this, SpellStatisticAction);
+	  }
+	
+	  _createClass(SpellStatisticAction, null, [{
+	    key: 'fetchSpellStatistics',
+	    value: function fetchSpellStatistics(args) {
+	      var params = args || {};
+	      params.actionType = _constants2.default.ActionTypes.FETCH_SPELL_STATISTICS;
+	      _dispatcher2.default.dispatch(params);
+	    }
+	  }]);
+	
+	  return SpellStatisticAction;
+	})();
+	
+	exports.default = SpellStatisticAction;
+
+/***/ },
+/* 285 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(_) {'use strict';
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _events = __webpack_require__(221);
+	
+	var _whatwgFetch = __webpack_require__(222);
+	
+	var _whatwgFetch2 = _interopRequireDefault(_whatwgFetch);
+	
+	var _constants = __webpack_require__(214);
+	
+	var _constants2 = _interopRequireDefault(_constants);
+	
+	var _dispatcher = __webpack_require__(216);
+	
+	var _dispatcher2 = _interopRequireDefault(_dispatcher);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var CHANGE_EVENT = 'change';
+	
+	exports.default = new ((function (_EventEmitter) {
+	  _inherits(SpellStatisticStore, _EventEmitter);
+	
+	  function SpellStatisticStore() {
+	    _classCallCheck(this, SpellStatisticStore);
+	
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(SpellStatisticStore).call(this));
+	
+	    _this.statistics = [];
+	
+	    _dispatcher2.default.register(function (action) {
+	      switch (action.actionType) {
+	        case _constants2.default.ActionTypes.FETCH_SPELL_STATISTICS:
+	          _this._fetchSpellStatistics(action);
+	          break;
+	      }
+	    });
+	    return _this;
+	  }
+	
+	  _createClass(SpellStatisticStore, [{
+	    key: '_fetchSpellStatistics',
+	    value: function _fetchSpellStatistics(args) {
+	      var _this2 = this;
+	
+	      this.emit(CHANGE_EVENT);
+	
+	      var params = _.pick(args, function (value, key) {
+	        return ['spell_id', 'map', 'queue'].indexOf(key) > -1;
+	      });
+	
+	      var url = '/api/spells/statistics/?term=month&' + _.map(params, function (value, key) {
+	        return key + '=' + value;
+	      }).join('&');
+	
+	      (0, _whatwgFetch2.default)(url).then(function (response) {
+	        return response.json();
+	      }).then(function (json) {
+	        _this2.statistics = _.reject(_this2.statistics, params).concat(json);
+	        _this2.emit(CHANGE_EVENT);
+	      }).catch(function (error) {
+	        console.error(error);
+	      });
+	    }
+	  }, {
+	    key: 'addChangeListener',
+	    value: function addChangeListener(callback) {
+	      this.on(CHANGE_EVENT, callback);
+	    }
+	  }, {
+	    key: 'removeChangeListener',
+	    value: function removeChangeListener(callback) {
+	      this.removeListener(CHANGE_EVENT, callback);
+	    }
+	  }, {
+	    key: 'getSpellStatistics',
+	    value: function getSpellStatistics(args) {
+	      var params = _.pick(args, function (value, key) {
+	        return ['spell_id', 'map', 'queue'].indexOf(key) > -1;
+	      });
+	
+	      return _.filter(this.statistics, params);
+	    }
+	  }]);
+	
+	  return SpellStatisticStore;
+	})(_events.EventEmitter))();
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(210)))
+
+/***/ },
+/* 286 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _events = __webpack_require__(221);
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	exports.default = new ((function (_EventEmitter) {
+	  _inherits(SpellStore, _EventEmitter);
+	
+	  function SpellStore() {
+	    _classCallCheck(this, SpellStore);
+	
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(SpellStore).apply(this, arguments));
+	  }
+	
+	  _createClass(SpellStore, [{
+	    key: 'getSpellName',
+	    value: function getSpellName(id) {
+	      return [, 'キュアオール', 'リターンゲート', 'パワーライズ', 'クイックドライブ', 'リザレクション', 'フォースフィールド', 'クレアボヤンス', 'クロノフリーズ', 'リモートサモン'][id] || 'unknown';
+	    }
+	  }]);
+	
+	  return SpellStore;
+	})(_events.EventEmitter))();
 
 /***/ }
 /******/ ]);

@@ -84,11 +84,13 @@ export default class Servant extends Component {
       );
     });
 
-    const servantNodes = _.filter(this.state.servants, this._getPredicate()).map((servant) => {
+    const servantNodes = _.filter(this.state.servants, this._getPredicate()).sort((a, b) => {
+      return a.id - b.id;
+    }).map((servant, index) => {
       const cls = classNames('clip', `tribe-${servant.tribe_id}`);
       const style = {backgroundPositionX: `${-40*(servant.tribe_code-1)}px`};
       return (
-        <tr key={servant.id} onClick={this._handleServantClick.bind(this, servant.id)}>
+        <tr key={index} onClick={this._handleServantClick.bind(this, servant.id)}>
           <th className="hidden-xs" scope="row">{servant.id}</th>
           <td className={cls} style={style}>　</td>
           <td className="">{`${servant.tribe_name}-${_.padLeft(servant.tribe_code, 3, 0)}`}</td>

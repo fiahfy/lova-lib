@@ -446,8 +446,7 @@ class StatisticsSection extends Component {
     ServantStatisticAction.fetchServantStatistics({
       servant_id: +this.props.servant.id,
       map: options.map,
-      queue: options.queue,
-      term: 'month'
+      queue: options.queue
     });
   }
   _onChange() {
@@ -466,8 +465,7 @@ class StatisticsSection extends Component {
     ServantStatisticAction.fetchServantStatistics({
       servant_id: +this.props.servant.id,
       map: this.state.map,
-      queue: this.state.queue,
-      term: 'month'
+      queue: this.state.queue
     });
   }
   componentWillUnmount() {
