@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Router, Route, Link, IndexRedirect, Redirect} from 'react-router'
-import History from './history';
+import history from './history';
 import App from './components/app';
 import Servant from './components/servant';
 import ServantDetail from './components/servant-detail';
@@ -27,6 +27,6 @@ const routes = (
 );
 
 ReactDOM.render(
-  <Router routes={routes} history={History} />,
+  <Router routes={routes} history={history} />,
   document.querySelector('#app')
 );

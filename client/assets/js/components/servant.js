@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import classNames from 'classnames';
-import History from '../history';
 import ServantAction from '../actions/servant';
 import ServantStore from '../stores/servant';
 
@@ -13,7 +12,7 @@ export default class Servant extends Component {
     this._onChange = this._onChange.bind(this);
   }
   _handleServantClick(servantId) {
-    History.pushState(null, `/servants/${servantId}/`);
+    this.props.history.pushState(null, `/servants/${servantId}/`);
   }
   _handleQueryChange() {
     this.forceUpdate();
@@ -58,7 +57,7 @@ export default class Servant extends Component {
   componentDidMount() {
     // TODO: dont use jquery
     $('#servant').find('select').select2().on('select2-selecting', (e) => {
-      History.pushState(null, `/servants/?tribe_id=${e.val}`);
+      this.props.history.pushState(null, '/servants/', {tribe_id: e.val});
     });
     ServantStore.addChangeListener(this._onChange);
     ServantAction.fetchServants();

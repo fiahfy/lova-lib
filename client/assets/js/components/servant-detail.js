@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {Link} from 'react-router'
 import classNames from 'classnames';
 import NVD3Chart from 'react-nvd3';
-import History from '../history';
 import ServantAction from '../actions/servant';
 import ServantStatisticAction from '../actions/servant-statistic';
 import ServantStore from '../stores/servant';
@@ -95,7 +94,7 @@ class DetailSection extends Component {
         <div className="row">
           <div className="col-lg-4 col-md-5 col-sm-5">
             <div className="col-sm-12" className="logo">
-              <a href="assets/img/l/{{ c.servant.id }}.jpg" target="_self">
+              <a href={`assets/img/l/${servant.id}.jpg`} target="_self">
                 <img src={servant.id ? `assets/img/l/${servant.id}.jpg` : ''}
                      className="center-block img-rounded img-responsive" />
               </a>
@@ -107,21 +106,21 @@ class DetailSection extends Component {
                 <dl className="row">
                   <dt className="col-xs-3">Tribe</dt>
                   <dd className="col-xs-9">
-                    <a href={`/servants/?tribe_id=${servant.tribe_id}`}>
+                    <Link to="/servants/" query={{tribe_id: servant.tribe_id}}>
                       {servant.tribe_name}
-                    </a>-{_.padLeft(servant.tribe_code, 3, 0)}
+                    </Link>-{_.padLeft(servant.tribe_code, 3, 0)}
                   </dd>
                 </dl>
                 <dl className="row">
                   <dt className="col-xs-3">Type</dt>
                   <dd className="col-xs-9">
-                    <a href={`/servants/?q=type:${servant.type}`}>{servant.type}</a>
+                    <Link to="/servants/" query={{q: `type:${servant.type}`}}>{servant.type}</Link>
                   </dd>
                 </dl>
                 <dl className="row">
                   <dt className="col-xs-3">Cost</dt>
                   <dd className="col-xs-9">
-                    <a href={`/servants/?q=cost:${servant.cost}`}>{servant.cost}</a>
+                    <Link to="/servants/" query={{q: `cost:${servant.cost}`}}>{servant.cost}</Link>
                   </dd>
                 </dl>
               </div>
@@ -141,7 +140,7 @@ class DetailSection extends Component {
                 <dl className="row">
                   <dt className="col-xs-3">Range</dt>
                   <dd className="col-xs-9">
-                    <a href={`/servants/?q=range:${servant.range}`}>{servant.range}</a>
+                    <Link to="/servants/" query={{q: `range:${servant.range}`}}>{servant.range}</Link>
                   </dd>
                 </dl>
               </div>
@@ -158,17 +157,17 @@ class DetailSection extends Component {
               <dl className="col-sm-6 row">
                 <dt className="col-xs-3">Illust</dt>
                 <dd className="col-xs-9">
-                  <a href={`/servants/?q=illustrationBy:${this._wrapQuoteIfNeed(servant.illustration_by || '')}`}>
+                  <Link to="/servants/" query={{q: `illustrationBy:${this._wrapQuoteIfNeed(servant.illustration_by || '')}`}}>
                     {servant.illustration_by}
-                  </a>
+                  </Link>
                 </dd>
               </dl>
               <dl className="col-sm-6 row">
                 <dt className="col-xs-3">CV</dt>
                 <dd className="col-xs-9">
-                  <a href={`/servants/?q=characterVoice:${this._wrapQuoteIfNeed(servant.character_voice || '')}`}>
+                  <Link to="/servants/" query={{q: `characterVoice:${this._wrapQuoteIfNeed(servant.character_voice || '')}`}}>
                     {servant.character_voice}
-                  </a>
+                  </Link>
                 </dd>
               </dl>
             </div>

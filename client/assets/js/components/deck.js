@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 import classNames from 'classnames';
-import History from '../history';
+import {DragDropContext} from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
 import ServantAction from '../actions/servant';
 import ServantStore from '../stores/servant';
 
-export default class Deck extends Component {
+class Deck extends Component {
   state = {
     deck: null,
     servants: []
@@ -36,6 +37,8 @@ export default class Deck extends Component {
   }
 }
 
+export default DragDropContext(HTML5Backend)(Deck);
+
 class DeckForm extends Component {
   render() {
     return (
@@ -60,23 +63,10 @@ class DeckForm extends Component {
 
 class DeckContainer extends Component {
   render() {
-    const cardNodes = [].map((card, index) => {
+    const cardNodes = _.range(1, 9).map((card, index) => {
       let servant;
-      const cls = classNames('card', `tribe-`);
-      const bgImage = index <= 5 ? 'deck.png' : 'side-board.png';
-      const deckImage = servant ? `${servant.id}.jpg` : 'blank.png';
       return (
-        <div className={cls}>
-          <div className="background">
-            <img src={`/assets/img/m/${bgImage}`} className="img-rounded img-responsive" />
-          </div>
-          <div className="content">
-            <img src={`/assets/img/m/${deckImage}`} className="img-rounded img-responsive" />
-              <span>
-                Cost {servant.cost}
-              </span>
-          </div>
-        </div>
+        <Card key={index} index={index} servant={servant} />
       );
     });
 
@@ -188,6 +178,32 @@ class DeckContainer extends Component {
           </div>
         </div>
         */}
+      </div>
+    );
+  }
+}
+
+class Card extends Component {
+  render() {
+    let servant;
+    const cls = classNames('card', `tribe-`);
+    const bgImage = this.props.index <= 5 ? 'deck.png' : 'side-board.png';
+    const deckImage = servant ? `${servant.id}.jpg` : 'blank.png';
+    const costNode = servant ? (
+      <span>
+        Cost {servant.cost}
+      </span>
+    ) : '';
+
+    return (
+      <div className={cls}>
+        <div className="background">
+          <img src={`/assets/img/m/${bgImage}`} className="img-rounded img-responsive" />
+        </div>
+        <div className="content">
+          <img src={`/assets/img/m/${deckImage}`} className="img-rounded img-responsive" />
+          {costNode}
+        </div>
       </div>
     );
   }
