@@ -85774,7 +85774,7 @@
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Deck).call(this));
 	
 	    _this.state = {
-	      deck: null,
+	      cards: [],
 	      servants: []
 	    };
 	
@@ -85785,8 +85785,15 @@
 	  _createClass(Deck, [{
 	    key: '_onChange',
 	    value: function _onChange() {
+	      var cards = _.range(0, 8).map(function (index) {
+	        if (index == 4) {
+	          return null;
+	        }
+	        return _.clone(_servant4.default.getServants()[index], true);
+	      });
 	      this.setState({
-	        servants: _servant4.default.getServants()
+	        servants: _servant4.default.getServants(),
+	        cards: cards
 	      });
 	    }
 	  }, {
@@ -85806,8 +85813,8 @@
 	      return _react2.default.createElement(
 	        'div',
 	        null,
-	        _react2.default.createElement(DeckForm, null),
-	        _react2.default.createElement(DeckContainer, { servants: this.state.servants }),
+	        _react2.default.createElement(DeckForm, { cards: this.state.cards }),
+	        _react2.default.createElement(DeckContainer, { cards: this.state.cards, servants: this.state.servants }),
 	        _react2.default.createElement(DeckServant, { servants: this.state.servants })
 	      );
 	    }
@@ -85880,11 +85887,18 @@
 	  }
 	
 	  _createClass(DeckContainer, [{
+	    key: '_onDrop',
+	    value: function _onDrop(item) {
+	      console.log(item);
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var cardNodes = _.range(1, 9).map(function (card, index) {
-	        var servant = undefined;
-	        return _react2.default.createElement(Card, { key: index, index: index, servant: servant });
+	      var _this4 = this;
+	
+	      var cardNodes = _.range(0, 8).map(function (index) {
+	        return _react2.default.createElement(CardContainer, { key: index, index: index, card: _this4.props.cards[index],
+	          onDrop: _this4._onDrop.bind(_this4) });
 	      });
 	
 	      var tribeIdOptionNodes = _.uniq(this.props.servants, function (value, key) {
@@ -86013,52 +86027,132 @@
 	  return DeckContainer;
 	})(_react.Component);
 	
-	var Card = (function (_Component4) {
-	  _inherits(Card, _Component4);
+	var _CardContainer = (function (_Component4) {
+	  _inherits(_CardContainer, _Component4);
 	
-	  function Card() {
-	    _classCallCheck(this, Card);
+	  function _CardContainer() {
+	    _classCallCheck(this, _CardContainer);
 	
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Card).apply(this, arguments));
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(_CardContainer).apply(this, arguments));
 	  }
 	
-	  _createClass(Card, [{
+	  _createClass(_CardContainer, [{
 	    key: 'render',
 	    value: function render() {
-	      var servant = undefined;
-	      var cls = (0, _classnames2.default)('card', 'tribe-');
-	      var bgImage = this.props.index <= 5 ? 'deck.png' : 'side-board.png';
-	      var deckImage = servant ? servant.id + '.jpg' : 'blank.png';
-	      var costNode = servant ? _react2.default.createElement(
-	        'span',
-	        null,
-	        'Cost ',
-	        servant.cost
-	      ) : '';
+	      var _props = this.props;
+	      var connectDropTarget = _props.connectDropTarget;
+	      var isOver = _props.isOver;
+	      var canDrop = _props.canDrop;
 	
-	      return _react2.default.createElement(
+	      var isActive = isOver && canDrop;
+	
+	      var backgroundColor = null;
+	      if (isActive) {
+	        backgroundColor = 'darkgreen';
+	      } else if (canDrop) {
+	        backgroundColor = 'darkkhaki';
+	      }
+	
+	      var card = this.props.card || {};
+	
+	      var tribeCls = card.tribe_id ? 'tribe-' + card.tribe_id : null;
+	      var cls = (0, _classnames2.default)('card', tribeCls);
+	      var bgImage = this.props.index <= 5 ? 'deck.png' : 'side-board.png';
+	
+	      return connectDropTarget(_react2.default.createElement(
 	        'div',
 	        { className: cls },
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'background' },
-	          _react2.default.createElement('img', { src: '/assets/img/m/' + bgImage, className: 'img-rounded img-responsive' })
+	          _react2.default.createElement('img', { src: '/assets/img/m/' + bgImage, className: 'img-rounded img-responsive', style: { backgroundColor: backgroundColor } })
 	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'content' },
-	          _react2.default.createElement('img', { src: '/assets/img/m/' + deckImage, className: 'img-rounded img-responsive' }),
-	          costNode
-	        )
-	      );
+	        _react2.default.createElement(Card, { card: card })
+	      ));
 	    }
 	  }]);
 	
-	  return Card;
+	  return _CardContainer;
 	})(_react.Component);
 	
-	var DeckServant = (function (_Component5) {
-	  _inherits(DeckServant, _Component5);
+	_CardContainer.propTypes = {
+	  connectDropTarget: _react.PropTypes.func.isRequired,
+	  isOver: _react.PropTypes.bool.isRequired,
+	  canDrop: _react.PropTypes.bool.isRequired,
+	  onDrop: _react.PropTypes.func.isRequired
+	};
+	
+	var CardContainer = (0, _reactDnd.DropTarget)('card', {
+	  drop: function drop(props, monitor) {
+	    props.onDrop(monitor.getItem());
+	  }
+	}, function (connect, monitor) {
+	  return {
+	    connectDropTarget: connect.dropTarget(),
+	    isOver: monitor.isOver(),
+	    canDrop: monitor.canDrop()
+	  };
+	})(_CardContainer);
+	
+	var _Card = (function (_Component5) {
+	  _inherits(_Card, _Component5);
+	
+	  function _Card() {
+	    _classCallCheck(this, _Card);
+	
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(_Card).apply(this, arguments));
+	  }
+	
+	  _createClass(_Card, [{
+	    key: 'render',
+	    value: function render() {
+	      var _props2 = this.props;
+	      var connectDragSource = _props2.connectDragSource;
+	      var isDragging = _props2.isDragging;
+	
+	      var opacity = isDragging ? 0.4 : 1;
+	
+	      var card = this.props.card || {};
+	
+	      var deckImage = card.id ? card.id + '.jpg' : 'blank.png';
+	
+	      return connectDragSource(_react2.default.createElement(
+	        'div',
+	        { className: 'content' },
+	        _react2.default.createElement('img', { src: '/assets/img/m/' + deckImage, className: 'img-rounded img-responsive' }),
+	        _react2.default.createElement(
+	          'span',
+	          null,
+	          card.cost ? 'Cost ' + card.cost : ''
+	        )
+	      ));
+	    }
+	  }]);
+	
+	  return _Card;
+	})(_react.Component);
+	
+	_Card.propTypes = {
+	  connectDragSource: _react.PropTypes.func.isRequired,
+	  isDragging: _react.PropTypes.bool.isRequired,
+	  card: _react.PropTypes.object
+	};
+	
+	var Card = (0, _reactDnd.DragSource)('card', {
+	  beginDrag: function beginDrag(props) {
+	    return {
+	      card: props.card
+	    };
+	  }
+	}, function (connect, monitor) {
+	  return {
+	    connectDragSource: connect.dragSource(),
+	    isDragging: monitor.isDragging()
+	  };
+	})(_Card);
+	
+	var DeckServant = (function (_Component6) {
+	  _inherits(DeckServant, _Component6);
 	
 	  function DeckServant() {
 	    _classCallCheck(this, DeckServant);

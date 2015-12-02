@@ -1,13 +1,13 @@
-import React, {Component} from 'react';
+import React, {Component, PropTypes} from 'react';
 import classNames from 'classnames';
-import {DragDropContext} from 'react-dnd';
+import {DragDropContext, DropTarget, DragSource} from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import ServantAction from '../actions/servant';
 import ServantStore from '../stores/servant';
 
 class Deck extends Component {
   state = {
-    deck: null,
+    cards: [],
     servants: []
   };
   constructor() {
@@ -15,8 +15,13 @@ class Deck extends Component {
     this._onChange = this._onChange.bind(this);
   }
   _onChange() {
+    const cards = _.range(0, 8).map((index) => {
+      if (index  == 4) { return null; }
+      return _.clone(ServantStore.getServants()[index], true);
+    });
     this.setState({
-      servants: ServantStore.getServants()
+      servants: ServantStore.getServants(),
+      cards: cards
     });
   }
   componentDidMount() {
@@ -29,14 +34,13 @@ class Deck extends Component {
   render() {
     return (
       <div>
-        <DeckForm />
-        <DeckContainer servants={this.state.servants} />
+        <DeckForm cards={this.state.cards} />
+        <DeckContainer cards={this.state.cards} servants={this.state.servants} />
         <DeckServant servants={this.state.servants} />
       </div>
     );
   }
 }
-
 export default DragDropContext(HTML5Backend)(Deck);
 
 class DeckForm extends Component {
@@ -62,11 +66,14 @@ class DeckForm extends Component {
 }
 
 class DeckContainer extends Component {
+  _onDrop(item) {
+    console.log(item);
+  }
   render() {
-    const cardNodes = _.range(1, 9).map((card, index) => {
-      let servant;
+    const cardNodes = _.range(0, 8).map((index) => {
       return (
-        <Card key={index} index={index} servant={servant} />
+        <CardContainer key={index} index={index} card={this.props.cards[index]}
+                       onDrop={this._onDrop.bind(this)} />
       );
     });
 
@@ -183,31 +190,86 @@ class DeckContainer extends Component {
   }
 }
 
-class Card extends Component {
-  render() {
-    let servant;
-    const cls = classNames('card', `tribe-`);
-    const bgImage = this.props.index <= 5 ? 'deck.png' : 'side-board.png';
-    const deckImage = servant ? `${servant.id}.jpg` : 'blank.png';
-    const costNode = servant ? (
-      <span>
-        Cost {servant.cost}
-      </span>
-    ) : '';
+class _CardContainer extends Component {
+  static propTypes = {
+    connectDropTarget: PropTypes.func.isRequired,
+    isOver: PropTypes.bool.isRequired,
+    canDrop: PropTypes.bool.isRequired,
+    onDrop: PropTypes.func.isRequired
+  };
 
-    return (
+  render() {
+    const {connectDropTarget, isOver, canDrop} = this.props;
+    const isActive = isOver && canDrop;
+
+    let backgroundColor = null;
+    if (isActive) {
+      backgroundColor = 'darkgreen';
+    } else if (canDrop) {
+      backgroundColor = 'darkkhaki';
+    }
+
+    const card = this.props.card || {};
+
+    const tribeCls = card.tribe_id ? `tribe-${card.tribe_id}` : null;
+    const cls = classNames('card', tribeCls);
+    const bgImage = this.props.index <= 5 ? 'deck.png' : 'side-board.png';
+
+    return connectDropTarget(
       <div className={cls}>
         <div className="background">
-          <img src={`/assets/img/m/${bgImage}`} className="img-rounded img-responsive" />
+          <img src={`/assets/img/m/${bgImage}`} className="img-rounded img-responsive" style={{backgroundColor: backgroundColor}} />
         </div>
-        <div className="content">
-          <img src={`/assets/img/m/${deckImage}`} className="img-rounded img-responsive" />
-          {costNode}
-        </div>
+        <Card card={card} />
       </div>
     );
   }
 }
+const CardContainer = DropTarget('card', {
+  drop(props, monitor) {
+    props.onDrop(monitor.getItem());
+  }
+}, (connect, monitor) => ({
+  connectDropTarget: connect.dropTarget(),
+  isOver: monitor.isOver(),
+  canDrop: monitor.canDrop()
+}))(_CardContainer);
+
+class _Card extends Component {
+  static propTypes = {
+    connectDragSource: PropTypes.func.isRequired,
+    isDragging: PropTypes.bool.isRequired,
+    card: PropTypes.object
+  };
+
+  render() {
+    const {connectDragSource, isDragging} = this.props;
+    const opacity = isDragging ? 0.4 : 1;
+
+    const card = this.props.card || {};
+
+    const deckImage = card.id ? `${card.id}.jpg` : 'blank.png';
+
+    return connectDragSource(
+      <div className="content">
+        <img src={`/assets/img/m/${deckImage}`} className="img-rounded img-responsive" />
+        <span>
+          {card.cost ? `Cost ${card.cost}` : ''}
+        </span>
+      </div>
+    )
+  }
+}
+const Card = DragSource('card', {
+  beginDrag(props) {
+    return {
+      card: props.card
+    };
+  }
+}, (connect, monitor) => ({
+  connectDragSource: connect.dragSource(),
+  isDragging: monitor.isDragging()
+}))(_Card);
 
 class DeckServant extends Component {
   componentDidUpdate() {
