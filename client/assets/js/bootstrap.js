@@ -5,7 +5,7 @@ import history from './history';
 import App from './components/app';
 import Servant from './components/servant';
 import ServantDetail from './components/servant-detail';
-import Deck from './components/deck';
+import Deck from './components/deck/deck';
 import Chart from './components/chart';
 import Prize from './components/prize';
 import About from './components/about';

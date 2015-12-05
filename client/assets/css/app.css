@@ -137,12 +137,6 @@ img {
     border-radius: 0;
     padding: 2px 7px;
 }
-[ng-click] {
-    cursor: pointer;
-}
-[ng-drag] {
-    cursor: move;
-}
 
 /* Servant */
 #servant td:not(:nth-child(5)) {
@@ -383,6 +377,9 @@ img {
 }
 .card>div {
     position: relative;
+}
+.card>div.content {
+    cursor: move;
 }
 .card>div.content>img {
     border: 2px solid transparent;
