@@ -93,7 +93,7 @@ class DetailSection extends Component {
       <div className="detail">
         <div className="row">
           <div className="col-lg-4 col-md-5 col-sm-5">
-            <div className="col-sm-12" className="logo">
+            <div className="col-sm-12 logo">
               <a href={`assets/img/l/${servant.id}.jpg`} target="_self">
                 <img src={servant.id ? `assets/img/l/${servant.id}.jpg` : ''}
                      className="center-block img-rounded img-responsive" />
@@ -215,7 +215,7 @@ class DetailSection extends Component {
           </div>
         </div>
 
-        <div className="skill" className="row">
+        <div className="skill row">
           <dl className="col-sm-6">
             <dt><b>Active Skill</b></dt>
             {createSkillNode('active')}

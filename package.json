@@ -65,6 +65,7 @@
     "react-dom": "0.14.2",
     "react-nvd3": "0.2.0",
     "react-router": "1.0.0",
+    "react-zeroclipboard": "3.0.0",
     "style-loader": "0.13.0",
     "url-loader": "0.5.6",
     "webpack": "1.12.6",

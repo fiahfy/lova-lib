@@ -4,24 +4,22 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import ServantAction from '../../actions/servant';
 import ServantStore from '../../stores/servant';
 import DeckDropContainer from './deck-drop-container';
+import DeckUtils from '../../utils/deck-utils';
 
 class Deck extends Component {
   state = {
     cards: [],
-    servants: []
+    servants: [],
+    filter: {}
   };
   constructor() {
     super();
     this._onChange = this._onChange.bind(this);
   }
   _onChange() {
-    const cards = _.range(0, 8).map((index) => {
-      if (index  == 4) { return null; }
-      return _.clone(ServantStore.getServants()[index], true);
-    });
     this.setState({
       servants: ServantStore.getServants(),
-      cards: cards
+      cards:    DeckUtils.getCards(this.props.params.hash)
     });
   }
   _onDrop(droppedIndex, {index, card}) {
@@ -36,8 +34,16 @@ class Deck extends Component {
       cards: cards
     });
   }
+  _handleFilterChange(filter) {
+    this.setState({
+      filter: filter
+    });
+  }
   componentDidMount() {
     ServantStore.addChangeListener(this._onChange);
+    ServantAction.fetchServants();
+  }
+  componentWillReceiveProps() {
     ServantAction.fetchServants();
   }
   componentDidUpdate() {
@@ -51,7 +57,9 @@ class Deck extends Component {
   }
   render() {
     return (
-      <DeckDropContainer {...this.state} handleCardChange={this._handleCardChange.bind(this)} onDrop={(item) => this._onDrop(null, item)} />
+      <DeckDropContainer {...this.state} handleCardChange={this._handleCardChange.bind(this)}
+                                         handleFilterChange={this._handleFilterChange.bind(this)}
+                                         onDrop={(item) => this._onDrop(null, item)} />
     )
   }
 }

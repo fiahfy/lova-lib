@@ -1,3 +1,5 @@
+import ServantStore from '../stores/servant';
+
 export default class DeckUtils {
   static getMana(cards) {
     const fill = _.range(0, 6).every((index) => {
@@ -46,7 +48,22 @@ export default class DeckUtils {
       }
       return card.id;
     });
-    console.log(cardIds);
     return window.btoa(JSON.stringify(cardIds));
+  }
+  static getCards(hash) {
+    if (!hash) {
+      return [];
+    }
+    let cardIds = [];
+    try {
+      cardIds = JSON.parse(window.atob(hash));
+    } catch (e) {
+      console.warn(`Invalid Deck Hash: ${hash}`);
+      return [];
+    }
+
+    return _.range(0, 8).map((index) => {
+      return ServantStore.getServant(cardIds[index]);
+    });
   }
 }

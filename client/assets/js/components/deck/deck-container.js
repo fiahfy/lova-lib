@@ -6,7 +6,23 @@ export default class DeckContainer extends Component {
   _onDrop(droppedIndex, {index, card}) {
     this.props.handleCardChange(droppedIndex, index, card);
   }
+  _handleTribeClick(tribe_name) {
+    const {filter, handleFilterChange} = this.props;
+    filter.tribe_name = tribe_name;
+    handleFilterChange(filter);
+  }
+  _handleTypeClick(type) {
+    const {filter, handleFilterChange} = this.props;
+    filter.type = type;
+    handleFilterChange(filter);
+  }
+  _handleQueryChange() {
+    const {filter, handleFilterChange} = this.props;
+    filter.name = this.refs.query.value;
+    handleFilterChange(filter);
+  }
   componentDidMount() {
+    // TODO: dont use jquery
     const dummyWrapper = $('<div>');
     const container = $('#deck-container');
     const baseTop = container.offset().top;
@@ -22,39 +38,38 @@ export default class DeckContainer extends Component {
     });
   }
   render() {
-    const mana = DeckUtils.getMana(this.props.cards);
-    const bonusMana = DeckUtils.getBonusMana(this.props.cards);
-    const totalMana = DeckUtils.getTotalMana(this.props.cards);
+    const {cards, servants, filter} = this.props;
+
+    const mana = DeckUtils.getMana(cards);
+    const bonusMana = DeckUtils.getBonusMana(cards);
+    const totalMana = DeckUtils.getTotalMana(cards);
 
     const cardNodes = _.range(0, 8).map((index) => {
       return (
-        <CardContainer key={index} index={index} card={this.props.cards[index]}
+        <CardContainer key={index} index={index} card={cards[index]}
                        onDrop={(item) => this._onDrop(index, item)} />
       );
     });
 
-    const tribeIdOptionNodes = _.uniq(this.props.servants, (value, key) => {
-      return value.tribe_id;
+    const tribeIdOptionNodes = _.uniq(servants, (value, key) => {
+      return value.tribe_name;
     }).map((servant, index) => {
       return (
         <li key={index}>
-          <a>{servant.tribe_name}</a>
+          <a onClick={this._handleTribeClick.bind(this, servant.tribe_name)}>{servant.tribe_name}</a>
         </li>
       );
     });
 
-    const typeOptionNodes = _.uniq(this.props.servants, (value, key) => {
+    const typeOptionNodes = _.uniq(servants, (value, key) => {
       return value.type;
     }).map((servant, index) => {
       return (
         <li key={index}>
-          <a>{servant.type}</a>
+          <a onClick={this._handleTypeClick.bind(this, servant.type)}>{servant.type}</a>
         </li>
       );
     });
-
-    const tribeName = '';
-    const type = '';
 
     return (
       <div id="deck-container">
@@ -78,7 +93,7 @@ export default class DeckContainer extends Component {
             <div className="btn-group">
               <button type="button" className="btn btn-primary dropdown-toggle"
                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                {tribeName} <span className="caret" />
+                {filter.tribe_name ? filter.tribe_name : `Select Tribe...`} <span className="caret" />
               </button>
               <ul className="dropdown-menu">
                 {tribeIdOptionNodes}
@@ -87,14 +102,15 @@ export default class DeckContainer extends Component {
             <div className="btn-group">
               <button type="button" className="btn btn-primary dropdown-toggle"
                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                {type} <span className="caret" />
+                {filter.type ? filter.type : `Select Type...`} <span className="caret" />
               </button>
               <ul className="dropdown-menu">
                 {typeOptionNodes}
               </ul>
             </div>
           </div>
-          <input type="text" value="" placeholder="Input Keyword..." className="form-control" />
+          <input type="text" placeholder="Input Keyword..." ref="query"
+                 className="form-control" onChange={this._handleQueryChange.bind(this)} />
         </div>
 
         {/*

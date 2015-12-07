@@ -6,36 +6,34 @@ import Card from './card';
 class CardContainer extends Component {
   static propTypes = {
     connectDropTarget: PropTypes.func.isRequired,
-    isOver: PropTypes.bool.isRequired,
-    canDrop: PropTypes.bool.isRequired,
-    onDrop: PropTypes.func,
-    disabled: PropTypes.bool,
-    index: PropTypes.number,
-    card: PropTypes.object
+    isOver:            PropTypes.bool.isRequired,
+    canDrop:           PropTypes.bool.isRequired,
+    onDrop:            PropTypes.func,
+    disabled:          PropTypes.bool,
+    index:             PropTypes.number,
+    card:              PropTypes.object
+  };
+  static defaultProps = {
+    onDrop:   () => {},
+    disabled: false,
+    index:    null,
+    card:     null
   };
 
   render() {
-    const {connectDropTarget, isOver, canDrop} = this.props;
-    const isActive = isOver && canDrop;
+    const {connectDropTarget, index, card} = this.props;
 
-    let backgroundColor = null;
-    if (isActive) {
-      backgroundColor = 'darkgreen';
-    } else if (canDrop) {
-      backgroundColor = 'darkkhaki';
-    }
-
-    const tribeCls = this.props.card ? `tribe-${this.props.card.tribe_id}` : null;
+    const tribeCls = card ? `tribe-${card.tribe_id}` : null;
     const cls = classNames('card', tribeCls);
-    const bgImage = this.props.index <= 5 ? 'deck.png' : 'side-board.png';
+    const bgImage = index === null ? 'blank.png' : index <= 5 ? 'deck.png' : 'side-board.png';
 
     return connectDropTarget(
       <div className={cls}>
         <div className="background">
           <img src={`/assets/img/m/${bgImage}`}
-               className="img-rounded img-responsive" style={{backgroundColor: backgroundColor}} />
+               className="img-rounded img-responsive" />
         </div>
-        <Card index={this.props.index} card={this.props.card} />
+        <Card index={index} card={card} />
       </div>
     );
   }
@@ -46,6 +44,6 @@ export default DropTarget((props) => (props.disabled ? '' : 'card'), {
   }
 }, (connect, monitor) => ({
   connectDropTarget: connect.dropTarget(),
-  isOver: monitor.isOver(),
-  canDrop: monitor.canDrop()
+  isOver:            monitor.isOver(),
+  canDrop:           monitor.canDrop()
 }))(CardContainer);

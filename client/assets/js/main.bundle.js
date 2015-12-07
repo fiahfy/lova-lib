@@ -60,33 +60,9 @@
 	
 	var _history2 = _interopRequireDefault(_history);
 	
-	var _app = __webpack_require__(212);
+	var _routes = __webpack_require__(409);
 	
-	var _app2 = _interopRequireDefault(_app);
-	
-	var _servant = __webpack_require__(213);
-	
-	var _servant2 = _interopRequireDefault(_servant);
-	
-	var _servantDetail = __webpack_require__(228);
-	
-	var _servantDetail2 = _interopRequireDefault(_servantDetail);
-	
-	var _deck = __webpack_require__(401);
-	
-	var _deck2 = _interopRequireDefault(_deck);
-	
-	var _chart = __webpack_require__(342);
-	
-	var _chart2 = _interopRequireDefault(_chart);
-	
-	var _prize = __webpack_require__(346);
-	
-	var _prize2 = _interopRequireDefault(_prize);
-	
-	var _about = __webpack_require__(351);
-	
-	var _about2 = _interopRequireDefault(_about);
+	var _routes2 = _interopRequireDefault(_routes);
 	
 	__webpack_require__(352);
 	
@@ -94,20 +70,7 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var routes = _react2.default.createElement(
-	  _reactRouter.Route,
-	  { path: '/', component: _app2.default },
-	  _react2.default.createElement(_reactRouter.IndexRedirect, { to: 'deck/' }),
-	  _react2.default.createElement(_reactRouter.Route, { path: 'deck/', component: _deck2.default }),
-	  _react2.default.createElement(_reactRouter.Route, { path: 'servants/', component: _servant2.default }),
-	  _react2.default.createElement(_reactRouter.Route, { path: 'servants/:id/', component: _servantDetail2.default }),
-	  _react2.default.createElement(_reactRouter.Route, { path: 'charts/', component: _chart2.default }),
-	  _react2.default.createElement(_reactRouter.Route, { path: 'prize/', component: _prize2.default }),
-	  _react2.default.createElement(_reactRouter.Route, { path: 'about/', component: _about2.default }),
-	  _react2.default.createElement(_reactRouter.Redirect, { from: '*', to: '/' })
-	);
-	
-	_reactDom2.default.render(_react2.default.createElement(_reactRouter.Router, { routes: routes, history: _history2.default }), document.querySelector('#app'));
+	_reactDom2.default.render(_react2.default.createElement(_reactRouter.Router, { routes: _routes2.default, history: _history2.default }), document.querySelector('#app'));
 
 /***/ },
 /* 1 */
@@ -48179,7 +48142,7 @@
 	            { className: 'col-lg-4 col-md-5 col-sm-5' },
 	            _react2.default.createElement(
 	              'div',
-	              { className: 'col-sm-12', className: 'logo' },
+	              { className: 'col-sm-12 logo' },
 	              _react2.default.createElement(
 	                'a',
 	                { href: 'assets/img/l/' + servant.id + '.jpg', target: '_self' },
@@ -48512,7 +48475,7 @@
 	        ),
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'skill', className: 'row' },
+	          { className: 'skill row' },
 	          _react2.default.createElement(
 	            'dl',
 	            { className: 'col-sm-6' },
@@ -92412,7 +92375,7 @@
 /* 401 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(_, $) {'use strict';
+	/* WEBPACK VAR INJECTION */(function($) {'use strict';
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
@@ -92444,6 +92407,10 @@
 	
 	var _deckDropContainer2 = _interopRequireDefault(_deckDropContainer);
 	
+	var _deckUtils = __webpack_require__(408);
+	
+	var _deckUtils2 = _interopRequireDefault(_deckUtils);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -92462,7 +92429,8 @@
 	
 	    _this.state = {
 	      cards: [],
-	      servants: []
+	      servants: [],
+	      filter: {}
 	    };
 	
 	    _this._onChange = _this._onChange.bind(_this);
@@ -92472,15 +92440,9 @@
 	  _createClass(Deck, [{
 	    key: '_onChange',
 	    value: function _onChange() {
-	      var cards = _.range(0, 8).map(function (index) {
-	        if (index == 4) {
-	          return null;
-	        }
-	        return _.clone(_servant4.default.getServants()[index], true);
-	      });
 	      this.setState({
 	        servants: _servant4.default.getServants(),
-	        cards: cards
+	        cards: _deckUtils2.default.getCards(this.props.params.hash)
 	      });
 	    }
 	  }, {
@@ -92503,9 +92465,21 @@
 	      });
 	    }
 	  }, {
+	    key: '_handleFilterChange',
+	    value: function _handleFilterChange(filter) {
+	      this.setState({
+	        filter: filter
+	      });
+	    }
+	  }, {
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
 	      _servant4.default.addChangeListener(this._onChange);
+	      _servant2.default.fetchServants();
+	    }
+	  }, {
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps() {
 	      _servant2.default.fetchServants();
 	    }
 	  }, {
@@ -92526,7 +92500,9 @@
 	    value: function render() {
 	      var _this2 = this;
 	
-	      return _react2.default.createElement(_deckDropContainer2.default, _extends({}, this.state, { handleCardChange: this._handleCardChange.bind(this), onDrop: function onDrop(item) {
+	      return _react2.default.createElement(_deckDropContainer2.default, _extends({}, this.state, { handleCardChange: this._handleCardChange.bind(this),
+	        handleFilterChange: this._handleFilterChange.bind(this),
+	        onDrop: function onDrop(item) {
 	          return _this2._onDrop(null, item);
 	        } }));
 	    }
@@ -92536,13 +92512,13 @@
 	})(_react.Component);
 	
 	exports.default = (0, _reactDnd.DragDropContext)(_reactDndHtml5Backend2.default)(Deck);
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(214), __webpack_require__(216)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(216)))
 
 /***/ },
 /* 402 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	/* WEBPACK VAR INJECTION */(function(_) {'use strict';
 	
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 	
@@ -92582,7 +92558,11 @@
 	  _createClass(DeckServant, [{
 	    key: 'render',
 	    value: function render() {
-	      var servantNodes = this.props.servants.sort(function (a, b) {
+	      var _props = this.props;
+	      var servants = _props.servants;
+	      var filter = _props.filter;
+	
+	      var servantNodes = _.filter(servants, filter).sort(function (a, b) {
 	        return a.tribe_id * 1000 + a.tribe_code - (b.tribe_id * 1000 + b.tribe_code);
 	      }).map(function (servant, index) {
 	        var cls = (0, _classnames2.default)('card', 'tribe-' + servant.tribe_id, { setted: false });
@@ -92605,6 +92585,7 @@
 	})(_react.Component);
 	
 	exports.default = DeckServant;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(214)))
 
 /***/ },
 /* 403 */
@@ -92654,21 +92635,12 @@
 	    value: function render() {
 	      var _props = this.props;
 	      var connectDropTarget = _props.connectDropTarget;
-	      var isOver = _props.isOver;
-	      var canDrop = _props.canDrop;
+	      var index = _props.index;
+	      var card = _props.card;
 	
-	      var isActive = isOver && canDrop;
-	
-	      var backgroundColor = null;
-	      if (isActive) {
-	        backgroundColor = 'darkgreen';
-	      } else if (canDrop) {
-	        backgroundColor = 'darkkhaki';
-	      }
-	
-	      var tribeCls = this.props.card ? 'tribe-' + this.props.card.tribe_id : null;
+	      var tribeCls = card ? 'tribe-' + card.tribe_id : null;
 	      var cls = (0, _classnames2.default)('card', tribeCls);
-	      var bgImage = this.props.index <= 5 ? 'deck.png' : 'side-board.png';
+	      var bgImage = index === null ? 'blank.png' : index <= 5 ? 'deck.png' : 'side-board.png';
 	
 	      return connectDropTarget(_react2.default.createElement(
 	        'div',
@@ -92677,9 +92649,9 @@
 	          'div',
 	          { className: 'background' },
 	          _react2.default.createElement('img', { src: '/assets/img/m/' + bgImage,
-	            className: 'img-rounded img-responsive', style: { backgroundColor: backgroundColor } })
+	            className: 'img-rounded img-responsive' })
 	        ),
-	        _react2.default.createElement(_card2.default, { index: this.props.index, card: this.props.card })
+	        _react2.default.createElement(_card2.default, { index: index, card: card })
 	      ));
 	    }
 	  }]);
@@ -92695,6 +92667,12 @@
 	  disabled: _react.PropTypes.bool,
 	  index: _react.PropTypes.number,
 	  card: _react.PropTypes.object
+	};
+	CardContainer.defaultProps = {
+	  onDrop: function onDrop() {},
+	  disabled: false,
+	  index: null,
+	  card: null
 	};
 	exports.default = (0, _reactDnd.DropTarget)(function (props) {
 	  return props.disabled ? '' : 'card';
@@ -92750,21 +92728,20 @@
 	    value: function render() {
 	      var _props = this.props;
 	      var connectDragSource = _props.connectDragSource;
-	      var isDragging = _props.isDragging;
+	      var card = _props.card;
 	
-	      var opacity = isDragging ? 0.4 : 1;
-	
-	      var deckImage = this.props.card ? this.props.card.id + '.jpg' : 'blank.png';
+	      var deckImage = card ? card.id + '.jpg' : 'blank.png';
 	
 	      return connectDragSource(_react2.default.createElement(
 	        'div',
 	        { className: 'content' },
-	        _react2.default.createElement('img', { 'data-original': '/assets/img/m/' + deckImage, src: '/assets/img/m/blank.png',
+	        _react2.default.createElement('img', { 'data-original': '/assets/img/m/' + deckImage,
+	          src: '/assets/img/m/blank.png',
 	          className: 'img-rounded img-responsive lazy' }),
 	        _react2.default.createElement(
 	          'span',
 	          null,
-	          this.props.card ? 'Cost ' + this.props.card.cost : ''
+	          card ? 'Cost ' + card.cost : ''
 	        )
 	      ), 'copy');
 	    }
@@ -92778,6 +92755,10 @@
 	  isDragging: _react.PropTypes.bool.isRequired,
 	  index: _react.PropTypes.number,
 	  card: _react.PropTypes.object
+	};
+	Card.defaultProps = {
+	  index: null,
+	  card: null
 	};
 	exports.default = (0, _reactDnd.DragSource)('card', {
 	  beginDrag: function beginDrag(props) {
@@ -92845,15 +92826,20 @@
 	    value: function render() {
 	      var _props = this.props;
 	      var connectDropTarget = _props.connectDropTarget;
-	      var isOver = _props.isOver;
-	      var canDrop = _props.canDrop;
+	      var handleCardChange = _props.handleCardChange;
+	      var handleFilterChange = _props.handleFilterChange;
+	      var servants = _props.servants;
+	      var cards = _props.cards;
+	      var filter = _props.filter;
 	
 	      return connectDropTarget(_react2.default.createElement(
 	        'div',
 	        null,
-	        _react2.default.createElement(_deckForm2.default, { cards: this.props.cards }),
-	        _react2.default.createElement(_deckContainer2.default, { cards: this.props.cards, servants: this.props.servants, handleCardChange: this.props.handleCardChange }),
-	        _react2.default.createElement(_deckServant2.default, { servants: this.props.servants })
+	        _react2.default.createElement(_deckForm2.default, { cards: cards }),
+	        _react2.default.createElement(_deckContainer2.default, { cards: cards, servants: servants, filter: filter,
+	          handleCardChange: handleCardChange,
+	          handleFilterChange: handleFilterChange }),
+	        _react2.default.createElement(_deckServant2.default, { servants: servants, filter: filter })
 	      ));
 	    }
 	  }]);
@@ -92861,6 +92847,16 @@
 	  return DeckDropContainer;
 	})(_react.Component);
 	
+	DeckDropContainer.propTypes = {
+	  connectDropTarget: _react.PropTypes.func.isRequired,
+	  isOver: _react.PropTypes.bool.isRequired,
+	  canDrop: _react.PropTypes.bool.isRequired,
+	  onDrop: _react.PropTypes.func,
+	  handleCardChange: _react.PropTypes.func,
+	  servants: _react.PropTypes.array,
+	  cards: _react.PropTypes.array,
+	  filter: _react.PropTypes.object
+	};
 	exports.default = (0, _reactDnd.DropTarget)('card', {
 	  drop: function drop(props, monitor) {
 	    var hasDroppedOnChild = monitor.didDrop();
@@ -92881,7 +92877,7 @@
 /* 406 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	/* WEBPACK VAR INJECTION */(function($) {'use strict';
 	
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 	
@@ -92892,6 +92888,10 @@
 	var _react = __webpack_require__(1);
 	
 	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactZeroclipboard = __webpack_require__(411);
+	
+	var _reactZeroclipboard2 = _interopRequireDefault(_reactZeroclipboard);
 	
 	var _deckUtils = __webpack_require__(408);
 	
@@ -92919,13 +92919,35 @@
 	    value: function _getDeckURL() {
 	      var a = window.document.createElement('a');
 	      a.href = window.location.href;
-	      return a.protocol + '//' + a.hostname + (a.port ? ':' + a.port : a.port) + '/deck/' + _deckUtils2.default.getHash(this.props.cards);
+	      return a.protocol + '//' + a.hostname + (a.port ? ':' + a.port : a.port) + '/deck/' + _deckUtils2.default.getHash(this.props.cards) + '/';
+	    }
+	  }, {
+	    key: '_onAfterCopy',
+	    value: function _onAfterCopy() {
+	      // TODO: dont use jquery
+	      var button = $('.copy-clipboard');
+	      button.tooltip('show');
+	      setTimeout(function () {
+	        button.tooltip('hide');
+	      }, 1000);
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      // TODO: dont use jquery
+	      var button = $('.copy-clipboard');
+	      button.tooltip({
+	        container: 'body',
+	        title: 'Copied',
+	        placement: 'bottom',
+	        trigger: 'manual'
+	      });
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var url = this._getDeckURL();
-	      console.log(url);
+	
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'container', id: 'deck' },
@@ -92951,11 +92973,13 @@
 	              'Hold to Copy'
 	            ),
 	            _react2.default.createElement(
-	              'button',
-	              { className: 'hidden-xs btn btn-primary copy-clipboard',
-	                'data-toggle': 'tooltip', 'data-placement': 'bottom',
-	                'data-clipboard-text': url },
-	              'Copy'
+	              _reactZeroclipboard2.default,
+	              { text: url, onAfterCopy: this._onAfterCopy.bind(this) },
+	              _react2.default.createElement(
+	                'button',
+	                { className: 'hidden-xs btn btn-primary copy-clipboard' },
+	                'Copy'
+	              )
 	            )
 	          )
 	        )
@@ -92967,6 +92991,7 @@
 	})(_react.Component);
 	
 	exports.default = DeckForm;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(216)))
 
 /***/ },
 /* 407 */
@@ -93018,8 +93043,39 @@
 	      this.props.handleCardChange(droppedIndex, index, card);
 	    }
 	  }, {
+	    key: '_handleTribeClick',
+	    value: function _handleTribeClick(tribe_name) {
+	      var _props = this.props;
+	      var filter = _props.filter;
+	      var handleFilterChange = _props.handleFilterChange;
+	
+	      filter.tribe_name = tribe_name;
+	      handleFilterChange(filter);
+	    }
+	  }, {
+	    key: '_handleTypeClick',
+	    value: function _handleTypeClick(type) {
+	      var _props2 = this.props;
+	      var filter = _props2.filter;
+	      var handleFilterChange = _props2.handleFilterChange;
+	
+	      filter.type = type;
+	      handleFilterChange(filter);
+	    }
+	  }, {
+	    key: '_handleQueryChange',
+	    value: function _handleQueryChange() {
+	      var _props3 = this.props;
+	      var filter = _props3.filter;
+	      var handleFilterChange = _props3.handleFilterChange;
+	
+	      filter.name = this.refs.query.value;
+	      handleFilterChange(filter);
+	    }
+	  }, {
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
+	      // TODO: dont use jquery
 	      var dummyWrapper = $('<div>');
 	      var container = $('#deck-container');
 	      var baseTop = container.offset().top;
@@ -93039,32 +93095,37 @@
 	    value: function render() {
 	      var _this2 = this;
 	
-	      var mana = _deckUtils2.default.getMana(this.props.cards);
-	      var bonusMana = _deckUtils2.default.getBonusMana(this.props.cards);
-	      var totalMana = _deckUtils2.default.getTotalMana(this.props.cards);
+	      var _props4 = this.props;
+	      var cards = _props4.cards;
+	      var servants = _props4.servants;
+	      var filter = _props4.filter;
+	
+	      var mana = _deckUtils2.default.getMana(cards);
+	      var bonusMana = _deckUtils2.default.getBonusMana(cards);
+	      var totalMana = _deckUtils2.default.getTotalMana(cards);
 	
 	      var cardNodes = _.range(0, 8).map(function (index) {
-	        return _react2.default.createElement(_cardContainer2.default, { key: index, index: index, card: _this2.props.cards[index],
+	        return _react2.default.createElement(_cardContainer2.default, { key: index, index: index, card: cards[index],
 	          onDrop: function onDrop(item) {
 	            return _this2._onDrop(index, item);
 	          } });
 	      });
 	
-	      var tribeIdOptionNodes = _.uniq(this.props.servants, function (value, key) {
-	        return value.tribe_id;
+	      var tribeIdOptionNodes = _.uniq(servants, function (value, key) {
+	        return value.tribe_name;
 	      }).map(function (servant, index) {
 	        return _react2.default.createElement(
 	          'li',
 	          { key: index },
 	          _react2.default.createElement(
 	            'a',
-	            null,
+	            { onClick: _this2._handleTribeClick.bind(_this2, servant.tribe_name) },
 	            servant.tribe_name
 	          )
 	        );
 	      });
 	
-	      var typeOptionNodes = _.uniq(this.props.servants, function (value, key) {
+	      var typeOptionNodes = _.uniq(servants, function (value, key) {
 	        return value.type;
 	      }).map(function (servant, index) {
 	        return _react2.default.createElement(
@@ -93072,14 +93133,11 @@
 	          { key: index },
 	          _react2.default.createElement(
 	            'a',
-	            null,
+	            { onClick: _this2._handleTypeClick.bind(_this2, servant.type) },
 	            servant.type
 	          )
 	        );
 	      });
-	
-	      var tribeName = '';
-	      var type = '';
 	
 	      return _react2.default.createElement(
 	        'div',
@@ -93139,7 +93197,7 @@
 	                'button',
 	                { type: 'button', className: 'btn btn-primary dropdown-toggle',
 	                  'data-toggle': 'dropdown', 'aria-haspopup': 'true', 'aria-expanded': 'false' },
-	                tribeName,
+	                filter.tribe_name ? filter.tribe_name : 'Select Tribe...',
 	                ' ',
 	                _react2.default.createElement('span', { className: 'caret' })
 	              ),
@@ -93156,7 +93214,7 @@
 	                'button',
 	                { type: 'button', className: 'btn btn-primary dropdown-toggle',
 	                  'data-toggle': 'dropdown', 'aria-haspopup': 'true', 'aria-expanded': 'false' },
-	                type,
+	                filter.type ? filter.type : 'Select Type...',
 	                ' ',
 	                _react2.default.createElement('span', { className: 'caret' })
 	              ),
@@ -93167,7 +93225,8 @@
 	              )
 	            )
 	          ),
-	          _react2.default.createElement('input', { type: 'text', value: '', placeholder: 'Input Keyword...', className: 'form-control' })
+	          _react2.default.createElement('input', { type: 'text', placeholder: 'Input Keyword...', ref: 'query',
+	            className: 'form-control', onChange: this._handleQueryChange.bind(this) })
 	        )
 	      );
 	    }
@@ -93183,13 +93242,19 @@
 /* 408 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(_) {"use strict";
+	/* WEBPACK VAR INJECTION */(function(_) {'use strict';
 	
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	
+	var _servant = __webpack_require__(225);
+	
+	var _servant2 = _interopRequireDefault(_servant);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -93199,7 +93264,7 @@
 	  }
 	
 	  _createClass(DeckUtils, null, [{
-	    key: "getMana",
+	    key: 'getMana',
 	    value: function getMana(cards) {
 	      var fill = _.range(0, 6).every(function (index) {
 	        return !!cards[index];
@@ -93207,7 +93272,7 @@
 	      return fill ? 30 : 0;
 	    }
 	  }, {
-	    key: "getBonusMana",
+	    key: 'getBonusMana',
 	    value: function getBonusMana(cards) {
 	      var mana = DeckUtils.getMana(cards);
 	      if (!mana) {
@@ -93233,7 +93298,7 @@
 	      }
 	    }
 	  }, {
-	    key: "getTotalMana",
+	    key: 'getTotalMana',
 	    value: function getTotalMana(cards) {
 	      return _.range(0, 6).reduce(function (previous, current) {
 	        var card = cards[current];
@@ -93244,7 +93309,7 @@
 	      }, 0);
 	    }
 	  }, {
-	    key: "getHash",
+	    key: 'getHash',
 	    value: function getHash(cards) {
 	      var cardIds = _.range(0, 8).map(function (index) {
 	        var card = cards[index];
@@ -93253,8 +93318,25 @@
 	        }
 	        return card.id;
 	      });
-	      console.log(cardIds);
 	      return window.btoa(JSON.stringify(cardIds));
+	    }
+	  }, {
+	    key: 'getCards',
+	    value: function getCards(hash) {
+	      if (!hash) {
+	        return [];
+	      }
+	      var cardIds = [];
+	      try {
+	        cardIds = JSON.parse(window.atob(hash));
+	      } catch (e) {
+	        console.warn('Invalid Deck Hash: ' + hash);
+	        return [];
+	      }
+	
+	      return _.range(0, 8).map(function (index) {
+	        return _servant2.default.getServant(cardIds[index]);
+	      });
 	    }
 	  }]);
 	
@@ -93263,6 +93345,324 @@
 	
 	exports.default = DeckUtils;
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(214)))
+
+/***/ },
+/* 409 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRouter = __webpack_require__(159);
+	
+	var _app = __webpack_require__(212);
+	
+	var _app2 = _interopRequireDefault(_app);
+	
+	var _servant = __webpack_require__(213);
+	
+	var _servant2 = _interopRequireDefault(_servant);
+	
+	var _servantDetail = __webpack_require__(228);
+	
+	var _servantDetail2 = _interopRequireDefault(_servantDetail);
+	
+	var _deck = __webpack_require__(401);
+	
+	var _deck2 = _interopRequireDefault(_deck);
+	
+	var _chart = __webpack_require__(342);
+	
+	var _chart2 = _interopRequireDefault(_chart);
+	
+	var _prize = __webpack_require__(346);
+	
+	var _prize2 = _interopRequireDefault(_prize);
+	
+	var _about = __webpack_require__(351);
+	
+	var _about2 = _interopRequireDefault(_about);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = _react2.default.createElement(
+	  _reactRouter.Route,
+	  { path: '/', component: _app2.default },
+	  _react2.default.createElement(_reactRouter.IndexRedirect, { to: 'deck/' }),
+	  _react2.default.createElement(_reactRouter.Route, { path: 'deck/', component: _deck2.default }),
+	  _react2.default.createElement(_reactRouter.Route, { path: 'deck/:hash/', component: _deck2.default }),
+	  _react2.default.createElement(_reactRouter.Route, { path: 'servants/', component: _servant2.default }),
+	  _react2.default.createElement(_reactRouter.Route, { path: 'servants/:id/', component: _servantDetail2.default }),
+	  _react2.default.createElement(_reactRouter.Route, { path: 'charts/', component: _chart2.default }),
+	  _react2.default.createElement(_reactRouter.Route, { path: 'prize/', component: _prize2.default }),
+	  _react2.default.createElement(_reactRouter.Route, { path: 'about/', component: _about2.default }),
+	  _react2.default.createElement(_reactRouter.Redirect, { from: '*', to: '/' })
+	);
+
+/***/ },
+/* 410 */,
+/* 411 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(global, process) {var React = __webpack_require__(1);
+	var ReactDOM = __webpack_require__(158);
+	var loadScript = __webpack_require__(412);
+	var ZeroClipboard, client;
+	
+	// callbacks waiting for ZeroClipboard to load
+	var waitingForScriptToLoad = [];
+	
+	// these are the active elements using ZeroClipboardComponent
+	// each item in the array should be a [element, callback] pair
+	var eventHandlers = {
+	    copy: [],
+	    afterCopy: [],
+	    error: [],
+	    ready: []
+	};
+	
+	// add a listener, and returns a remover
+	var addZeroListener = function(event, el, fn){
+	    eventHandlers[event].push([el, fn]);
+	    return function(){
+	        var handlers = eventHandlers[event];
+	        for (var i=0; i<handlers.length; i++) {
+	            if (handlers[i][0] === el) {
+	                // mutate the array to remove the listener
+	                handlers.splice(i, 1);
+	                return;
+	            }
+	        }
+	    };
+	};
+	
+	var propToEvent = {
+	    onCopy: 'copy',
+	    onAfterCopy: 'afterCopy',
+	    onError: 'error',
+	    onReady: 'ready'
+	};
+	
+	var readyEventHasHappened = false;
+	
+	// asynchronusly load ZeroClipboard from cdnjs
+	// it should automatically discover the SWF location using some clever hacks :-)
+	var handleZeroClipLoad = function(error){
+	    if (error) {
+	        console.error("Couldn't load zeroclipboard from CDNJS.  Copy will not work.  "
+	            + "Check your Content-Security-Policy.");
+	        console.error(error);
+	    }
+	
+	    // grab it and free up the global
+	    ZeroClipboard = global.ZeroClipboard;
+	    delete global.ZeroClipboard;
+	
+	    ZeroClipboard.config({
+	      swfPath: '//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.swf'
+	    });
+	
+	    client = new ZeroClipboard();
+	
+	    var handleEvent = function(eventName){
+	        client.on(eventName, function(event){
+	            // ready has no active element
+	            if (eventName === 'ready') {
+	                eventHandlers[eventName].forEach(function(xs){
+	                    xs[1](event);
+	                });
+	
+	                readyEventHasHappened = true;
+	                return;
+	            }
+	
+	            var activeElement = ZeroClipboard.activeElement();
+	
+	            // find an event handler for this element
+	            // we use some so we don't continue looking after a match is found
+	            eventHandlers[eventName].some(function(xs){
+	                var element = xs[0], callback = xs[1];
+	                if (element === activeElement) {
+	                    callback(event);
+	                    return true;
+	                }
+	            });
+	        });
+	    };
+	
+	    for (var eventName in eventHandlers) {
+	        handleEvent(eventName);
+	    }
+	
+	    // call the callbacks when ZeroClipboard is ready
+	    // these are set in ReactZeroClipboard::componentDidMount
+	    waitingForScriptToLoad.forEach(function(callback){
+	        callback();
+	    });
+	};
+	
+	var findOrLoadWasCalled = false;
+	function findOrLoadZeroClipboard(){
+	    if (findOrLoadWasCalled) return;
+	    findOrLoadWasCalled = true;
+	
+	    if (global.ZeroClipboard) {
+	        handleZeroClipLoad(null);
+	    }
+	    else {
+	        // load zeroclipboard from CDN
+	        // in production we want the minified version
+	        var ZERO_CLIPBOARD_SOURCE = '//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard';
+	        loadScript(process.env.NODE_ENV === 'production' ? ZERO_CLIPBOARD_SOURCE + '.min.js' : ZERO_CLIPBOARD_SOURCE + '.js', handleZeroClipLoad);
+	    }
+	}
+	
+	// <ReactZeroClipboard 
+	//   text="text to copy"
+	//   html="<b>html to copy</b>"
+	//   richText="{\\rtf1\\ansi\n{\\b rich text to copy}}"
+	//   getText={(Void -> String)}
+	//   getHtml={(Void -> String)}
+	//   getRichText={(Void -> String)}
+	//
+	//   onCopy={(Event -> Void)}
+	//   onAfterCopy={(Event -> Void)}
+	//   onErrorCopy={(Error -> Void)}
+	//
+	//   onReady={(Event -> Void)}
+	// />
+	var ReactZeroClipboard = React.createClass({
+	    ready: function(cb){
+	        findOrLoadZeroClipboard();
+	
+	        if (client) {
+	            // nextTick guarentees asynchronus execution
+	            process.nextTick(cb.bind(this));
+	        }
+	        else {
+	            waitingForScriptToLoad.push(cb.bind(this));
+	        }
+	    },
+	    componentWillMount: function(){
+	        if (readyEventHasHappened && this.props.onReady) {
+	            this.props.onReady();
+	        }
+	    },
+	    componentDidMount: function(){
+	        // wait for ZeroClipboard to be ready, and then bind it to our element
+	        this.eventRemovers = [];
+	        this.ready(function(){
+	            if (!this.isMounted()) return;
+	            var el = ReactDOM.findDOMNode(this);
+	            client.clip(el);
+	
+	            // translate our props to ZeroClipboard events, and add them to
+	            // our listeners
+	            for (var prop in this.props) {
+	                var eventName = propToEvent[prop];
+	
+	                if (eventName && typeof this.props[prop] === "function") {
+	                    var remover = addZeroListener(eventName, el, this.props[prop]);
+	                    this.eventRemovers.push(remover);
+	                }
+	            }
+	
+	            var remover = addZeroListener("copy", el, this.handleCopy);
+	            this.eventRemovers.push(remover);
+	        });
+	    },
+	    componentWillUnmount: function(){
+	        if (client) {
+	            client.unclip(ReactDOM.findDOMNode(this));
+	        }
+	
+	        // remove our event listener
+	        this.eventRemovers.forEach(function(fn){ fn(); });
+	    },
+	    handleCopy: function(){
+	        var p = this.props;
+	
+	        // grab or calculate the different data types
+	        var text = result(p.getText || p.text);
+	        var html = result(p.getHtml || p.html);
+	        var richText = result(p.getRichText || p.richText);
+	
+	        // give ourselves a fresh slate and then set
+	        // any provided data types
+	        client.clearData();
+	        richText != null && client.setRichText(richText);
+	        html     != null && client.setHtml(html);
+	        text     != null && client.setText(text);
+	    },
+	    render: function(){
+	        return React.Children.only(this.props.children);
+	    }
+	});
+	module.exports = ReactZeroClipboard;
+	
+	function result(fnOrValue) {
+	    if (typeof fnOrValue === "function") {
+	        // call it if it's a function
+	        return fnOrValue();
+	    }
+	    else {
+	        // just return it as is
+	        return fnOrValue;
+	    }
+	}
+	
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(4)))
+
+/***/ },
+/* 412 */
+/***/ function(module, exports) {
+
+	var loading = {};
+	
+	module.exports = function loadScript(src, callback){
+	    if (typeof(window) === 'undefined') return;
+	    
+	    // we don't want duplicate script elements
+	    // so we use an array of callbacks instead of
+	    // multiple onload handlers
+	    if (loading[src]) {
+	        loading[src].push(callback);
+	        return;
+	    }
+	
+	    // create the array of callbacks
+	    loading[src] = [callback];
+	
+	    // create a script, and handle success/failure in node callback style
+	    var script = document.createElement('script');
+	    script.onload = function(){
+	        loading[src].forEach(function(cb){
+	            cb();
+	        });
+	        delete loading[src];
+	    };
+	
+	    script.onerror = function(error){
+	        loading[src].forEach(function(cb){
+	            cb(error)
+	        });
+	        delete loading[src];
+	    };
+	
+	    // set the src and append it to the head
+	    // I believe async is true by default, but there's no harm in setting it
+	    script.async = true;
+	    script.src = src;
+	    document.getElementsByTagName("head")[0].appendChild(script);
+	};
+
 
 /***/ }
 /******/ ]);
