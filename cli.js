@@ -2,8 +2,8 @@
 
 var mongoose = require('mongoose');
 var commander = require('commander');
-var commands = require('./server/commands');
-var logger = require('./server/utils/logger');
+var commands = require('./src/server/commands');
+var logger = require('./src/server/utils/logger');
 
 var promise = null;
 

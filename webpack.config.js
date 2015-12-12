@@ -2,13 +2,13 @@ var webpack = require('webpack');
 
 module.exports = {
   debug: true,
-  devtool: 'source-map',
+  devtool: 'cheap-source-map',
   entry: {
-    main: './client/assets/js/bootstrap.js',
-    style: './client/assets/js/loader.js'
+    main: './src/client/bootstrap.js',
+    style: './src/client/loader.js'
   },
   output: {
-    path: './client/assets/',
+    path: './public/assets/',
     publicPath: '/assets/',
     filename: 'js/[name].bundle.js',
     chunkFilename: "js/[id].bundle.js"

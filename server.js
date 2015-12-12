@@ -1,6 +1,6 @@
 'use strict';
 
-var config = require('./server/config/app');
+var config = require('./src/server/config/app');
 var koa = require('koa');
 var app = koa();
 
