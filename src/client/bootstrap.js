@@ -6,6 +6,7 @@ import {configureStore} from './store'
 
 import 'flat-ui/dist/js/flat-ui'
 import 'jquery-lazyload'
+import 'datatables'
 
 const store = configureStore()
 

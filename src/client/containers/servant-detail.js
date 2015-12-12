@@ -1,5 +1,6 @@
 import classNames from 'classnames'
 import React, {Component, PropTypes} from 'react'
+import Helmet from 'react-helmet'
 import {Link} from 'react-router'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
@@ -30,6 +31,12 @@ export default class ServantDetail extends Component {
   state = {
     section: null
   }
+  _getMetaInfo() {
+    const {servant} = this.props
+    const title = `Servant ${servant.tribe_name}-${_.padLeft(servant.tribe_code, 3, 0)} ${servant.name} : LoVATool`
+    const description = servant.oral_tradition
+    return {title, description}
+  }
   componentWillReceiveProps(nextProps) {
     if (this.props.location.pathname === nextProps.location.pathname) {
       return
@@ -53,6 +60,8 @@ export default class ServantDetail extends Component {
     const {section} = this.state
     const {servant, statistics} = this.props
 
+    const {title, description} = this._getMetaInfo()
+
     const navigationNodes = ['detail', 'statistics'].map((navigation, index) => {
       const cls = classNames({active: (section || 'detail') === navigation})
       const url = `/servants/${servant.id}/`
@@ -72,6 +81,8 @@ export default class ServantDetail extends Component {
 
     return (
       <div className="container" id="servant-detail">
+        <Helmet title={title}
+                meta={[{name: 'description', content: description}]} />
         <div className="page-header">
           <h2>{servant.name}
             <small className="pull-right">

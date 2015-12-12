@@ -1,11 +1,43 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router'
+import Helmet from 'react-helmet'
+import GoogleAnalytics from 'react-g-analytics'
 
 export default class App extends Component {
+  _getMetaInfo() {
+    const pathname = this.props.location.pathname
+    const pathes = pathname.match(/^\/(\w+)\//)
+
+    let title = `${_.capitalize(pathes[1])} : LoVA Tool`
+    let description = 'Tool Site for Lord of Vermilion Arena'
+    switch (pathes[1]) {
+      case 'deck':
+        description = 'Deck Simulator for Lord of Vermilion Arena'
+        break;
+      case 'charts':
+        description = 'Charts for Lord of Vermilion Arena'
+        break;
+      case 'prize':
+        description = 'Prize Simulator for Lord of Vermilion Arena'
+        break;
+      case 'about':
+        break;
+      case 'servants':
+        description = 'Servants for Lord of Vermilion Arena'
+        break;
+    }
+
+    return {title, description}
+  }
   render() {
     const year = (new Date()).getFullYear()
+    const {title, description} = this._getMetaInfo()
+
     return (
       <div>
+        <Helmet title={title}
+                meta={[{name: 'description', content: description}]} />
+        <GoogleAnalytics id="UA-41512550-9" />
         <nav className="navbar navbar-default">
           <div className="container">
             <div className="navbar-header">

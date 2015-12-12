@@ -15,7 +15,7 @@ export default class StatisticsSection extends Component {
 
     let datum = []
     datum.push({
-      key: 'Win Rate',
+      key: 'This Servant',
       area: true,
       color: '#1f77b4',
       values: _.filter(statistics, {mode: 'win', map, queue})
@@ -47,7 +47,7 @@ export default class StatisticsSection extends Component {
         tickFormat: d => d3.time.format('%Y-%m-%d')(new Date(d))
       },
       yAxis: {
-        axisLabel: 'Rate (%)',
+        axisLabel: 'Win Rate (%)',
         tickFormat: d => d3.format('.02f')(d),
         axisLabelDistance: -10
       }
@@ -59,7 +59,7 @@ export default class StatisticsSection extends Component {
 
     let datum = []
     datum.push({
-      key: 'Used Rate',
+      key: 'This Servant',
       area: true,
       color: '#9467bd',
       values: _.filter(statistics, {mode: 'used', map, queue})
@@ -91,7 +91,7 @@ export default class StatisticsSection extends Component {
         tickFormat: d => d3.time.format('%Y-%m-%d')(new Date(d))
       },
       yAxis: {
-        axisLabel: 'Rate (%)',
+        axisLabel: 'Used Rate (%)',
         tickFormat: d => d3.format('.02f')(d),
         axisLabelDistance: -10
       }
