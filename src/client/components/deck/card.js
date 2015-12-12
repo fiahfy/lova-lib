@@ -1,22 +1,38 @@
-import React, {Component, PropTypes} from 'react';
-import {DragSource} from 'react-dnd';
+import React, {Component, PropTypes} from 'react'
+import {DragSource} from 'react-dnd'
 
-class Card extends Component {
+const spec = {
+  beginDrag(props) {
+    return {
+      index: props.index,
+      card:  props.card
+    }
+  }
+}
+
+function collect(connect, monitor) {
+  return {
+    connectDragSource: connect.dragSource(),
+    isDragging:        monitor.isDragging()
+  }
+}
+
+@DragSource('card', spec, collect)
+export default class Card extends Component {
   static propTypes = {
     connectDragSource: PropTypes.func.isRequired,
     isDragging:        PropTypes.bool.isRequired,
     index:             PropTypes.number,
     card:              PropTypes.object
-  };
+  }
   static defaultProps = {
     index: null,
     card:  null
-  };
-
+  }
   render() {
-    const {connectDragSource, card} = this.props;
+    const {connectDragSource, card} = this.props
 
-    const deckImage = card ? `${card.id}.jpg` : 'blank.png';
+    const deckImage = card ? `${card.id}.jpg` : 'blank.png'
 
     return connectDragSource(
       <div className="content">
@@ -31,14 +47,3 @@ class Card extends Component {
     )
   }
 }
-export default DragSource('card', {
-  beginDrag(props) {
-    return {
-      index: props.index,
-      card:  props.card
-    };
-  }
-}, (connect, monitor) => ({
-  connectDragSource: connect.dragSource(),
-  isDragging:        monitor.isDragging()
-}))(Card);

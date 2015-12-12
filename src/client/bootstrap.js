@@ -1,13 +1,15 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import {Router} from 'react-router'
-import history from './history';
-import routes from './routes';
+import 'babel-polyfill'
+import React from 'react'
+import ReactDOM from 'react-dom'
+import Root from './containers/root'
+import {configureStore} from './store'
 
-import 'flat-ui/dist/js/flat-ui';
-import 'jquery-lazyload';
+import 'flat-ui/dist/js/flat-ui'
+import 'jquery-lazyload'
+
+const store = configureStore()
 
 ReactDOM.render(
-  <Router routes={routes} history={history} />,
+  <Root store={store} />,
   document.querySelector('#app')
-);
+)

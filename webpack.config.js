@@ -29,9 +29,10 @@ module.exports = {
     //    warnings: false
     //  }
     //}),
+    new webpack.NoErrorsPlugin(),
     new webpack.ProvidePlugin({
-      $: 'jquery',
       _: 'lodash',
+      $: 'jquery',
       jQuery: 'jquery',
       'window.jQuery': 'jquery'
     })
@@ -55,6 +56,7 @@ module.exports = {
         exclude: /node_modules/,
         loader: 'babel',
         query: {
+          plugins: ['transform-decorators-legacy'],
           presets: ['es2015', 'stage-0', 'react']
         }
       },

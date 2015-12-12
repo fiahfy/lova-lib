@@ -1,3 +1,3 @@
-import {createHistory, useQueries} from 'history';
+import {createHistory, useQueries} from 'history'
 
-export default useQueries(createHistory)();
+export default useQueries(createHistory)()
