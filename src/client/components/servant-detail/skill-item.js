@@ -36,9 +36,13 @@ export default class SkillItem extends Component {
     if (!name) {
       return (
         <dd>
-          <div className="well well-sm">
-            <small>None</small>
-          </div>
+          <dl className="row">
+            <dd className="col-xs-12">
+              <div className="well well-sm">
+                <small>None</small>
+              </div>
+            </dd>
+          </dl>
         </dd>
       )
     }
@@ -57,8 +61,8 @@ export default class SkillItem extends Component {
           <dd className="col-xs-9">{(effect || '').replace(',', '・') || '-'}</dd>
         </dl>
         <dl className="row">
-          <dt className="col-sm-12">Description</dt>
-          <dd className="col-sm-12">
+          <dt className="col-xs-12">Description</dt>
+          <dd className="col-xs-12">
             <div className="well well-sm">
               <small dangerouslySetInnerHTML={{__html: this._descriptionHTML()}} />
             </div>

@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react'
 import {DragSource} from 'react-dnd'
+import SkillItem from '../servant-detail/skill-item'
 
 const spec = {
   beginDrag(props) {
@@ -29,6 +30,34 @@ export default class Card extends Component {
     index: null,
     card:  null
   }
+  _setupPopover() {
+    const {card} = this.props
+    // TODO: dont use jquery
+    $(this.refs.cardSpan).popover('destroy')
+    $(this.refs.cardSpan).popover({
+      animation: true,
+      html: true,
+      placement: () => {
+        let top = $(this.refs.cardSpan).offset().top;
+        if (top - $(window).scrollTop() < $(window).height() / 2) {
+          return 'bottom'
+        }
+        return 'top'
+      },
+      container: 'body',
+      trigger: 'hover',
+      title: card ? card.name : '',
+      content: () => {
+        return $(this.refs.cardPopup).html()
+      }
+    })
+  }
+  componentDidUpdate() {
+    this._setupPopover()
+  }
+  componentDidMount() {
+    this._setupPopover()
+  }
   render() {
     const {connectDragSource, card} = this.props
 
@@ -39,11 +68,46 @@ export default class Card extends Component {
         <img data-original={`/assets/img/m/${deckImage}`}
              src="/assets/img/m/blank.png"
              className="img-rounded img-responsive lazy" />
-        <span>
+        <span ref="cardSpan">
           {card ? `Cost ${card.cost}` : ''}
         </span>
+        <div ref="cardPopup" className="skill-popover-content">
+          <CardPopup card={card} />
+        </div>
       </div>,
       'copy'
+    )
+  }
+}
+
+class CardPopup extends Component {
+  static propTypes = {
+    card: PropTypes.object
+  }
+  static defaultProps = {
+    card: null
+  }
+  render() {
+    const {card} = this.props
+
+    const createSkillNode = (type) => {
+      const skill = card ? card.skill[type] : {}
+      return (
+        <SkillItem key={type} type={type} {...skill} />
+      )
+    }
+
+    return (
+      <div className="skill-popover">
+        <dl className="col-sm-6">
+          <dt><b>Active Skill</b></dt>
+          {createSkillNode('active')}
+        </dl>
+        <dl className="col-sm-6">
+          <dt><b>Passive Skill</b></dt>
+          {createSkillNode('passive')}
+        </dl>
+      </div>
     )
   }
 }

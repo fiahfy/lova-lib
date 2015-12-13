@@ -76,14 +76,16 @@ export default class Servant extends Component {
     return servants
   }
   componentDidUpdate() {
-    $('table.table').dataTable({
-      paging: false,
-      searching: false,
-      columnDefs: [
-        {orderable: false, targets: 1 ,
-        {orderSequence: ['desc', 'asc'], targets: [6, 7, 8, 9]},
-      ]
-    });
+    // $('table.table').dataTable({
+    //   paging: false,
+    //   searching: false,
+    //   columnDefs: [
+    //     {orderable: false, targets: 1},
+    //     {orderSequence: ['desc', 'asc'], targets: [6, 7, 8, 9]},
+    //   ],
+		//   bAutoWidth: false,
+		//   bDestroy: true
+    // });
   }
   componentWillReceiveProps(nextProps) {
     if (this.props.location.search === nextProps.location.search) {
