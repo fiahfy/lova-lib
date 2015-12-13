@@ -10,7 +10,7 @@ import DevTools from '../containers/dev-tools'
 const funcs = [
   applyMiddleware(thunk),
   reduxReactRouter({routes, history}),
-  applyMiddleware(createLogger()),
+  // applyMiddleware(createLogger()),
   // DevTools.instrument()
 ]
 

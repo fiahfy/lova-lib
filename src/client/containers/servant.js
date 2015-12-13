@@ -85,7 +85,7 @@ export default class Servant extends Component {
     //   ],
 		//   bAutoWidth: false,
 		//   bDestroy: true
-    // });
+    // })
   }
   componentWillReceiveProps(nextProps) {
     if (this.props.location.search === nextProps.location.search) {
