@@ -2,7 +2,7 @@ var webpack = require('webpack');
 
 module.exports = {
   debug: true,
-  devtool: 'cheap-source-map',
+  devtool: false,
   entry: {
     main: './src/client/bootstrap.js',
     style: './src/client/loader.js'
@@ -22,13 +22,14 @@ module.exports = {
     //}),
     //  new webpack.optimize.LimitChunkCountPlugin({maxChunks: 15}),
     //  new webpack.optimize.MinChunkSizePlugin({minChunkSize: 100000}),
-    //new webpack.optimize.DedupePlugin(),
-    //new webpack.optimize.OccurenceOrderPlugin(),
-    //new webpack.optimize.UglifyJsPlugin({
-    //  compress: {
-    //    warnings: false
-    //  }
-    //}),
+    new webpack.optimize.DedupePlugin(),
+    new webpack.optimize.AggressiveMergingPlugin(),
+    new webpack.optimize.OccurenceOrderPlugin(),
+    new webpack.optimize.UglifyJsPlugin({
+     compress: {
+       warnings: false
+     }
+    }),
     new webpack.NoErrorsPlugin(),
     new webpack.ProvidePlugin({
       _: 'lodash',
