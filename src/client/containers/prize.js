@@ -1,8 +1,8 @@
 import classNames from 'classnames'
 import moment from 'moment'
 import React, {Component, PropTypes} from 'react'
-import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
+import {bindActionCreators} from 'redux'
 import * as ActionCreators from '../actions'
 
 function mapStateToProps(state) {
@@ -20,14 +20,14 @@ export default class Prize extends Component {
     actions: PropTypes.object
   }
   state = {
-    view: 0,
-    lotResults: [],
+    view:              0,
+    lotResults:        [],
     lotResultsSummary: []
   }
-  _handleViewClick = (view) => {
+  handleViewClick = (view) => {
     this.setState({view: view})
   }
-  _handleDrawClick = () => {
+  handleDrawClick = () => {
     let times = this.refs.times.value
     times = Math.min(Math.max(1, times), 1000)
     this.refs.times.value = times
@@ -66,6 +66,8 @@ export default class Prize extends Component {
         count: value.count,
         rate: value.rate
       }
+    }).sort((a, b) => {
+      return b.count - a.count
     })
 
     this.setState({
@@ -86,7 +88,7 @@ export default class Prize extends Component {
     ].map((option) => {
       const cls = classNames('btn', 'btn-primary', {active: option.value === view})
       return (
-        <a key={`view-${option.value}`} className={cls} onClick={this._handleViewClick.bind(this, option.value)}>
+        <a key={`view-${option.value}`} className={cls} onClick={this.handleViewClick.bind(this, option.value)}>
           <span className={option.iconClassName} />
         </a>
       )
@@ -171,7 +173,7 @@ export default class Prize extends Component {
               <input type="text" className="form-control" min="1" max="1000" placeholder="1-1000"
                      ref="times" defaultValue="10" />
               <span className="input-group-btn">
-                <button className="btn btn-primary" onClick={this._handleDrawClick}>Draw</button>
+                <button className="btn btn-primary" onClick={this.handleDrawClick}>Draw</button>
               </span>
             </div>
 

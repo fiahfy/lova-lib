@@ -34,6 +34,7 @@ export default class StatusItem extends Component {
         </tbody>
       )
     }
+    
     return (
       <tbody>
       <tr>

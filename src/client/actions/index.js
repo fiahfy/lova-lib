@@ -8,7 +8,7 @@ export const RECEIVE_SPELL_STATISTICS = 'RECEIVE_SPELL_STATISTICS'
 
 export function fetchServant(id) {
   return dispatch => {
-    fetch(`/api/servants/${id}/?with_statistic`)
+    return fetch(`/api/servants/${id}/?with_statistic`)
       .then(response => response.json())
       .then(json => dispatch({
         type:    RECEIVE_SERVANT,
@@ -22,7 +22,7 @@ export function fetchServant(id) {
 
 export function fetchServants() {
   return dispatch => {
-    fetch('/api/servants/?with_statistic')
+    return fetch('/api/servants/?with_statistic')
       .then(response => response.json())
       .then(json => dispatch({
         type:     RECEIVE_SERVANTS,
@@ -36,7 +36,7 @@ export function fetchServants() {
 
 export function fetchPrizes() {
   return dispatch => {
-    fetch('/api/prizes/')
+    return fetch('/api/prizes/')
       .then(response => response.json())
       .then(json => dispatch({
         type:   RECEIVE_PRIZES,
@@ -55,7 +55,7 @@ export function fetchServantStatistics(args) {
     const url = '/api/servants/statistics/?term=month&'
               + _.map(params, (value, key) => `${key}=${value}`).join('&')
 
-    fetch(url)
+    return fetch(url)
       .then(response => response.json())
       .then(json => dispatch({
         type:              RECEIVE_SERVANT_STATISTICS,
@@ -75,7 +75,7 @@ export function fetchSpellStatistics(args) {
     const url = '/api/spells/statistics/?term=month&'
               + _.map(params, (value, key) => `${key}=${value}`).join('&')
 
-    fetch(url)
+    return fetch(url)
       .then(response => response.json())
       .then(json => dispatch({
         type:            RECEIVE_SPELL_STATISTICS,

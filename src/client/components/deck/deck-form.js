@@ -6,7 +6,7 @@ export default class DeckForm extends Component {
   static propTypes = {
     cards: PropTypes.arrayOf(PropTypes.object)
   }
-  _getDeckURL() {
+  getDeckURL() {
     const {cards} = this.props
 
     let a = window.document.createElement('a')
@@ -15,7 +15,7 @@ export default class DeckForm extends Component {
       + a.hostname + (a.port ? ':' + a.port : a.port)
       + '/deck/' + DeckUtils.getHash(cards.map(card => card ? card.id : 0)) + '/'
   }
-  _onAfterCopy() {
+  onAfterCopy() {
     // TODO: dont use jquery
     const button = $('.copy-clipboard')
     button
@@ -37,7 +37,7 @@ export default class DeckForm extends Component {
       })
   }
   render() {
-    const url = this._getDeckURL()
+    const url = this.getDeckURL()
 
     return (
       <div className="container" id="deck">
@@ -51,7 +51,7 @@ export default class DeckForm extends Component {
             <a href={url} className="visible-xs btn btn-primary"
                onclick="return false">Hold to Copy</a>
             <ReactZeroClipboard text={url}
-                                onAfterCopy={this._onAfterCopy.bind(this)}>
+                                onAfterCopy={this.onAfterCopy.bind(this)}>
               <button className="hidden-xs btn btn-primary copy-clipboard">Copy</button>
             </ReactZeroClipboard>
           </span>

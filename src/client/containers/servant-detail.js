@@ -2,8 +2,8 @@ import classNames from 'classnames'
 import React, {Component, PropTypes} from 'react'
 import Helmet from 'react-helmet'
 import {Link} from 'react-router'
-import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
+import {bindActionCreators} from 'redux'
 import * as ActionCreators from '../actions'
 import DetailSection from '../components/servant-detail/detail-section'
 import StatisticsSection from '../components/servant-detail/statistics-section'
@@ -31,7 +31,7 @@ export default class ServantDetail extends Component {
   state = {
     section: null
   }
-  _getMetaInfo() {
+  getMetaInfo() {
     const {servant} = this.props
     const title = `Servant ${servant.tribe_name}-${_.padLeft(servant.tribe_code, 3, 0)} ${servant.name} : LoVATool`
     const description = servant.oral_tradition
@@ -60,7 +60,7 @@ export default class ServantDetail extends Component {
     const {section} = this.state
     const {servant, statistics} = this.props
 
-    const {title, description} = this._getMetaInfo()
+    const {title, description} = this.getMetaInfo()
 
     const navigationNodes = ['detail', 'statistics'].map((navigation, index) => {
       const cls = classNames({active: (section || 'detail') === navigation})

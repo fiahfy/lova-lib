@@ -30,7 +30,7 @@ export default class Card extends Component {
     index: null,
     card:  null
   }
-  _setupPopover() {
+  setupPopover() {
     const {card} = this.props
     // TODO: dont use jquery
     $(this.refs.cardSpan).popover('destroy')
@@ -53,10 +53,10 @@ export default class Card extends Component {
     })
   }
   componentDidUpdate() {
-    this._setupPopover()
+    this.setupPopover()
   }
   componentDidMount() {
-    this._setupPopover()
+    this.setupPopover()
   }
   render() {
     const {connectDragSource, card} = this.props

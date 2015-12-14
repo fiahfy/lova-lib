@@ -9,7 +9,7 @@ export default class SkillItem extends Component {
     cd:          PropTypes.arrayOf(PropTypes.number),
     ap:          PropTypes.arrayOf(PropTypes.number)
   }
-  _descriptionHTML() {
+  descriptionHTML() {
     const {name, description, cd, ap} = this.props
 
     let html = description
@@ -64,7 +64,7 @@ export default class SkillItem extends Component {
           <dt className="col-xs-12">Description</dt>
           <dd className="col-xs-12">
             <div className="well well-sm">
-              <small dangerouslySetInnerHTML={{__html: this._descriptionHTML()}} />
+              <small dangerouslySetInnerHTML={{__html: this.descriptionHTML()}} />
             </div>
           </dd>
         </dl>

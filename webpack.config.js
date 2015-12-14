@@ -14,22 +14,19 @@ module.exports = {
     chunkFilename: "js/[id].bundle.js"
   },
   plugins: [
-    //new webpack.NoErrorsPlugin(),
     //new webpack.DefinePlugin({
     //  'process.env': {
     //    'NODE_ENV': JSON.stringify('production')
     //  }
     //}),
-    //  new webpack.optimize.LimitChunkCountPlugin({maxChunks: 15}),
-    //  new webpack.optimize.MinChunkSizePlugin({minChunkSize: 100000}),
-    new webpack.optimize.DedupePlugin(),
-    new webpack.optimize.AggressiveMergingPlugin(),
-    new webpack.optimize.OccurenceOrderPlugin(),
-    new webpack.optimize.UglifyJsPlugin({
-     compress: {
-       warnings: false
-     }
-    }),
+    // new webpack.optimize.DedupePlugin(),
+    // new webpack.optimize.AggressiveMergingPlugin(),
+    // new webpack.optimize.OccurenceOrderPlugin(),
+    // new webpack.optimize.UglifyJsPlugin({
+    //  compress: {
+    //    warnings: false
+    //  }
+    // }),
     new webpack.NoErrorsPlugin(),
     new webpack.ProvidePlugin({
       _: 'lodash',

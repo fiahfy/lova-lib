@@ -2,8 +2,8 @@ import classNames from 'classnames'
 import moment from 'moment'
 import React, {Component, PropTypes} from 'react'
 import NVD3Chart from 'react-nvd3'
-import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
+import {bindActionCreators} from 'redux'
 import * as ActionCreators from '../actions'
 import * as SpellUtils from '../utils/spell-utils'
 
@@ -26,7 +26,7 @@ export default class Chart extends Component {
     spellStatistics:  PropTypes.arrayOf(PropTypes.object),
     actions:          PropTypes.object
   }
-  _getSpellChartParams() {
+  getSpellChartParams() {
     const {spellStatistics} = this.props
 
     const datum = _.uniq(_.pluck(spellStatistics, 'spell_id'))
@@ -85,7 +85,7 @@ export default class Chart extends Component {
           <small>Updated {updated}</small>
         </h3>
 
-        <NVD3Chart {...this._getSpellChartParams()} />
+        <NVD3Chart {...this.getSpellChartParams()} />
       </div>
     )
   }

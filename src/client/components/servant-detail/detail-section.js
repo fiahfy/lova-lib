@@ -8,7 +8,7 @@ export default class DetailSection extends Component {
   static propTypes = {
     servant: PropTypes.object
   }
-  _wrapQuoteIfNeed(value) {
+  wrapQuoteIfNeed(value) {
     return value.indexOf(' ') > -1 ? `"${value}"` : value
   }
   render() {
@@ -22,7 +22,7 @@ export default class DetailSection extends Component {
       })
     }
 
-    const createSkillNode = (type) => {
+    const createSkillNode = type => {
       const skill = servant.skill ? servant.skill[type] : {}
       return (
         <SkillItem key={type} type={type} {...skill} />
@@ -97,7 +97,7 @@ export default class DetailSection extends Component {
               <dl className="col-sm-6 row">
                 <dt className="col-xs-3">Illust</dt>
                 <dd className="col-xs-9">
-                  <Link to="/servants/" query={{q: `illustrationBy:${this._wrapQuoteIfNeed(servant.illustration_by || '')}`}}>
+                  <Link to="/servants/" query={{q: `illustrationBy:${this.wrapQuoteIfNeed(servant.illustration_by || '')}`}}>
                     {servant.illustration_by}
                   </Link>
                 </dd>
@@ -105,7 +105,7 @@ export default class DetailSection extends Component {
               <dl className="col-sm-6 row">
                 <dt className="col-xs-3">CV</dt>
                 <dd className="col-xs-9">
-                  <Link to="/servants/" query={{q: `characterVoice:${this._wrapQuoteIfNeed(servant.character_voice || '')}`}}>
+                  <Link to="/servants/" query={{q: `characterVoice:${this.wrapQuoteIfNeed(servant.character_voice || '')}`}}>
                     {servant.character_voice}
                   </Link>
                 </dd>

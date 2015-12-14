@@ -8,10 +8,10 @@ export default class DeckContainer extends Component {
     cards:    PropTypes.arrayOf(PropTypes.object),
     filter:   PropTypes.object
   }
-  _onDrop(droppedIndex, {index, card}) {
+  onDrop(droppedIndex, {index, card}) {
     this.props.handleCardChange(droppedIndex, index, card)
   }
-  _handleTribeClick(tribe_name) {
+  handleTribeClick(tribe_name) {
     const {filter, handleFilterChange} = this.props
     delete filter.tribe_name
     if (tribe_name) {
@@ -19,7 +19,7 @@ export default class DeckContainer extends Component {
     }
     handleFilterChange(filter)
   }
-  _handleTypeClick(type) {
+  handleTypeClick(type) {
     const {filter, handleFilterChange} = this.props
     delete filter.type
     if (type) {
@@ -27,7 +27,7 @@ export default class DeckContainer extends Component {
     }
     handleFilterChange(filter)
   }
-  _handleQueryChange() {
+  handleQueryChange() {
     const {filter, handleFilterChange} = this.props
     filter.name = this.refs.query.value
     handleFilterChange(filter)
@@ -59,7 +59,7 @@ export default class DeckContainer extends Component {
       return indexes.map((index) => {
         return (
           <CardContainer key={index} index={index} card={cards[index]}
-                         onDrop={(item) => this._onDrop(index, item)} />
+                         onDrop={(item) => this.onDrop(index, item)} />
         )
       })
     }
@@ -73,7 +73,7 @@ export default class DeckContainer extends Component {
         const tribeName = servant.id ? servant.tribe_name : null
         return (
           <li key={index}>
-            <a onClick={this._handleTribeClick.bind(this, tribeName)}>{servant.tribe_name}</a>
+            <a onClick={this.handleTribeClick.bind(this, tribeName)}>{servant.tribe_name}</a>
           </li>
         )
       })
@@ -84,7 +84,7 @@ export default class DeckContainer extends Component {
         const type = servant.id ? servant.type : null
         return (
           <li key={index}>
-            <a onClick={this._handleTypeClick.bind(this, type)}>{servant.type}</a>
+            <a onClick={this.handleTypeClick.bind(this, type)}>{servant.type}</a>
           </li>
         )
       })
@@ -131,7 +131,7 @@ export default class DeckContainer extends Component {
             </div>
           </div>
           <input type="text" placeholder="Input Keyword..." ref="query"
-                 className="form-control" onChange={this._handleQueryChange.bind(this)} />
+                 className="form-control" onChange={this.handleQueryChange.bind(this)} />
         </div>
       </div>
     )

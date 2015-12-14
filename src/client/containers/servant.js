@@ -1,8 +1,8 @@
 import classNames from 'classnames'
 import moment from 'moment'
 import React, {Component, PropTypes} from 'react'
-import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
+import {bindActionCreators} from 'redux'
 import * as ActionCreators from '../actions'
 
 function mapStateToProps(state) {
@@ -23,17 +23,17 @@ export default class Servant extends Component {
     tribeId: 0,
     q:       ''
   }
-  _handleServantClick = (servantId) => {
+  handleServantClick(servantId) {
     this.props.history.pushState(null, `/servants/${servantId}/`)
   }
-  _handleQuerySubmit = (e) => {
+  handleQuerySubmit(e) {
     e.preventDefault()
     const {tribeId, q} = this.state
     const query = {tribe_id: tribeId, q}
     query.q = this.refs.q.value
     this.props.history.pushState(null, '/servants/', query)
   }
-  _getServantFilter() {
+  getServantFilter() {
     const {q, tribeId} = this.state
 
     let i = 0
@@ -61,10 +61,10 @@ export default class Servant extends Component {
 
     return filter
   }
-  _filteredServants() {
+  filteredServants() {
     let {servants} = this.props
 
-    const filter = this._getServantFilter()
+    const filter = this.getServantFilter()
 
     const name = filter.name
     delete filter.name
@@ -127,13 +127,13 @@ export default class Servant extends Component {
       )
     })
 
-    const servantNodes = this._filteredServants()
+    const servantNodes = this.filteredServants()
       .sort((a, b) => (a.tribe_id * 1000 + a.tribe_code) - (b.tribe_id * 1000 + b.tribe_code))
       .map((servant, index) => {
         const cls = classNames('clip', `tribe-${servant.tribe_id}`)
         const style = {backgroundPositionX: `${-40*(servant.tribe_code-1)}px`}
         return (
-          <tr key={index} onClick={this._handleServantClick.bind(this, servant.id)}>
+          <tr key={index} onClick={this.handleServantClick.bind(this, servant.id)}>
             <th className="hidden-xs" scope="row">{servant.id}</th>
             <td className={cls} style={style}>　</td>
             <td className="">{`${servant.tribe_name}-${_.padLeft(servant.tribe_code, 3, 0)}`}</td>
@@ -164,7 +164,7 @@ export default class Servant extends Component {
         </div>
 
         <div className="form-group">
-          <form onSubmit={this._handleQuerySubmit}>
+          <form onSubmit={this.handleQuerySubmit.bind(this)}>
             <input type="text" placeholder="Input Keyword..." className="form-control"
                    ref="q" defaultValue={q} />
           </form>

@@ -1,8 +1,8 @@
 import React, {Component, PropTypes} from 'react'
 import {DragDropContext} from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
-import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
+import {bindActionCreators} from 'redux'
 import * as ActionCreators from '../actions'
 import * as DeckUtils from '../utils/deck-utils'
 import DeckDropContainer from '../components/deck/deck-drop-container'
@@ -26,10 +26,10 @@ export default class Deck extends Component {
     cards:  [],
     filter: {}
   }
-  _onDrop(droppedIndex, {index, card}) {
-    this._handleCardChange(droppedIndex, index, card)
+  onDrop(droppedIndex, {index, card}) {
+    this.handleCardChange(droppedIndex, index, card)
   }
-  _handleCardChange(droppedIndex, draggedIndex, draggedCard) {
+  handleCardChange(droppedIndex, draggedIndex, draggedCard) {
     let {cards} = this.state
     cards[draggedIndex] = droppedIndex ? cards[droppedIndex] : null
     cards[droppedIndex] = draggedCard
@@ -38,7 +38,7 @@ export default class Deck extends Component {
       cards: cards
     })
   }
-  _handleFilterChange(filter) {
+  handleFilterChange(filter) {
     this.setState({
       filter: filter
     })
@@ -65,9 +65,9 @@ export default class Deck extends Component {
     const {cards, filter} = this.state
     return (
       <DeckDropContainer servants={servants} cards={cards} filter={filter}
-                         handleCardChange={this._handleCardChange.bind(this)}
-                         handleFilterChange={this._handleFilterChange.bind(this)}
-                         onDrop={(item) => this._onDrop(null, item)} />
+                         handleCardChange={this.handleCardChange.bind(this)}
+                         handleFilterChange={this.handleFilterChange.bind(this)}
+                         onDrop={(item) => this.onDrop(null, item)} />
     )
   }
 }

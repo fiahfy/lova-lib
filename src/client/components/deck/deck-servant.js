@@ -1,12 +1,12 @@
-import React, {Component, PropTypes} from 'react'
 import classNames from 'classnames'
+import React, {Component, PropTypes} from 'react'
 import CardContainer from './card-container'
 
 export default class DeckServant extends Component {
   static propTypes = {
     servants: PropTypes.arrayOf(PropTypes.object)
   }
-  _filteredServants() {
+  filteredServants() {
     let {servants, filter} = this.props
 
     const name = filter.name
@@ -19,7 +19,7 @@ export default class DeckServant extends Component {
     return servants
   }
   render() {
-    const servantNodes = this._filteredServants()
+    const servantNodes = this.filteredServants()
       .sort((a, b) => (a.tribe_id * 1000 + a.tribe_code) - (b.tribe_id * 1000 + b.tribe_code))
       .map((servant, index) => {
         const cls = classNames('card', `tribe-${servant.tribe_id}`, {setted: false})

@@ -4,7 +4,7 @@ import Helmet from 'react-helmet'
 import GoogleAnalytics from 'react-g-analytics'
 
 export default class App extends Component {
-  _getMetaInfo() {
+  getMetaInfo() {
     const pathname = this.props.location.pathname
     const pathes = pathname.match(/^\/(\w+)\//)
 
@@ -31,7 +31,7 @@ export default class App extends Component {
   }
   render() {
     const year = (new Date()).getFullYear()
-    const {title, description} = this._getMetaInfo()
+    const {title, description} = this.getMetaInfo()
 
     return (
       <div>
