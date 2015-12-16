@@ -1,14 +1,12 @@
-'use strict';
+import mongoose from 'mongoose'
 
-let mongoose = require('mongoose');
+const Schema = mongoose.Schema
 
-let Schema = mongoose.Schema;
-
-let ServantSchema = new Schema({
-  _id:              { type: Number, require: true, unique: true },
-  tribe_id:         { type: Number, require: true },
-  tribe_name:       { type: String, require: true },
-  tribe_code:       { type: Number, require: true },
+const ServantSchema = new Schema({
+  _id:              {type: Number, require: true, unique: true},
+  tribe_id:         {type: Number, require: true},
+  tribe_name:       {type: String, require: true},
+  tribe_code:       {type: Number, require: true},
   type:             String,
   name:             String,
   cost:             Number,
@@ -58,14 +56,12 @@ let ServantSchema = new Schema({
       as:           Number
     }
   }
-}, {id: false});
+}, {id: false})
 
-ServantSchema.virtual('id').get(function() {
-  return this._id;
-});
+ServantSchema.virtual('id').get(function() { return this._id })
 
 ServantSchema.set('toJSON', {
   virtuals: true
-});
+})
 
-module.exports = mongoose.model('servant', ServantSchema);
+export default mongoose.model('servant', ServantSchema)

@@ -1,34 +1,31 @@
-'use strict';
+import mongoose from 'mongoose'
 
-let mongoose = require('mongoose');
+const Schema = mongoose.Schema
 
-let Schema = mongoose.Schema;
-
-let CounterSchema = new Schema({
+const CounterSchema = new Schema({
   _id: String,
   seq: Number
-});
+})
 
-CounterSchema.statics.getNewId = function (name,  callback) {
-  let me = this;
-  return new Promise(function(resolve, reject) {
-    me.collection.findAndModify(
-      { _id: name },
+CounterSchema.statics.getNewId = (name, callback) => {
+  return new Promise((resolve, reject) => {
+    this.collection.findAndModify(
+      {_id: name},
       [],
-      { $inc: { seq: 1 } },
-      { new: true, upsert: true },
-      function(err, result) {
+      {$inc: {seq: 1}},
+      {new: true, upsert: true},
+      (err, result) => {
         if (callback) {
-          callback(err, result);
+          callback(err, result)
         }
         if (err) {
-          reject({err: err, result: result});
-          return;
+          reject({err: err, result: result})
+          return
         }
-        resolve({err: err, result: result});
+        resolve({err: err, result: result})
       }
-    );
-  });
-};
+    )
+  })
+}
 
-module.exports = mongoose.model('counter', CounterSchema);
+export default mongoose.model('counter', CounterSchema)

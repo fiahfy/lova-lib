@@ -18,8 +18,24 @@
     "type": "git",
     "url": "https://github.com/fiahfy/lova-tool"
   },
+  "scripts": {
+    "start": "PWD=`pwd`; forever start -w --minUptime 1000 --spinSleepTime 1000 -a -l ${PWD}/tmp/forever/forever.log --watchDirectory ${PWD}/server.js server.js",
+    "poststart": "mongod --fork --logpath /dev/null --dbpath tmp/mongodb/data",
+    "prestop": "mongo admin --eval 'db.shutdownServer()' > /dev/null",
+    "stop": "forever stop server.js",
+    "tail": "forever logs -f server.js",
+    "watch": "npm run watch-client & npm run watch-server",
+    "watch-client": "npm run build-client -- -w",
+    "watch-server": "npm run build-server -- -w",
+    "build": "npm run build-client & npm run build-server",
+    "build-client": "webpack --config webpack/client.babel.js",
+    "build-server": "webpack --config webpack/server.babel.js",
+    "dump": "mongodump --host=127.0.0.1 --port=27017 -u admin -d lova -o tmp/mongodb/dump",
+    "restore": "mongorestore --host=127.0.0.1 --port=27017 -d lova --drop tmp/mongodb/dump/lova"
+  },
+  "private": true,
   "engines": {
-    "node": "4.2.2"
+    "node": ">=4.2.2"
   },
   "dependencies": {
     "cheerio-httpcli": "0.3.3",
@@ -58,11 +74,15 @@
     "flux": "2.1.1",
     "forever": "0.15.1",
     "history": "1.13.1",
+    "html-loader": "0.4.0",
     "imports-loader": "0.6.5",
     "jquery": "2.1.4",
     "jquery-lazyload": "1.9.7",
+    "json-loader": "0.5.4",
     "keymirror": "0.1.1",
     "lwip": "kant2002/lwip#5f6a38c",
+    "markdown-loader": "0.1.7",
+    "node-loader": "0.5.0",
     "nvd3": "1.8.1",
     "react": "0.14.3",
     "react-dnd": "2.0.2",
@@ -86,17 +106,5 @@
     "webpack-dev-server": "1.14.0",
     "whatwg-fetch": "0.10.1"
   },
-  "bundleDependencies": [],
-  "private": true,
-  "scripts": {
-    "start": "PWD=`pwd`; forever start -w --minUptime 1000 --spinSleepTime 1000 -a -l ${PWD}/tmp/forever/forever.log --watchDirectory ${PWD} server.js",
-    "poststart": "mongod --fork --logpath /dev/null --dbpath tmp/mongodb/data",
-    "prestop": "mongo admin --eval 'db.shutdownServer()' > /dev/null",
-    "stop": "forever stop server.js",
-    "tail": "forever logs -f server.js",
-    "watch": "webpack -w",
-    "dump": "mongodump --host=127.0.0.1 --port=27017 -u admin -d lova -o tmp/mongodb/dump",
-    "restore": "mongorestore --host=127.0.0.1 --port=27017 -d lova --drop tmp/mongodb/dump/lova"
-  },
-  "main": "server.js"
+  "bundleDependencies": []
 }

@@ -1,28 +1,22 @@
-'use strict';
+import url from 'url'
 
-let config = {
-  host:   process.env.OPENSHIFT_MONGODB_DB_HOST || '127.0.0.1',
-  port:   process.env.OPENSHIFT_MONGODB_DB_PORT || 27017,
-  user:   process.env.OPENSHIFT_MONGODB_DB_USERNAME,
-  pass:   process.env.OPENSHIFT_MONGODB_DB_PASSWORD,
-  scheme: 'mongodb',
-  db:     'lova'
-};
+const config = {
+  host: process.env.OPENSHIFT_MONGODB_DB_HOST || '127.0.0.1',
+  port: process.env.OPENSHIFT_MONGODB_DB_PORT || 27017,
+  user: process.env.OPENSHIFT_MONGODB_DB_USERNAME,
+  pass: process.env.OPENSHIFT_MONGODB_DB_PASSWORD,
+  protocol: 'mongodb',
+  db: 'lova'
+}
 
-config.uri = (function(config) {
-  let uri = '';
-  if (config.user) {
-    uri += config.user;
-    if (config.pass) {
-      uri += `:${config.pass}`;
-    }
-    uri += '@';
-  }
-  uri += config.host;
-  if (config.port) {
-    uri += `:${config.port}`;
-  }
-  return `${config.scheme}://${uri}/${config.db}`;
-})(config);
+const {host, port, user, pass, protocol, db} = config
+config.uri = url.format({
+  protocol: `${protocol}:`,
+  slashes:  true,
+  auth:     user && pass ? `${user}:${pass}` : null,
+  hostname: host,
+  port:     port,
+  pathname: `/${db}`
+})
 
-module.exports = config;
+export default config

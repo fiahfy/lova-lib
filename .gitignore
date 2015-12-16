@@ -35,7 +35,6 @@ node_modules
 
 # Custom
 .idea
-client/assets/ts/**/*.js*
 tmp/forever/*
 tmp/mongodb/*
 !.gitkeep

@@ -1,1 +1,2 @@
-client/assets/js/*bundle.js* -diff
+public/assets/js/*bundle.js* -diff
+server.js* -diff
