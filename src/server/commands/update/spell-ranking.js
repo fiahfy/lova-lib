@@ -1,9 +1,9 @@
 'use strict';
 
 let co = require('co');
-let logger = require('../../../utils/logger');
-let scraper = require('../../../utils/scraper');
-let models = require('../../../models');
+let logger = require('../../utils/logger');
+let scraper = require('../../utils/scraper');
+let models = require('../../models');
 
 const maps = ['all', 'vermilion', 'braze'];
 const queues = ['all', 'normal', 'solo'];

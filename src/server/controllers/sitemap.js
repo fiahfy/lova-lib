@@ -1,32 +1,28 @@
-'use strict';
+import xmlify from 'xmlify'
+import models from '../models'
 
-let xmlify = require('xmlify');
-let models = require('../models');
+export default (function *() {
+  const servants = yield models.servant.find({}, 'id').sort({_id: 1}).exec()
 
-function *sitemap() {
-  let servants = yield models.servant.find({}, 'id').sort({_id: 1}).exec();
+  let pathes = []
+  pathes.push('/')
+  pathes.push('/about/')
+  pathes.push('/charts/')
+  pathes.push('/deck/')
+  pathes.push('/prize/')
+  servants.forEach(servants => {
+    pathes.push(`/servants/${servants.id}/`)
+  })
 
-  let urls = [];
-  urls.push('/');
-  urls.push('/about/');
-  urls.push('/charts/');
-  urls.push('/deck/');
-  urls.push('/prize/');
-  servants.forEach((e) => {
-    urls.push(`/servants/${e.id}/`);
-  });
+  const urls = pathes.map(path => {
+    return {loc: `http://lova-fiahfy.rhcloud.com${path}`}
+  })
 
-  urls = urls.map((loc) => {
-    return {loc: `http://lova-fiahfy.rhcloud.com${loc}`};
-  });
-
-  let urlset = {
+  const urlset = {
     _xmlns: 'http://www.sitemaps.org/schemas/sitemap/0.9',
     url: urls
-  };
+  }
 
-  this.type = 'xml';
-  this.body = xmlify(urlset, 'urlset');
-}
-
-module.exports = sitemap;
+  this.type = 'xml'
+  this.body = xmlify(urlset, 'urlset')
+})
