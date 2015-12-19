@@ -8,7 +8,7 @@ import history from '../history'
 import routes from '../routes'
 import rootReducer from '../reducers'
 import transitionMiddleware from '../middlewares/transition-middleware'
-import DevTools from '../containers/dev-tools'
+// import DevTools from '../containers/dev-tools'
 
 const reduxReactRouterFunc = ExecutionEnvironment.canUseDOM
   ? reduxReactRouter({routes, history})

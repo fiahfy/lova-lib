@@ -20615,15 +20615,12 @@ module.exports =
 
 	var _transitionMiddleware2 = _interopRequireDefault(_transitionMiddleware);
 
-	var _devTools = __webpack_require__(240);
-
-	var _devTools2 = _interopRequireDefault(_devTools);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	// import createLogger from 'redux-logger'
+	// import DevTools from '../containers/dev-tools'
 
 	var reduxReactRouterFunc = _ExecutionEnvironment2.default.canUseDOM ? (0, _reduxRouter.reduxReactRouter)({ routes: _routes2.default, history: _history2.default }) : (0, _server.reduxReactRouter)({ routes: _routes2.default, history: _history2.default });
+	// import createLogger from 'redux-logger'
 
 	var funcs = [(0, _redux.applyMiddleware)(_reduxThunk2.default), reduxReactRouterFunc, (0, _redux.applyMiddleware)(_transitionMiddleware2.default)];
 
@@ -24891,57 +24888,10 @@ module.exports =
 	}
 
 /***/ },
-/* 240 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(24);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reduxDevtools = __webpack_require__(241);
-
-	var _reduxDevtoolsLogMonitor = __webpack_require__(242);
-
-	var _reduxDevtoolsLogMonitor2 = _interopRequireDefault(_reduxDevtoolsLogMonitor);
-
-	var _reduxDevtoolsDockMonitor = __webpack_require__(243);
-
-	var _reduxDevtoolsDockMonitor2 = _interopRequireDefault(_reduxDevtoolsDockMonitor);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = (0, _reduxDevtools.createDevTools)(_react2.default.createElement(
-	  _reduxDevtoolsDockMonitor2.default,
-	  { toggleVisibilityKey: 'H',
-	    changePositionKey: 'W' },
-	  _react2.default.createElement(_reduxDevtoolsLogMonitor2.default, null)
-	));
-
-/***/ },
-/* 241 */
-/***/ function(module, exports) {
-
-	module.exports = require("redux-devtools");
-
-/***/ },
-/* 242 */
-/***/ function(module, exports) {
-
-	module.exports = require("redux-devtools-log-monitor");
-
-/***/ },
-/* 243 */
-/***/ function(module, exports) {
-
-	module.exports = require("redux-devtools-dock-monitor");
-
-/***/ },
+/* 240 */,
+/* 241 */,
+/* 242 */,
+/* 243 */,
 /* 244 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -25435,10 +25385,6 @@ module.exports =
 
 	var _reduxRouter = __webpack_require__(197);
 
-	var _devTools = __webpack_require__(240);
-
-	var _devTools2 = _interopRequireDefault(_devTools);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -25446,6 +25392,8 @@ module.exports =
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	// import DevTools from './dev-tools'
 
 	var Root = (_temp = _class = (function (_Component) {
 	  _inherits(Root, _Component);
