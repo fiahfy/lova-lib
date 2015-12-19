@@ -15,18 +15,6 @@ const cache = LRU({maxAge: 1000 * 60})
 
 const app = koa()
 
-app.use(function *(next) {
-  if (this.path.indexOf('/api/') > -1) {
-    // server
-    yield next
-  } else if (this.path.indexOf('.') > -1) {
-    // static file
-    yield next
-  } else {
-    // client root
-    yield next
-  }
-})
 app.use(koaStatic('public', {maxage: 10 * 60 * 1000}))
 if (!config.development) {
   app.use(function *(next) {

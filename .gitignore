@@ -35,6 +35,5 @@ node_modules
 
 # Custom
 .idea
-tmp/forever/*
 tmp/mongodb/*
 !.gitkeep

@@ -24,11 +24,9 @@
   },
   "main": "server.js",
   "scripts": {
-    "start": "PWD=`pwd`; forever start -w --minUptime 1000 --spinSleepTime 1000 -a -l ${PWD}/tmp/forever/forever.log --watchDirectory ${PWD}/server.js server.js",
     "poststart": "mongod --fork --logpath /dev/null --dbpath tmp/mongodb/data",
     "prestop": "mongo admin --eval 'db.shutdownServer()' > /dev/null",
-    "stop": "forever stop server.js",
-    "tail": "forever logs -f server.js",
+    "server": "nodemon -w server.js server.js",
     "watch": "npm run watch-client & npm run watch-server & npm run watch-cli",
     "watch-client": "npm run build-client -- -w",
     "watch-server": "npm run build-server -- -w",
@@ -62,7 +60,6 @@
     "file-loader": "0.8.5",
     "flat-ui": "designmodo/Flat-UI#2.2.2",
     "flux": "2.1.1",
-    "forever": "0.15.1",
     "history": "1.13.1",
     "html-loader": "0.4.0",
     "imports-loader": "0.6.5",
@@ -94,10 +91,6 @@
     "react-router": "1.0.2",
     "react-zeroclipboard": "3.0.0",
     "redux": "3.0.5",
-    "redux-devtools": "3.0.0-beta-3",
-    "redux-devtools-dock-monitor": "1.0.0-beta-3",
-    "redux-devtools-log-monitor": "1.0.0-beta-3",
-    "redux-logger": "2.2.1",
     "redux-router": "1.0.0-beta5",
     "redux-thunk": "1.0.0",
     "request": "2.63.0",
@@ -105,8 +98,15 @@
     "style-loader": "0.13.0",
     "url-loader": "0.5.7",
     "webpack": "1.12.9",
-    "webpack-dev-server": "1.14.0",
     "winston": "1.0.2",
     "xmlify": "1.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "1.8.1",
+    "redux-devtools": "3.0.0-beta-3",
+    "redux-devtools-dock-monitor": "1.0.0-beta-3",
+    "redux-devtools-log-monitor": "1.0.0-beta-3",
+    "redux-logger": "2.2.1",
+    "webpack-dev-server": "1.14.0"
   }
 }

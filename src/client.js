@@ -8,7 +8,13 @@ import 'flat-ui/dist/js/flat-ui'
 import 'jquery-lazyload'
 import 'datatables'
 
-const store = configureStore()
+let initialState
+try {
+  initialState = window.__initialState
+} catch (e) {
+  initialState = {}
+}
+const store = configureStore(initialState)
 
 ReactDOM.render(
   <Root store={store} />,
