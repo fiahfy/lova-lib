@@ -13,16 +13,16 @@ export default (function *() {
       if (error) {
         this.status = 500
         this.body = error.message
-        reject()
+        resolve()
         return
       } else if (redirectLocation) {
         this.redirect(redirectLocation.pathname + redirectLocation.search)
-        reject()
+        resolve()
         return
       } else if (!renderProps) {
         this.status = 404
         this.body = 'Not found'
-        reject()
+        resolve()
         return
       }
 

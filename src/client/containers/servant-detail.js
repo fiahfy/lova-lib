@@ -5,8 +5,17 @@ import {Link} from 'react-router'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 import * as ActionCreators from '../actions'
+import connectData from '../decorators/connect-data'
 import DetailSection from '../components/servant-detail/detail-section'
 import StatisticsSection from '../components/servant-detail/statistics-section'
+
+function fetchDataDeferred(getState, dispatch, location, params) {
+  const {id} = params
+  return Promise.all([
+    ActionCreators.fetchServant(+id)(dispatch),
+    ActionCreators.fetchServantStatistics({servant_id: +id})(dispatch)
+  ])
+}
 
 function mapStateToProps(state) {
   const {servants, servantStatistics, router} = state
@@ -21,6 +30,7 @@ function mapDispatchToProps(dispatch) {
   return { actions: bindActionCreators(ActionCreators, dispatch) }
 }
 
+@connectData(null, fetchDataDeferred)
 @connect(mapStateToProps, mapDispatchToProps)
 export default class ServantDetail extends Component {
   static propTypes = {
@@ -28,36 +38,14 @@ export default class ServantDetail extends Component {
     statistics: PropTypes.arrayOf(PropTypes.object),
     actions:    PropTypes.object
   }
-  state = {
-    section: null
-  }
   getMetaInfo() {
     const {servant} = this.props
     const title = `Servant ${servant.tribe_name}-${_.padLeft(servant.tribe_code, 3, 0)} ${servant.name} : LoVATool`
     const description = servant.oral_tradition
     return {title, description}
   }
-  componentWillReceiveProps(nextProps) {
-    if (this.props.location.pathname === nextProps.location.pathname) {
-      return
-    }
-    const {section} = nextProps.params
-    this.setState({section})
-    const {id} = nextProps.params
-    this.props.actions.fetchServant(+id)
-    this.props.actions.fetchServantStatistics({servant_id: +id})
-  }
-  componentWillMount() {
-    const {section} = this.props.params
-    this.setState({section})
-  }
-  componentDidMount() {
-    const {id} = this.props.params
-    this.props.actions.fetchServant(+id)
-    this.props.actions.fetchServantStatistics({servant_id: +id})
-  }
   render() {
-    const {section} = this.state
+    const {section} = this.props.params
     const {servant, statistics} = this.props
 
     const {title, description} = this.getMetaInfo()

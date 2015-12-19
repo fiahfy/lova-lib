@@ -4,7 +4,11 @@ import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 import * as ActionCreators from '../actions'
+import connectData from '../decorators/connect-data'
 
+function fetchDataDeferred(getState, dispatch, location, params) {
+  return ActionCreators.fetchPrizes()(dispatch)
+}
 function mapStateToProps(state) {
   return { prizes: state.prizes }
 }
@@ -13,6 +17,7 @@ function mapDispatchToProps(dispatch) {
   return { actions: bindActionCreators(ActionCreators, dispatch) }
 }
 
+@connectData(null, fetchDataDeferred)
 @connect(mapStateToProps, mapDispatchToProps)
 export default class Prize extends Component {
   static propTypes = {
@@ -74,9 +79,6 @@ export default class Prize extends Component {
       lotResults: results,
       lotResultsSummary: resultsSummary
     })
-  }
-  componentDidMount() {
-    this.props.actions.fetchPrizes()
   }
   render() {
     const {prizes} = this.props

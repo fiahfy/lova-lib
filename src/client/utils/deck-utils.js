@@ -1,3 +1,5 @@
+import ExecutionEnvironment from 'fbjs/lib/ExecutionEnvironment'
+
 export function getMana(cards) {
   const fill = _.range(0, 6).every(index => !!cards[index])
   return fill ? 30 : 0
@@ -38,9 +40,13 @@ export function getTotalMana(cards) {
   }, 0)
 }
 
+export function getURL(cardIds) {
+  return 'http://localhost:3000/deck/' + getHash(cardIds) + '/'
+}
+
 export function getHash(cardIds) {
   cardIds = _.range(0, 8).map(index => cardIds[index] || 0)
-  return window.btoa(JSON.stringify(cardIds))
+  return btoa(JSON.stringify(cardIds))
 }
 
 export function getCardIds(hash) {
@@ -49,11 +55,31 @@ export function getCardIds(hash) {
   }
   let cardIds = []
   try {
-    cardIds = JSON.parse(window.atob(hash))
+    cardIds = JSON.parse(atob(hash))
   } catch (e) {
     console.warn(`Invalid Deck Hash: ${hash}`)
     return []
   }
 
   return _.range(0, 8).map(index => cardIds[index])
+}
+
+function atob(hash) {
+  if (ExecutionEnvironment.canUseDOM) {
+    return window.atob(hash)
+  }
+  return new Buffer(str, 'base64').toString('binary')
+}
+
+function btoa(str) {
+  if (ExecutionEnvironment.canUseDOM) {
+    return window.btoa(str)
+  }
+  let buffer;
+  if (Buffer.isBuffer(str)) {
+    buffer = str;
+  } else {
+    buffer = new Buffer(str.toString(), 'binary');
+  }
+  return buffer.toString('base64');
 }

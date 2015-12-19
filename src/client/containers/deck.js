@@ -6,6 +6,11 @@ import {bindActionCreators} from 'redux'
 import * as ActionCreators from '../actions'
 import * as DeckUtils from '../utils/deck-utils'
 import DeckDropContainer from '../components/deck/deck-drop-container'
+import connectData from '../decorators/connect-data'
+
+function fetchDataDeferred(getState, dispatch, location, params) {
+  return ActionCreators.fetchServants()(dispatch)
+}
 
 function mapStateToProps(state) {
   return { servants: state.servants }
@@ -15,6 +20,7 @@ function mapDispatchToProps(dispatch) {
   return { actions: bindActionCreators(ActionCreators, dispatch) }
 }
 
+@connectData(null, fetchDataDeferred)
 @DragDropContext(HTML5Backend)
 @connect(mapStateToProps, mapDispatchToProps)
 export default class Deck extends Component {
@@ -43,6 +49,12 @@ export default class Deck extends Component {
       filter: filter
     })
   }
+  getDeckURL() {
+    const {cards} = this.state
+    const {location} = this.props
+
+    return DeckUtils.getURL(cards.map(card => card ? card.id : 0))
+  }
   componentWillReceiveProps(nextProps) {
     const {servants, params} = nextProps
     const {hash} = nextProps.params
@@ -58,13 +70,17 @@ export default class Deck extends Component {
     }, 1)
   }
   componentDidMount() {
-    this.props.actions.fetchServants()
+    setTimeout(() => {
+      // TODO: dont use jquery
+      $('.lazy').lazyload()
+    }, 1)
   }
   render() {
     const {servants} = this.props
     const {cards, filter} = this.state
     return (
       <DeckDropContainer servants={servants} cards={cards} filter={filter}
+                         deckURL={this.getDeckURL()}
                          handleCardChange={this.handleCardChange.bind(this)}
                          handleFilterChange={this.handleFilterChange.bind(this)}
                          onDrop={(item) => this.onDrop(null, item)} />

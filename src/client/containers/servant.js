@@ -4,6 +4,11 @@ import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 import * as ActionCreators from '../actions'
+import connectData from '../decorators/connect-data'
+
+function fetchDataDeferred(getState, dispatch, location, params) {
+  return ActionCreators.fetchServants()(dispatch)
+}
 
 function mapStateToProps(state) {
   return { servants: state.servants }
@@ -13,32 +18,28 @@ function mapDispatchToProps(dispatch) {
   return { actions: bindActionCreators(ActionCreators, dispatch) }
 }
 
+@connectData(null, fetchDataDeferred)
 @connect(mapStateToProps, mapDispatchToProps)
 export default class Servant extends Component {
   static propTypes = {
     servants: PropTypes.arrayOf(PropTypes.object),
     actions:  PropTypes.object
   }
-  state = {
-    tribeId: 0,
-    q:       ''
-  }
   handleServantClick(servantId) {
     this.props.history.pushState(null, `/servants/${servantId}/`)
   }
   handleQuerySubmit(e) {
     e.preventDefault()
-    const {tribeId, q} = this.state
-    const query = {tribe_id: tribeId, q}
+    const {query} = this.props.location
     query.q = this.refs.q.value
     this.props.history.pushState(null, '/servants/', query)
   }
   getServantFilter() {
-    const {q, tribeId} = this.state
+    const {q, tribe_id} = this.props.location.query
 
     let i = 0
     let map = new Map()
-    let filter = q.replace(/"[^"]*"/g, (match) => {
+    let filter = (q || '').replace(/"[^"]*"/g, (match) => {
       map.set(i, match.replace(/^"(.*)"$/, "$1"))
       return `@${i++}@`
     }).split(/[\s　]/i).map((element) => {
@@ -55,8 +56,8 @@ export default class Servant extends Component {
       return p
     }, {})
 
-    if (tribeId > 0) {
-      filter['tribe_id'] = +tribeId
+    if (tribe_id > 0) {
+      filter['tribe_id'] = +tribe_id
     }
 
     return filter
@@ -87,30 +88,16 @@ export default class Servant extends Component {
 		//   bDestroy: true
     // })
   }
-  componentWillReceiveProps(nextProps) {
-    if (this.props.location.search === nextProps.location.search) {
-      return
-    }
-    const {tribe_id, q} = nextProps.location.query
-    this.setState(_.defaults({tribeId: +tribe_id, q}, this.state))
-    this.props.actions.fetchServants()
-  }
-  componentWillMount() {
-    const {tribe_id, q} = this.props.location.query
-    this.setState(_.defaults({tribeId: +tribe_id, q}, this.state))
-  }
   componentDidMount() {
     // TODO: dont use jquery
     $('#servant').find('select').select2().on('select2-selecting', (e) => {
-      const {tribeId, q} = this.state
-      const query = {tribe_id: tribeId, q}
+      const {query} = this.props.location
       query.tribe_id = e.val
       this.props.history.pushState(null, '/servants/', query)
     })
-    this.props.actions.fetchServants()
   }
   render() {
-    const {tribeId, q} = this.state
+    const {tribeId, q} = this.props.location.query
 
     const tribeIdOptionNodes = [
       {value: 0, name: 'Select Tribe...'},

@@ -32,15 +32,16 @@ export default class DeckDropContainer extends Component {
     handleCardChange:  PropTypes.func,
     servants:          PropTypes.arrayOf(PropTypes.object),
     cards:             PropTypes.arrayOf(PropTypes.object),
-    filter:            PropTypes.object
+    filter:            PropTypes.object,
+    deckURL:           PropTypes.string
   }
   render() {
     const {connectDropTarget, handleCardChange, handleFilterChange,
-      servants, cards, filter} = this.props
+      servants, cards, filter, deckURL} = this.props
 
     return connectDropTarget(
       <div>
-        <DeckForm cards={cards} />
+        <DeckForm deckURL={deckURL} />
         <DeckContainer cards={cards} servants={servants} filter={filter}
                        handleCardChange={handleCardChange}
                        handleFilterChange={handleFilterChange} />

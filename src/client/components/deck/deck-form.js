@@ -1,23 +1,9 @@
 import React, {Component, PropTypes} from 'react'
 import ReactZeroClipboard from 'react-zeroclipboard'
-import * as DeckUtils from '../../utils/deck-utils'
-import ExecutionEnvironment from 'fbjs/lib/ExecutionEnvironment'
 
 export default class DeckForm extends Component {
   static propTypes = {
-    cards: PropTypes.arrayOf(PropTypes.object)
-  }
-  getDeckURL() {
-    const {cards} = this.props
-
-    if (!ExecutionEnvironment.canUseDOM) {
-      return ''
-    }
-    let a = window.document.createElement('a')
-    a.href = window.location.href
-    return a.protocol + '//'
-      + a.hostname + (a.port ? ':' + a.port : a.port)
-      + '/deck/' + DeckUtils.getHash(cards.map(card => card ? card.id : 0)) + '/'
+    deckURL: PropTypes.string
   }
   onAfterCopy() {
     // TODO: dont use jquery
@@ -41,7 +27,7 @@ export default class DeckForm extends Component {
       })
   }
   render() {
-    const url = this.getDeckURL()
+    const {deckURL} = this.props
 
     return (
       <div className="container" id="deck">
@@ -50,11 +36,11 @@ export default class DeckForm extends Component {
         </div>
 
         <div className="input-group">
-          <input type="text" className="form-control" value={url} readOnly />
+          <input type="text" className="form-control" value={deckURL} readOnly />
           <span className="input-group-btn">
-            <a href={url} className="visible-xs btn btn-primary"
+            <a href={deckURL} className="visible-xs btn btn-primary"
                onclick="return false">Hold to Copy</a>
-            <ReactZeroClipboard text={url}
+            <ReactZeroClipboard text={deckURL}
                                 onAfterCopy={this.onAfterCopy.bind(this)}>
               <button className="hidden-xs btn btn-primary copy-clipboard">Copy</button>
             </ReactZeroClipboard>
