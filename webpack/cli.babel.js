@@ -14,7 +14,16 @@ const config = {
     filename: '../../cli.js',
     libraryTarget: 'commonjs2'
   },
-  externals: nodeModules
+  externals: nodeModules,
+  plugins: [
+    new webpack.NoErrorsPlugin(),
+    new webpack.ProvidePlugin({
+      _: 'lodash',
+      $: 'jquery',
+      jQuery: 'jquery',
+      'window.jQuery': 'jquery'
+    })
+  ]
 }
 
 export default Object.assign({}, clientConfig, config)
