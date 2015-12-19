@@ -7,8 +7,8 @@ import LRU from 'lru-cache'
 import routes from './server/routes'
 
 const config = {
-  port:        process.env.OPENSHIFT_NODEJS_PORT || 3000,
-  ip:          process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1'
+  port: process.env.OPENSHIFT_NODEJS_PORT || 3000,
+  ip:   process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1'
 }
 
 const cache = LRU({maxAge: 1000 * 60})
@@ -24,7 +24,7 @@ app.use(function *(next) {
     yield next
   } else {
     // client root
-    yield koaSend(this, '/index.html', {root: 'public'})
+    yield next
   }
 })
 app.use(koaStatic('public', {maxage: 10 * 60 * 1000}))

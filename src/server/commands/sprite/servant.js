@@ -5,6 +5,9 @@ import lwip from 'lwip'
 import logger from '../../utils/logger'
 import * as scraper from '../../utils/scraper'
 import * as models from '../../models'
+if (process.env.NODE_ENV !== 'production') {
+  const lwip = require('lwip')
+}
 
 const imageDir = './public/assets/img/'
 

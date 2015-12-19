@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react'
 import ReactZeroClipboard from 'react-zeroclipboard'
 import * as DeckUtils from '../../utils/deck-utils'
+import ExecutionEnvironment from 'fbjs/lib/ExecutionEnvironment'
 
 export default class DeckForm extends Component {
   static propTypes = {
@@ -9,6 +10,9 @@ export default class DeckForm extends Component {
   getDeckURL() {
     const {cards} = this.props
 
+    if (!ExecutionEnvironment.canUseDOM) {
+      return ''
+    }
     let a = window.document.createElement('a')
     a.href = window.location.href
     return a.protocol + '//'

@@ -65,7 +65,7 @@ module.exports =
 
 	var downloadCommands = _interopRequireWildcard(_download);
 
-	var _sprite = __webpack_require__(26);
+	var _sprite = __webpack_require__(27);
 
 	var spriteCommands = _interopRequireWildcard(_sprite);
 
@@ -2628,13 +2628,9 @@ module.exports =
 
 	var _fs2 = _interopRequireDefault(_fs);
 
-	var _request = __webpack_require__(24);
+	var _request = __webpack_require__(25);
 
 	var _request2 = _interopRequireDefault(_request);
-
-	var _lwip = __webpack_require__(25);
-
-	var _lwip2 = _interopRequireDefault(_lwip);
 
 	var _logger = __webpack_require__(7);
 
@@ -2652,10 +2648,11 @@ module.exports =
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	// if (process.env.NODE_ENV !== 'production') {
+	if (process.env.NODE_ENV !== 'production') {
+	  var _lwip = __webpack_require__(26);
+	}
 
 	var imageDir = './public/assets/img/';
-	// }
 
 	function findServants(args) {
 	  return models.servant.find(args).sort({ _id: 1 }).exec();
@@ -2843,7 +2840,7 @@ module.exports =
 
 	function scale(orgPath, distPath, ratio) {
 	  return new Promise(function (resolve) {
-	    _lwip2.default.open(orgPath, function (err, image) {
+	    lwip.open(orgPath, function (err, image) {
 	      image.batch().scale(ratio, ratio, 'lanczos').writeFile(distPath, 'jpg', {}, function (err) {
 	        if (err) {
 	          reject(err);
@@ -2857,9 +2854,9 @@ module.exports =
 
 	function compress(orgPath, distPath, params) {
 	  return new Promise(function (resolve) {
-	    _lwip2.default.open(orgPath, function (err, image) {
+	    lwip.open(orgPath, function (err, image) {
 	      image.toBuffer('jpg', { quality: 50 }, function (err, buffer) {
-	        _lwip2.default.open(buffer, 'jpg', function (err, image) {
+	        lwip.open(buffer, 'jpg', function (err, image) {
 	          image.writeFile(distPath, 'jpg', {}, function (err) {
 	            if (err) {
 	              reject(err);
@@ -2872,22 +2869,28 @@ module.exports =
 	    });
 	  });
 	}
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(28)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(24)))
 
 /***/ },
 /* 24 */
 /***/ function(module, exports) {
 
-	module.exports = require("request");
+	module.exports = require("lodash");
 
 /***/ },
 /* 25 */
 /***/ function(module, exports) {
 
-	module.exports = require("lwip");
+	module.exports = require("request");
 
 /***/ },
 /* 26 */
+/***/ function(module, exports) {
+
+	module.exports = require("lwip");
+
+/***/ },
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2896,7 +2899,7 @@ module.exports =
 	  value: true
 	});
 
-	var _servant = __webpack_require__(27);
+	var _servant = __webpack_require__(28);
 
 	Object.defineProperty(exports, 'servant', {
 	  enumerable: true,
@@ -2906,7 +2909,7 @@ module.exports =
 	});
 
 /***/ },
-/* 27 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3056,13 +3059,13 @@ module.exports =
 
 	var _fs2 = _interopRequireDefault(_fs);
 
-	var _request = __webpack_require__(24);
+	var _request = __webpack_require__(25);
 
 	var _request2 = _interopRequireDefault(_request);
 
-	var _lwip = __webpack_require__(25);
+	var _lwip2 = __webpack_require__(26);
 
-	var _lwip2 = _interopRequireDefault(_lwip);
+	var _lwip3 = _interopRequireDefault(_lwip2);
 
 	var _logger = __webpack_require__(7);
 
@@ -3080,6 +3083,10 @@ module.exports =
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	if (process.env.NODE_ENV !== 'production') {
+	  var _lwip = __webpack_require__(26);
+	}
+
 	var imageDir = './public/assets/img/';
 
 	function findServants(args) {
@@ -3091,7 +3098,7 @@ module.exports =
 	    var max = servants.reduce(function (previous, current) {
 	      return Math.max(current.tribe_code, previous);
 	    }, 0);
-	    _lwip2.default.create(40 * max, 40, { r: 0, g: 0, b: 0 }, function (err, image) {
+	    _lwip3.default.create(40 * max, 40, { r: 0, g: 0, b: 0 }, function (err, image) {
 	      (0, _co2.default)(regeneratorRuntime.mark(function _callee2() {
 	        var _iteratorNormalCompletion3, _didIteratorError3, _iteratorError3, _iterator3, _step3, _servant;
 
@@ -3187,7 +3194,7 @@ module.exports =
 	    var max = servants.reduce(function (previous, current) {
 	      return Math.max(current.tribe_code, previous);
 	    }, 0);
-	    _lwip2.default.create(150 * max, 890 / 640 * 150, { r: 0, g: 0, b: 0 }, function (err, image) {
+	    _lwip3.default.create(150 * max, 890 / 640 * 150, { r: 0, g: 0, b: 0 }, function (err, image) {
 	      (0, _co2.default)(regeneratorRuntime.mark(function _callee3() {
 	        var _iteratorNormalCompletion4, _didIteratorError4, _iteratorError4, _iterator4, _step4, _servant2;
 
@@ -3281,7 +3288,7 @@ module.exports =
 	function pasteSprite(image, servant) {
 	  return new Promise(function (resolve, reject) {
 	    var imagePath = imageDir + 'clip/' + servant.id + '.jpg';
-	    _lwip2.default.open(imagePath, function (err, pasteImage) {
+	    _lwip3.default.open(imagePath, function (err, pasteImage) {
 	      if (err) {
 	        reject(err);
 	        return;
@@ -3295,7 +3302,7 @@ module.exports =
 	function paste(image, servant) {
 	  return new Promise(function (resolve) {
 	    var imagePath = imageDir + 'm/' + servant.id + '.jpg';
-	    _lwip2.default.open(imagePath, function (err, pasteImage) {
+	    _lwip3.default.open(imagePath, function (err, pasteImage) {
 	      if (err) {
 	        reject(err);
 	        return;
@@ -3305,12 +3312,6 @@ module.exports =
 	    });
 	  });
 	}
-
-/***/ },
-/* 28 */
-/***/ function(module, exports) {
-
-	module.exports = require("lodash");
 
 /***/ }
 /******/ ]);

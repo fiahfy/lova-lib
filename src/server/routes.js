@@ -16,5 +16,6 @@ router.get('/api/prizes/', apiControllers.prize)
 ///
 router.get('/api/servants/statistics/', apiControllers.servantStatistics)
 router.get('/api/spells/statistics/', apiControllers.spellStatistics)
+router.get('*', rootController)
 
 export default router.routes()

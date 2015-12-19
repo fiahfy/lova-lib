@@ -1,3 +1,6 @@
-import {createHistory, useQueries} from 'history'
+import {createHistory, createMemoryHistory, useQueries} from 'history'
+import ExecutionEnvironment from 'fbjs/lib/ExecutionEnvironment'
 
-export default useQueries(createHistory)()
+export default useQueries(
+  ExecutionEnvironment.canUseDOM ? createHistory : createMemoryHistory
+)()

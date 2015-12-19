@@ -4,14 +4,11 @@ export default {
   target: 'web',
   debug: true,
   devtool: 'cheap-source-map',
-  entry: {
-    main: './src/client/bootstrap.js',
-    style: './src/client/loader.js'
-  },
+  entry: './src/client.js',
   output: {
     path: './public/assets/',
     publicPath: '/assets/',
-    filename: 'js/[name].bundle.js'
+    filename: 'js/bundle.js'
   },
   plugins: [
     //new webpack.DefinePlugin({
@@ -43,14 +40,22 @@ export default {
       },
       {
         test: /\.css$/,
-        loader: 'style!css'
+        loader: 'css'
       },
       {
-        test: /\.(png|woff|woff2|eot|ttf|svg)$/,
+        test: /\.(jpg|gif|png|svg)$/,
         loader: 'url',
         query: {
           limit: '10000',
           name: 'lib/[hash].[ext]'
+        }
+      },
+      {
+        test: /\.(woff|woff2|eot|ttf)$/,
+        loader: 'url',
+        query: {
+          limit: '10000',
+          name: 'font/[hash].[ext]'
         }
       },
       {
@@ -73,10 +78,6 @@ export default {
       {
         test: /flat-ui\.js$/,
         loader: 'imports?this=>window'
-      },
-      {
-        test: /fetch\.js$/,
-        loader: 'imports?this=>global!exports?global.fetch'
       }
     ]
   }

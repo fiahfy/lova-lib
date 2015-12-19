@@ -1,12 +1,12 @@
 import co from 'co'
 import fs from'fs'
 import request from'request'
-// if (process.env.NODE_ENV !== 'production') {
-import lwip from 'lwip'
-// }
 import logger from '../../utils/logger'
 import * as scraper from '../../utils/scraper'
 import * as models from '../../models'
+if (process.env.NODE_ENV !== 'production') {
+  const lwip = require('lwip')
+}
 
 const imageDir = './public/assets/img/'
 

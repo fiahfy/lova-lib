@@ -1,11 +1,11 @@
 import classNames from 'classnames'
 import moment from 'moment'
 import React, {Component, PropTypes} from 'react'
-import NVD3Chart from 'react-nvd3'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 import * as ActionCreators from '../actions'
 import * as SpellUtils from '../utils/spell-utils'
+import NVD3Chart from '../components/react-nvd3'
 
 function mapStateToProps(state) {
   return {

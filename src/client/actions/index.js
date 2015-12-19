@@ -1,4 +1,4 @@
-import fetch from 'whatwg-fetch'
+import fetch from 'isomorphic-fetch'
 
 export const RECEIVE_SERVANT = 'RECEIVE_SERVANT'
 export const RECEIVE_SERVANTS = 'RECEIVE_SERVANTS'
