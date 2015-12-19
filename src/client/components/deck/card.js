@@ -38,7 +38,7 @@ export default class Card extends Component {
       animation: true,
       html: true,
       placement: () => {
-        let top = $(this.refs.cardSpan).offset().top;
+        const top = $(this.refs.cardSpan).offset().top
         if (top - $(window).scrollTop() < $(window).height() / 2) {
           return 'bottom'
         }

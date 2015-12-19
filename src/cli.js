@@ -6,7 +6,7 @@ import * as downloadCommands from './server/commands/download'
 import * as spriteCommands from './server/commands/sprite'
 import logger from './server/utils/logger'
 
-var promise = null
+let promise = null
 
 commander
   .command('update-servant [url]')

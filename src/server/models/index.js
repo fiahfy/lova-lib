@@ -46,5 +46,5 @@ process.on('SIGINT', () => {
 export {default as counter} from './counter'
 export {default as servant} from './servant'
 export {default as prize} from './prize'
-export {default as servantrRanking} from './servant-ranking'
+export {default as servantRanking} from './servant-ranking'
 export {default as spellRanking} from './spell-ranking'

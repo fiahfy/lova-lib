@@ -13,18 +13,18 @@ export default class App extends Component {
     switch (pathes[1]) {
       case 'deck':
         description = 'Deck Simulator for Lord of Vermilion Arena'
-        break;
+        break
       case 'charts':
         description = 'Charts for Lord of Vermilion Arena'
-        break;
+        break
       case 'prize':
         description = 'Prize Simulator for Lord of Vermilion Arena'
-        break;
+        break
       case 'about':
-        break;
+        break
       case 'servants':
         description = 'Servants for Lord of Vermilion Arena'
-        break;
+        break
     }
 
     return {title, description}

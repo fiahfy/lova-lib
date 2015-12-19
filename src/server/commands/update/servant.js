@@ -1,6 +1,6 @@
 import co from 'co'
 import logger from'../../utils/logger'
-import scraper from'../../utils/scraper'
+import * as scraper from'../../utils/scraper'
 import * as models from'../../models'
 
 export default function(url, force) {

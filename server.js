@@ -356,7 +356,7 @@ module.exports =
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.spellRanking = exports.servantrRanking = exports.prize = exports.servant = exports.counter = undefined;
+	exports.spellRanking = exports.servantRanking = exports.prize = exports.servant = exports.counter = undefined;
 
 	var _counter = __webpack_require__(13);
 
@@ -387,7 +387,7 @@ module.exports =
 
 	var _servantRanking = __webpack_require__(17);
 
-	Object.defineProperty(exports, 'servantrRanking', {
+	Object.defineProperty(exports, 'servantRanking', {
 	  enumerable: true,
 	  get: function get() {
 	    return _servantRanking.default;
@@ -491,8 +491,10 @@ module.exports =
 	});
 
 	CounterSchema.statics.getNewId = function (name, callback) {
+	  var _this = this;
+
 	  return new Promise(function (resolve, reject) {
-	    undefined.collection.findAndModify({ _id: name }, [], { $inc: { seq: 1 } }, { new: true, upsert: true }, function (err, result) {
+	    _this.collection.findAndModify({ _id: name }, [], { $inc: { seq: 1 } }, { new: true, upsert: true }, function (err, result) {
 	      if (callback) {
 	        callback(err, result);
 	      }
@@ -729,14 +731,22 @@ module.exports =
 
 	'use strict';
 
-	var winston = __webpack_require__(22);
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 
-	var logger = new winston.Logger({
-	  transports: [new winston.transports.Console({ level: 'silly', timestamp: true })]
+	var _winston = __webpack_require__(22);
+
+	var _winston2 = _interopRequireDefault(_winston);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var logger = new _winston2.default.Logger({
+	  transports: [new _winston2.default.transports.Console({ level: 'silly', timestamp: true })]
 	});
 	logger.cli();
 
-	module.exports = logger;
+	exports.default = logger;
 
 /***/ },
 /* 22 */

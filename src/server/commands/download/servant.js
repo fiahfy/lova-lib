@@ -1,135 +1,135 @@
-'use strict';
+import co from 'co'
+import fs from'fs'
+import request from'request'
+// if (process.env.NODE_ENV !== 'production') {
+import lwip from 'lwip'
+// }
+import logger from '../../utils/logger'
+import * as scraper from '../../utils/scraper'
+import * as models from '../../models'
 
-let co = require('co');
-let fs = require('fs');
-let request = require('request');
-let lwip = process.env.NODE_ENV !== 'production' ? require('lwip') : undefined;
-let logger = require('../../utils/logger');
-let scraper = require('../../utils/scraper');
-let models = require('../../models');
+const imageDir = './public/assets/img/'
 
-const imageDir = './client/assets/img/';
-
-module.exports = function(id, force) {
+export default function(id, force) {
   return co(function *() {
-    let servants;
+    let servants
     if (id) {
-      servants = yield findServants({_id: id});
+      servants = yield findServants({_id: id})
     } else {
-      servants = yield findServants({});
+      servants = yield findServants({})
     }
     for (let servant of servants) {
-      yield save(servant, force);
+      yield save(servant, force)
     }
-  });
-};
+  })
+}
 
 function findServants(args) {
-  return models.servant.find(args).sort({_id: 1}).exec();
+  return models.servant.find(args).sort({_id: 1}).exec()
 }
 
 function save(servant, force) {
   return co(function *() {
-    logger.verbose('Begin Download Servant Image: id = %d', servant.id);
+    logger.verbose('Begin Download Servant Image: id = %d', servant.id)
 
-    let clipImagePath = `${imageDir}clip/${servant.id}.jpg`;
-    let largeImagePath = `${imageDir}l/${servant.id}.jpg`;
-    let middleImagePath = `${imageDir}m/${servant.id}.jpg`;
+    const clipImagePath = `${imageDir}clip/${servant.id}.jpg`
+    const largeImagePath = `${imageDir}l/${servant.id}.jpg`
+    const middleImagePath = `${imageDir}m/${servant.id}.jpg`
 
     if (!force && (yield exists(clipImagePath)) && (yield exists(largeImagePath)) && (yield exists(middleImagePath))) {
-      logger.verbose('Image File is Almost Exists');
-      return;
+      logger.verbose('Image File is Almost Exists')
+      return
     }
 
-    let clipUrl = yield getClipImageUrlWithServant(servant);
-    let url = yield getImageUrlWithServant(servant);
+    const clipUrl = yield getClipImageUrlWithServant(servant)
+    const url = yield getImageUrlWithServant(servant)
     if (!clipUrl || !url) {
-      throw new Error('Image Url is Not Found');
+      throw new Error('Image Url is Not Found')
     }
 
-    yield download(clipUrl, clipImagePath);
+    yield download(clipUrl, clipImagePath)
 
-    yield download(url, largeImagePath);
+    yield download(url, largeImagePath)
 
-    yield scale(largeImagePath, middleImagePath, 150 / 640);
+    yield scale(largeImagePath, middleImagePath, 150 / 640)
 
-    yield compress(middleImagePath, middleImagePath, {quality: 50});
-  });
+    yield compress(middleImagePath, middleImagePath, {quality: 50})
+  })
 }
 
 function getImageUrlWithServant(servant) {
   return co(function *() {
-    let $ = (yield scraper.fetchServant(servant.tribe_name, servant.name)).$;
-    return $('#rendered-body').find('> div:first-child img').attr('src');
-  });
+    const $ = (yield scraper.fetchServant(servant.tribe_name, servant.name)).$
+    return $('#rendered-body').find('> div:first-child img').attr('src')
+  })
 }
 
 function getClipImageUrlWithServant(servant) {
   return co(function *() {
-    let $ = (yield scraper.fetchAllServantList()).$;
-    let tribeNameAndCode = `${servant.tribe_name}-${('000'+servant.tribe_code).slice(-3)}`;
+    const $ = (yield scraper.fetchAllServantList()).$
+    const tribeNameAndCode = `${servant.tribe_name}-${_.padLeft(servant.tribe_code, 3, 0)}`
     return $('#content_1001_1').next().next()
       .find(`table tbody tr td:contains(${tribeNameAndCode})`).prev().prev()
-      .find('a img').attr('src');
-  });
+      .find('a img').attr('src')
+  })
 }
 
 function exists(path) {
-  return new Promise(function(resolve, reject) {
-    fs.stat(path, function(err, stat) {
+  return new Promise(resolve => {
+    fs.stat(path, err => {
       if (err == null) {
-        resolve(true);
-        return;
+        resolve(true)
+        return
       }
-      resolve(false);
-    });
-  });
+      resolve(false)
+    })
+  })
 }
 
 function download(url, path) {
-  return new Promise(function(resolve, reject) {
-    logger.verbose('Download Image: url = %s', url);
+  return new Promise(resolve => {
+    logger.verbose('Download Image: url = %s', url)
 
     request
       .get(url)
       //.on('response', function(res) {
-      //  console.log('statusCode: ', res.statusCode);
-      //  console.log('content-length: ', res.headers['content-length']);
+      //  console.log('statusCode: ', res.statusCode)
+      //  console.log('content-length: ', res.headers['content-length'])
       //})
-      .pipe(fs.createWriteStream(path).on('close', function() {
-        resolve();
-      }));
-  });
+      .pipe(fs.createWriteStream(path).on('close', () => {
+        resolve()
+      }))
+  })
 }
 
 function scale(orgPath, distPath, ratio) {
-  return new Promise(function(resolve, reject) {
-    lwip.open(orgPath, function(err, image) {
+  return new Promise(resolve => {
+    lwip.open(orgPath, (err, image) => {
       image.batch().scale(ratio, ratio, 'lanczos').writeFile(distPath, 'jpg', {}, function (err) {
         if (err) {
-          reject(err);
-          return;
+          reject(err)
+          return
         }
-        resolve();
-      });
-    });
-  });
+        resolve()
+      })
+    })
+  })
 }
 
 function compress(orgPath, distPath, params) {
-  return new Promise(function(resolve, reject) {
-    lwip.open(orgPath, function(err, image) {
-      image.toBuffer('jpg', {quality: 50}, function(err, buffer) {
+  return new Promise(resolve => {
+    lwip.open(orgPath, (err, image) => {
+      image.toBuffer('jpg', {quality: 50}, (err, buffer) => {
         lwip.open(buffer, 'jpg', function(err, image) {
           image.writeFile(distPath, 'jpg', {}, function (err) {
             if (err) {
-              reject(err);
-              return;
+              reject(err)
+              return
             }
-            resolve();
-          });
-        });
-      });
-    });
-  });
+            resolve()
+          })
+        })
+      })
+    })
+  })
 }

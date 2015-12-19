@@ -67,7 +67,7 @@ export default class Chart extends Component {
     this.props.actions.fetchSpellStatistics({
       map:   'all',
       queue: 'all'
-    });
+    })
   }
   render() {
     const {spellStatistics} = this.props

@@ -64,8 +64,8 @@ export default class DeckContainer extends Component {
       })
     }
 
-    const cardNodes = createCardNodes(_.range(0, 8));
-    const cardNodesForXS = createCardNodes([0, 1, 2, 6, 3, 4, 5, 7]);
+    const cardNodes = createCardNodes(_.range(0, 8))
+    const cardNodesForXS = createCardNodes([0, 1, 2, 6, 3, 4, 5, 7])
 
     const tribeIdOptionNodes = [{tribe_name: 'Select Tribe...'}]
       .concat(_.uniq(servants, (value, key) => value.tribe_name))

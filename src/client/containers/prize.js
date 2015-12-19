@@ -32,7 +32,7 @@ export default class Prize extends Component {
     times = Math.min(Math.max(1, times), 1000)
     this.refs.times.value = times
 
-    const {prizes} = this.props;
+    const {prizes} = this.props
 
     let totalRate = 0
     const lots = prizes.map((e) => {

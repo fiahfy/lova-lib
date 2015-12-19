@@ -289,7 +289,7 @@ module.exports =
 
 	var _scraper = __webpack_require__(9);
 
-	var _scraper2 = _interopRequireDefault(_scraper);
+	var scraper = _interopRequireWildcard(_scraper);
 
 	var _models = __webpack_require__(11);
 
@@ -400,7 +400,7 @@ module.exports =
 	        switch (_context4.prev = _context4.next) {
 	          case 0:
 	            _context4.next = 2;
-	            return _scraper2.default.fetchAllServantList();
+	            return scraper.fetchAllServantList();
 
 	          case 2:
 	            $ = _context4.sent.$;
@@ -435,7 +435,7 @@ module.exports =
 	        switch (_context5.prev = _context5.next) {
 	          case 0:
 	            _context5.next = 2;
-	            return _scraper2.default.fetch(url);
+	            return scraper.fetch(url);
 
 	          case 2:
 	            $ = _context5.sent.$;
@@ -620,14 +620,22 @@ module.exports =
 
 	'use strict';
 
-	var winston = __webpack_require__(8);
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 
-	var logger = new winston.Logger({
-	  transports: [new winston.transports.Console({ level: 'silly', timestamp: true })]
+	var _winston = __webpack_require__(8);
+
+	var _winston2 = _interopRequireDefault(_winston);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var logger = new _winston2.default.Logger({
+	  transports: [new _winston2.default.transports.Console({ level: 'silly', timestamp: true })]
 	});
 	logger.cli();
 
-	module.exports = logger;
+	exports.default = logger;
 
 /***/ },
 /* 8 */
@@ -641,20 +649,38 @@ module.exports =
 
 	'use strict';
 
-	var client = __webpack_require__(10);
-	var logger = __webpack_require__(7);
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.fetch = fetch;
+	exports.fetchArticle = fetchArticle;
+	exports.fetchNotice = fetchNotice;
+	exports.fetchServant = fetchServant;
+	exports.fetchAllServantList = fetchAllServantList;
+	exports.fetchServantRanking = fetchServantRanking;
+	exports.fetchSpellRanking = fetchSpellRanking;
+
+	var _cheerioHttpcli = __webpack_require__(10);
+
+	var _cheerioHttpcli2 = _interopRequireDefault(_cheerioHttpcli);
+
+	var _logger = __webpack_require__(7);
+
+	var _logger2 = _interopRequireDefault(_logger);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	// set ua
-	client.setBrowser('chrome');
-	client.headers['User-Agent'] += ' Lova Scraper Client/1.0.0';
+	_cheerioHttpcli2.default.setBrowser('chrome');
+	_cheerioHttpcli2.default.headers['User-Agent'] += ' Lova Scraper Client/1.0.0';
 
 	var lovaSiteBasePath = 'http://lova.jp/';
 	var cacheSiteBasePath = 'http://cache.lova.jp/';
 	var wikiSiteBasePath = 'http://wiki.4gamer.net/lova/';
 
 	function fetch(url) {
-	  logger.verbose('Fetch Url: url = %s', url);
-	  return client.fetch(url);
+	  _logger2.default.verbose('Fetch Url: url = %s', url);
+	  return _cheerioHttpcli2.default.fetch(url);
 	}
 
 	function fetchArticle(id) {
@@ -758,16 +784,6 @@ module.exports =
 	  return fetch(url);
 	}
 
-	module.exports = {
-	  fetch: fetch,
-	  fetchArticle: fetchArticle,
-	  fetchNotice: fetchNotice,
-	  fetchServant: fetchServant,
-	  fetchAllServantList: fetchAllServantList,
-	  fetchServantRanking: fetchServantRanking,
-	  fetchSpellRanking: fetchSpellRanking
-	};
-
 /***/ },
 /* 10 */
 /***/ function(module, exports) {
@@ -783,7 +799,7 @@ module.exports =
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.spellRanking = exports.servantrRanking = exports.prize = exports.servant = exports.counter = undefined;
+	exports.spellRanking = exports.servantRanking = exports.prize = exports.servant = exports.counter = undefined;
 
 	var _counter = __webpack_require__(12);
 
@@ -814,7 +830,7 @@ module.exports =
 
 	var _servantRanking = __webpack_require__(15);
 
-	Object.defineProperty(exports, 'servantrRanking', {
+	Object.defineProperty(exports, 'servantRanking', {
 	  enumerable: true,
 	  get: function get() {
 	    return _servantRanking.default;
@@ -918,8 +934,10 @@ module.exports =
 	});
 
 	CounterSchema.statics.getNewId = function (name, callback) {
+	  var _this = this;
+
 	  return new Promise(function (resolve, reject) {
-	    undefined.collection.findAndModify({ _id: name }, [], { $inc: { seq: 1 } }, { new: true, upsert: true }, function (err, result) {
+	    _this.collection.findAndModify({ _id: name }, [], { $inc: { seq: 1 } }, { new: true, upsert: true }, function (err, result) {
 	      if (callback) {
 	        callback(err, result);
 	      }
@@ -1233,7 +1251,7 @@ module.exports =
 
 	var _scraper = __webpack_require__(9);
 
-	var _scraper2 = _interopRequireDefault(_scraper);
+	var scraper = _interopRequireWildcard(_scraper);
 
 	var _models = __webpack_require__(11);
 
@@ -1359,7 +1377,7 @@ module.exports =
 
 	          case 5:
 	            _context3.next = 7;
-	            return _scraper2.default.fetchArticle(id);
+	            return scraper.fetchArticle(id);
 
 	          case 7:
 	            $ = _context3.sent.$;
@@ -1458,7 +1476,7 @@ module.exports =
 	                  switch (_context4.prev = _context4.next) {
 	                    case 0:
 	                      _context4.next = 2;
-	                      return _scraper2.default.fetchNotice(i);
+	                      return scraper.fetchNotice(i);
 
 	                    case 2:
 	                      $ = _context4.sent.$;
@@ -1531,16 +1549,12 @@ module.exports =
 
 	'use strict';
 
-	var co = __webpack_require__(6);
-	var logger = __webpack_require__(7);
-	var scraper = __webpack_require__(9);
-	var models = __webpack_require__(11);
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 
-	var maps = ['all', 'vermilion', 'braze'];
-	var queues = ['all', 'normal', 'solo'];
-
-	module.exports = function (date, dateFrom, dateTo, force) {
-	  return co(regeneratorRuntime.mark(function _callee() {
+	exports.default = function (date, dateFrom, dateTo, force) {
+	  return (0, _co2.default)(regeneratorRuntime.mark(function _callee() {
 	    var from, to, _d, _d2, servantMap, d, _arr, _i, mode, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, map, _iteratorNormalCompletion2, _didIteratorError2, _iteratorError2, _iterator2, _step2, queue;
 
 	    return regeneratorRuntime.wrap(function _callee$(_context) {
@@ -1758,15 +1772,38 @@ module.exports =
 	  }));
 	};
 
+	var _co = __webpack_require__(6);
+
+	var _co2 = _interopRequireDefault(_co);
+
+	var _logger = __webpack_require__(7);
+
+	var _logger2 = _interopRequireDefault(_logger);
+
+	var _scraper = __webpack_require__(9);
+
+	var scraper = _interopRequireWildcard(_scraper);
+
+	var _models = __webpack_require__(11);
+
+	var models = _interopRequireWildcard(_models);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var maps = ['all', 'vermilion', 'braze'];
+	var queues = ['all', 'normal', 'solo'];
+
 	function updateRanking(date, mode, map, queue, servantMap, force) {
-	  return co(regeneratorRuntime.mark(function _callee2() {
-	    var results, rankings, data, _iteratorNormalCompletion3, _didIteratorError3, _iteratorError3, _iterator3, _step3, r, _iteratorNormalCompletion4, _didIteratorError4, _iteratorError4, _iterator4, _step4, d;
+	  return (0, _co2.default)(regeneratorRuntime.mark(function _callee2() {
+	    var results, rankings, data, _iteratorNormalCompletion3, _didIteratorError3, _iteratorError3, _iterator3, _step3, d;
 
 	    return regeneratorRuntime.wrap(function _callee2$(_context2) {
 	      while (1) {
 	        switch (_context2.prev = _context2.next) {
 	          case 0:
-	            logger.verbose('Update Servant Ranking Begin: date = %s (%s, %s, %s)', date.toUTCString(), mode, map, queue);
+	            _logger2.default.verbose('Update Servant Ranking Begin: date = %s (%s, %s, %s)', date.toUTCString(), mode, map, queue);
 
 	            _context2.next = 3;
 	            return findRanking({ date: date, mode: mode, map: map, queue: queue });
@@ -1784,13 +1821,13 @@ module.exports =
 	              break;
 	            }
 
-	            logger.verbose('Servant Ranking is Almost Exists');
+	            _logger2.default.verbose('Servant Ranking is Almost Exists');
 	            return _context2.abrupt('return');
 
 	          case 8:
 
 	            // delete
-	            logger.info('Delete Servant Ranking');
+	            _logger2.default.info('Delete Servant Ranking');
 	            _context2.next = 11;
 	            return deleteRanking({ date: date, mode: mode, map: map, queue: queue });
 
@@ -1806,141 +1843,100 @@ module.exports =
 	              break;
 	            }
 
-	            logger.warn('Servant Ranking Data is Nothing');
+	            _logger2.default.warn('Servant Ranking Data is Nothing');
 	            return _context2.abrupt('return');
 
 	          case 17:
-	            data = [];
-	            _iteratorNormalCompletion3 = true;
-	            _didIteratorError3 = false;
-	            _iteratorError3 = undefined;
-	            _context2.prev = 21;
-
-	            for (_iterator3 = rankings[Symbol.iterator](); !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-	              r = _step3.value;
-
-	              data.push({
+	            data = rankings.map(function (ranking) {
+	              return {
 	                date: date,
 	                mode: mode,
 	                map: map,
 	                queue: queue,
-	                servant_id: servantMap[r.tribe][Number(r.id)],
-	                seq: r.seq,
-	                rank: r.rank,
-	                score: r.score
-	              });
-	            }
+	                servant_id: servantMap[ranking.tribe][Number(ranking.id)],
+	                seq: ranking.seq,
+	                rank: ranking.rank,
+	                score: ranking.score
+	              };
+	            });
 
 	            // insert
-	            _context2.next = 29;
+
+	            _logger2.default.info('Insert Servant Ranking');
+	            _iteratorNormalCompletion3 = true;
+	            _didIteratorError3 = false;
+	            _iteratorError3 = undefined;
+	            _context2.prev = 22;
+	            _iterator3 = data[Symbol.iterator]();
+
+	          case 24:
+	            if (_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done) {
+	              _context2.next = 31;
+	              break;
+	            }
+
+	            d = _step3.value;
+	            _context2.next = 28;
+	            return insertRanking(d);
+
+	          case 28:
+	            _iteratorNormalCompletion3 = true;
+	            _context2.next = 24;
 	            break;
 
-	          case 25:
-	            _context2.prev = 25;
-	            _context2.t0 = _context2['catch'](21);
+	          case 31:
+	            _context2.next = 37;
+	            break;
+
+	          case 33:
+	            _context2.prev = 33;
+	            _context2.t0 = _context2['catch'](22);
 	            _didIteratorError3 = true;
 	            _iteratorError3 = _context2.t0;
 
-	          case 29:
-	            _context2.prev = 29;
-	            _context2.prev = 30;
+	          case 37:
+	            _context2.prev = 37;
+	            _context2.prev = 38;
 
 	            if (!_iteratorNormalCompletion3 && _iterator3.return) {
 	              _iterator3.return();
 	            }
 
-	          case 32:
-	            _context2.prev = 32;
+	          case 40:
+	            _context2.prev = 40;
 
 	            if (!_didIteratorError3) {
-	              _context2.next = 35;
+	              _context2.next = 43;
 	              break;
 	            }
 
 	            throw _iteratorError3;
 
-	          case 35:
-	            return _context2.finish(32);
-
-	          case 36:
-	            return _context2.finish(29);
-
-	          case 37:
-	            logger.info('Insert Servant Ranking');
-	            _iteratorNormalCompletion4 = true;
-	            _didIteratorError4 = false;
-	            _iteratorError4 = undefined;
-	            _context2.prev = 41;
-	            _iterator4 = data[Symbol.iterator]();
-
 	          case 43:
-	            if (_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done) {
-	              _context2.next = 50;
-	              break;
-	            }
+	            return _context2.finish(40);
 
-	            d = _step4.value;
-	            _context2.next = 47;
-	            return insertRanking(d);
+	          case 44:
+	            return _context2.finish(37);
 
-	          case 47:
-	            _iteratorNormalCompletion4 = true;
-	            _context2.next = 43;
-	            break;
-
-	          case 50:
-	            _context2.next = 56;
-	            break;
-
-	          case 52:
-	            _context2.prev = 52;
-	            _context2.t1 = _context2['catch'](41);
-	            _didIteratorError4 = true;
-	            _iteratorError4 = _context2.t1;
-
-	          case 56:
-	            _context2.prev = 56;
-	            _context2.prev = 57;
-
-	            if (!_iteratorNormalCompletion4 && _iterator4.return) {
-	              _iterator4.return();
-	            }
-
-	          case 59:
-	            _context2.prev = 59;
-
-	            if (!_didIteratorError4) {
-	              _context2.next = 62;
-	              break;
-	            }
-
-	            throw _iteratorError4;
-
-	          case 62:
-	            return _context2.finish(59);
-
-	          case 63:
-	            return _context2.finish(56);
-
-	          case 64:
+	          case 45:
 	          case 'end':
 	            return _context2.stop();
 	        }
 	      }
-	    }, _callee2, this, [[21, 25, 29, 37], [30,, 32, 36], [41, 52, 56, 64], [57,, 59, 63]]);
+	    }, _callee2, this, [[22, 33, 37, 45], [38,, 40, 44]]);
 	  }));
 	}
 
 	function findRanking(args) {
-	  return models.servantranking.find(args).exec();
+	  return models.servantRanking.find(args).exec();
 	}
 
 	function deleteRanking(args) {
-	  return models.servantranking.remove(args).exec();
+	  return models.servantRanking.remove(args).exec();
 	}
 
 	function insertRanking(args) {
-	  return co(regeneratorRuntime.mark(function _callee3() {
+	  return (0, _co2.default)(regeneratorRuntime.mark(function _callee3() {
 	    var result, _id;
 
 	    return regeneratorRuntime.wrap(function _callee3$(_context3) {
@@ -1954,7 +1950,7 @@ module.exports =
 	            result = _context3.sent.result;
 	            _id = result.value.seq;
 	            _context3.next = 6;
-	            return models.servantranking.update({ _id: _id }, args, { upsert: true }).exec();
+	            return models.servantRanking.update({ _id: _id }, args, { upsert: true }).exec();
 
 	          case 6:
 	          case 'end':
@@ -1966,7 +1962,7 @@ module.exports =
 	}
 
 	function getRanking(date, mode, map, queue) {
-	  return co(regeneratorRuntime.mark(function _callee4() {
+	  return (0, _co2.default)(regeneratorRuntime.mark(function _callee4() {
 	    var body;
 	    return regeneratorRuntime.wrap(function _callee4$(_context4) {
 	      while (1) {
@@ -1991,8 +1987,8 @@ module.exports =
 	}
 
 	function getServantMap() {
-	  return co(regeneratorRuntime.mark(function _callee5() {
-	    var servants, map, _iteratorNormalCompletion5, _didIteratorError5, _iteratorError5, _iterator5, _step5, servant, tribeName;
+	  return (0, _co2.default)(regeneratorRuntime.mark(function _callee5() {
+	    var servants, map, _iteratorNormalCompletion4, _didIteratorError4, _iteratorError4, _iterator4, _step4, servant, tribeName;
 
 	    return regeneratorRuntime.wrap(function _callee5$(_context5) {
 	      while (1) {
@@ -2004,13 +2000,13 @@ module.exports =
 	          case 2:
 	            servants = _context5.sent;
 	            map = {};
-	            _iteratorNormalCompletion5 = true;
-	            _didIteratorError5 = false;
-	            _iteratorError5 = undefined;
+	            _iteratorNormalCompletion4 = true;
+	            _didIteratorError4 = false;
+	            _iteratorError4 = undefined;
 	            _context5.prev = 7;
 
-	            for (_iterator5 = servants[Symbol.iterator](); !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-	              servant = _step5.value;
+	            for (_iterator4 = servants[Symbol.iterator](); !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+	              servant = _step4.value;
 	              tribeName = getTribeName(servant.tribe_id);
 
 	              if (!map[tribeName]) {
@@ -2024,26 +2020,26 @@ module.exports =
 	          case 11:
 	            _context5.prev = 11;
 	            _context5.t0 = _context5['catch'](7);
-	            _didIteratorError5 = true;
-	            _iteratorError5 = _context5.t0;
+	            _didIteratorError4 = true;
+	            _iteratorError4 = _context5.t0;
 
 	          case 15:
 	            _context5.prev = 15;
 	            _context5.prev = 16;
 
-	            if (!_iteratorNormalCompletion5 && _iterator5.return) {
-	              _iterator5.return();
+	            if (!_iteratorNormalCompletion4 && _iterator4.return) {
+	              _iterator4.return();
 	            }
 
 	          case 18:
 	            _context5.prev = 18;
 
-	            if (!_didIteratorError5) {
+	            if (!_didIteratorError4) {
 	              _context5.next = 21;
 	              break;
 	            }
 
-	            throw _iteratorError5;
+	            throw _iteratorError4;
 
 	          case 21:
 	            return _context5.finish(18);
@@ -2052,7 +2048,14 @@ module.exports =
 	            return _context5.finish(15);
 
 	          case 23:
-	            return _context5.abrupt('return', map);
+	            return _context5.abrupt('return', servants.reduce(function (previous, current) {
+	              var tribeName = getTribeName(current.tribe_id);
+	              if (!previous[tribeName]) {
+	                previous[tribeName] = {};
+	              }
+	              previous[tribeName][current.tribe_code] = current._id;
+	              return previous;
+	            }, {}));
 
 	          case 24:
 	          case 'end':
@@ -2073,16 +2076,12 @@ module.exports =
 
 	'use strict';
 
-	var co = __webpack_require__(6);
-	var logger = __webpack_require__(7);
-	var scraper = __webpack_require__(9);
-	var models = __webpack_require__(11);
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 
-	var maps = ['all', 'vermilion', 'braze'];
-	var queues = ['all', 'normal', 'solo'];
-
-	module.exports = function (date, dateFrom, dateTo, force) {
-	  return co(regeneratorRuntime.mark(function _callee() {
+	exports.default = function (date, dateFrom, dateTo, force) {
+	  return (0, _co2.default)(regeneratorRuntime.mark(function _callee() {
 	    var from, to, _d, _d2, d, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, map, _iteratorNormalCompletion2, _didIteratorError2, _iteratorError2, _iterator2, _step2, queue;
 
 	    return regeneratorRuntime.wrap(function _callee$(_context) {
@@ -2280,15 +2279,38 @@ module.exports =
 	  }));
 	};
 
+	var _co = __webpack_require__(6);
+
+	var _co2 = _interopRequireDefault(_co);
+
+	var _logger = __webpack_require__(7);
+
+	var _logger2 = _interopRequireDefault(_logger);
+
+	var _scraper = __webpack_require__(9);
+
+	var scraper = _interopRequireWildcard(_scraper);
+
+	var _models = __webpack_require__(11);
+
+	var models = _interopRequireWildcard(_models);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var maps = ['all', 'vermilion', 'braze'];
+	var queues = ['all', 'normal', 'solo'];
+
 	function updateRanking(date, map, queue, force) {
-	  return co(regeneratorRuntime.mark(function _callee2() {
-	    var results, rankings, data, _iteratorNormalCompletion3, _didIteratorError3, _iteratorError3, _iterator3, _step3, r, _iteratorNormalCompletion4, _didIteratorError4, _iteratorError4, _iterator4, _step4, d;
+	  return (0, _co2.default)(regeneratorRuntime.mark(function _callee2() {
+	    var results, rankings, data, _iteratorNormalCompletion3, _didIteratorError3, _iteratorError3, _iterator3, _step3, d;
 
 	    return regeneratorRuntime.wrap(function _callee2$(_context2) {
 	      while (1) {
 	        switch (_context2.prev = _context2.next) {
 	          case 0:
-	            logger.verbose('Update Spell Ranking Begin: date = %s (%s, %s)', date.toUTCString(), map, queue);
+	            _logger2.default.verbose('Update Spell Ranking Begin: date = %s (%s, %s)', date.toUTCString(), map, queue);
 
 	            _context2.next = 3;
 	            return findRanking({ date: date, map: map, queue: queue });
@@ -2306,13 +2328,13 @@ module.exports =
 	              break;
 	            }
 
-	            logger.verbose('Spell Ranking is Almost Exists');
+	            _logger2.default.verbose('Spell Ranking is Almost Exists');
 	            return _context2.abrupt('return');
 
 	          case 8:
 
 	            // delete
-	            logger.info('Delete Spell Ranking');
+	            _logger2.default.info('Delete Spell Ranking');
 	            _context2.next = 11;
 	            return deleteRanking({ date: date, map: map, queue: queue });
 
@@ -2328,140 +2350,99 @@ module.exports =
 	              break;
 	            }
 
-	            logger.warn('Spell Ranking Data is Nothing');
+	            _logger2.default.warn('Spell Ranking Data is Nothing');
 	            return _context2.abrupt('return');
 
 	          case 17:
-	            data = [];
-	            _iteratorNormalCompletion3 = true;
-	            _didIteratorError3 = false;
-	            _iteratorError3 = undefined;
-	            _context2.prev = 21;
-
-	            for (_iterator3 = rankings[Symbol.iterator](); !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-	              r = _step3.value;
-
-	              data.push({
+	            data = rankings.map(function (ranking) {
+	              return {
 	                date: date,
 	                map: map,
 	                queue: queue,
-	                spell_id: getSpellIdWithName(r.name),
-	                seq: r.seq,
-	                rank: r.rank,
-	                score: r.score
-	              });
-	            }
+	                spell_id: getSpellIdWithName(ranking.name),
+	                seq: ranking.seq,
+	                rank: ranking.rank,
+	                score: ranking.score
+	              };
+	            });
 
 	            // insert
-	            _context2.next = 29;
+
+	            _logger2.default.info('Insert Ranking Ranking');
+	            _iteratorNormalCompletion3 = true;
+	            _didIteratorError3 = false;
+	            _iteratorError3 = undefined;
+	            _context2.prev = 22;
+	            _iterator3 = data[Symbol.iterator]();
+
+	          case 24:
+	            if (_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done) {
+	              _context2.next = 31;
+	              break;
+	            }
+
+	            d = _step3.value;
+	            _context2.next = 28;
+	            return insertRanking(d);
+
+	          case 28:
+	            _iteratorNormalCompletion3 = true;
+	            _context2.next = 24;
 	            break;
 
-	          case 25:
-	            _context2.prev = 25;
-	            _context2.t0 = _context2['catch'](21);
+	          case 31:
+	            _context2.next = 37;
+	            break;
+
+	          case 33:
+	            _context2.prev = 33;
+	            _context2.t0 = _context2['catch'](22);
 	            _didIteratorError3 = true;
 	            _iteratorError3 = _context2.t0;
 
-	          case 29:
-	            _context2.prev = 29;
-	            _context2.prev = 30;
+	          case 37:
+	            _context2.prev = 37;
+	            _context2.prev = 38;
 
 	            if (!_iteratorNormalCompletion3 && _iterator3.return) {
 	              _iterator3.return();
 	            }
 
-	          case 32:
-	            _context2.prev = 32;
+	          case 40:
+	            _context2.prev = 40;
 
 	            if (!_didIteratorError3) {
-	              _context2.next = 35;
+	              _context2.next = 43;
 	              break;
 	            }
 
 	            throw _iteratorError3;
 
-	          case 35:
-	            return _context2.finish(32);
-
-	          case 36:
-	            return _context2.finish(29);
-
-	          case 37:
-	            logger.info('Insert Ranking Ranking');
-	            _iteratorNormalCompletion4 = true;
-	            _didIteratorError4 = false;
-	            _iteratorError4 = undefined;
-	            _context2.prev = 41;
-	            _iterator4 = data[Symbol.iterator]();
-
 	          case 43:
-	            if (_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done) {
-	              _context2.next = 50;
-	              break;
-	            }
+	            return _context2.finish(40);
 
-	            d = _step4.value;
-	            _context2.next = 47;
-	            return insertRanking(d);
+	          case 44:
+	            return _context2.finish(37);
 
-	          case 47:
-	            _iteratorNormalCompletion4 = true;
-	            _context2.next = 43;
-	            break;
-
-	          case 50:
-	            _context2.next = 56;
-	            break;
-
-	          case 52:
-	            _context2.prev = 52;
-	            _context2.t1 = _context2['catch'](41);
-	            _didIteratorError4 = true;
-	            _iteratorError4 = _context2.t1;
-
-	          case 56:
-	            _context2.prev = 56;
-	            _context2.prev = 57;
-
-	            if (!_iteratorNormalCompletion4 && _iterator4.return) {
-	              _iterator4.return();
-	            }
-
-	          case 59:
-	            _context2.prev = 59;
-
-	            if (!_didIteratorError4) {
-	              _context2.next = 62;
-	              break;
-	            }
-
-	            throw _iteratorError4;
-
-	          case 62:
-	            return _context2.finish(59);
-
-	          case 63:
-	            return _context2.finish(56);
-
-	          case 64:
+	          case 45:
 	          case 'end':
 	            return _context2.stop();
 	        }
 	      }
-	    }, _callee2, this, [[21, 25, 29, 37], [30,, 32, 36], [41, 52, 56, 64], [57,, 59, 63]]);
+	    }, _callee2, this, [[22, 33, 37, 45], [38,, 40, 44]]);
 	  }));
 	}
 
 	function findRanking(args) {
-	  return models.spellranking.find(args).exec();
+	  return models.spellRanking.find(args).exec();
 	}
 
 	function deleteRanking(args) {
-	  return models.spellranking.remove(args).exec();
+	  return models.spellRanking.remove(args).exec();
 	}
 
 	function insertRanking(args) {
-	  return co(regeneratorRuntime.mark(function _callee3() {
+	  return (0, _co2.default)(regeneratorRuntime.mark(function _callee3() {
 	    var result, _id;
 
 	    return regeneratorRuntime.wrap(function _callee3$(_context3) {
@@ -2475,7 +2456,7 @@ module.exports =
 	            result = _context3.sent.result;
 	            _id = result.value.seq;
 	            _context3.next = 6;
-	            return models.spellranking.update({ _id: _id }, args, { upsert: true }).exec();
+	            return models.spellRanking.update({ _id: _id }, args, { upsert: true }).exec();
 
 	          case 6:
 	          case 'end':
@@ -2487,7 +2468,7 @@ module.exports =
 	}
 
 	function getRanking(date, map, queue) {
-	  return co(regeneratorRuntime.mark(function _callee4() {
+	  return (0, _co2.default)(regeneratorRuntime.mark(function _callee4() {
 	    var body;
 	    return regeneratorRuntime.wrap(function _callee4$(_context4) {
 	      while (1) {
@@ -2538,20 +2519,14 @@ module.exports =
 /* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	/* WEBPACK VAR INJECTION */(function(_) {'use strict';
 
-	var co = __webpack_require__(6);
-	var fs = __webpack_require__(17);
-	var request = __webpack_require__(24);
-	var lwip = process.env.NODE_ENV !== 'production' ? __webpack_require__(25) : undefined;
-	var logger = __webpack_require__(7);
-	var scraper = __webpack_require__(9);
-	var models = __webpack_require__(11);
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 
-	var imageDir = './client/assets/img/';
-
-	module.exports = function (id, force) {
-	  return co(regeneratorRuntime.mark(function _callee() {
+	exports.default = function (id, force) {
+	  return (0, _co2.default)(regeneratorRuntime.mark(function _callee() {
 	    var servants, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, servant;
 
 	    return regeneratorRuntime.wrap(function _callee$(_context) {
@@ -2645,18 +2620,55 @@ module.exports =
 	  }));
 	};
 
+	var _co = __webpack_require__(6);
+
+	var _co2 = _interopRequireDefault(_co);
+
+	var _fs = __webpack_require__(17);
+
+	var _fs2 = _interopRequireDefault(_fs);
+
+	var _request = __webpack_require__(24);
+
+	var _request2 = _interopRequireDefault(_request);
+
+	var _lwip = __webpack_require__(25);
+
+	var _lwip2 = _interopRequireDefault(_lwip);
+
+	var _logger = __webpack_require__(7);
+
+	var _logger2 = _interopRequireDefault(_logger);
+
+	var _scraper = __webpack_require__(9);
+
+	var scraper = _interopRequireWildcard(_scraper);
+
+	var _models = __webpack_require__(11);
+
+	var models = _interopRequireWildcard(_models);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	// if (process.env.NODE_ENV !== 'production') {
+
+	var imageDir = './public/assets/img/';
+	// }
+
 	function findServants(args) {
 	  return models.servant.find(args).sort({ _id: 1 }).exec();
 	}
 
 	function save(servant, force) {
-	  return co(regeneratorRuntime.mark(function _callee2() {
+	  return (0, _co2.default)(regeneratorRuntime.mark(function _callee2() {
 	    var clipImagePath, largeImagePath, middleImagePath, clipUrl, url;
 	    return regeneratorRuntime.wrap(function _callee2$(_context2) {
 	      while (1) {
 	        switch (_context2.prev = _context2.next) {
 	          case 0:
-	            logger.verbose('Begin Download Servant Image: id = %d', servant.id);
+	            _logger2.default.verbose('Begin Download Servant Image: id = %d', servant.id);
 
 	            clipImagePath = imageDir + 'clip/' + servant.id + '.jpg';
 	            largeImagePath = imageDir + 'l/' + servant.id + '.jpg';
@@ -2708,7 +2720,7 @@ module.exports =
 	              break;
 	            }
 
-	            logger.verbose('Image File is Almost Exists');
+	            _logger2.default.verbose('Image File is Almost Exists');
 	            return _context2.abrupt('return');
 
 	          case 22:
@@ -2756,7 +2768,7 @@ module.exports =
 	}
 
 	function getImageUrlWithServant(servant) {
-	  return co(regeneratorRuntime.mark(function _callee3() {
+	  return (0, _co2.default)(regeneratorRuntime.mark(function _callee3() {
 	    var $;
 	    return regeneratorRuntime.wrap(function _callee3$(_context3) {
 	      while (1) {
@@ -2779,7 +2791,7 @@ module.exports =
 	}
 
 	function getClipImageUrlWithServant(servant) {
-	  return co(regeneratorRuntime.mark(function _callee4() {
+	  return (0, _co2.default)(regeneratorRuntime.mark(function _callee4() {
 	    var $, tribeNameAndCode;
 	    return regeneratorRuntime.wrap(function _callee4$(_context4) {
 	      while (1) {
@@ -2790,7 +2802,7 @@ module.exports =
 
 	          case 2:
 	            $ = _context4.sent.$;
-	            tribeNameAndCode = servant.tribe_name + '-' + ('000' + servant.tribe_code).slice(-3);
+	            tribeNameAndCode = servant.tribe_name + '-' + _.padLeft(servant.tribe_code, 3, 0);
 	            return _context4.abrupt('return', $('#content_1001_1').next().next().find('table tbody tr td:contains(' + tribeNameAndCode + ')').prev().prev().find('a img').attr('src'));
 
 	          case 5:
@@ -2803,8 +2815,8 @@ module.exports =
 	}
 
 	function exists(path) {
-	  return new Promise(function (resolve, reject) {
-	    fs.stat(path, function (err, stat) {
+	  return new Promise(function (resolve) {
+	    _fs2.default.stat(path, function (err) {
 	      if (err == null) {
 	        resolve(true);
 	        return;
@@ -2815,23 +2827,23 @@ module.exports =
 	}
 
 	function download(url, path) {
-	  return new Promise(function (resolve, reject) {
-	    logger.verbose('Download Image: url = %s', url);
+	  return new Promise(function (resolve) {
+	    _logger2.default.verbose('Download Image: url = %s', url);
 
-	    request.get(url)
+	    _request2.default.get(url)
 	    //.on('response', function(res) {
-	    //  console.log('statusCode: ', res.statusCode);
-	    //  console.log('content-length: ', res.headers['content-length']);
+	    //  console.log('statusCode: ', res.statusCode)
+	    //  console.log('content-length: ', res.headers['content-length'])
 	    //})
-	    .pipe(fs.createWriteStream(path).on('close', function () {
+	    .pipe(_fs2.default.createWriteStream(path).on('close', function () {
 	      resolve();
 	    }));
 	  });
 	}
 
 	function scale(orgPath, distPath, ratio) {
-	  return new Promise(function (resolve, reject) {
-	    lwip.open(orgPath, function (err, image) {
+	  return new Promise(function (resolve) {
+	    _lwip2.default.open(orgPath, function (err, image) {
 	      image.batch().scale(ratio, ratio, 'lanczos').writeFile(distPath, 'jpg', {}, function (err) {
 	        if (err) {
 	          reject(err);
@@ -2844,10 +2856,10 @@ module.exports =
 	}
 
 	function compress(orgPath, distPath, params) {
-	  return new Promise(function (resolve, reject) {
-	    lwip.open(orgPath, function (err, image) {
+	  return new Promise(function (resolve) {
+	    _lwip2.default.open(orgPath, function (err, image) {
 	      image.toBuffer('jpg', { quality: 50 }, function (err, buffer) {
-	        lwip.open(buffer, 'jpg', function (err, image) {
+	        _lwip2.default.open(buffer, 'jpg', function (err, image) {
 	          image.writeFile(distPath, 'jpg', {}, function (err) {
 	            if (err) {
 	              reject(err);
@@ -2860,6 +2872,7 @@ module.exports =
 	    });
 	  });
 	}
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(28)))
 
 /***/ },
 /* 24 */
@@ -2898,18 +2911,12 @@ module.exports =
 
 	'use strict';
 
-	var co = __webpack_require__(6);
-	var fs = __webpack_require__(17);
-	var request = __webpack_require__(24);
-	var lwip = process.env.NODE_ENV !== 'production' ? __webpack_require__(25) : undefined;
-	var logger = __webpack_require__(7);
-	var scraper = __webpack_require__(9);
-	var models = __webpack_require__(11);
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 
-	var imageDir = './client/assets/img/';
-
-	module.exports = function () {
-	  return co(regeneratorRuntime.mark(function _callee() {
+	exports.default = function () {
+	  return (0, _co2.default)(regeneratorRuntime.mark(function _callee() {
 	    var servants, tribes, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, servant, _iteratorNormalCompletion2, _didIteratorError2, _iteratorError2, _iterator2, _step2, tribeId;
 
 	    return regeneratorRuntime.wrap(function _callee$(_context) {
@@ -2984,12 +2991,12 @@ module.exports =
 
 	            tribeId = _step2.value;
 
-	            logger.verbose('Create Servant Clip Sprite Image: tribe_id = %d', tribeId);
+	            _logger2.default.verbose('Create Servant Clip Sprite Image: tribe_id = %d', tribeId);
 	            _context.next = 33;
 	            return createClipSpriteWithTribe(tribeId, tribes.get(tribeId));
 
 	          case 33:
-	            logger.verbose('Create Servant Sprite Image: tribe_id = %d', tribeId);
+	            _logger2.default.verbose('Create Servant Sprite Image: tribe_id = %d', tribeId);
 	            _context.next = 36;
 	            return createSpriteWithTribe(tribeId, tribes.get(tribeId));
 
@@ -3041,60 +3048,71 @@ module.exports =
 	  }));
 	};
 
+	var _co = __webpack_require__(6);
+
+	var _co2 = _interopRequireDefault(_co);
+
+	var _fs = __webpack_require__(17);
+
+	var _fs2 = _interopRequireDefault(_fs);
+
+	var _request = __webpack_require__(24);
+
+	var _request2 = _interopRequireDefault(_request);
+
+	var _lwip = __webpack_require__(25);
+
+	var _lwip2 = _interopRequireDefault(_lwip);
+
+	var _logger = __webpack_require__(7);
+
+	var _logger2 = _interopRequireDefault(_logger);
+
+	var _scraper = __webpack_require__(9);
+
+	var scraper = _interopRequireWildcard(_scraper);
+
+	var _models = __webpack_require__(11);
+
+	var models = _interopRequireWildcard(_models);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var imageDir = './public/assets/img/';
+
 	function findServants(args) {
 	  return models.servant.find(args).sort({ _id: 1 }).exec();
 	}
 
 	function createClipSpriteWithTribe(tribeId, servants) {
 	  return new Promise(function (resolve, reject) {
-	    var max = 0;
-	    var _iteratorNormalCompletion3 = true;
-	    var _didIteratorError3 = false;
-	    var _iteratorError3 = undefined;
-
-	    try {
-	      for (var _iterator3 = servants[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-	        var _servant2 = _step3.value;
-
-	        max = Math.max(_servant2.tribe_code, max);
-	      }
-	    } catch (err) {
-	      _didIteratorError3 = true;
-	      _iteratorError3 = err;
-	    } finally {
-	      try {
-	        if (!_iteratorNormalCompletion3 && _iterator3.return) {
-	          _iterator3.return();
-	        }
-	      } finally {
-	        if (_didIteratorError3) {
-	          throw _iteratorError3;
-	        }
-	      }
-	    }
-
-	    lwip.create(40 * max, 40, { r: 0, g: 0, b: 0 }, function (err, image) {
-	      co(regeneratorRuntime.mark(function _callee2() {
-	        var _iteratorNormalCompletion4, _didIteratorError4, _iteratorError4, _iterator4, _step4, _servant;
+	    var max = servants.reduce(function (previous, current) {
+	      return Math.max(current.tribe_code, previous);
+	    }, 0);
+	    _lwip2.default.create(40 * max, 40, { r: 0, g: 0, b: 0 }, function (err, image) {
+	      (0, _co2.default)(regeneratorRuntime.mark(function _callee2() {
+	        var _iteratorNormalCompletion3, _didIteratorError3, _iteratorError3, _iterator3, _step3, _servant;
 
 	        return regeneratorRuntime.wrap(function _callee2$(_context2) {
 	          while (1) {
 	            switch (_context2.prev = _context2.next) {
 	              case 0:
 	                image = image.batch();
-	                _iteratorNormalCompletion4 = true;
-	                _didIteratorError4 = false;
-	                _iteratorError4 = undefined;
+	                _iteratorNormalCompletion3 = true;
+	                _didIteratorError3 = false;
+	                _iteratorError3 = undefined;
 	                _context2.prev = 4;
-	                _iterator4 = servants[Symbol.iterator]();
+	                _iterator3 = servants[Symbol.iterator]();
 
 	              case 6:
-	                if (_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done) {
+	                if (_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done) {
 	                  _context2.next = 14;
 	                  break;
 	                }
 
-	                _servant = _step4.value;
+	                _servant = _step3.value;
 	                _context2.next = 10;
 	                return pasteSprite(image, _servant);
 
@@ -3102,7 +3120,7 @@ module.exports =
 	                image = _context2.sent;
 
 	              case 11:
-	                _iteratorNormalCompletion4 = true;
+	                _iteratorNormalCompletion3 = true;
 	                _context2.next = 6;
 	                break;
 
@@ -3113,26 +3131,26 @@ module.exports =
 	              case 16:
 	                _context2.prev = 16;
 	                _context2.t0 = _context2['catch'](4);
-	                _didIteratorError4 = true;
-	                _iteratorError4 = _context2.t0;
+	                _didIteratorError3 = true;
+	                _iteratorError3 = _context2.t0;
 
 	              case 20:
 	                _context2.prev = 20;
 	                _context2.prev = 21;
 
-	                if (!_iteratorNormalCompletion4 && _iterator4.return) {
-	                  _iterator4.return();
+	                if (!_iteratorNormalCompletion3 && _iterator3.return) {
+	                  _iterator3.return();
 	                }
 
 	              case 23:
 	                _context2.prev = 23;
 
-	                if (!_didIteratorError4) {
+	                if (!_didIteratorError3) {
 	                  _context2.next = 26;
 	                  break;
 	                }
 
-	                throw _iteratorError4;
+	                throw _iteratorError3;
 
 	              case 26:
 	                return _context2.finish(23);
@@ -3166,62 +3184,39 @@ module.exports =
 
 	function createSpriteWithTribe(tribeId, servants) {
 	  return new Promise(function (resolve, reject) {
-	    var max = 0;
-	    var _iteratorNormalCompletion5 = true;
-	    var _didIteratorError5 = false;
-	    var _iteratorError5 = undefined;
-
-	    try {
-	      for (var _iterator5 = servants[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-	        var _servant4 = _step5.value;
-
-	        max = Math.max(_servant4.tribe_code, max);
-	      }
-	    } catch (err) {
-	      _didIteratorError5 = true;
-	      _iteratorError5 = err;
-	    } finally {
-	      try {
-	        if (!_iteratorNormalCompletion5 && _iterator5.return) {
-	          _iterator5.return();
-	        }
-	      } finally {
-	        if (_didIteratorError5) {
-	          throw _iteratorError5;
-	        }
-	      }
-	    }
-
-	    lwip.create(150 * max, 890 / 640 * 150, { r: 0, g: 0, b: 0 }, function (err, image) {
-	      co(regeneratorRuntime.mark(function _callee3() {
-	        var _iteratorNormalCompletion6, _didIteratorError6, _iteratorError6, _iterator6, _step6, _servant3;
+	    var max = servants.reduce(function (previous, current) {
+	      return Math.max(current.tribe_code, previous);
+	    }, 0);
+	    _lwip2.default.create(150 * max, 890 / 640 * 150, { r: 0, g: 0, b: 0 }, function (err, image) {
+	      (0, _co2.default)(regeneratorRuntime.mark(function _callee3() {
+	        var _iteratorNormalCompletion4, _didIteratorError4, _iteratorError4, _iterator4, _step4, _servant2;
 
 	        return regeneratorRuntime.wrap(function _callee3$(_context3) {
 	          while (1) {
 	            switch (_context3.prev = _context3.next) {
 	              case 0:
 	                image = image.batch();
-	                _iteratorNormalCompletion6 = true;
-	                _didIteratorError6 = false;
-	                _iteratorError6 = undefined;
+	                _iteratorNormalCompletion4 = true;
+	                _didIteratorError4 = false;
+	                _iteratorError4 = undefined;
 	                _context3.prev = 4;
-	                _iterator6 = servants[Symbol.iterator]();
+	                _iterator4 = servants[Symbol.iterator]();
 
 	              case 6:
-	                if (_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done) {
+	                if (_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done) {
 	                  _context3.next = 14;
 	                  break;
 	                }
 
-	                _servant3 = _step6.value;
+	                _servant2 = _step4.value;
 	                _context3.next = 10;
-	                return paste(image, _servant3);
+	                return paste(image, _servant2);
 
 	              case 10:
 	                image = _context3.sent;
 
 	              case 11:
-	                _iteratorNormalCompletion6 = true;
+	                _iteratorNormalCompletion4 = true;
 	                _context3.next = 6;
 	                break;
 
@@ -3232,26 +3227,26 @@ module.exports =
 	              case 16:
 	                _context3.prev = 16;
 	                _context3.t0 = _context3['catch'](4);
-	                _didIteratorError6 = true;
-	                _iteratorError6 = _context3.t0;
+	                _didIteratorError4 = true;
+	                _iteratorError4 = _context3.t0;
 
 	              case 20:
 	                _context3.prev = 20;
 	                _context3.prev = 21;
 
-	                if (!_iteratorNormalCompletion6 && _iterator6.return) {
-	                  _iterator6.return();
+	                if (!_iteratorNormalCompletion4 && _iterator4.return) {
+	                  _iterator4.return();
 	                }
 
 	              case 23:
 	                _context3.prev = 23;
 
-	                if (!_didIteratorError6) {
+	                if (!_didIteratorError4) {
 	                  _context3.next = 26;
 	                  break;
 	                }
 
-	                throw _iteratorError6;
+	                throw _iteratorError4;
 
 	              case 26:
 	                return _context3.finish(23);
@@ -3286,7 +3281,7 @@ module.exports =
 	function pasteSprite(image, servant) {
 	  return new Promise(function (resolve, reject) {
 	    var imagePath = imageDir + 'clip/' + servant.id + '.jpg';
-	    lwip.open(imagePath, function (err, pasteImage) {
+	    _lwip2.default.open(imagePath, function (err, pasteImage) {
 	      if (err) {
 	        reject(err);
 	        return;
@@ -3298,9 +3293,9 @@ module.exports =
 	}
 
 	function paste(image, servant) {
-	  return new Promise(function (resolve, reject) {
+	  return new Promise(function (resolve) {
 	    var imagePath = imageDir + 'm/' + servant.id + '.jpg';
-	    lwip.open(imagePath, function (err, pasteImage) {
+	    _lwip2.default.open(imagePath, function (err, pasteImage) {
 	      if (err) {
 	        reject(err);
 	        return;
@@ -3310,6 +3305,12 @@ module.exports =
 	    });
 	  });
 	}
+
+/***/ },
+/* 28 */
+/***/ function(module, exports) {
+
+	module.exports = require("lodash");
 
 /***/ }
 /******/ ]);

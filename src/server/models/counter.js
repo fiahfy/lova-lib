@@ -7,7 +7,7 @@ const CounterSchema = new Schema({
   seq: Number
 })
 
-CounterSchema.statics.getNewId = (name, callback) => {
+CounterSchema.statics.getNewId = function(name, callback) {
   return new Promise((resolve, reject) => {
     this.collection.findAndModify(
       {_id: name},
