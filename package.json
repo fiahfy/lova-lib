@@ -76,7 +76,6 @@
     "koa-static": "1.4.9",
     "lodash": "3.10.1",
     "lru-cache": "2.7.0",
-    "lwip": "kant2002/lwip#5f6a38c",
     "markdown-loader": "0.1.7",
     "moment": "2.10.6",
     "mongoose": "4.1.8",
@@ -103,6 +102,7 @@
     "xmlify": "1.0.1"
   },
   "devDependencies": {
+    "lwip": "kant2002/lwip#5f6a38c",
     "nodemon": "1.8.1",
     "redux-devtools": "3.0.0-beta-3",
     "redux-devtools-dock-monitor": "1.0.0-beta-3",
