@@ -24,7 +24,6 @@
   },
   "main": "server.js",
   "scripts": {
-    "postinstall": "npm run build",
     "poststart": "mongod --fork --logpath /dev/null --dbpath tmp/mongodb/data",
     "prestop": "mongo admin --eval 'db.shutdownServer()' > /dev/null",
     "server": "nodemon -V -w server.js server.js",
@@ -32,7 +31,7 @@
     "watch-client": "npm run build-client -- -w",
     "watch-server": "npm run build-server -- -w",
     "watch-cli": "npm run build-cli -- -w",
-    "build": "npm run build-client & npm run build-server",
+    "build": "npm run build-client & npm run build-server & npm run build-cli",
     "build-client": "webpack --config webpack/client.babel.js",
     "build-server": "webpack --config webpack/server.babel.js",
     "build-cli": "webpack --config webpack/cli.babel.js",

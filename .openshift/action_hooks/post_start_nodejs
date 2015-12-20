@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "########## post_start_nodejs ##########"
+
 # The pre_start_cartridge and pre_stop_cartridge hooks are *SOURCED*
 # immediately before (re)starting or stopping the specified cartridge.
 # They are able to make any desired environment variable changes as
@@ -37,5 +39,3 @@ if [ "$zcode" -eq 200 ]; then
    echo "  - Version from test URI = $(curl -s $app_uri | sed 's/.*"node_version":"\(.*\)".*/\1/')"
    echo ""
 fi
-
-
