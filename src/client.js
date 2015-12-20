@@ -6,7 +6,7 @@ import {configureStore} from './client/store'
 
 import 'flat-ui/dist/js/flat-ui'
 import 'jquery-lazyload'
-import 'datatables'
+// import 'datatables'
 
 let initialState
 try {

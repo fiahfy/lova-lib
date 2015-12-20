@@ -41,7 +41,8 @@ export function getTotalMana(cards) {
 }
 
 export function getURL(cardIds) {
-  return 'http://localhost:3000/deck/' + getHash(cardIds) + '/'
+  return 'http://' + (process.env.OPENSHIFT_APP_DNS || 'localhost:3000')
+   + '/deck/' + getHash(cardIds) + '/'
 }
 
 export function getHash(cardIds) {

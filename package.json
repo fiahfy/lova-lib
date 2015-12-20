@@ -24,6 +24,7 @@
   },
   "main": "server.js",
   "scripts": {
+    "postinstall": "npm run build",
     "poststart": "mongod --fork --logpath /dev/null --dbpath tmp/mongodb/data",
     "prestop": "mongo admin --eval 'db.shutdownServer()' > /dev/null",
     "server": "nodemon -V -w server.js server.js",
@@ -53,7 +54,6 @@
     "commander": "2.8.1",
     "css-loader": "0.23.0",
     "d3": "3.5.10",
-    "datatables": "1.10.9",
     "events": "1.1.0",
     "exports-loader": "0.6.2",
     "fbjs": "0.5.1",

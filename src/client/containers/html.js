@@ -4,7 +4,7 @@ import appCss from '../../../public/assets/css/app.css'
 import css1 from 'bootstrap/dist/css/bootstrap.css'
 import css2 from 'flat-ui/dist/css/flat-ui.css'
 import css3 from 'nvd3/build/nv.d3.css'
-import css4 from 'datatables/media/css/jquery.dataTables.css'
+// import css4 from 'datatables/media/css/jquery.dataTables.css'
 
 export default class Html extends Component {
   static propTypes = {
