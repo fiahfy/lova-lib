@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "########## pre_stop_nodejs ##########"
+
 # The pre_start_cartridge and pre_stop_cartridge hooks are *SOURCED*
 # immediately before (re)starting or stopping the specified cartridge.
 # They are able to make any desired environment variable changes as
@@ -27,3 +29,4 @@ if [ -f "$OPENSHIFT_REPO_DIR/.openshift/lib/utils" ]; then
    _SHOW_SETUP_PATH_MESSAGES="true" setup_path_for_custom_node_version
 fi
 
+echo "########## pre_stop_nodejs ##########"

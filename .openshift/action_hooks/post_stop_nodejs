@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "########## post_stop_nodejs ##########"
+
 # The pre_start_cartridge and pre_stop_cartridge hooks are *SOURCED*
 # immediately before (re)starting or stopping the specified cartridge.
 # They are able to make any desired environment variable changes as
@@ -12,3 +14,5 @@
 # prevent your application from stopping cleanly or starting at all.
 # Application start and stop is subject to different timeouts
 # throughout the system.
+
+echo "########## post_stop_nodejs ##########"

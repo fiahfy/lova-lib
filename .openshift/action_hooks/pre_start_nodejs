@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "########## pre_start_nodejs ##########"
+
 # The pre_start_cartridge and pre_stop_cartridge hooks are *SOURCED*
 # immediately before (re)starting or stopping the specified cartridge.
 # They are able to make any desired environment variable changes as
@@ -23,3 +25,4 @@ echo ""
 echo "  - pre_start_nodejs: Adding Node.js version $ver binaries to path"
 _SHOW_SETUP_PATH_MESSAGES="true" setup_path_for_custom_node_version
 
+echo "########## pre_start_nodejs ##########"

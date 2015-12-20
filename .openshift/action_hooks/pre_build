@@ -1,4 +1,7 @@
 #!/bin/bash
+
+echo "########## pre_build ##########"
+
 # This is a simple script and will be executed on your CI system if
 # available.  Otherwise it will execute while your application is stopped
 # before the build step.  This script gets executed directly, so it
@@ -18,4 +21,4 @@ ensure_node_is_installed
 #  npm version to install the dependencies.
 mv  "${OPENSHIFT_REPO_DIR}/package.json"  "$(get_node_tmp_dir)"
 
-
+echo "########## pre_build ##########"
