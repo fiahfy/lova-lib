@@ -24954,7 +24954,7 @@ module.exports =
 
 	      var head = _reactHelmet2.default.rewind();
 
-	      var cssString = _bootstrap2.default.toString() + _flatUi2.default.toString() + _nvD2.default.toString() + css4.toString() + _app2.default.toString();
+	      var cssString = _bootstrap2.default.toString() + _flatUi2.default.toString() + _nvD2.default.toString() + _app2.default.toString();
 
 	      return _react2.default.createElement(
 	        'html',

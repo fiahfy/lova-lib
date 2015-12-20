@@ -20,7 +20,6 @@ export default class Html extends Component {
       = css1.toString()
       + css2.toString()
       + css3.toString()
-      + css4.toString()
       + appCss.toString()
 
     return (
