@@ -16,3 +16,5 @@ source "$OPENSHIFT_REPO_DIR/.openshift/lib/utils"
 #  so check if its needed. Just ensure the custom Node[.js] version is
 #  installed.
 ensure_node_is_installed
+
+echo "########## deploy ##########"

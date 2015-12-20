@@ -39,3 +39,5 @@ if [ "$zcode" -eq 200 ]; then
    echo "  - Version from test URI = $(curl -s $app_uri | sed 's/.*"node_version":"\(.*\)".*/\1/')"
    echo ""
 fi
+
+echo "########## post_start_nodejs ##########"

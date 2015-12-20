@@ -6,4 +6,4 @@ echo "########## post_deploy ##########"
 # is deployed and started.  This script gets executed directly, so
 # it could be python, php, ruby, etc.
 
-(cd "${OPENSHIFT_REPO_DIR}"; export HOME=$OPENSHIFT_REPO_DIR; npm run build)
+echo "########## post_deploy ##########"

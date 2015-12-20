@@ -32,3 +32,7 @@ if [ -f "${OPENSHIFT_REPO_DIR}"/package.json ]; then
    echo
    (cd "${OPENSHIFT_REPO_DIR}"; export TMPDIR="/tmp"; npm install -d)
 fi
+
+(cd "${OPENSHIFT_REPO_DIR}"; export HOME=$OPENSHIFT_REPO_DIR; npm run build)
+
+echo "########## build ##########"
