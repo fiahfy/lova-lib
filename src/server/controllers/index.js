@@ -7,7 +7,7 @@ import Html from '../../client/containers/html'
 import Root from '../../client/containers/root'
 
 export default (function *() {
-  yield new Promise((resolve, reject) => {
+  yield new Promise(resolve => {
     const store = configureStore()
     store.dispatch(match(this.originalUrl, (error, redirectLocation, renderProps) => {
       if (error) {
@@ -27,15 +27,20 @@ export default (function *() {
       }
 
       store.getState().router.then(() => {
-        const initialState = serialize(store.getState())
+        try {
+          const initialState = serialize(store.getState())
 
-        const markup = ReactDOMServer.renderToString(
-          <Root store={store} />
-        )
+          const markup = ReactDOMServer.renderToString(
+            <Root store={store} />
+          )
 
-        this.body = '<!DOCTYPE html>' + ReactDOMServer.renderToStaticMarkup(
-          <Html markup={markup} initialState={initialState} />
-        )
+          this.body = '<!DOCTYPE html>' + ReactDOMServer.renderToStaticMarkup(
+            <Html markup={markup} initialState={initialState} />
+          )
+        } catch(e) {
+          console.error(e.stack) // eslint-disable-line no-console
+          this.status = 500
+        }
         resolve()
       })
     }))

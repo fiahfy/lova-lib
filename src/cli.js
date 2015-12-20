@@ -76,9 +76,9 @@ if (!promise) {
   commander.help()
 }
 
-promise.then(function(reason) {
+promise.then(() => {
     mongoose.disconnect()
-  }, function(reason) {
+  }, (reason) => {
     mongoose.disconnect()
     logger.error(reason)
   }

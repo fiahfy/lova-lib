@@ -1,5 +1,6 @@
 export function getSpellName(id) {
-  return [,
+  return [
+      null,
       'キュアオール',
       'リターンゲート',
       'パワーライズ',

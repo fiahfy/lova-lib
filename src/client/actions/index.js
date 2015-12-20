@@ -20,9 +20,6 @@ export function fetchServant(id) {
         type:    RECEIVE_SERVANT,
         servant: json
       }))
-      .catch((error) => {
-        console.error(error)
-      })
   }
 }
 
@@ -34,9 +31,6 @@ export function fetchServants() {
         type:     RECEIVE_SERVANTS,
         servants: json
       }))
-      .catch((error) => {
-        console.error(error)
-      })
   }
 }
 
@@ -48,9 +42,6 @@ export function fetchPrizes() {
         type:   RECEIVE_PRIZES,
         prizes: json
       }))
-      .catch((error) => {
-        console.error(error)
-      })
   }
 }
 
@@ -68,9 +59,6 @@ export function fetchServantStatistics(args) {
         filter:            params,
         servantStatistics: json
       }))
-      .catch((error) => {
-        console.error(error)
-      })
   }
 }
 
@@ -88,8 +76,5 @@ export function fetchSpellStatistics(args) {
         filter:          params,
         spellStatistics: json
       }))
-      .catch((error) => {
-        console.error(error)
-      })
   }
 }

@@ -1,7 +1,6 @@
 import 'babel-polyfill'
 import koa from 'koa'
 import koaStatic from 'koa-static'
-import koaSend from 'koa-send'
 import crypto from 'crypto'
 import LRU from 'lru-cache'
 import routes from './server/routes'

@@ -68,7 +68,7 @@ export default class DeckContainer extends Component {
     const cardNodesForXS = createCardNodes([0, 1, 2, 6, 3, 4, 5, 7])
 
     const tribeIdOptionNodes = [{tribe_name: 'Select Tribe...'}]
-      .concat(_.uniq(servants, (value, key) => value.tribe_name))
+      .concat(_.uniq(servants, value => value.tribe_name))
       .map((servant, index) => {
         const tribeName = servant.id ? servant.tribe_name : null
         return (
@@ -79,7 +79,7 @@ export default class DeckContainer extends Component {
       })
 
     const typeOptionNodes = [{type: 'Select Type...'}]
-      .concat(_.uniq(servants, (value, key) => value.type))
+      .concat(_.uniq(servants, value => value.type))
       .map((servant, index) => {
         const type = servant.id ? servant.type : null
         return (

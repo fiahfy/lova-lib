@@ -10,7 +10,7 @@ export default class SkillItem extends Component {
     ap:          PropTypes.arrayOf(PropTypes.number)
   }
   descriptionHTML() {
-    const {name, description, cd, ap} = this.props
+    const {description, cd, ap} = this.props
 
     let html = description
       .replace(/(^|\n)\d+\.\s/g, '$1')

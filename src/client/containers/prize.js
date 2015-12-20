@@ -6,7 +6,7 @@ import {bindActionCreators} from 'redux'
 import * as ActionCreators from '../actions'
 import connectData from '../decorators/connect-data'
 
-function fetchDataDeferred(getState, dispatch, location, params) {
+function fetchDataDeferred(getState, dispatch) {
   return ActionCreators.fetchPrizes()(dispatch)
 }
 function mapStateToProps(state) {

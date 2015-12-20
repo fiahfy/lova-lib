@@ -15,7 +15,8 @@
   ],
   "globals": {
     "_": false,
-    "$": false
+    "$": false,
+    "d3": true
   },
   "parser": "babel-eslint",
   "rules": {

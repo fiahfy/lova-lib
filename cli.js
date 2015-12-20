@@ -109,7 +109,7 @@ module.exports =
 	  _commander2.default.help();
 	}
 
-	promise.then(function (reason) {
+	promise.then(function () {
 	  _mongoose2.default.disconnect();
 	}, function (reason) {
 	  _mongoose2.default.disconnect();
@@ -541,7 +541,7 @@ module.exports =
 
 	function getTribeParam(input) {
 	  var args = input.split('-');
-	  return [[, '人獣', '神族', '魔種', '海種', '不死'].indexOf(args[0]), args[0], Number(args[1])];
+	  return [[null, '人獣', '神族', '魔種', '海種', '不死'].indexOf(args[0]), args[0], Number(args[1])];
 	}
 
 	function fixServant(servant) {
@@ -845,10 +845,6 @@ module.exports =
 	    return _spellRanking.default;
 	  }
 	});
-
-	var _fs = __webpack_require__(17);
-
-	var _fs2 = _interopRequireDefault(_fs);
 
 	var _url = __webpack_require__(18);
 
@@ -2067,7 +2063,7 @@ module.exports =
 	}
 
 	function getTribeName(tribeId) {
-	  return [, 'bst', 'hly', 'dvl', 'sea', 'und'][tribeId];
+	  return [null, 'bst', 'hly', 'dvl', 'sea', 'und'][tribeId];
 	}
 
 /***/ },
@@ -2493,7 +2489,7 @@ module.exports =
 	}
 
 	function getSpellIdWithName(name) {
-	  return [, 'キュアオール', 'リターンゲート', 'パワーライズ', 'クイックドライブ', 'リザレクション', 'フォースフィールド', 'クレアボヤンス', 'クロノフリーズ', 'リモートサモン'].indexOf(name);
+	  return [null, 'キュアオール', 'リターンゲート', 'パワーライズ', 'クイックドライブ', 'リザレクション', 'フォースフィールド', 'クレアボヤンス', 'クロノフリーズ', 'リモートサモン'].indexOf(name);
 	}
 
 /***/ },
@@ -2840,7 +2836,7 @@ module.exports =
 	}
 
 	function scale(orgPath, distPath, ratio) {
-	  return new Promise(function (resolve) {
+	  return new Promise(function (resolve, reject) {
 	    lwip.open(orgPath, function (err, image) {
 	      image.batch().scale(ratio, ratio, 'lanczos').writeFile(distPath, 'jpg', {}, function (err) {
 	        if (err) {
@@ -2854,9 +2850,9 @@ module.exports =
 	}
 
 	function compress(orgPath, distPath, params) {
-	  return new Promise(function (resolve) {
+	  return new Promise(function (resolve, reject) {
 	    lwip.open(orgPath, function (err, image) {
-	      image.toBuffer('jpg', { quality: 50 }, function (err, buffer) {
+	      image.toBuffer('jpg', params, function (err, buffer) {
 	        lwip.open(buffer, 'jpg', function (err, image) {
 	          image.writeFile(distPath, 'jpg', {}, function (err) {
 	            if (err) {
@@ -3056,21 +3052,9 @@ module.exports =
 
 	var _co2 = _interopRequireDefault(_co);
 
-	var _fs = __webpack_require__(17);
-
-	var _fs2 = _interopRequireDefault(_fs);
-
-	var _request = __webpack_require__(25);
-
-	var _request2 = _interopRequireDefault(_request);
-
 	var _logger = __webpack_require__(7);
 
 	var _logger2 = _interopRequireDefault(_logger);
-
-	var _scraper = __webpack_require__(9);
-
-	var scraper = _interopRequireWildcard(_scraper);
 
 	var _models = __webpack_require__(11);
 
@@ -3298,7 +3282,7 @@ module.exports =
 	}
 
 	function paste(image, servant) {
-	  return new Promise(function (resolve) {
+	  return new Promise(function (resolve, reject) {
 	    var imagePath = imageDir + 'm/' + servant.id + '.jpg';
 	    lwip.open(imagePath, function (err, pasteImage) {
 	      if (err) {

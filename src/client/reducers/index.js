@@ -50,5 +50,5 @@ export default combineReducers({
   servants,
   prizes,
   servantStatistics,
-  spellStatistics,
+  spellStatistics
 })

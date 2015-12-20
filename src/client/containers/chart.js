@@ -1,4 +1,3 @@
-import classNames from 'classnames'
 import moment from 'moment'
 import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'

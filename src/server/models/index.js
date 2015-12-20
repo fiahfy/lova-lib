@@ -1,4 +1,3 @@
-import fs from 'fs'
 import url from 'url'
 import mongoose from 'mongoose'
 import logger from '../utils/logger'

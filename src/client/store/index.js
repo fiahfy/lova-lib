@@ -17,7 +17,7 @@ const reduxReactRouterFunc = ExecutionEnvironment.canUseDOM
 const funcs = [
   applyMiddleware(thunk),
   reduxReactRouterFunc,
-  applyMiddleware(transitionMiddleware),
+  applyMiddleware(transitionMiddleware)
   // applyMiddleware(createLogger()),
   // DevTools.instrument()
 ]

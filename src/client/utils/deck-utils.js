@@ -58,7 +58,7 @@ export function getCardIds(hash) {
   try {
     cardIds = JSON.parse(atob(hash))
   } catch (e) {
-    console.warn(`Invalid Deck Hash: ${hash}`)
+    console.warn(`Invalid Deck Hash: ${hash}`) // eslint-disable-line no-console
     return []
   }
 

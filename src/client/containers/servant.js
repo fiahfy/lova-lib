@@ -6,7 +6,7 @@ import {bindActionCreators} from 'redux'
 import * as ActionCreators from '../actions'
 import connectData from '../decorators/connect-data'
 
-function fetchDataDeferred(getState, dispatch, location, params) {
+function fetchDataDeferred(getState, dispatch) {
   return ActionCreators.fetchServants()(dispatch)
 }
 
@@ -42,7 +42,7 @@ export default class Servant extends Component {
     let filter = (q || '').replace(/"[^"]*"/g, (match) => {
       map.set(i, match.replace(/^"(.*)"$/, "$1"))
       return `@${i++}@`
-    }).split(/[\s　]/i).map((element) => {
+    }).split(/[\s　]/i).map((element) => { // eslint-disable-line no-irregular-whitespace
       return element.replace(/@(\d+)@/, (match, i) => {
         return map.get(+i)
       })

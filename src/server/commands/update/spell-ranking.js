@@ -116,7 +116,8 @@ function getRanking(date, map, queue) {
 }
 
 function getSpellIdWithName(name) {
-  return [,
+  return [
+    null,
     'キュアオール',
     'リターンゲート',
     'パワーライズ',

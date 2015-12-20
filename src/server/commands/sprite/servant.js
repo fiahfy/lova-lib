@@ -1,8 +1,5 @@
 import co from 'co'
-import fs from 'fs'
-import request from 'request'
 import logger from '../../utils/logger'
-import * as scraper from '../../utils/scraper'
 import * as models from '../../models'
 let lwip = null
 if (!process.env.OPENSHIFT_APP_DNS) {
@@ -105,7 +102,7 @@ function pasteSprite(image, servant) {
 }
 
 function paste(image, servant) {
-  return new Promise(resolve => {
+  return new Promise((resolve, reject) => {
     const imagePath = `${imageDir}m/${servant.id}.jpg`
     lwip.open(imagePath, (err, pasteImage) => {
       if (err) {

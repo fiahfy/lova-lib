@@ -144,5 +144,5 @@ function getServantMap() {
 }
 
 function getTribeName(tribeId) {
-  return [, 'bst', 'hly', 'dvl', 'sea', 'und'][tribeId]
+  return [null, 'bst', 'hly', 'dvl', 'sea', 'und'][tribeId]
 }

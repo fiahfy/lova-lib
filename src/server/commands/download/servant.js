@@ -104,7 +104,7 @@ function download(url, path) {
 }
 
 function scale(orgPath, distPath, ratio) {
-  return new Promise(resolve => {
+  return new Promise((resolve, reject) => {
     lwip.open(orgPath, (err, image) => {
       image.batch().scale(ratio, ratio, 'lanczos').writeFile(distPath, 'jpg', {}, function (err) {
         if (err) {
@@ -118,9 +118,9 @@ function scale(orgPath, distPath, ratio) {
 }
 
 function compress(orgPath, distPath, params) {
-  return new Promise(resolve => {
+  return new Promise((resolve, reject) => {
     lwip.open(orgPath, (err, image) => {
-      image.toBuffer('jpg', {quality: 50}, (err, buffer) => {
+      image.toBuffer('jpg', params, (err, buffer) => {
         lwip.open(buffer, 'jpg', function(err, image) {
           image.writeFile(distPath, 'jpg', {}, function (err) {
             if (err) {

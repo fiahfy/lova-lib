@@ -173,7 +173,7 @@ function parseDateString(input) {
 
 function getTribeParam(input) {
   const args = input.split('-')
-  return [[, '人獣', '神族', '魔種', '海種', '不死'].indexOf(args[0]), args[0], Number(args[1])]
+  return [[null, '人獣', '神族', '魔種', '海種', '不死'].indexOf(args[0]), args[0], Number(args[1])]
 }
 
 function fixServant(servant) {

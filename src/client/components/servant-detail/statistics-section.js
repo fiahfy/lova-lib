@@ -53,8 +53,8 @@ export default class StatisticsSection extends Component {
       }
     }
   }
-  handleOptionClick(e) {
-    const options = _.reduce(this.refs, (previous, value, key) => {
+  handleOptionClick() {
+    const options = _.reduce(this.refs, (previous, value) => {
       if (value.checked) {
         previous[value.name] = value.value
       }

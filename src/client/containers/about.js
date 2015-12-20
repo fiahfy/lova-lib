@@ -3,6 +3,7 @@ import React, {Component} from 'react'
 export default class About extends Component {
   render() {
     const mail = 'd.fiahfy@gmail.com'
+    /*eslint-disable no-irregular-whitespace */
     return (
       <div className="container" id="about">
         <div className="page-header">
@@ -34,5 +35,6 @@ export default class About extends Component {
         </address>
       </div>
     )
+    /*eslint-enable no-irregular-whitespace */
   }
 }

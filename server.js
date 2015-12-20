@@ -57,10 +57,6 @@ module.exports =
 
 	var _koaStatic2 = _interopRequireDefault(_koaStatic);
 
-	var _koaSend = __webpack_require__(4);
-
-	var _koaSend2 = _interopRequireDefault(_koaSend);
-
 	var _crypto = __webpack_require__(5);
 
 	var _crypto2 = _interopRequireDefault(_crypto);
@@ -154,12 +150,7 @@ module.exports =
 	module.exports = require("koa-static");
 
 /***/ },
-/* 4 */
-/***/ function(module, exports) {
-
-	module.exports = require("koa-send");
-
-/***/ },
+/* 4 */,
 /* 5 */
 /***/ function(module, exports) {
 
@@ -289,7 +280,7 @@ module.exports =
 	      switch (_context.prev = _context.next) {
 	        case 0:
 	          _context.next = 2;
-	          return new Promise(function (resolve, reject) {
+	          return new Promise(function (resolve) {
 	            var store = (0, _store.configureStore)();
 	            store.dispatch((0, _server3.match)(_this.originalUrl, function (error, redirectLocation, renderProps) {
 	              if (error) {
@@ -309,11 +300,16 @@ module.exports =
 	              }
 
 	              store.getState().router.then(function () {
-	                var initialState = (0, _serializeJavascript2.default)(store.getState());
+	                try {
+	                  var initialState = (0, _serializeJavascript2.default)(store.getState());
 
-	                var markup = _server2.default.renderToString(_react2.default.createElement(_root2.default, { store: store }));
+	                  var markup = _server2.default.renderToString(_react2.default.createElement(_root2.default, { store: store }));
 
-	                _this.body = '<!DOCTYPE html>' + _server2.default.renderToStaticMarkup(_react2.default.createElement(_html2.default, { markup: markup, initialState: initialState }));
+	                  _this.body = '<!DOCTYPE html>' + _server2.default.renderToStaticMarkup(_react2.default.createElement(_html2.default, { markup: markup, initialState: initialState }));
+	                } catch (e) {
+	                  console.error(e.stack); // eslint-disable-line no-console
+	                  _this.status = 500;
+	                }
 	                resolve();
 	              });
 	            }));
@@ -449,10 +445,6 @@ module.exports =
 	    return _spellRanking.default;
 	  }
 	});
-
-	var _fs = __webpack_require__(19);
-
-	var _fs2 = _interopRequireDefault(_fs);
 
 	var _url = __webpack_require__(20);
 
@@ -761,12 +753,7 @@ module.exports =
 	exports.default = _mongoose2.default.model('spellranking', SpellrankingShema);
 
 /***/ },
-/* 19 */
-/***/ function(module, exports) {
-
-	module.exports = require("fs");
-
-/***/ },
+/* 19 */,
 /* 20 */
 /***/ function(module, exports) {
 
@@ -20622,10 +20609,11 @@ module.exports =
 	var reduxReactRouterFunc = _ExecutionEnvironment2.default.canUseDOM ? (0, _reduxRouter.reduxReactRouter)({ routes: _routes2.default, history: _history2.default }) : (0, _server.reduxReactRouter)({ routes: _routes2.default, history: _history2.default });
 	// import createLogger from 'redux-logger'
 
-	var funcs = [(0, _redux.applyMiddleware)(_reduxThunk2.default), reduxReactRouterFunc, (0, _redux.applyMiddleware)(_transitionMiddleware2.default)];
-
+	var funcs = [(0, _redux.applyMiddleware)(_reduxThunk2.default), reduxReactRouterFunc, (0, _redux.applyMiddleware)(_transitionMiddleware2.default)
 	// applyMiddleware(createLogger()),
 	// DevTools.instrument()
+	];
+
 	var finalCreateStore = _redux.compose.apply(undefined, funcs)(_redux.createStore);
 
 	function configureStore(initialState) {
@@ -21052,7 +21040,7 @@ module.exports =
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	function fetchDataDeferred(getState, dispatch, location, params) {
+	function fetchDataDeferred(getState, dispatch) {
 	  return ActionCreators.fetchServants()(dispatch);
 	}
 
@@ -21100,6 +21088,7 @@ module.exports =
 	        map.set(i, match.replace(/^"(.*)"$/, "$1"));
 	        return '@' + i++ + '@';
 	      }).split(/[\s　]/i).map(function (element) {
+	        // eslint-disable-line no-irregular-whitespace
 	        return element.replace(/@(\d+)@/, function (match, i) {
 	          return map.get(+i);
 	        });
@@ -21433,8 +21422,6 @@ module.exports =
 	        type: RECEIVE_SERVANT,
 	        servant: json
 	      });
-	    }).catch(function (error) {
-	      console.error(error);
 	    });
 	  };
 	}
@@ -21448,8 +21435,6 @@ module.exports =
 	        type: RECEIVE_SERVANTS,
 	        servants: json
 	      });
-	    }).catch(function (error) {
-	      console.error(error);
 	    });
 	  };
 	}
@@ -21463,8 +21448,6 @@ module.exports =
 	        type: RECEIVE_PRIZES,
 	        prizes: json
 	      });
-	    }).catch(function (error) {
-	      console.error(error);
 	    });
 	  };
 	}
@@ -21487,8 +21470,6 @@ module.exports =
 	        filter: params,
 	        servantStatistics: json
 	      });
-	    }).catch(function (error) {
-	      console.error(error);
 	    });
 	  };
 	}
@@ -21511,8 +21492,6 @@ module.exports =
 	        filter: params,
 	        spellStatistics: json
 	      });
-	    }).catch(function (error) {
-	      console.error(error);
 	    });
 	  };
 	}
@@ -22443,7 +22422,6 @@ module.exports =
 	    key: 'descriptionHTML',
 	    value: function descriptionHTML() {
 	      var _props = this.props;
-	      var name = _props.name;
 	      var description = _props.description;
 	      var cd = _props.cd;
 	      var ap = _props.ap;
@@ -22676,8 +22654,8 @@ module.exports =
 	    }
 	  }, {
 	    key: 'handleOptionClick',
-	    value: function handleOptionClick(e) {
-	      var options = _.reduce(this.refs, function (previous, value, key) {
+	    value: function handleOptionClick() {
+	      var options = _.reduce(this.refs, function (previous, value) {
 	        if (value.checked) {
 	          previous[value.name] = value.value;
 	        }
@@ -23104,7 +23082,7 @@ module.exports =
 	  try {
 	    cardIds = JSON.parse(atob(hash));
 	  } catch (e) {
-	    console.warn('Invalid Deck Hash: ' + hash);
+	    console.warn('Invalid Deck Hash: ' + hash); // eslint-disable-line no-console
 	    return [];
 	  }
 
@@ -23495,7 +23473,7 @@ module.exports =
 	      var cardNodes = createCardNodes(_.range(0, 8));
 	      var cardNodesForXS = createCardNodes([0, 1, 2, 6, 3, 4, 5, 7]);
 
-	      var tribeIdOptionNodes = [{ tribe_name: 'Select Tribe...' }].concat(_.uniq(servants, function (value, key) {
+	      var tribeIdOptionNodes = [{ tribe_name: 'Select Tribe...' }].concat(_.uniq(servants, function (value) {
 	        return value.tribe_name;
 	      })).map(function (servant, index) {
 	        var tribeName = servant.id ? servant.tribe_name : null;
@@ -23510,7 +23488,7 @@ module.exports =
 	        );
 	      });
 
-	      var typeOptionNodes = [{ type: 'Select Type...' }].concat(_.uniq(servants, function (value, key) {
+	      var typeOptionNodes = [{ type: 'Select Type...' }].concat(_.uniq(servants, function (value) {
 	        return value.type;
 	      })).map(function (servant, index) {
 	        var type = servant.id ? servant.type : null;
@@ -24047,10 +24025,6 @@ module.exports =
 	});
 	exports.default = undefined;
 
-	var _classnames = __webpack_require__(209);
-
-	var _classnames2 = _interopRequireDefault(_classnames);
-
 	var _moment = __webpack_require__(210);
 
 	var _moment2 = _interopRequireDefault(_moment);
@@ -24214,7 +24188,7 @@ module.exports =
 	});
 	exports.getSpellName = getSpellName;
 	function getSpellName(id) {
-	    return [, 'キュアオール', 'リターンゲート', 'パワーライズ', 'クイックドライブ', 'リザレクション', 'フォースフィールド', 'クレアボヤンス', 'クロノフリーズ', 'リモートサモン'][id] || 'unknown';
+	    return [null, 'キュアオール', 'リターンゲート', 'パワーライズ', 'クイックドライブ', 'リザレクション', 'フォースフィールド', 'クレアボヤンス', 'クロノフリーズ', 'リモートサモン'][id] || 'unknown';
 	}
 
 /***/ },
@@ -24266,7 +24240,7 @@ module.exports =
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	function fetchDataDeferred(getState, dispatch, location, params) {
+	function fetchDataDeferred(getState, dispatch) {
 	  return ActionCreators.fetchPrizes()(dispatch);
 	}
 	function mapStateToProps(state) {
@@ -24649,6 +24623,7 @@ module.exports =
 	    key: 'render',
 	    value: function render() {
 	      var mail = 'd.fiahfy@gmail.com';
+	      /*eslint-disable no-irregular-whitespace */
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'container', id: 'about' },
@@ -24694,6 +24669,7 @@ module.exports =
 	          )
 	        )
 	      );
+	      /*eslint-enable no-irregular-whitespace */
 	    }
 	  }]);
 
@@ -25328,8 +25304,6 @@ module.exports =
 	var _react = __webpack_require__(24);
 
 	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRouter = __webpack_require__(188);
 
 	var _reactRedux = __webpack_require__(211);
 
