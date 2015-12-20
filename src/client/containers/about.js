@@ -1,8 +1,11 @@
 import React, {Component} from 'react'
 
 export default class About extends Component {
-  render() {
+  componentDidMount() {
     const mail = 'd.fiahfy@gmail.com'
+    $('.mail').attr('href', mail).text(mail)
+  }
+  render() {
     /*eslint-disable no-irregular-whitespace */
     return (
       <div className="container" id="about">
@@ -29,7 +32,7 @@ export default class About extends Component {
 `}</pre>
         <address>
           <strong>Mail</strong><br />
-          <a href={`mailto:${mail}`}>{mail}</a><br />
+          <a className="mail" /><br />
           <strong>Issue</strong><br />
           <a href="https://github.com/fiahfy/lova-tool/issues">https://github.com/fiahfy/lova-tool/issues</a>
         </address>

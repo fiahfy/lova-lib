@@ -41,8 +41,13 @@ export function getTotalMana(cards) {
 }
 
 export function getURL(cardIds) {
-  return 'http://' + (process.env.OPENSHIFT_APP_DNS || 'localhost:3000')
-   + '/deck/' + getHash(cardIds) + '/'
+  let host
+  if (ExecutionEnvironment.canUseDOM) {
+    host = window.location.href.replace(/^https?:\/\/([^\/]+)\/.*$/, '$1')
+  } else {
+    host = process.env.OPENSHIFT_APP_DNS || 'localhost:3000'
+  }
+  return 'http://' + host + '/deck/' + getHash(cardIds) + '/'
 }
 
 export function getHash(cardIds) {

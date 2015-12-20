@@ -61,7 +61,7 @@ module.exports =
 
 	var updateCommands = _interopRequireWildcard(_update);
 
-	var _download = __webpack_require__(22);
+	var _download = __webpack_require__(21);
 
 	var downloadCommands = _interopRequireWildcard(_download);
 
@@ -153,7 +153,7 @@ module.exports =
 	  }
 	});
 
-	var _prize = __webpack_require__(19);
+	var _prize = __webpack_require__(18);
 
 	Object.defineProperty(exports, 'prize', {
 	  enumerable: true,
@@ -162,7 +162,7 @@ module.exports =
 	  }
 	});
 
-	var _servantRanking = __webpack_require__(20);
+	var _servantRanking = __webpack_require__(19);
 
 	Object.defineProperty(exports, 'servantRanking', {
 	  enumerable: true,
@@ -171,7 +171,7 @@ module.exports =
 	  }
 	});
 
-	var _spellRanking = __webpack_require__(21);
+	var _spellRanking = __webpack_require__(20);
 
 	Object.defineProperty(exports, 'spellRanking', {
 	  enumerable: true,
@@ -846,7 +846,7 @@ module.exports =
 	  }
 	});
 
-	var _url = __webpack_require__(18);
+	var _url = __webpack_require__(17);
 
 	var _url2 = _interopRequireDefault(_url);
 
@@ -1150,16 +1150,10 @@ module.exports =
 /* 17 */
 /***/ function(module, exports) {
 
-	module.exports = require("fs");
-
-/***/ },
-/* 18 */
-/***/ function(module, exports) {
-
 	module.exports = require("url");
 
 /***/ },
-/* 19 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1540,7 +1534,7 @@ module.exports =
 	}
 
 /***/ },
-/* 20 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2067,7 +2061,7 @@ module.exports =
 	}
 
 /***/ },
-/* 21 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2493,7 +2487,7 @@ module.exports =
 	}
 
 /***/ },
-/* 22 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2502,7 +2496,7 @@ module.exports =
 	  value: true
 	});
 
-	var _servant = __webpack_require__(23);
+	var _servant = __webpack_require__(22);
 
 	Object.defineProperty(exports, 'servant', {
 	  enumerable: true,
@@ -2512,7 +2506,7 @@ module.exports =
 	});
 
 /***/ },
-/* 23 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(_) {'use strict';
@@ -2620,7 +2614,7 @@ module.exports =
 
 	var _co2 = _interopRequireDefault(_co);
 
-	var _fs = __webpack_require__(17);
+	var _fs = __webpack_require__(24);
 
 	var _fs2 = _interopRequireDefault(_fs);
 
@@ -2866,13 +2860,19 @@ module.exports =
 	    });
 	  });
 	}
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(24)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(23)))
+
+/***/ },
+/* 23 */
+/***/ function(module, exports) {
+
+	module.exports = require("lodash");
 
 /***/ },
 /* 24 */
 /***/ function(module, exports) {
 
-	module.exports = require("lodash");
+	module.exports = require("fs");
 
 /***/ },
 /* 25 */
