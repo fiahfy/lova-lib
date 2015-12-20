@@ -22840,7 +22840,7 @@ module.exports =
 
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-	var _dec, _dec2, _dec3, _class, _class2, _temp2;
+	var _dec, _dec2, _dec3, _class, _class2, _temp;
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -22887,7 +22887,7 @@ module.exports =
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	function fetchDataDeferred(getState, dispatch, location, params) {
+	function fetchDataDeferred(getState, dispatch) {
 	  return ActionCreators.fetchServants()(dispatch);
 	}
 
@@ -22899,24 +22899,21 @@ module.exports =
 	  return { actions: (0, _redux.bindActionCreators)(ActionCreators, dispatch) };
 	}
 
-	var Deck = (_dec = (0, _connectData2.default)(null, fetchDataDeferred), _dec2 = (0, _reactDnd.DragDropContext)(_reactDndHtml5Backend2.default), _dec3 = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps), _dec(_class = _dec2(_class = _dec3(_class = (_temp2 = _class2 = (function (_Component) {
+	var Deck = (_dec = (0, _connectData2.default)(null, fetchDataDeferred), _dec2 = (0, _reactDnd.DragDropContext)(_reactDndHtml5Backend2.default), _dec3 = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps), _dec(_class = _dec2(_class = _dec3(_class = (_temp = _class2 = (function (_Component) {
 	  _inherits(Deck, _Component);
 
-	  function Deck() {
-	    var _Object$getPrototypeO;
-
-	    var _temp, _this, _ret;
-
+	  function Deck(props) {
 	    _classCallCheck(this, Deck);
 
-	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	      args[_key] = arguments[_key];
-	    }
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Deck).call(this, props));
 
-	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(Deck)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this.state = {
+	    _this.state = {
 	      cards: [],
 	      filter: {}
-	    }, _temp), _possibleConstructorReturn(_this, _ret);
+	    };
+
+	    _this.state.cards = _this.getInitialCards();
+	    return _this;
 	  }
 
 	  _createClass(Deck, [{
@@ -22947,42 +22944,42 @@ module.exports =
 	      });
 	    }
 	  }, {
+	    key: 'getInitialCards',
+	    value: function getInitialCards() {
+	      var _props = this.props;
+	      var servants = _props.servants;
+	      var params = _props.params;
+
+	      return DeckUtils.getCardIds(params.hash).map(function (id) {
+	        return _.first(_.filter(servants, { id: id })) || null;
+	      });
+	    }
+	  }, {
 	    key: 'getDeckURL',
 	    value: function getDeckURL() {
 	      var cards = this.state.cards;
-	      var location = this.props.location;
 
 	      return DeckUtils.getURL(cards.map(function (card) {
 	        return card ? card.id : 0;
 	      }));
 	    }
 	  }, {
-	    key: 'componentWillReceiveProps',
-	    value: function componentWillReceiveProps(nextProps) {
-	      var servants = nextProps.servants;
-	      var params = nextProps.params;
-	      var hash = nextProps.params.hash;
-
-	      var cards = DeckUtils.getCardIds(hash).map(function (id) {
-	        return _.first(_.filter(servants, { id: id })) || null;
-	      });
-	      this.setState({ cards: cards });
+	    key: 'updateLazyImages',
+	    value: function updateLazyImages() {
+	      setTimeout(function () {
+	        // TODO: dont use jquery
+	        $('.lazy').lazyload();
+	      }, 1);
 	    }
 	  }, {
 	    key: 'componentDidUpdate',
 	    value: function componentDidUpdate() {
-	      setTimeout(function () {
-	        // TODO: dont use jquery
-	        $('.lazy').lazyload();
-	      }, 1);
+	      this.updateLazyImages();
 	    }
 	  }, {
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      setTimeout(function () {
-	        // TODO: dont use jquery
-	        $('.lazy').lazyload();
-	      }, 1);
+	      this.updateLazyImages();
 	    }
 	  }, {
 	    key: 'render',
@@ -23008,7 +23005,7 @@ module.exports =
 	})(_react.Component), _class2.propTypes = {
 	  servants: _react.PropTypes.arrayOf(_react.PropTypes.object),
 	  actions: _react.PropTypes.object
-	}, _temp2)) || _class) || _class) || _class);
+	}, _temp)) || _class) || _class) || _class);
 	exports.default = Deck;
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(204), __webpack_require__(208)))
 
@@ -23120,7 +23117,7 @@ module.exports =
 	  if (_ExecutionEnvironment2.default.canUseDOM) {
 	    return window.atob(hash);
 	  }
-	  return new Buffer(str, 'base64').toString('binary');
+	  return new Buffer(hash, 'base64').toString('binary');
 	}
 
 	function btoa(str) {
@@ -23224,7 +23221,7 @@ module.exports =
 	        _react2.default.createElement(_deckContainer2.default, { cards: cards, servants: servants, filter: filter,
 	          handleCardChange: handleCardChange,
 	          handleFilterChange: handleFilterChange }),
-	        _react2.default.createElement(_deckServant2.default, { servants: servants, filter: filter })
+	        _react2.default.createElement(_deckServant2.default, { servants: servants, cards: cards, filter: filter })
 	      ));
 	    }
 	  }]);
@@ -23704,11 +23701,12 @@ module.exports =
 	    value: function render() {
 	      var _props = this.props;
 	      var connectDropTarget = _props.connectDropTarget;
+	      var selected = _props.selected;
 	      var index = _props.index;
 	      var card = _props.card;
 
 	      var tribeCls = card ? 'tribe-' + card.tribe_id : null;
-	      var cls = (0, _classnames2.default)('card', tribeCls);
+	      var cls = (0, _classnames2.default)('card', tribeCls, { 'setted': selected });
 	      var bgImage = index === null ? 'blank.png' : index <= 5 ? 'deck.png' : 'side-board.png';
 
 	      return connectDropTarget(_react2.default.createElement(
@@ -23732,6 +23730,7 @@ module.exports =
 	  canDrop: _react.PropTypes.bool.isRequired,
 	  onDrop: _react.PropTypes.func,
 	  disabled: _react.PropTypes.bool,
+	  selected: _react.PropTypes.bool,
 	  index: _react.PropTypes.number,
 	  card: _react.PropTypes.object
 	}, _class2.defaultProps = {
@@ -23956,10 +23955,6 @@ module.exports =
 	});
 	exports.default = undefined;
 
-	var _classnames = __webpack_require__(209);
-
-	var _classnames2 = _interopRequireDefault(_classnames);
-
 	var _react = __webpack_require__(24);
 
 	var _react2 = _interopRequireDefault(_react);
@@ -24006,11 +24001,14 @@ module.exports =
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var cards = this.props.cards;
+
 	      var servantNodes = this.filteredServants().sort(function (a, b) {
 	        return a.tribe_id * 1000 + a.tribe_code - (b.tribe_id * 1000 + b.tribe_code);
 	      }).map(function (servant, index) {
-	        var cls = (0, _classnames2.default)('card', 'tribe-' + servant.tribe_id, { setted: false });
-	        return _react2.default.createElement(_cardContainer2.default, { key: index, index: null, card: servant, disabled: true });
+	        var selected = !!_.find(cards, { id: servant.id });
+	        return _react2.default.createElement(_cardContainer2.default, { key: index, selected: selected, disabled: true,
+	          index: null, card: servant });
 	      });
 
 	      return _react2.default.createElement(
@@ -24027,7 +24025,9 @@ module.exports =
 
 	  return DeckServant;
 	})(_react.Component), _class.propTypes = {
-	  servants: _react.PropTypes.arrayOf(_react.PropTypes.object)
+	  servants: _react.PropTypes.arrayOf(_react.PropTypes.object),
+	  cards: _react.PropTypes.arrayOf(_react.PropTypes.object),
+	  filter: _react.PropTypes.object
 	}, _temp);
 	exports.default = DeckServant;
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(204)))

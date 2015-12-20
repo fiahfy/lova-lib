@@ -29,6 +29,7 @@ export default class CardContainer extends Component {
     canDrop:           PropTypes.bool.isRequired,
     onDrop:            PropTypes.func,
     disabled:          PropTypes.bool,
+    selected:          PropTypes.bool,
     index:             PropTypes.number,
     card:              PropTypes.object
   }
@@ -39,10 +40,10 @@ export default class CardContainer extends Component {
     card:     null
   }
   render() {
-    const {connectDropTarget, index, card} = this.props
+    const {connectDropTarget, selected, index, card} = this.props
 
     const tribeCls = card ? `tribe-${card.tribe_id}` : null
-    const cls = classNames('card', tribeCls)
+    const cls = classNames('card', tribeCls, {'setted': selected})
     const bgImage = index === null ? 'blank.png' : index <= 5 ? 'deck.png' : 'side-board.png'
 
     return connectDropTarget(

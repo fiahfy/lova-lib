@@ -68,7 +68,7 @@ function atob(hash) {
   if (ExecutionEnvironment.canUseDOM) {
     return window.atob(hash)
   }
-  return new Buffer(str, 'base64').toString('binary')
+  return new Buffer(hash, 'base64').toString('binary')
 }
 
 function btoa(str) {

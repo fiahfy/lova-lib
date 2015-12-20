@@ -8,7 +8,7 @@ import * as DeckUtils from '../utils/deck-utils'
 import DeckDropContainer from '../components/deck/deck-drop-container'
 import connectData from '../decorators/connect-data'
 
-function fetchDataDeferred(getState, dispatch, location, params) {
+function fetchDataDeferred(getState, dispatch) {
   return ActionCreators.fetchServants()(dispatch)
 }
 
@@ -32,6 +32,10 @@ export default class Deck extends Component {
     cards:  [],
     filter: {}
   }
+  constructor(props) {
+    super(props)
+    this.state.cards = this.getInitialCards()
+  }
   onDrop(droppedIndex, {index, card}) {
     this.handleCardChange(droppedIndex, index, card)
   }
@@ -49,31 +53,27 @@ export default class Deck extends Component {
       filter: filter
     })
   }
-  getDeckURL() {
-    const {cards} = this.state
-    const {location} = this.props
-
-    return DeckUtils.getURL(cards.map(card => card ? card.id : 0))
-  }
-  componentWillReceiveProps(nextProps) {
-    const {servants, params} = nextProps
-    const {hash} = nextProps.params
-    const cards = DeckUtils.getCardIds(hash).map(id => {
+  getInitialCards() {
+    const {servants, params} = this.props
+    return DeckUtils.getCardIds(params.hash).map(id => {
       return _.first(_.filter(servants, {id: id})) || null
     })
-    this.setState({cards})
+  }
+  getDeckURL() {
+    const {cards} = this.state
+    return DeckUtils.getURL(cards.map(card => card ? card.id : 0))
+  }
+  updateLazyImages() {
+    setTimeout(() => {
+      // TODO: dont use jquery
+      $('.lazy').lazyload()
+    }, 1)
   }
   componentDidUpdate() {
-    setTimeout(() => {
-      // TODO: dont use jquery
-      $('.lazy').lazyload()
-    }, 1)
+    this.updateLazyImages()
   }
   componentDidMount() {
-    setTimeout(() => {
-      // TODO: dont use jquery
-      $('.lazy').lazyload()
-    }, 1)
+    this.updateLazyImages()
   }
   render() {
     const {servants} = this.props

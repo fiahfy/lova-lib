@@ -45,7 +45,7 @@ export default class DeckDropContainer extends Component {
         <DeckContainer cards={cards} servants={servants} filter={filter}
                        handleCardChange={handleCardChange}
                        handleFilterChange={handleFilterChange} />
-        <DeckServant servants={servants} filter={filter} />
+        <DeckServant servants={servants} cards={cards} filter={filter} />
       </div>
     )
   }
