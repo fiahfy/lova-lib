@@ -5,7 +5,7 @@ import logger from '../../utils/logger'
 import * as scraper from '../../utils/scraper'
 import * as models from '../../models'
 let lwip = null
-if (process.env.NODE_ENV !== 'production') {
+if (!process.env.OPENSHIFT_APP_DNS) {
   lwip = require('lwip')
 }
 

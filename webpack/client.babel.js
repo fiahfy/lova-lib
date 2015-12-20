@@ -1,12 +1,10 @@
 import webpack from 'webpack'
 
-const production = !!process.env.OPENSHIFT_APP_DNS
+const production = true
 const plugins = production ? [
-  new webpack.DefinePlugin({
-   'process.env': {
-     'NODE_ENV': JSON.stringify('production')
-   }
-  }),
+  // new webpack.DefinePlugin({
+  //   'process.env.NODE_ENV': JSON.stringify('production')
+  // }),
   new webpack.optimize.DedupePlugin(),
   new webpack.optimize.AggressiveMergingPlugin(),
   new webpack.optimize.OccurenceOrderPlugin(),
