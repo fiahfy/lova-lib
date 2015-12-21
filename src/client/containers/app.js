@@ -8,8 +8,8 @@ export default class App extends Component {
     const pathname = this.props.location.pathname
     const pathes = pathname.match(/^\/(\w+)\//)
 
-    let title = `${_.capitalize(pathes[1])} : LoVA Tool`
-    let description = 'Tool Site for Lord of Vermilion Arena'
+    let title = `${_.capitalize(pathes[1])} : LoVA Lib`
+    let description = 'Site for Lord of Vermilion Arena'
     switch (pathes[1]) {
       case 'deck':
         description = 'Deck Simulator for Lord of Vermilion Arena'
@@ -49,7 +49,7 @@ export default class App extends Component {
                 <span className="icon-bar" />
                 <span className="icon-bar" />
               </button>
-              <Link className="navbar-brand" to="/">LoVA Tool</Link>
+              <Link className="navbar-brand" to="/">LoVA Lib</Link>
             </div>
             <div id="navbar" className="collapse navbar-collapse">
               <ul className="nav navbar-nav">

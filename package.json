@@ -1,7 +1,7 @@
 {
-  "name": "lova-tool",
+  "name": "lova-lib",
   "version": "1.0.0",
-  "description": "Tools for Lord of Vermilion Arena",
+  "description": "Site for Lord of Vermilion Arena",
   "keywords": [
     "OpenShift",
     "Node.js",

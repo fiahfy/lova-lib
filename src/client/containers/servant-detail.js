@@ -40,7 +40,7 @@ export default class ServantDetail extends Component {
   }
   getMetaInfo() {
     const {servant} = this.props
-    const title = `Servant ${servant.tribe_name}-${_.padLeft(servant.tribe_code, 3, 0)} ${servant.name} : LoVATool`
+    const title = `Servant ${servant.tribe_name}-${_.padLeft(servant.tribe_code, 3, 0)} ${servant.name} : LoVA Lib`
     const description = servant.oral_tradition
     return {title, description}
   }
