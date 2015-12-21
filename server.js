@@ -20818,8 +20818,8 @@ module.exports =
 	      var pathname = this.props.location.pathname;
 	      var pathes = pathname.match(/^\/(\w+)\//);
 
-	      var title = _.capitalize(pathes[1]) + ' : LoVA Tool';
-	      var description = 'Tool Site for Lord of Vermilion Arena';
+	      var title = _.capitalize(pathes[1]) + ' : LoVA Lib';
+	      var description = 'Site for Lord of Vermilion Arena';
 	      switch (pathes[1]) {
 	        case 'deck':
 	          description = 'Deck Simulator for Lord of Vermilion Arena';
@@ -20881,7 +20881,7 @@ module.exports =
 	              _react2.default.createElement(
 	                _reactRouter.Link,
 	                { className: 'navbar-brand', to: '/' },
-	                'LoVA Tool'
+	                'LoVA Lib'
 	              )
 	            ),
 	            _react2.default.createElement(
@@ -21665,7 +21665,7 @@ module.exports =
 	    value: function getMetaInfo() {
 	      var servant = this.props.servant;
 
-	      var title = 'Servant ' + servant.tribe_name + '-' + _.padLeft(servant.tribe_code, 3, 0) + ' ' + servant.name + ' : LoVATool';
+	      var title = 'Servant ' + servant.tribe_name + '-' + _.padLeft(servant.tribe_code, 3, 0) + ' ' + servant.name + ' : LoVA Lib';
 	      var description = servant.oral_tradition;
 	      return { title: title, description: description };
 	    }
