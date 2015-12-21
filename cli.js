@@ -2618,10 +2618,6 @@ module.exports =
 
 	var _fs2 = _interopRequireDefault(_fs);
 
-	var _request = __webpack_require__(25);
-
-	var _request2 = _interopRequireDefault(_request);
-
 	var _logger = __webpack_require__(7);
 
 	var _logger2 = _interopRequireDefault(_logger);
@@ -2638,9 +2634,11 @@ module.exports =
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	var request = null;
 	var lwip = null;
 	if (!process.env.OPENSHIFT_APP_DNS) {
-	  lwip = __webpack_require__(26);
+	  lwip = __webpack_require__(25);
+	  request = __webpack_require__(26);
 	}
 
 	var imageDir = './public/assets/img/';
@@ -2818,7 +2816,7 @@ module.exports =
 	  return new Promise(function (resolve) {
 	    _logger2.default.verbose('Download Image: url = %s', url);
 
-	    _request2.default.get(url)
+	    request.get(url)
 	    //.on('response', function(res) {
 	    //  console.log('statusCode: ', res.statusCode)
 	    //  console.log('content-length: ', res.headers['content-length'])
@@ -2878,13 +2876,13 @@ module.exports =
 /* 25 */
 /***/ function(module, exports) {
 
-	module.exports = require("request");
+	module.exports = require("lwip");
 
 /***/ },
 /* 26 */
 /***/ function(module, exports) {
 
-	module.exports = require("lwip");
+	module.exports = require("request");
 
 /***/ },
 /* 27 */
@@ -3066,7 +3064,7 @@ module.exports =
 
 	var lwip = null;
 	if (!process.env.OPENSHIFT_APP_DNS) {
-	  lwip = __webpack_require__(26);
+	  lwip = __webpack_require__(25);
 	}
 
 	var imageDir = './public/assets/img/';

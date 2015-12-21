@@ -1,12 +1,13 @@
 import co from 'co'
 import fs from'fs'
-import request from'request'
 import logger from '../../utils/logger'
 import * as scraper from '../../utils/scraper'
 import * as models from '../../models'
+let request = null
 let lwip = null
 if (!process.env.OPENSHIFT_APP_DNS) {
   lwip = require('lwip')
+  request = require('request')
 }
 
 const imageDir = './public/assets/img/'
