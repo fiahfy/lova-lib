@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 
 const Schema = mongoose.Schema
 
-const ServantrankingShema = new Schema({
+const ServantRankingShema = new Schema({
   _id:        {type: Number, require: true, unique: true},
   date:       {type: Date,   require: true},
   mode:       {type: String, require: true},
@@ -14,12 +14,12 @@ const ServantrankingShema = new Schema({
   score:      {type: Number, require: true}
 }, {id: false})
 
-ServantrankingShema.virtual('id').get(function() {
+ServantRankingShema.virtual('id').get(function() {
   return this._id
 })
 
-ServantrankingShema.set('toJSON', {
+ServantRankingShema.set('toJSON', {
   virtuals: true
 })
 
-export default mongoose.model('servantranking', ServantrankingShema)
+export default mongoose.model('servantRanking', ServantRankingShema)

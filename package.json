@@ -37,7 +37,7 @@
     "build-server": "webpack --config webpack/server.babel.js",
     "build-cli": "webpack --config webpack/cli.babel.js",
     "lint": "eslint src",
-    "dump": "mongodump --host=127.0.0.1 --port=27017 -u admin -d lova -o tmp/mongodb/dump",
+    "dump": "mongodump --host=127.0.0.1 --port=27017 -u admin -d lova -o tmp/mongodb/dump -p",
     "restore": "mongorestore --host=127.0.0.1 --port=27017 -d lova --drop tmp/mongodb/dump/lova"
   },
   "dependencies": {

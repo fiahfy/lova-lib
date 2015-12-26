@@ -2,7 +2,7 @@ import co from 'co'
 import logger from '../../utils/logger'
 import * as models from '../../models'
 let lwip = null
-if (!process.env.OPENSHIFT_APP_DNS) {
+if (!process.env.DOCKER_NODE_HOST) {
   lwip = require('lwip')
 }
 

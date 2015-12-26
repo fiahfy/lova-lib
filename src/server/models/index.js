@@ -3,10 +3,10 @@ import mongoose from 'mongoose'
 import logger from '../utils/logger'
 
 const config = {
-  host: process.env.OPENSHIFT_MONGODB_DB_HOST || '127.0.0.1',
-  port: process.env.OPENSHIFT_MONGODB_DB_PORT || 27017,
-  user: process.env.OPENSHIFT_MONGODB_DB_USERNAME,
-  pass: process.env.OPENSHIFT_MONGODB_DB_PASSWORD,
+  host: process.env.DOCKER_MONGO_HOST || '127.0.0.1',
+  port: process.env.DOCKER_MONGO_PORT || 27017,
+  user: process.env.DOCKER_MONGO_USERNAME,
+  pass: process.env.DOCKER_MONGO_PASSWORD,
   protocol: 'mongodb',
   db: 'lova'
 }

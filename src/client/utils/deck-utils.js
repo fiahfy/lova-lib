@@ -45,7 +45,7 @@ export function getURL(cardIds) {
   if (ExecutionEnvironment.canUseDOM) {
     host = window.location.href.replace(/^https?:\/\/([^\/]+)\/.*$/, '$1')
   } else {
-    host = process.env.OPENSHIFT_APP_DNS || 'localhost:3000'
+    host = process.env.DOCKER_NODE_HOST || 'localhost:3000'
   }
   return 'http://' + host + '/deck/' + getHash(cardIds) + '/'
 }

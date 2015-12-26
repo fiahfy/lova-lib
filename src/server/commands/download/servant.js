@@ -5,7 +5,7 @@ import * as scraper from '../../utils/scraper'
 import * as models from '../../models'
 let request = null
 let lwip = null
-if (!process.env.OPENSHIFT_APP_DNS) {
+if (!process.env.DOCKER_NODE_HOST) {
   lwip = require('lwip')
   request = require('request')
 }
