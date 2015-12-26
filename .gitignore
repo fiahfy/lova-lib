@@ -35,5 +35,8 @@ node_modules
 
 # Custom
 .idea
-tmp/mongodb/*
+/public/assets/js/bundle.js*
+/cli.js*
+/server.js*
+/tmp/mongodb/*
 !.gitkeep
