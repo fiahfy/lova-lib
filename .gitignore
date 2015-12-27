@@ -38,5 +38,5 @@ node_modules
 /public/assets/js/bundle.js*
 /cli.js*
 /server.js*
-/tmp/mongodb/*
+/tmp
 !.gitkeep

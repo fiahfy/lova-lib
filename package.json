@@ -25,7 +25,7 @@
   "main": "server.js",
   "scripts": {
     "install": "npm run build",
-    "poststart": "mongod --fork --logpath /dev/null --dbpath tmp/mongodb/data",
+    "poststart": "mongod --fork --logpath /dev/null --dbpath tmp/mongo/data",
     "prestop": "mongo admin --eval 'db.shutdownServer()' > /dev/null",
     "server": "nodemon -V -w server.js server.js",
     "watch": "npm run build -- -w",
@@ -37,8 +37,8 @@
     "build-server": "webpack --config webpack/server.babel.js",
     "build-cli": "webpack --config webpack/cli.babel.js",
     "lint": "eslint src",
-    "dump": "mongodump --host=127.0.0.1 --port=27017 -u admin -d lova -o tmp/mongodb/dump -p",
-    "restore": "mongorestore --host=127.0.0.1 --port=27017 -d lova --drop tmp/mongodb/dump/lova"
+    "dump": "mongodump --host=127.0.0.1 --port=27017 -u admin -d lova -o tmp/mongo/dump -p",
+    "restore": "mongorestore --host=127.0.0.1 --port=27017 -d lova --drop tmp/mongo/dump/lova"
   },
   "dependencies": {
     "babel-core": "6.3.17",
