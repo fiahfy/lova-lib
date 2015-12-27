@@ -2,7 +2,7 @@ import webpack from 'webpack'
 import appConfig from '../src/config'
 import baseConfig from './base.babel'
 
-const plugins = appConfig.production ? [
+const plugins = appConfig.env === 'production' ? [
   new webpack.optimize.DedupePlugin(),
   new webpack.optimize.AggressiveMergingPlugin(),
   new webpack.optimize.OccurenceOrderPlugin(),
