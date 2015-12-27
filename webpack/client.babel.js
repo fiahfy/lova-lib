@@ -7,9 +7,9 @@ const plugins = appConfig.env === 'production' ? [
   new webpack.optimize.AggressiveMergingPlugin(),
   new webpack.optimize.OccurenceOrderPlugin(),
   new webpack.optimize.UglifyJsPlugin({
-   compress: {
-     warnings: false
-   }
+    compress: {
+      warnings: false
+    }
   }),
   new webpack.NoErrorsPlugin()
 ] : []
