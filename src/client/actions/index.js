@@ -9,7 +9,7 @@ export const RECEIVE_SPELL_STATISTICS = 'RECEIVE_SPELL_STATISTICS'
 
 let apiBaseURL = ''
 if (!ExecutionEnvironment.canUseDOM) {
-  apiBaseURL = 'http://' + (process.env.DOCKER_NODE_HOST || 'localhost:3000')
+  apiBaseURL = 'http://localhost:' + (process.env.DOCKER_NODE_PORT || 3000)
 }
 
 export function fetchServant(id) {
