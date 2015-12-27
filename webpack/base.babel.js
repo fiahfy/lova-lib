@@ -2,8 +2,8 @@ import webpack from 'webpack'
 import config from '../src/config'
 
 export default {
-  debug: !config.production,
-  devtool: config.production ? 'source-map' : 'cheap-source-map',
+  debug: config.env === 'development',
+  devtool: config.env === 'development' ? 'cheap-source-map' : 'source-map',
   plugins:[
     new webpack.ProvidePlugin({
       _: 'lodash',
