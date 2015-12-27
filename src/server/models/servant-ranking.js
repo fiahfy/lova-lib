@@ -12,7 +12,7 @@ const ServantRankingShema = new Schema({
   seq:        {type: Number, require: true},
   rank:       {type: Number, require: true},
   score:      {type: Number, require: true}
-}, {id: false})
+}, {id: false, collection: 'servantRankings'})
 
 ServantRankingShema.virtual('id').get(function() {
   return this._id

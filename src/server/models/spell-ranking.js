@@ -11,7 +11,7 @@ const SpellRankingShema = new Schema({
   seq:      {type: Number, require: true},
   rank:     {type: Number, require: true},
   score:    {type: Number, require: true}
-}, {id: false})
+}, {id: false, collection: 'spellRankings'})
 
 SpellRankingShema.virtual('id').get(function() {
   return this._id

@@ -100,7 +100,7 @@ function deleteRanking(args) {
 
 function insertRanking(args) {
   return co(function *() {
-    const result = (yield models.counter.getNewId('spellranking')).result
+    const result = (yield models.counter.getNewId('spellRanking')).result
     const _id = result.value.seq
     yield models.spellRanking.update({_id: _id}, args, {upsert: true}).exec()
   })
