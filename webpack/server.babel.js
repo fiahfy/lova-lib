@@ -1,6 +1,5 @@
-import webpack from 'webpack'
 import fs from 'fs'
-import clientConfig from './client.babel'
+import baseConfig from './base.babel'
 
 const nodeModules = fs.readdirSync('node_modules')
   .filter(dir => '.bin' !== dir)
@@ -14,15 +13,7 @@ const config = {
     filename: '../../server.js',
     libraryTarget: 'commonjs2'
   },
-  externals: nodeModules,
-  plugins: [
-    new webpack.ProvidePlugin({
-      _: 'lodash',
-      $: 'jquery',
-      jQuery: 'jquery',
-      'window.jQuery': 'jquery'
-    })
-  ]
+  externals: nodeModules
 }
 
-export default Object.assign({}, clientConfig, config)
+export default Object.assign({}, baseConfig, config)

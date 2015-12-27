@@ -1,7 +1,7 @@
 import {createHistory, createMemoryHistory, useQueries} from 'history'
 import {useSimpleScroll} from 'scroll-behavior'
-import ExecutionEnvironment from 'fbjs/lib/ExecutionEnvironment'
+import config from '../config'
 
 export default useSimpleScroll(useQueries(
-  ExecutionEnvironment.canUseDOM ? createHistory : createMemoryHistory
+  config.target === 'client' ? createHistory : createMemoryHistory
 ))()

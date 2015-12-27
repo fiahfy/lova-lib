@@ -4,17 +4,14 @@ import koaStatic from 'koa-static'
 import crypto from 'crypto'
 import LRU from 'lru-cache'
 import routes from './server/routes'
-
-const config = {
-  port: process.env.DOCKER_NODE_PORT || 3000
-}
+import config from './config'
 
 const cache = LRU({maxAge: 1000 * 60})
 
 const app = koa()
 
 app.use(koaStatic('public', {maxage: 10 * 60 * 1000}))
-if (!config.development) {
+if (config.env === 'production') {
   app.use(function *(next) {
     if (this.path.indexOf('.') > -1) {
       yield next
@@ -32,4 +29,4 @@ if (!config.development) {
 }
 app.use(routes)
 
-app.listen(config.port)
+app.listen(config.app.port)
