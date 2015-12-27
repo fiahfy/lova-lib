@@ -1,7 +1,7 @@
 import ExecutionEnvironment from 'fbjs/lib/ExecutionEnvironment'
 
 export default {
-  env: !!process.env.DOCKER_NODE_DNS ? 'production' : 'development',
+  env: process.env.NODE_ENV || 'development',
   target: ExecutionEnvironment.canUseDOM ? 'client' : 'server',
   app: {
     dns: process.env.DOCKER_NODE_DNS || 'localhost:3000',

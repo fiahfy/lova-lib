@@ -3,6 +3,7 @@ import appConfig from '../src/config'
 import baseConfig from './base.babel'
 
 const plugins = appConfig.env === 'production' ? [
+  new webpack.NoErrorsPlugin(),
   new webpack.optimize.DedupePlugin(),
   new webpack.optimize.AggressiveMergingPlugin(),
   new webpack.optimize.OccurenceOrderPlugin(),
@@ -10,8 +11,7 @@ const plugins = appConfig.env === 'production' ? [
     compress: {
       warnings: false
     }
-  }),
-  new webpack.NoErrorsPlugin()
+  })
 ] : []
 
 const config = {
