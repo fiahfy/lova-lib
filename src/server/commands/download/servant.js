@@ -6,7 +6,7 @@ import * as scraper from '../../utils/scraper'
 import * as models from '../../models'
 let request = null
 let lwip = null
-if (config.env === 'development') {
+if (process.env.NODE_ENV === 'development') {
   lwip = require('lwip')
   request = require('request')
 }

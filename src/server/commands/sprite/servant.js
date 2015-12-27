@@ -3,7 +3,7 @@ import config from '../../../config'
 import logger from '../../utils/logger'
 import * as models from '../../models'
 let lwip = null
-if (config.env === 'development') {
+if (process.env.NODE_ENV === 'development') {
   lwip = require('lwip')
 }
 
