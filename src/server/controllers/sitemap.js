@@ -1,5 +1,6 @@
 import xmlify from 'xmlify'
-import models from '../models'
+import config from '../../config'
+import * as models from '../models'
 
 export default (function *() {
   const servants = yield models.servant.find({}, 'id').sort({_id: 1}).exec()
@@ -15,7 +16,7 @@ export default (function *() {
   })
 
   const urls = pathes.map(path => {
-    return {loc: `http://lova-fiahfy.rhcloud.com${path}`}
+    return {loc: `http://${config.app.dns}${path}`}
   })
 
   const urlset = {
