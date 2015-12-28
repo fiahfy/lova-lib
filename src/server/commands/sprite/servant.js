@@ -1,8 +1,9 @@
 import co from 'co'
+import config from '../../../config'
 import logger from '../../utils/logger'
 import * as models from '../../models'
 let lwip = null
-if (!process.env.OPENSHIFT_APP_DNS) {
+if (process.env.NODE_ENV === 'development') {
   lwip = require('lwip')
 }
 

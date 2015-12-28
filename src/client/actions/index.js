@@ -1,5 +1,5 @@
 import fetch from 'isomorphic-fetch'
-import ExecutionEnvironment from 'fbjs/lib/ExecutionEnvironment'
+import config from '../../config'
 
 export const RECEIVE_SERVANT = 'RECEIVE_SERVANT'
 export const RECEIVE_SERVANTS = 'RECEIVE_SERVANTS'
@@ -8,8 +8,8 @@ export const RECEIVE_SERVANT_STATISTICS = 'RECEIVE_SERVANT_STATISTICS'
 export const RECEIVE_SPELL_STATISTICS = 'RECEIVE_SPELL_STATISTICS'
 
 let apiBaseURL = ''
-if (!ExecutionEnvironment.canUseDOM) {
-  apiBaseURL = 'http://' + (process.env.OPENSHIFT_APP_DNS || 'localhost:3000')
+if (config.target === 'server') {
+  apiBaseURL = `http://localhost:${config.app.port}`
 }
 
 export function fetchServant(id) {

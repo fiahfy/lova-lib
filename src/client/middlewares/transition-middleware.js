@@ -1,5 +1,5 @@
-import ExecutionEnvironment from 'fbjs/lib/ExecutionEnvironment'
 import {ROUTER_DID_CHANGE} from 'redux-router/lib/constants'
+import config from '../../config'
 
 const locationsAreEqual = (locA, locB) => (locA.pathname === locB.pathname) && (locA.search === locB.search)
 
@@ -40,7 +40,7 @@ export default function transitionMiddleware({getState, dispatch}) {
           .catch(() => doTransition())
       })
 
-      if (!ExecutionEnvironment.canUseDOM) {
+      if (config.target === 'server') {
         // router state is null until ReduxRouter is created so we can use this to store
         // our promise to let the server know when it can render
         getState().router = promise

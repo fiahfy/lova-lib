@@ -1,17 +1,9 @@
 import url from 'url'
 import mongoose from 'mongoose'
+import config from '../../config'
 import logger from '../utils/logger'
 
-const config = {
-  host: process.env.OPENSHIFT_MONGODB_DB_HOST || '127.0.0.1',
-  port: process.env.OPENSHIFT_MONGODB_DB_PORT || 27017,
-  user: process.env.OPENSHIFT_MONGODB_DB_USERNAME,
-  pass: process.env.OPENSHIFT_MONGODB_DB_PASSWORD,
-  protocol: 'mongodb',
-  db: 'lova'
-}
-
-const {host, port, user, pass, protocol, db} = config
+const {host, port, user, pass, protocol, db} = config.mongo
 const uri = url.format({
   protocol: `${protocol}:`,
   slashes:  true,

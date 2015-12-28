@@ -4,22 +4,16 @@ import koaStatic from 'koa-static'
 import crypto from 'crypto'
 import LRU from 'lru-cache'
 import routes from './server/routes'
-
-const config = {
-  port: process.env.OPENSHIFT_NODEJS_PORT || 3000,
-  ip:   process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1'
-}
+import config from './config'
 
 const cache = LRU({maxAge: 1000 * 60})
 
 const app = koa()
 
 app.use(koaStatic('public', {maxage: 10 * 60 * 1000}))
-if (!config.development) {
+if (config.env === 'production') {
   app.use(function *(next) {
-    if (this.path.indexOf('.') > -1) {
-      yield next
-    } else {
+    if (this.path.indexOf('/api/') > -1) {
       let key = crypto.createHash('md5').update(this.url).digest('hex')
       let value = cache.get(key)
       if (value) {
@@ -28,9 +22,11 @@ if (!config.development) {
       }
       yield next
       cache.set(key, this.body)
+    } else {
+      yield next
     }
   })
 }
 app.use(routes)
 
-app.listen(config.port, config.ip)
+app.listen(config.app.port)

@@ -1,4 +1,4 @@
-import ExecutionEnvironment from 'fbjs/lib/ExecutionEnvironment'
+import config from '../../config'
 
 export function getMana(cards) {
   const fill = _.range(0, 6).every(index => !!cards[index])
@@ -42,10 +42,10 @@ export function getTotalMana(cards) {
 
 export function getURL(cardIds) {
   let host
-  if (ExecutionEnvironment.canUseDOM) {
+  if (config.target === 'client') {
     host = window.location.href.replace(/^https?:\/\/([^\/]+)\/.*$/, '$1')
   } else {
-    host = process.env.OPENSHIFT_APP_DNS || 'localhost:3000'
+    host = config.app.dns
   }
   return 'http://' + host + '/deck/' + getHash(cardIds) + '/'
 }
@@ -71,14 +71,14 @@ export function getCardIds(hash) {
 }
 
 function atob(hash) {
-  if (ExecutionEnvironment.canUseDOM) {
+  if (config.target === 'client') {
     return window.atob(hash)
   }
   return new Buffer(hash, 'base64').toString('binary')
 }
 
 function btoa(str) {
-  if (ExecutionEnvironment.canUseDOM) {
+  if (config.target === 'client') {
     return window.btoa(str)
   }
   let buffer;

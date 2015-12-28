@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 
 const Schema = mongoose.Schema
 
-const SpellrankingShema = new Schema({
+const SpellRankingShema = new Schema({
   _id:      {type: Number, require: true, unique: true},
   date:     {type: Date,   require: true},
   map:      {type: String, require: true},
@@ -11,14 +11,14 @@ const SpellrankingShema = new Schema({
   seq:      {type: Number, require: true},
   rank:     {type: Number, require: true},
   score:    {type: Number, require: true}
-}, {id: false})
+}, {id: false, collection: 'spellRankings'})
 
-SpellrankingShema.virtual('id').get(function() {
+SpellRankingShema.virtual('id').get(function() {
   return this._id
 })
 
-SpellrankingShema.set('toJSON', {
+SpellRankingShema.set('toJSON', {
   virtuals: true
 })
 
-export default mongoose.model('spellranking', SpellrankingShema)
+export default mongoose.model('spellRanking', SpellRankingShema)

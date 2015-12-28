@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import ExecutionEnvironment from 'fbjs/lib/ExecutionEnvironment'
+import config from '../../config'
 
 class Blank extends Component {
   render() {
@@ -9,9 +9,4 @@ class Blank extends Component {
   }
 }
 
-let NVD3Chart
-if (ExecutionEnvironment.canUseDOM) {
-  NVD3Chart = require('react-nvd3')
-}
-
-export default (ExecutionEnvironment.canUseDOM ? NVD3Chart : Blank)
+export default (config.target === 'client' ? require('react-nvd3') : Blank)

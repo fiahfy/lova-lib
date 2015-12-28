@@ -3,14 +3,14 @@ import {reduxReactRouter} from 'redux-router'
 import {reduxReactRouter as serverReduxReactRouter} from 'redux-router/server'
 import thunk from 'redux-thunk'
 // import createLogger from 'redux-logger'
-import ExecutionEnvironment from 'fbjs/lib/ExecutionEnvironment'
-import history from '../history'
-import routes from '../routes'
-import rootReducer from '../reducers'
-import transitionMiddleware from '../middlewares/transition-middleware'
+import config from '../config'
+import history from './history'
+import routes from './routes'
+import rootReducer from './reducers'
+import transitionMiddleware from './middlewares/transition-middleware'
 // import DevTools from '../containers/dev-tools'
 
-const reduxReactRouterFunc = ExecutionEnvironment.canUseDOM
+const reduxReactRouterFunc = config.target === 'client'
   ? reduxReactRouter({routes, history})
   : serverReduxReactRouter({routes, history})
 

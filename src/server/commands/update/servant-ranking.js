@@ -106,7 +106,7 @@ function deleteRanking(args) {
 
 function insertRanking(args) {
   return co(function *() {
-    const result = (yield models.counter.getNewId('servantranking')).result
+    const result = (yield models.counter.getNewId('servantRanking')).result
     const _id = result.value.seq
     yield models.servantRanking.update({_id: _id}, args, {upsert: true}).exec()
   })
