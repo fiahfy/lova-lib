@@ -97,7 +97,7 @@ export default class Servant extends Component {
     })
   }
   render() {
-    const {tribeId, q} = this.props.location.query
+    const {tribe_id: tribeId, q} = this.props.location.query
 
     const tribeIdOptionNodes = [
       {value: 0, name: 'Select Tribe...'},
