@@ -52,6 +52,9 @@ export default class Card extends Component {
       }
     })
   }
+  shouldComponentUpdate(nextProps) {
+    return (this.props.card || {}).id !== (nextProps.card || {}).id
+  }
   componentDidUpdate() {
     this.setupPopover()
   }
