@@ -4,6 +4,7 @@ import baseConfig from './base.babel'
 
 const plugins = appConfig.env === 'production' ? [
   new webpack.NoErrorsPlugin(),
+  new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
   new webpack.optimize.DedupePlugin(),
   new webpack.optimize.AggressiveMergingPlugin(),
   new webpack.optimize.OccurenceOrderPlugin(),

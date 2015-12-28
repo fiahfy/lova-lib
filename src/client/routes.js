@@ -19,6 +19,5 @@ export default (
     <Route path="charts/" component={Chart} />
     <Route path="prize/" component={Prize} />
     <Route path="about/" component={About} />
-    <Redirect from="*" to="deck/" />
   </Route>
 )
