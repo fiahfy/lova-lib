@@ -25,8 +25,8 @@
   "main": "server.js",
   "scripts": {
     "install": "npm run build",
-    "poststart": "mongod --fork --logpath /dev/null --dbpath tmp/mongo/data",
-    "prestop": "mongo admin --eval 'db.shutdownServer()' > /dev/null",
+    "start-mongo": "mongod --fork --logpath /dev/null --dbpath tmp/mongo/data",
+    "stop-mongo": "mongo admin --eval 'db.shutdownServer()' > /dev/null",
     "server": "nodemon -V -w server.js server.js",
     "watch": "npm run build -- -w",
     "watch-client": "npm run build-client -- -w",

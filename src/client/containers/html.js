@@ -28,9 +28,8 @@ export default class Html extends Component {
           <meta charSet="utf-8" />
           {head.title.toComponent()}
           <meta name="viewport" content="width=device-width,user-scalable=0,initial-scale=1" />
-          <meta name="google-site-verification" content="6bN-eixW9drVZ1XveP3McIv2g2162XyXxQE9XJNtW9c" />
           <base href="/" />
-          <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
+          <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
           <style dangerouslySetInnerHTML={{__html: cssString}} />
           <script src="/assets/js/bundle.js" defer></script>
         </head>
