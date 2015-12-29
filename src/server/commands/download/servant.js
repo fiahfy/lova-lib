@@ -1,6 +1,5 @@
 import co from 'co'
 import fs from'fs'
-import config from '../../../config'
 import logger from '../../utils/logger'
 import * as scraper from '../../utils/scraper'
 import * as models from '../../models'
@@ -56,7 +55,7 @@ function save(servant, force) {
 
     yield scale(largeImagePath, middleImagePath, 150 / 640)
 
-    yield compress(middleImagePath, middleImagePath, {quality: 50})
+    // yield compress(middleImagePath, middleImagePath, {quality: 50})
   })
 }
 
@@ -119,20 +118,20 @@ function scale(orgPath, distPath, ratio) {
   })
 }
 
-function compress(orgPath, distPath, params) {
-  return new Promise((resolve, reject) => {
-    lwip.open(orgPath, (err, image) => {
-      image.toBuffer('jpg', params, (err, buffer) => {
-        lwip.open(buffer, 'jpg', function(err, image) {
-          image.writeFile(distPath, 'jpg', {}, function (err) {
-            if (err) {
-              reject(err)
-              return
-            }
-            resolve()
-          })
-        })
-      })
-    })
-  })
-}
+// function compress(orgPath, distPath, params) {
+//   return new Promise((resolve, reject) => {
+//     lwip.open(orgPath, (err, image) => {
+//       image.toBuffer('jpg', params, (err, buffer) => {
+//         lwip.open(buffer, 'jpg', function(err, image) {
+//           image.writeFile(distPath, 'jpg', {}, function (err) {
+//             if (err) {
+//               reject(err)
+//               return
+//             }
+//             resolve()
+//           })
+//         })
+//       })
+//     })
+//   })
+// }

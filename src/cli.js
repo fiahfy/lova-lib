@@ -80,6 +80,7 @@ promise.then(() => {
     mongoose.disconnect()
   }, (reason) => {
     mongoose.disconnect()
-    logger.error(reason)
+    logger.error(reason.message)
+    logger.error(reason.stack)
   }
 )

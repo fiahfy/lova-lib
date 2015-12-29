@@ -66,13 +66,14 @@ function getServantUrls() {
 
     let urls = []
     $('#content_1001_1').next().next().find('table tbody tr').each(function() {
-      //let tribeParams = getTribeParam($(this).find('td:nth-child(3)').text())
-      //if (tribeParams[0] < tribe_id) {
+      // let [tribeId, tribeCode] = [3, 50]
+      // let tribeParams = getTribeParam($(this).find('td:nth-child(3)').text())
+      // if (tribeParams[0] < tribeId) {
       //  return
-      //}
-      //if (tribeParams[0] === tribe_id && tribeParams[2] < tribe_code) {
+      // }
+      // if (tribeParams[0] === tribeId && tribeParams[2] < tribeCode) {
       //  return
-      //}
+      // }
       urls.push('http://wiki.4gamer.net' + $(this).find('td:nth-child(2) a').attr('href'))
     })
     return urls
@@ -196,6 +197,9 @@ function fixServant(servant) {
     servant.tribe_id   = 5
     servant.tribe_code = 46
   }
+  if (servant.name === '使い魔/魔種/豆腐小僧') {
+    servant.name = '豆腐小僧'
+  }
 
   // adjust illustration_by
   if (servant.illustration_by === '―') {
@@ -210,16 +214,26 @@ function fixServant(servant) {
     if (!servant.skill[type]) {
       continue
     }
+    // name
     if (['スキルなし', 'なし'].indexOf(servant.skill[type].name) > -1) {
       servant.skill[type] = null
       continue
     }
+    // ap
+    servant.skill[type].ap = servant.skill[type].ap.filter(ap => {
+      return ap.match(/^\d+$/)
+    })
     if (servant.skill[type].ap.length !== 3) {
       servant.skill[type].ap = []
     }
+    // cd
+    servant.skill[type].cd = servant.skill[type].cd.filter(cd => {
+      return cd.match(/^\d+$/)
+    })
     if (servant.skill[type].cd.length !== 3) {
       servant.skill[type].cd = []
     }
+    // designation
     if (servant.skill[type].designation === '―') {
       servant.skill[type].designation = null
     }
