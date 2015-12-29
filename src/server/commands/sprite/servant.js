@@ -1,5 +1,4 @@
 import co from 'co'
-import config from '../../../config'
 import logger from '../../utils/logger'
 import * as models from '../../models'
 let lwip = null
@@ -24,8 +23,8 @@ export default function() {
     for (let tribeId of tribes.keys()) {
       logger.verbose('Create Servant Clip Sprite Image: tribe_id = %d', tribeId)
       yield createClipSpriteWithTribe(tribeId, tribes.get(tribeId))
-      logger.verbose('Create Servant Sprite Image: tribe_id = %d', tribeId)
-      yield createSpriteWithTribe(tribeId, tribes.get(tribeId))
+      // logger.verbose('Create Servant Sprite Image: tribe_id = %d', tribeId)
+      // yield createSpriteWithTribe(tribeId, tribes.get(tribeId))
     }
   })
 }
