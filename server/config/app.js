@@ -26,7 +26,9 @@ config.route = function(app) {
       yield next;
     } else {
       // client root
-      yield send(this, '/index.html', {root: 'client'});
+      this.status = 301;
+      this.redirect('http://lovalib.fiahfy.net');
+      // yield send(this, '/index.html', {root: 'client'});
     }
   });
   app.use(st('client', {maxage: 10 * 60 * 1000}));
