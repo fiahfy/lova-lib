@@ -1,10 +1,10 @@
-import classNames from 'classnames'
 import moment from 'moment'
 import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 import * as ActionCreators from '../actions'
 import connectData from '../decorators/connect-data'
+import * as ServantUtils from '../utils/servant-utils'
 
 function fetchDataDeferred(getState, dispatch) {
   return ActionCreators.fetchServants()(dispatch)
@@ -30,6 +30,7 @@ export default class Servant extends Component {
   }
   handleQuerySubmit(e) {
     e.preventDefault()
+    $('table.table').trigger('sortReset')
     const {query} = this.props.location
     query.q = this.refs.q.value
     this.props.history.pushState(null, '/servants/', query)
@@ -76,21 +77,42 @@ export default class Servant extends Component {
     }
     return servants
   }
+  setupTableSorter() {
+    $('table.table').trigger('destroy')
+    $('table.table').tablesorter({
+      sortRestart: true,
+      textSorter: {
+        2: (a, b) => {
+          return ServantUtils.compareTribeString(a, b)
+        }
+      },
+      headers: {
+        1: {
+          sorter: false
+        },
+        6: {
+          sortInitialOrder: 'desc'
+        },
+        7: {
+          sortInitialOrder: 'desc'
+        },
+        8: {
+          sortInitialOrder: 'desc'
+        },
+        9: {
+          sortInitialOrder: 'desc'
+        }
+      }
+    })
+  }
   componentDidUpdate() {
-    // $('table.table').dataTable({
-    //   paging: false,
-    //   searching: false,
-    //   columnDefs: [
-    //     {orderable: false, targets: 1},
-    //     {orderSequence: ['desc', 'asc'], targets: [6, 7, 8, 9]},
-    //   ],
-		//   bAutoWidth: false,
-		//   bDestroy: true
-    // })
+    this.setupTableSorter()
   }
   componentDidMount() {
+    this.setupTableSorter()
     // TODO: dont use jquery
     $('#servant').find('select').select2().on('select2-selecting', (e) => {
+      $('table.table').trigger('sortReset')
       const {query} = this.props.location
       query.tribe_id = e.val
       this.props.history.pushState(null, '/servants/', query)
@@ -115,16 +137,17 @@ export default class Servant extends Component {
     })
 
     const servantNodes = this.filteredServants()
-      .sort((a, b) => (a.tribe_id * 1000 + a.tribe_code) - (b.tribe_id * 1000 + b.tribe_code))
+      .sort(ServantUtils.compareServant)
       .map((servant, index) => {
-        const cls = classNames('clip', `tribe-${servant.tribe_id}`)
         const style = {backgroundPositionX: `${-40*(servant.tribe_code-1)}px`}
         return (
-          <tr key={index} onClick={this.handleServantClick.bind(this, servant.id)}>
-            <th className="hidden-xs" scope="row">{servant.id}</th>
-            <td className={cls} style={style}>　</td>
+          <tr key={index} className={`tribe-${servant.tribe_id}`} onClick={this.handleServantClick.bind(this, servant.id)}>
+            <th className="" scope="row">{servant.id}</th>
+            <td className="clip">
+              <div style={style} />
+            </td>
             <td className="">{`${servant.tribe_name}-${_.padLeft(servant.tribe_code, 3, 0)}`}</td>
-            <td className="">{servant.cost}</td>
+            <td className="hidden-xs">{servant.cost}</td>
             <td className="hidden-xs">{servant.type}</td>
             <td className="">{servant.name}</td>
             <td className="hidden-xs hidden-sm">{servant.win_rate.toFixed(2)}</td>
@@ -161,10 +184,10 @@ export default class Servant extends Component {
           <table className="table table-hover">
             <thead>
             <tr>
-              <th className="hidden-xs">#</th>
+              <th className="">#</th>
               <th className="" />
               <th className="">Tribe</th>
-              <th className="">Cost</th>
+              <th className="hidden-xs">Cost</th>
               <th className="hidden-xs">Type</th>
               <th className="">Servant Name</th>
               <th className="hidden-xs hidden-sm">Win Rate</th>

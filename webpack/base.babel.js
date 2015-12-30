@@ -22,8 +22,8 @@ export default {
         loader: 'html!markdown'
       },
       {
-        test: /\.css$/,
-        loader: 'css'
+        test: /\.(css|scss)$/,
+        loader: 'css!sass'
       },
       {
         test: /\.(jpg|gif|png|svg)$/,
