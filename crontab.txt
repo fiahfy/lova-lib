@@ -1,0 +1,5 @@
+APP_PATH=/usr/src/app
+LOG_PATH=/usr/src/app/crontab.log
+
+0 * * * * cd ${APP_PATH}; node cli uprs >> ${LOG_PATH} 2>&1
+0 * * * * cd ${APP_PATH}; node cli uprp >> ${LOG_PATH} 2>&1
