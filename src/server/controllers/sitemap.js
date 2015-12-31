@@ -1,22 +1,28 @@
+import moment from 'moment'
 import xmlify from 'xmlify'
 import config from '../../config'
 import * as models from '../models'
 
 export default (function *() {
-  const servants = yield models.servant.find({}, 'id').sort({_id: 1}).exec()
+  const servants = yield models.servant.find({}, 'id update_date').sort({_id: 1}).exec()
 
   let pathes = []
-  pathes.push('/')
-  pathes.push('/about/')
-  pathes.push('/charts/')
-  pathes.push('/deck/')
-  pathes.push('/prize/')
-  servants.forEach(servants => {
-    pathes.push(`/servants/${servants.id}/`)
+  pathes.push({path: '/'})
+  pathes.push({path: '/about/'})
+  pathes.push({path: '/charts/'})
+  pathes.push({path: '/deck/'})
+  pathes.push({path: '/prize/'})
+  servants.forEach(servant => {
+    pathes.push({path: `/servants/${servant.id}/`, update_date: servant.update_date})
   })
 
-  const urls = pathes.map(path => {
-    return {loc: `http://${config.app.dns}${path}`}
+  const urls = pathes.map(({path, update_date}) => {
+    let url = {loc: `http://${config.app.dns}${path}`}
+    if (!update_date) {
+      return url
+    }
+    url.lastmod = moment(update_date).toISOString()
+    return url
   })
 
   const urlset = {

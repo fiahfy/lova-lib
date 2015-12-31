@@ -10,5 +10,5 @@ export function getSpellName(id) {
       'クレアボヤンス',
       'クロノフリーズ',
       'リモートサモン'
-    ][id] || 'unknown'
+    ][id] || 'Unknown'
 }

@@ -1,10 +1,13 @@
 import ExecutionEnvironment from 'fbjs/lib/ExecutionEnvironment'
 
 export default {
-  env: process.env.NODE_ENV || 'development',
+  env:    process.env.NODE_ENV || 'development',
   target: ExecutionEnvironment.canUseDOM ? 'client' : 'server',
+  devtools: {
+    monitor: false
+  },
   app: {
-    dns: process.env.DOCKER_NODE_DNS || 'localhost:3000',
+    dns:  process.env.DOCKER_NODE_DNS || 'localhost:3000',
     port: process.env.DOCKER_NODE_PORT || 3000
   },
   mongo: {
@@ -13,6 +16,6 @@ export default {
     user: process.env.DOCKER_MONGO_USERNAME,
     pass: process.env.DOCKER_MONGO_PASSWORD,
     protocol: 'mongodb',
-    db: 'lova'
+    db:   'lova'
   }
 }
