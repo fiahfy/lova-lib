@@ -15,7 +15,7 @@ export default class About extends Component {
           <strong>Mail</strong><br />
           <a className="mail" /><br />
           <strong>Issue</strong><br />
-          <a href="https://github.com/fiahfy/lova-lib/issues">https://github.com/fiahfy/lova-lib/issues</a>
+          <a href="https://github.com/fiahfy/lovalib/issues">https://github.com/fiahfy/lovalib/issues</a>
         </address>
       </div>
     )
