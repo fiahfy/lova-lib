@@ -1,5 +1,5 @@
-lova-lib
+lovalib
 ===========
 
 This project is Site for [Lord of Vermilion Arena](http://lova.jp/).  
-<http://lova-fiahfy.rhcloud.com/>
+<http://lovalib.fiahfy.net/>

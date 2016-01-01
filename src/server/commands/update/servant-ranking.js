@@ -28,9 +28,9 @@ export default function(date, dateFrom, dateTo, force) {
         throw new Error('Invalid Date: ' + dateTo)
       }
     } else {
-      // today if empty
+      // yesterday if empty
       let d = new Date
-      d = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()))
+      d = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate() - 1))
       from = to = d
     }
 

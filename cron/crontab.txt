@@ -1,0 +1,6 @@
+ENV_PATH=/root/env.sh
+APP_PATH=/usr/src/app
+LOG_PATH=/usr/src/app/cron/crontab.log
+
+0 * * * * . ${ENV_PATH}; cd ${APP_PATH}; /usr/local/bin/node cli uprs >> ${LOG_PATH} 2>&1
+5 * * * * . ${ENV_PATH}; cd ${APP_PATH}; /usr/local/bin/node cli uprp >> ${LOG_PATH} 2>&1
