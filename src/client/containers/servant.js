@@ -11,11 +11,11 @@ function fetchDataDeferred(getState, dispatch) {
 }
 
 function mapStateToProps(state) {
-  return { servants: state.servants }
+  return {servants: state.servants}
 }
 
 function mapDispatchToProps(dispatch) {
-  return { actions: bindActionCreators(ActionCreators, dispatch) }
+  return {actions: bindActionCreators(ActionCreators, dispatch)}
 }
 
 @connectData(null, fetchDataDeferred)
@@ -189,7 +189,7 @@ export default class Servant extends Component {
               <th className="">Tribe</th>
               <th className="hidden-xs">Cost</th>
               <th className="hidden-xs">Type</th>
-              <th className="">Servant Name</th>
+              <th className="">Servant</th>
               <th className="hidden-xs hidden-sm">Win Rate</th>
               <th className="hidden-xs hidden-sm">Used Rate</th>
               <th className="hidden-xs hidden-sm">Released</th>

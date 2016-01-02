@@ -30,17 +30,20 @@ export default class CardContainer extends Component {
     onDrop:            PropTypes.func,
     disabled:          PropTypes.bool,
     selected:          PropTypes.bool,
+    isLazy:            PropTypes.bool,
     index:             PropTypes.number,
     card:              PropTypes.object
   }
   static defaultProps = {
     onDrop:   () => {},
     disabled: false,
+    selected: false,
+    isLazy:   true,
     index:    null,
     card:     null
   }
   render() {
-    const {connectDropTarget, selected, index, card} = this.props
+    const {connectDropTarget, selected, isLazy, index, card} = this.props
 
     const tribeCls = card ? `tribe-${card.tribe_id}` : null
     const cls = classNames('card', tribeCls, {'setted': selected})
@@ -52,7 +55,7 @@ export default class CardContainer extends Component {
           <img src={`/assets/img/m/${bgImage}`}
                className="img-rounded img-responsive" />
         </div>
-        <Card index={index} card={card} />
+        <Card index={index} isLazy={isLazy} card={card} />
       </div>
     )
   }
