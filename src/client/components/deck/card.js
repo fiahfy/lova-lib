@@ -24,11 +24,13 @@ export default class Card extends Component {
     connectDragSource: PropTypes.func.isRequired,
     isDragging:        PropTypes.bool.isRequired,
     index:             PropTypes.number,
+    isLazy:            PropTypes.bool,
     card:              PropTypes.object
   }
   static defaultProps = {
     index: null,
-    card:  null
+    card:  null,
+    lazy:  true
   }
   setupPopover() {
     const {card} = this.props
@@ -62,14 +64,15 @@ export default class Card extends Component {
     this.setupPopover()
   }
   render() {
-    const {connectDragSource, card} = this.props
+    const {connectDragSource, card, isLazy} = this.props
 
-    const deckImage = card ? `${card.id}.jpg` : 'blank.png'
+    const orgDeckImage = card ? `${card.id}.jpg` : 'blank.png'
+    const deckImage = !isLazy && card ? `${card.id}.jpg` : 'blank.png'
 
     return connectDragSource(
       <div className="content">
-        <img data-original={`/assets/img/m/${deckImage}`}
-             src="/assets/img/m/blank.png"
+        <img data-original={`/assets/img/m/${orgDeckImage}`}
+             src={`/assets/img/m/${deckImage}`}
              className="img-rounded img-responsive lazy" />
         <span ref="cardSpan">
           {card ? `Cost ${card.cost}` : ''}

@@ -1,11 +1,12 @@
 import React, {Component, PropTypes} from 'react'
 import {DragDropContext} from 'react-dnd'
-import HTML5Backend from 'react-dnd-html5-backend'
+import TouchBackend from 'react-dnd-touch-backend'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 import * as ActionCreators from '../actions'
 import * as DeckUtils from '../utils/deck-utils'
 import DeckDropContainer from '../components/deck/deck-drop-container'
+import CardPreview from '../components/deck/card-preview'
 import connectData from '../decorators/connect-data'
 
 function fetchDataDeferred(getState, dispatch) {
@@ -21,7 +22,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 @connectData(null, fetchDataDeferred)
-@DragDropContext(HTML5Backend)
+@DragDropContext(TouchBackend({enableMouseEvents: true}))
 @connect(mapStateToProps, mapDispatchToProps)
 export default class Deck extends Component {
   static propTypes = {
@@ -79,11 +80,14 @@ export default class Deck extends Component {
     const {servants} = this.props
     const {cards, filter} = this.state
     return (
-      <DeckDropContainer servants={servants} cards={cards} filter={filter}
-                         deckURL={this.getDeckURL()}
-                         handleCardChange={this.handleCardChange.bind(this)}
-                         handleFilterChange={this.handleFilterChange.bind(this)}
-                         onDrop={(item) => this.onDrop(null, item)} />
+      <div>
+        <DeckDropContainer servants={servants} cards={cards} filter={filter}
+                           deckURL={this.getDeckURL()}
+                           handleCardChange={this.handleCardChange.bind(this)}
+                           handleFilterChange={this.handleFilterChange.bind(this)}
+                           onDrop={(item) => this.onDrop(null, item)} />
+        <CardPreview />
+      </div>
     )
   }
 }
