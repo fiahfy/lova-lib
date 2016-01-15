@@ -69,24 +69,40 @@ function getPrizes() {
     }
     const $ = (yield scraper.fetchArticle(id)).$
     const panel = $('#mainpanel')
-    const text = panel.find('div.subsection_frame').text()
-    const matches = text.match(/・([^：]+)：([^%％]+)[%％]/gi)
-    if (!matches.length) {
-      return []
-    }
+    // const text = panel.find('div.subsection_frame').text()
+    // const matches = text.match(/・([^：]+)：([^%％]+)[%％]/gi)
+    // if (!matches.length) {
+    //   return []
+    // }
+    // let date = new Date(panel.find('div.article_title span.date').text())
+    // date = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()))
+    // let prizes = []
+    // for (let matchText of matches) {
+    //   const ms = matchText.match(/・([^：]+)：([^%％]+)[%％]/i)
+    //   if (ms) {
+    //     prizes.push({
+    //       date: date,
+    //       name: ms[1].trim(),
+    //       rate: ms[2].trim() / 100
+    //     })
+    //   }
+    // }
     let date = new Date(panel.find('div.article_title span.date').text())
     date = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()))
-    let prizes = []
-    for (let matchText of matches) {
-      const ms = matchText.match(/・([^：]+)：([^%％]+)[%％]/i)
-      if (ms) {
-        prizes.push({
-          date: date,
-          name: ms[1].trim(),
-          rate: ms[2].trim() / 100
-        })
+    const prizes = _.values($('.subsection_frame').find('table>tbody>tr')).reduce(function(previous, current) {
+      const name = $(current).find('td:first-child').text()
+      const rate = $(current).find('td:last-child').text()
+      const matches = _.trim(rate).match(/^(\d+)[%％]$/i)
+      if (!matches) {
+        return previous
       }
-    }
+      previous.push({
+        date,
+        name,
+        rate: matches[1] / 100
+      })
+      return previous
+    }, [])
     return prizes
   })
 }

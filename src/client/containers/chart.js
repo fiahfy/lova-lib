@@ -130,7 +130,7 @@ export default class Chart extends Component {
         <h3>Spell Statistics
           <small>Updated {updated}</small>
         </h3>
-
+{/*
         <form className="form-horizontal">
           <div className="form-group">
             <label className="control-label col-xs-12 col-sm-2">Map</label>
@@ -145,7 +145,7 @@ export default class Chart extends Component {
             </div>
           </div>
         </form>
-
+*/}
         <NVD3Chart {...this.getSpellChartParams()} />
       </div>
     )
