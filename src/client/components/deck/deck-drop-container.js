@@ -34,7 +34,7 @@ export default class DeckDropContainer extends Component {
     cards:             PropTypes.arrayOf(PropTypes.object),
     filter:            PropTypes.object,
     deckURL:           PropTypes.string
-  }
+  };
   render() {
     const {connectDropTarget, handleCardChange, handleFilterChange,
       servants, cards, filter, deckURL} = this.props

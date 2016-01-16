@@ -7,7 +7,7 @@ import config from '../../config'
 export default class Root extends Component {
   static propTypes = {
     store: PropTypes.object.isRequired
-  }
+  };
   render() {
     const {store} = this.props
     const devTools = config.env === 'development' && config.devtools.monitor

@@ -26,12 +26,12 @@ export default class Card extends Component {
     index:             PropTypes.number,
     isLazy:            PropTypes.bool,
     card:              PropTypes.object
-  }
+  };
   static defaultProps = {
     index: null,
     card:  null,
     lazy:  true
-  }
+  };
   setupPopover() {
     const {card} = this.props
     // TODO: dont use jquery
@@ -89,10 +89,10 @@ export default class Card extends Component {
 class CardPopup extends Component {
   static propTypes = {
     card: PropTypes.object
-  }
+  };
   static defaultProps = {
     card: null
-  }
+  };
   render() {
     const {card} = this.props
 

@@ -37,7 +37,7 @@ export default class ServantDetail extends Component {
     servant:    PropTypes.object,
     statistics: PropTypes.arrayOf(PropTypes.object),
     actions:    PropTypes.object
-  }
+  };
   getMetaInfo() {
     const {servant} = this.props
     const title = `Servant ${servant.tribe_name}-${_.padLeft(servant.tribe_code, 3, 0)} ${servant.name} : LoVA Lib`

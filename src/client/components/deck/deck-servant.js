@@ -6,7 +6,7 @@ export default class DeckServant extends Component {
     servants: PropTypes.arrayOf(PropTypes.object),
     cards:    PropTypes.arrayOf(PropTypes.object),
     filter:   PropTypes.object
-  }
+  };
   filteredServants() {
     let {servants, filter} = this.props
 

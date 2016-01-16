@@ -4,11 +4,11 @@ import NVD3Chart from '../react-nvd3'
 export default class StatisticsSection extends Component {
   static propTypes = {
     statistics: PropTypes.arrayOf(PropTypes.object)
-  }
+  };
   state = {
     map:   'all',
     queue: 'all'
-  }
+  };
   getChartParams(mode) {
     const {map, queue} = this.state
     const {statistics} = this.props

@@ -23,16 +23,16 @@ export default class Prize extends Component {
   static propTypes = {
     prizes:  PropTypes.arrayOf(PropTypes.object),
     actions: PropTypes.object
-  }
+  };
   state = {
     view:              0,
     lotResults:        [],
     lotResultsSummary: []
-  }
-  handleViewClick = (view) => {
+  };
+  handleViewClick(view) {
     this.setState({view: view})
   }
-  handleDrawClick = () => {
+  handleDrawClick() {
     let times = this.refs.times.value
     times = Math.min(Math.max(1, times), 1000)
     this.refs.times.value = times
@@ -175,7 +175,7 @@ export default class Prize extends Component {
               <input type="text" className="form-control" min="1" max="1000" placeholder="1-1000"
                      ref="times" defaultValue="10" />
               <span className="input-group-btn">
-                <button className="btn btn-primary" onClick={this.handleDrawClick}>Draw</button>
+                <button className="btn btn-primary" onClick={this.handleDrawClick.bind(this)}>Draw</button>
               </span>
             </div>
 

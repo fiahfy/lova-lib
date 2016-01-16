@@ -24,7 +24,7 @@ export default class Servant extends Component {
   static propTypes = {
     servants: PropTypes.arrayOf(PropTypes.object),
     actions:  PropTypes.object
-  }
+  };
   handleServantClick(servantId) {
     this.props.history.pushState(null, `/servants/${servantId}/`)
   }
