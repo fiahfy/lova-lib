@@ -11,14 +11,21 @@ export default class ServantList extends Component {
   filteredServants() {
     const {servants, filter} = this.props
 
-    const name = filter.name
-    delete filter.name
+    const newFilter = _.clone(filter)
+    const name = newFilter.name
+    delete newFilter.name
 
-    let results = _.filter(servants, filter)
+    let results = _.filter(servants, newFilter)
     if (name) {
       results = _.filter(results, servant => servant.name.indexOf(name) > -1)
     }
     return results
+  }
+  getServantsTable() {
+    return this.refs.servantsTable
+  }
+  shouldComponentUpdate(nextProps) {
+    return JSON.stringify(this.props) != JSON.stringify(nextProps)
   }
   render() {
     const servantNodes = this.filteredServants()
@@ -57,7 +64,7 @@ export default class ServantList extends Component {
       })
 
     return (
-      <table className="table table-hover">
+      <table className="table table-hover" ref="servantsTable">
         <thead>
         <tr>
           <th className="">#</th>

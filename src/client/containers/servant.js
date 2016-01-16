@@ -26,15 +26,35 @@ export default class Servant extends Component {
     servants: PropTypes.arrayOf(PropTypes.object),
     actions:  PropTypes.object
   };
+  state = {
+    q:       '',
+    tribeId: 0
+  };
+  constructor(props) {
+    super(props)
+    const {tribe_id: tribeId = 0, q} = props.location.query
+    this.state = {tribeId, q}
+  }
+  handleTribeChange(e) {
+    $(this.refs.servantList.getServantsTable()).trigger('sortReset')
+    const {query} = this.props.location
+    query.tribe_id = e.val
+    this.props.history.pushState(null, '/servants/', query)
+  }
+  handleQueryChange(e) {
+    this.setState({q: e.target.value})
+  }
   handleQuerySubmit(e) {
     e.preventDefault()
-    $('table.table').trigger('sortReset')
+    // TODO: not work
+    // if sort rows, input text and submit
+    $(this.refs.servantList.getServantsTable()).trigger('sortReset')
     const {query} = this.props.location
     query.q = this.refs.q.value
     this.props.history.pushState(null, '/servants/', query)
   }
   getServantFilter() {
-    const {q, tribe_id} = this.props.location.query
+    const {tribe_id, q} = this.props.location.query
 
     let i = 0
     let map = new Map()
@@ -62,8 +82,8 @@ export default class Servant extends Component {
     return filter
   }
   setupTableSorter() {
-    $('table.table').trigger('destroy')
-    $('table.table').tablesorter({
+    $(this.refs.servantList.getServantsTable()).trigger('destroy')
+    $(this.refs.servantList.getServantsTable()).tablesorter({
       sortRestart: true,
       textSorter: {
         2: (a, b) => {
@@ -89,22 +109,22 @@ export default class Servant extends Component {
       }
     })
   }
+  componentWillReceiveProps(nextProps) {
+    const {tribe_id: tribeId = 0, q} = nextProps.location.query
+    this.setState({tribeId, q})
+    $(this.refs.tribeSelect).select2("destroy")
+    $(this.refs.tribeSelect).select2()
+  }
   componentDidUpdate() {
     this.setupTableSorter()
   }
   componentDidMount() {
     this.setupTableSorter()
-    // TODO: dont use jquery
-    $('#servant').find('select').select2().on('select2-selecting', (e) => {
-      $('table.table').trigger('sortReset')
-      const {query} = this.props.location
-      query.tribe_id = e.val
-      this.props.history.pushState(null, '/servants/', query)
-    })
+    $(this.refs.tribeSelect).select2().on('select2-selecting', this.handleTribeChange.bind(this))
   }
   render() {
-    const {servants, location} = this.props
-    const {tribe_id: tribeId, q} = location.query
+    const {servants} = this.props
+    const {tribeId, q} = this.state
 
     const tribeIdOptionNodes = [
       {value: 0, name: 'Select Tribe...'},
@@ -132,7 +152,8 @@ export default class Servant extends Component {
         <div className="clearfix">
           <div className="pull-left">
             <select className="form-control select select-primary select-block mbl"
-                    defaultValue={tribeId}>
+                    ref="tribeSelect" value={tribeId}
+                    onChange={this.handleTribeChange.bind(this)}>
               {tribeIdOptionNodes}
             </select>
           </div>
@@ -140,13 +161,13 @@ export default class Servant extends Component {
 
         <div className="form-group">
           <form onSubmit={this.handleQuerySubmit.bind(this)}>
-            <input type="text" placeholder="Input Keyword..." className="form-control"
-                   ref="q" defaultValue={q} />
+            <input type="text" className="form-control" placeholder="Input Keyword..."
+                   ref="q" value={q} onChange={this.handleQueryChange.bind(this)} />
           </form>
         </div>
 
         <div>
-          <ServantList servants={servants} filter={filter} />
+          <ServantList servants={servants} filter={filter} ref="servantList" />
         </div>
       </div>
     )
