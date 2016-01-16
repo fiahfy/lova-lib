@@ -36,19 +36,16 @@ export default class Servant extends Component {
     this.state = {tribeId, q}
   }
   handleTribeChange(e) {
-    $(this.refs.servantList.getServantsTable()).trigger('sortReset')
     const {query} = this.props.location
     query.tribe_id = e.val
     this.props.history.pushState(null, '/servants/', query)
   }
   handleQueryChange(e) {
+    $(this.refs.servantList.getServantsTable()).trigger('sortReset')
     this.setState({q: e.target.value})
   }
   handleQuerySubmit(e) {
     e.preventDefault()
-    // TODO: not work
-    // if sort rows, input text and submit
-    $(this.refs.servantList.getServantsTable()).trigger('sortReset')
     const {query} = this.props.location
     query.q = this.refs.q.value
     this.props.history.pushState(null, '/servants/', query)
@@ -110,9 +107,10 @@ export default class Servant extends Component {
     })
   }
   componentWillReceiveProps(nextProps) {
+    $(this.refs.servantList.getServantsTable()).trigger('sortReset')
     const {tribe_id: tribeId = 0, q} = nextProps.location.query
     this.setState({tribeId, q})
-    $(this.refs.tribeSelect).select2("destroy")
+    $(this.refs.tribeSelect).select2('destroy')
     $(this.refs.tribeSelect).select2()
   }
   componentDidUpdate() {
