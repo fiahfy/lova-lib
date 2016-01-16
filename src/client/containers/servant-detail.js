@@ -27,7 +27,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return { actions: bindActionCreators(ActionCreators, dispatch) }
+  return {actions: bindActionCreators(ActionCreators, dispatch)}
 }
 
 @connectData(null, fetchDataDeferred)

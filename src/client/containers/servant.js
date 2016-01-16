@@ -5,6 +5,7 @@ import {bindActionCreators} from 'redux'
 import * as ActionCreators from '../actions'
 import connectData from '../decorators/connect-data'
 import * as ServantUtils from '../utils/servant-utils'
+import ServantList from '../components/servant/servant-list'
 
 function fetchDataDeferred(getState, dispatch) {
   return ActionCreators.fetchServants()(dispatch)
@@ -25,9 +26,6 @@ export default class Servant extends Component {
     servants: PropTypes.arrayOf(PropTypes.object),
     actions:  PropTypes.object
   };
-  handleServantClick(servantId) {
-    this.props.history.pushState(null, `/servants/${servantId}/`)
-  }
   handleQuerySubmit(e) {
     e.preventDefault()
     $('table.table').trigger('sortReset')
@@ -62,20 +60,6 @@ export default class Servant extends Component {
     }
 
     return filter
-  }
-  filteredServants() {
-    let {servants} = this.props
-
-    const filter = this.getServantFilter()
-
-    const name = filter.name
-    delete filter.name
-
-    servants = _.filter(servants, filter)
-    if (name) {
-      servants = _.filter(servants, servant => servant.name.indexOf(name) > -1)
-    }
-    return servants
   }
   setupTableSorter() {
     $('table.table').trigger('destroy')
@@ -119,7 +103,8 @@ export default class Servant extends Component {
     })
   }
   render() {
-    const {tribe_id: tribeId, q} = this.props.location.query
+    const {servants, location} = this.props
+    const {tribe_id: tribeId, q} = location.query
 
     const tribeIdOptionNodes = [
       {value: 0, name: 'Select Tribe...'},
@@ -136,27 +121,7 @@ export default class Servant extends Component {
       )
     })
 
-    const servantNodes = this.filteredServants()
-      .sort(ServantUtils.compareServant)
-      .map((servant, index) => {
-        const style = {backgroundPositionX: `${-40*(servant.tribe_code-1)}px`}
-        return (
-          <tr key={index} className={`tribe-${servant.tribe_id}`} onClick={this.handleServantClick.bind(this, servant.id)}>
-            <th className="" scope="row">{servant.id}</th>
-            <td className="clip">
-              <div style={style} />
-            </td>
-            <td className="">{`${servant.tribe_name}-${_.padLeft(servant.tribe_code, 3, 0)}`}</td>
-            <td className="hidden-xs">{servant.cost}</td>
-            <td className="hidden-xs">{servant.type}</td>
-            <td className="">{servant.name}</td>
-            <td className="hidden-xs hidden-sm">{servant.win_rate.toFixed(2)}</td>
-            <td className="hidden-xs hidden-sm">{servant.used_rate.toFixed(2)}</td>
-            <td className="hidden-xs hidden-sm">{moment(servant.release_date).format('YYYY-MM-DD')}</td>
-            <td className="hidden-xs hidden-sm">{moment(servant.update_date).format('YYYY-MM-DD')}</td>
-          </tr>
-        )
-      })
+    const filter = this.getServantFilter()
 
     return (
       <div className="container" id="servant">
@@ -181,25 +146,7 @@ export default class Servant extends Component {
         </div>
 
         <div>
-          <table className="table table-hover">
-            <thead>
-            <tr>
-              <th className="">#</th>
-              <th className="" />
-              <th className="">Tribe</th>
-              <th className="hidden-xs">Cost</th>
-              <th className="hidden-xs">Type</th>
-              <th className="">Servant</th>
-              <th className="hidden-xs hidden-sm">Win Rate</th>
-              <th className="hidden-xs hidden-sm">Used Rate</th>
-              <th className="hidden-xs hidden-sm">Released</th>
-              <th className="hidden-xs hidden-sm">Updated</th>
-            </tr>
-            </thead>
-            <tbody>
-              {servantNodes}
-            </tbody>
-          </table>
+          <ServantList servants={servants} filter={filter} />
         </div>
       </div>
     )
