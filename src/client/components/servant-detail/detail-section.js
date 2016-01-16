@@ -7,7 +7,7 @@ import SkillItem from './skill-item'
 export default class DetailSection extends Component {
   static propTypes = {
     servant: PropTypes.object
-  }
+  };
   wrapQuoteIfNeed(value) {
     return value.indexOf(' ') > -1 ? `"${value}"` : value
   }

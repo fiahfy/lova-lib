@@ -32,7 +32,7 @@ export default class CardPreview extends Component {
       y: PropTypes.number.isRequired
     }),
     isDragging:    PropTypes.bool.isRequired
-  }
+  };
   getItemStyles () {
     const {currentOffset} = this.props
 

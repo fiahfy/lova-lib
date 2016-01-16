@@ -35,7 +35,7 @@ export default class Chart extends Component {
   static propTypes = {
     spellStatistics:  PropTypes.arrayOf(PropTypes.object),
     actions:          PropTypes.object
-  }
+  };
   getSpellChartParams() {
     const {spellStatistics} = this.props
 

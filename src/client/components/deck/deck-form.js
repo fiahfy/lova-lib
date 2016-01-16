@@ -4,7 +4,7 @@ import ReactZeroClipboard from 'react-zeroclipboard'
 export default class DeckForm extends Component {
   static propTypes = {
     deckURL: PropTypes.string
-  }
+  };
   onAfterCopy() {
     // TODO: dont use jquery
     const button = $('.copy-clipboard')

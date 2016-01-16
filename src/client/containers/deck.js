@@ -28,11 +28,11 @@ export default class Deck extends Component {
   static propTypes = {
     servants: PropTypes.arrayOf(PropTypes.object),
     actions:  PropTypes.object
-  }
+  };
   state = {
     cards:  [],
     filter: {}
-  }
+  };
   constructor(props) {
     super(props)
     this.state.cards = this.getInitialCards()

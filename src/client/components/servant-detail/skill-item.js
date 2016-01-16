@@ -8,7 +8,7 @@ export default class SkillItem extends Component {
     effect:      PropTypes.string,
     cd:          PropTypes.arrayOf(PropTypes.number),
     ap:          PropTypes.arrayOf(PropTypes.number)
-  }
+  };
   descriptionHTML() {
     const {description, cd, ap} = this.props
 

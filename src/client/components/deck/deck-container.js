@@ -7,7 +7,7 @@ export default class DeckContainer extends Component {
     servants: PropTypes.arrayOf(PropTypes.object),
     cards:    PropTypes.arrayOf(PropTypes.object),
     filter:   PropTypes.object
-  }
+  };
   onDrop(droppedIndex, {index, card}) {
     this.props.handleCardChange(droppedIndex, index, card)
   }

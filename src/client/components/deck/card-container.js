@@ -33,7 +33,7 @@ export default class CardContainer extends Component {
     isLazy:            PropTypes.bool,
     index:             PropTypes.number,
     card:              PropTypes.object
-  }
+  };
   static defaultProps = {
     onDrop:   () => {},
     disabled: false,
@@ -41,7 +41,7 @@ export default class CardContainer extends Component {
     isLazy:   true,
     index:    null,
     card:     null
-  }
+  };
   render() {
     const {connectDropTarget, selected, isLazy, index, card} = this.props
 

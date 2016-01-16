@@ -10,7 +10,7 @@ export default class Html extends Component {
   static propTypes = {
     markup:       PropTypes.string,
     initialState: PropTypes.string
-  }
+  };
   render() {
     const {markup, initialState} = this.props
 

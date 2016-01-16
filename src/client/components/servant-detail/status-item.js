@@ -12,7 +12,7 @@ export default class StatusItem extends Component {
     res:   PropTypes.number,
     ms:    PropTypes.number,
     as:    PropTypes.number
-  }
+  };
   render() {
     const {rows, level,
       hp, ap, atk, pow, def, res, ms, as} = this.props
@@ -34,7 +34,7 @@ export default class StatusItem extends Component {
         </tbody>
       )
     }
-    
+
     return (
       <tbody>
       <tr>
