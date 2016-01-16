@@ -1,3 +1,6 @@
+@import 'tablesorter';
+@import 'prize';
+
 @mixin text {
   color: #fff;
   background-color: #1abc9c;
@@ -347,20 +350,6 @@ img {
 }
 #deck-popover-container {
   position: relative;
-}
-
-/* Prize */
-#prize>div>div>.input-group {
-  margin-bottom: 20px;
-}
-#prize>div>div>.btn-toolbar {
-  margin-bottom: 20px;
-}
-#prize>div>div>.input-group {
-  width: 1%;
-}
-#prize>div>div>.input-group>input{
-  width: 100px;
 }
 
 /* About */
