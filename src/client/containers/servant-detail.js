@@ -38,17 +38,20 @@ export default class ServantDetail extends Component {
     statistics: PropTypes.arrayOf(PropTypes.object),
     actions:    PropTypes.object
   };
-  getMetaInfo() {
+  getHelmet() {
     const {servant} = this.props
-    const title = `Servant ${servant.tribe_name}-${_.padLeft(servant.tribe_code, 3, 0)} ${servant.name} : LoVA Lib`
+
+    const title = `Servant ${servant.tribe_name}-${_.padLeft(servant.tribe_code, 3, 0)} ${servant.name}`
     const description = servant.oral_tradition
-    return {title, description}
+
+    return <Helmet title={title}
+                   meta={[{name: 'description', content: description}]} />
   }
   render() {
     const {section} = this.props.params
     const {servant, statistics} = this.props
 
-    const {title, description} = this.getMetaInfo()
+    const helmet = this.getHelmet()
 
     const navigationNodes = ['detail', 'statistics'].map((navigation, index) => {
       const cls = classNames({active: (section || 'detail') === navigation})
@@ -64,13 +67,12 @@ export default class ServantDetail extends Component {
     })
 
     const sectionNode = section !== 'statistics'
-      ? (<DetailSection servant={servant} />)
-      : (<StatisticsSection statistics={statistics} />)
+                      ? <DetailSection servant={servant} />
+                      : <StatisticsSection statistics={statistics} />
 
     return (
       <div className="container" id="servant-detail">
-        <Helmet title={title}
-                meta={[{name: 'description', content: description}]} />
+        {helmet}
         <div className="page-header">
           <h2>{servant.name}
             <small className="pull-right">

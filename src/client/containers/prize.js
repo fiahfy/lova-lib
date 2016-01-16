@@ -79,8 +79,8 @@ export default class Prize extends Component {
     const updated = this.getUpdateDate()
 
     const lotResultNodes = view === 0
-                         ? (<LotResultList lotResults={lotResults} />)
-                         : (<LotResultSummaryList lotResultsSummary={lotResultsSummary} />)
+                         ? <LotResultList lotResults={lotResults} />
+                         : <LotResultSummaryList lotResultsSummary={lotResultsSummary} />
 
     return (
       <div className="container" id="prize">

@@ -4,39 +4,43 @@ import Helmet from 'react-helmet'
 import GoogleAnalytics from 'react-g-analytics'
 
 export default class App extends Component {
-  getMetaInfo() {
+  getHelmet() {
     const pathname = this.props.location.pathname
     const pathes = pathname.match(/^\/(\w+)\//)
 
-    let title = `${_.capitalize(pathes[1])} : LoVA Lib`
-    let description = 'Site for Lord of Vermilion Arena'
+    const title = _.capitalize(pathes[1])
+    let description
     switch (pathes[1]) {
       case 'deck':
-        description = 'Deck Simulator for Lord of Vermilion Arena'
+        description = 'Deck Simulator'
         break
       case 'charts':
-        description = 'Charts for Lord of Vermilion Arena'
+        description = 'Charts'
         break
       case 'prize':
-        description = 'Prize Simulator for Lord of Vermilion Arena'
-        break
-      case 'about':
+        description = 'Prize Simulator'
         break
       case 'servants':
-        description = 'Servants for Lord of Vermilion Arena'
+        description = 'Servants'
+        break
+      case 'about':
+      default:
+        description = 'Site'
         break
     }
+    description += ' for Lord of Vermilion Arena'
 
-    return {title, description}
+    return <Helmet title={title}
+                   titleTemplate={'%s : LoVA Lib'}
+                   meta={[{name: 'description', content: description}]} />
   }
   render() {
     const year = (new Date()).getFullYear()
-    const {title, description} = this.getMetaInfo()
+    const helmet = this.getHelmet()
 
     return (
       <div>
-        <Helmet title={title}
-                meta={[{name: 'description', content: description}]} />
+        {helmet}
         <GoogleAnalytics id="UA-41512550-9" />
         <nav className="navbar navbar-default">
           <div className="container">
@@ -53,11 +57,11 @@ export default class App extends Component {
             </div>
             <div id="navbar" className="collapse navbar-collapse">
               <ul className="nav navbar-nav">
-                <li className=""><Link to="/deck/">Deck</Link></li>
-                <li className=""><Link to="/servants/">Servants</Link></li>
-                <li className=""><Link to="/charts/">Charts</Link></li>
-                <li className=""><Link to="/prize/">Prize</Link></li>
-                <li className=""><Link to="/about/">About</Link></li>
+                <li><Link to="/deck/">Deck</Link></li>
+                <li><Link to="/servants/">Servants</Link></li>
+                <li><Link to="/charts/">Charts</Link></li>
+                <li><Link to="/prize/">Prize</Link></li>
+                <li><Link to="/about/">About</Link></li>
               </ul>
             </div>
           </div>
