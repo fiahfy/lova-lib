@@ -1,4 +1,4 @@
-const TRIBES = [
+const tribes = [
   null,
   '人獣',
   '神族',
@@ -8,11 +8,11 @@ const TRIBES = [
 ]
 
 export function getTribeName(id) {
-  return TRIBES[id] || 'Unknown'
+  return tribes[id] || 'Unknown'
 }
 
 export function getTribeIdWithName(name) {
-  return TRIBES.indexOf(name)
+  return tribes.indexOf(name)
 }
 
 function getServantSortId(tribeId, tribeCode) {
