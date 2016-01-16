@@ -25,6 +25,7 @@
   "main": "server.js",
   "scripts": {
     "install": "npm run build",
+    "start": "node server.js",
     "start:dev": "npm run watch & npm run nodemon",
     "start:hot": "npm run hot:client & npm run hot:server",
     "nodemon": "nodemon -V -w server.js server.js",
