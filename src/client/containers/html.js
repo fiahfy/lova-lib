@@ -1,10 +1,13 @@
 import React, {Component, PropTypes} from 'react'
 import Helmet from 'react-helmet'
-import css1 from 'bootstrap/dist/css/bootstrap.css'
-import css2 from 'flat-ui/dist/css/flat-ui.css'
-import css3 from 'nvd3/build/nv.d3.css'
-import appCss from '../../../public/assets/css/app.scss'
-import tableSorterCss from '../../../public/assets/css/tablesorter.scss'
+import CSS1 from 'bootstrap/dist/css/bootstrap.css'
+import CSS2 from 'flat-ui/dist/css/flat-ui.css'
+import CSS3 from 'nvd3/build/nv.d3.css'
+import appCSS from '../../../public/assets/css/app.scss'
+
+const styles = [
+  CSS1, CSS2, CSS3, appCSS
+]
 
 export default class Html extends Component {
   static propTypes = {
@@ -16,22 +19,18 @@ export default class Html extends Component {
 
     const head = Helmet.rewind()
 
-    const cssString
-      = css1.toString()
-      + css2.toString()
-      + css3.toString()
-      + appCss.toString()
-      + tableSorterCss.toString()
+    const CSSString = styles.map(style => style.toString()).join('\n')
 
     return (
       <html>
         <head>
-          <meta charSet="utf-8" />
           {head.title.toComponent()}
+          {head.meta.toComponent()}
+          <meta charSet="utf-8" />
           <meta name="viewport" content="width=device-width,user-scalable=0,initial-scale=1" />
           <base href="/" />
           <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-          <style dangerouslySetInnerHTML={{__html: cssString}} />
+          <style dangerouslySetInnerHTML={{__html: CSSString}} />
           <script src="/assets/js/bundle.js" defer></script>
         </head>
         <body>
