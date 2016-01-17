@@ -5,7 +5,7 @@ import {bindActionCreators} from 'redux'
 import * as ActionCreators from '../actions'
 import * as SpellUtils from '../utils/spell-utils'
 import connectData from '../decorators/connect-data'
-import NVD3Chart from '../components/react-nvd3'
+import NVD3Chart from '../components/common/react-nvd3'
 
 function fetchDataDeferred(getState, dispatch) {
   return Promise.all([
