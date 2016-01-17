@@ -1,7 +1,8 @@
 @import 'tablesorter';
 @import 'prize';
+@import 'servant';
 
-@mixin text {
+@mixin default-button {
   color: #fff;
   background-color: #1abc9c;
   border-color: #1abc9c;
@@ -18,157 +19,90 @@
 }
 
 html {
+  min-height: 100%;
   overflow-x: hidden;
   position: relative;
-  min-height: 100%;
 }
 body {
-  overflow-x: hidden;
   font-size: 15px;
   font-family: Lato, '游ゴシック', YuGothic, 'ヒラギノ角ゴ ProN W3', 'Hiragino Kaku Gothic ProN', 'メイリオ', Meiryo, sans-serif;
+  overflow-x: hidden;
   padding-bottom: 150px;
 }
 h2 {
   font-size: 200%;
+  small {
+    color: lightgray;
+    margin-left: 15px;
+  }
+  .pull-right {
+    margin-top: 12px;
+  }
 }
 h3 {
   font-size: 150%;
-}
-h2 small,
-h3 small {
-  color: lightgray;
-  margin-left: 15px;
-}
-h2 .pull-right {
-  margin-top: 12px;
-}
-h3 .pull-right {
-  margin-top: 8px;
-}
-img:hover {
-  opacity: 0.5;
-  /*transition: 0.2s;*/
+  small {
+    color: lightgray;
+    margin-left: 15px;
+  }
+  .pull-right {
+    margin-top: 8px;
+  }
 }
 img {
   opacity: 1;
   /*transition: 0.2s;*/
+  &:hover {
+    opacity: 0.5;
+    /*transition: 0.2s;*/
+  }
 }
 
 .footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
   background-color: transparent;
-  /* Set the fixed height of the footer here */
+  bottom: 0;
   height: 150px;
+  position: absolute;
+  width: 100%;
   div {
-    margin-top: 90px;
     background-color: #ecf0f1;
-    .container>.text-muted {
+    margin-top: 90px;
+    .container .text-muted {
       margin: 20px 0;
     }
-    div>p {
-      white-space: nowrap;
+    div p {
       overflow: hidden;
       text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
 }
 .navbar {
   border-radius: 0;
-}
-.navbar-brand {
-  font-size: 22px;
-}
-.navbar-nav>li>a {
-  font-size: 15px;
-}
-.nav-pills>li.active>a {
-  color: #fff;
-  background-color: #1abc9c;
-  &:hover {
-    background-color: #48c9b0;
+  .navbar-brand {
+    font-size: 22px;
   }
-  &:focus {
-    background-color: #16a085;
+  .navbar-nav li a {
+    font-size: 15px;
   }
+}
+.nav-pills li.active a {
+  @include default-button;
 }
 .input-group-btn .btn.btn-primary {
-  @include text;
+  @include default-button;
 }
 .input-group-btn .btn.btn-primary.zeroclipboard-is-hover {
   color: #fff;
   background-color: #48c9b0;
   border-color: #48c9b0;
 }
-.input-group-btn:last-of-type>.btn-group:last-child>.btn {
-  margin-right: -3px;
-  border-right-width: 0;
-}
-.dropdown-menu {
-  max-height: 300px;
-  overflow-y: auto;
-}
 .select.form-control {
   height: 41px;
-}
-.select2-results {
-  max-height: none;
-}
-.dragging {
-  position: relative;
-}
-.popover{
-  max-width: 100%;
-  width: 80%;
 }
 .nvtooltip {
   border-radius: 0;
   padding: 2px 7px;
-}
-
-/* Servant */
-#servant {
-  td:not(:nth-child(5)) {
-    white-space: nowrap;
-  }
-  div>.btn-toolbar {
-    margin-bottom: 20px;
-  }
-  table>tbody>tr {
-    th {
-      padding: 9px 8px 10px;
-    }
-    td {
-      height: 40px;
-      box-sizing: border-box;
-      padding: 9px 8px 10px;
-      &.clip {
-        padding: 0px;
-        width: 40px;
-        div {
-          width: 40px;
-          height: 40px;
-          -webkit-clip-path: circle(19px at center);
-        }
-      }
-    }
-    &.tribe-1 td.clip>div {
-      background-image: url(/assets/img/clip/spr-1.jpg);
-    }
-    &.tribe-2 td.clip>div {
-      background-image: url(/assets/img/clip/spr-2.jpg);
-    }
-    &.tribe-3 td.clip>div {
-      background-image: url(/assets/img/clip/spr-3.jpg);
-    }
-    &.tribe-4 td.clip>div {
-      background-image: url(/assets/img/clip/spr-4.jpg);
-    }
-    &.tribe-5 td.clip>div {
-      background-image: url(/assets/img/clip/spr-5.jpg);
-    }
-  }
 }
 
 /* Servant Detail */
@@ -234,6 +168,10 @@ img {
 
 
 /* Deck */
+.popover{
+  max-width: 100%;
+  width: 80%;
+}
 #deck {
   .input-group>span>* {
     border-top-right-radius: 4px;
@@ -258,6 +196,14 @@ img {
   }
   .input-group {
     margin-top: 15px;
+    .input-group-btn:last-of-type>.btn-group:last-child>.btn {
+      margin-right: -3px;
+      border-right-width: 0;
+    }
+  }
+  .dropdown-menu {
+    max-height: 300px;
+    overflow-y: auto;
   }
   div>dl {
     margin: 0;
