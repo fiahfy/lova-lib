@@ -1,0 +1,251 @@
+.popover{
+  max-width: 100%;
+  width: 80%;
+}
+
+#deck {
+  .input-group>span>* {
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+  }
+  div>input {
+    background-color: #fff;
+    border-color: #bdc3c7;
+    color: #34495e;
+    opacity: 1;
+  }
+}
+
+#deck-container {
+  width: 100%;
+  z-index: 1;
+  background: #fff;
+  padding: 3px 0;
+  &.fitted {
+    position: fixed;
+    top: 0;
+    box-shadow: 0 1px 1px 0 #e7e9ec;
+  }
+  .input-group {
+    margin-top: 15px;
+    .input-group-btn:last-of-type>.btn-group:last-child>.btn {
+      margin-right: -3px;
+      border-right-width: 0;
+    }
+  }
+  .dropdown-menu {
+    max-height: 300px;
+    overflow-y: auto;
+  }
+  div>dl {
+    margin: 0;
+    padding: 0;
+    * {
+      display: table-cell;
+    }
+    dt {
+      padding: 0 15px 0 0;
+      font-size: 90%;
+      font-weight: 400;
+      line-height: 25px;
+      color: #c0c1c2;
+      width: 1%;
+      white-space: nowrap;
+    }
+    dd {
+      width: 100%;
+    }
+  }
+  .card {
+    padding: 3px;
+    border: 0 solid #1abc9c;
+    &:nth-child(1) {
+      border-width: 2px 0 0 2px;
+      padding: 1px 3px 3px 1px;
+      border-radius: 7px 0 0 0;
+    }
+    &:nth-child(2) {
+      border-width: 2px 0 0 0;
+      padding: 1px 3px 3px 3px;
+      border-radius: 0;
+    }
+    &:nth-child(3) {
+      border-width: 2px 2px 0 0;
+      padding: 1px 1px 3px 3px;
+      border-radius: 0 7px 0 0;
+    }
+    &:nth-child(5) {
+      border-width: 0 0 2px 2px;
+      padding: 3px 3px 1px 1px;
+      border-radius: 0 0 0 7px;
+    }
+    &:nth-child(6) {
+      border-width: 0 0 2px 0;
+      padding: 3px 3px 1px 3px;
+      border-radius: 0;
+    }
+    &:nth-child(7) {
+      border-width: 0 2px 2px 0;
+      padding: 3px 1px 1px 3px;
+      border-radius: 0 0 7px 0;
+    }
+  }
+}
+@media (min-width: 768px) {
+  #deck-container {
+    padding: 15px 0;
+    .card {
+      &:nth-child(1) {
+        border-width: 2px 0 2px 2px;
+        padding: 1px 3px 1px 1px;
+        border-radius: 7px 0 0 7px;
+      }
+      &:nth-child(2),
+      &:nth-child(3),
+      &:nth-child(4),
+      &:nth-child(5) {
+        border-width: 2px 0 2px 0;
+        padding: 1px 3px 1px 3px;
+        border-radius: 0;
+      }
+      &:nth-child(6) {
+        border-width: 2px 2px 2px 0;
+        padding: 1px 1px 1px 3px;
+        border-radius: 0 7px 7px 0;
+      }
+      &:nth-child(7),
+      &:nth-child(8) {
+        border-width: 0;
+        padding: 3px;
+        border-radius: 0;
+      }
+    }
+  }
+}
+
+#deck-servants {
+  margin-top: 15px;
+}
+
+#deck-popover-container {
+  position: relative;
+}
+
+/* Card Class */
+.card {
+  width: 25%;
+  float: left;
+  padding: 3px;
+  position: relative;
+  div {
+    position: relative;
+    &.content {
+      cursor: move;
+      img {
+        border: 2px solid transparent;
+        border-radius: 5px;
+        margin: 0 auto;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+      }
+      span {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        color: #fff;
+        text-align: center;
+        text-shadow: 0 0 3px #000;
+        font-style: italic;
+        font-size: 60%;
+        font-weight: bold;
+      }
+    }
+    &.background {
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      margin: 3px;
+      img {
+        width: 100%;
+        height: 100%;
+        border-radius: 5px;
+        background-color: lightgray;
+      }
+    }
+  }
+  &.tribe-1>div.content>img {
+    border-color: #a26821;
+    box-shadow: 0 0 1px #a26821;
+  }
+  &.tribe-2>div.content>img {
+    border-color: #9d9075;
+    box-shadow: 0 0 1px #9d9075;
+  }
+  &.tribe-3>div.content>img {
+    border-color: #554e86;
+    box-shadow: 0 0 1px #554e86;
+  }
+  &.tribe-4>div.content>img {
+    border-color: #558c9e;
+    box-shadow: 0 0 1px #558c9e;
+  }
+  &.tribe-5>div.content>img {
+    border-color: #7f4a83;
+    box-shadow: 0 0 1px #7f4a83;
+  }
+}
+@media (min-width: 768px) {
+  .card {
+    width: 12.5%;
+    div.content>span {
+      font-size: 60%;
+    }
+  }
+}
+@media (min-width: 992px) {
+  .card>div.content>span {
+    font-size: 90%;
+  }
+}
+@media (min-width: 1200px) {
+  .card>div.content>span {
+    font-size: 100%;
+  }
+}
+.card.setted>div.content {
+  img {
+    opacity: 0.5;
+  }
+  &:after {
+    *content: 'Setted';
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 0 7px;
+  }
+}
+
+/* Skill Popover Class */
+.skill-popover-content {
+  display: none;
+}
+.skill-popover>dl {
+  margin: 0;
+  padding: 0;
+  dt {
+    font-size: 90%;
+    font-weight: 400;
+    line-height: 25px;
+    color: #c0c1c2;
+  }
+  dl {
+    margin: 5px 0 0;
+  }
+}
