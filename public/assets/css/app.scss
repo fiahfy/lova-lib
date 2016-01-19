@@ -1,7 +1,11 @@
 @import 'tablesorter';
+@import 'chart';
+@import 'deck';
 @import 'prize';
+@import 'servant';
+@import 'servant-detail';
 
-@mixin text {
+@mixin default-button {
   color: #fff;
   background-color: #1abc9c;
   border-color: #1abc9c;
@@ -18,462 +22,88 @@
 }
 
 html {
+  min-height: 100%;
   overflow-x: hidden;
   position: relative;
-  min-height: 100%;
 }
 body {
-  overflow-x: hidden;
   font-size: 15px;
   font-family: Lato, '游ゴシック', YuGothic, 'ヒラギノ角ゴ ProN W3', 'Hiragino Kaku Gothic ProN', 'メイリオ', Meiryo, sans-serif;
+  overflow-x: hidden;
   padding-bottom: 150px;
 }
 h2 {
   font-size: 200%;
+  small {
+    color: lightgray;
+    margin-left: 15px;
+  }
+  .pull-right {
+    margin-top: 12px;
+  }
 }
 h3 {
   font-size: 150%;
-}
-h2 small,
-h3 small {
-  color: lightgray;
-  margin-left: 15px;
-}
-h2 .pull-right {
-  margin-top: 12px;
-}
-h3 .pull-right {
-  margin-top: 8px;
-}
-img:hover {
-  opacity: 0.5;
-  /*transition: 0.2s;*/
+  small {
+    color: lightgray;
+    margin-left: 15px;
+  }
+  .pull-right {
+    margin-top: 8px;
+  }
 }
 img {
   opacity: 1;
   /*transition: 0.2s;*/
+  &:hover {
+    opacity: 0.5;
+    /*transition: 0.2s;*/
+  }
 }
 
 .footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
   background-color: transparent;
-  /* Set the fixed height of the footer here */
+  bottom: 0;
   height: 150px;
+  position: absolute;
+  width: 100%;
   div {
-    margin-top: 90px;
     background-color: #ecf0f1;
-    .container>.text-muted {
+    margin-top: 90px;
+    .container .text-muted {
       margin: 20px 0;
     }
-    div>p {
-      white-space: nowrap;
+    div p {
       overflow: hidden;
       text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
 }
 .navbar {
   border-radius: 0;
-}
-.navbar-brand {
-  font-size: 22px;
-}
-.navbar-nav>li>a {
-  font-size: 15px;
-}
-.nav-pills>li.active>a {
-  color: #fff;
-  background-color: #1abc9c;
-  &:hover {
-    background-color: #48c9b0;
+  .navbar-brand {
+    font-size: 22px;
   }
-  &:focus {
-    background-color: #16a085;
+  .navbar-nav li a {
+    font-size: 15px;
   }
+}
+.nav-pills li.active a {
+  @include default-button;
 }
 .input-group-btn .btn.btn-primary {
-  @include text;
+  @include default-button;
 }
 .input-group-btn .btn.btn-primary.zeroclipboard-is-hover {
   color: #fff;
   background-color: #48c9b0;
   border-color: #48c9b0;
 }
-.input-group-btn:last-of-type>.btn-group:last-child>.btn {
-  margin-right: -3px;
-  border-right-width: 0;
-}
-.dropdown-menu {
-  max-height: 300px;
-  overflow-y: auto;
-}
 .select.form-control {
   height: 41px;
-}
-.select2-results {
-  max-height: none;
-}
-.dragging {
-  position: relative;
-}
-.popover{
-  max-width: 100%;
-  width: 80%;
 }
 .nvtooltip {
   border-radius: 0;
   padding: 2px 7px;
-}
-
-/* Servant */
-#servant {
-  td:not(:nth-child(5)) {
-    white-space: nowrap;
-  }
-  div>.btn-toolbar {
-    margin-bottom: 20px;
-  }
-  table>tbody>tr {
-    cursor: pointer;
-    th {
-      padding: 9px 8px 10px;
-    }
-    td {
-      height: 40px;
-      box-sizing: border-box;
-      padding: 9px 8px 10px;
-      &.clip {
-        padding: 0px;
-        width: 40px;
-        div {
-          width: 40px;
-          height: 40px;
-          -webkit-clip-path: circle(19px at center);
-        }
-      }
-    }
-    &.tribe-1 td.clip>div {
-      background-image: url(/assets/img/clip/spr-1.jpg);
-    }
-    &.tribe-2 td.clip>div {
-      background-image: url(/assets/img/clip/spr-2.jpg);
-    }
-    &.tribe-3 td.clip>div {
-      background-image: url(/assets/img/clip/spr-3.jpg);
-    }
-    &.tribe-4 td.clip>div {
-      background-image: url(/assets/img/clip/spr-4.jpg);
-    }
-    &.tribe-5 td.clip>div {
-      background-image: url(/assets/img/clip/spr-5.jpg);
-    }
-  }
-}
-
-/* Servant Detail */
-#servant-detail {
-  ul.nav {
-    margin-bottom: 30px;
-  }
-  .table {
-    margin-bottom: 0;
-    thead>tr>th {
-      vertical-align: top;
-    }
-  }
-  dl {
-    margin: 5px 0 0;
-    dt {
-      font-size: 90%;
-      font-weight: 400;
-      line-height: 25px;
-      color: #c0c1c2;
-      b {
-        font-size: 130%;
-      }
-    }
-    dd {
-      div, div>small {
-        line-height: 20px;
-      }
-      .well {
-        margin-bottom: 10px;
-      }
-    }
-  }
-  .logo {
-    margin-top: 5px;
-  }
-  .status, .skill {
-    margin-top: 30px;
-  }
-  .statistics {
-    text-align: center;
-    form>div>label {
-      font-size: 90%;
-      font-weight: 400;
-      line-height: 25px;
-      color: #c0c1c2;
-    }
-    .radio+.radio {
-      margin: 0 0 0 20px;
-    }
-    .form-horizontal .radio {
-      min-height: 0;
-    }
-    .form-group {
-      margin-bottom: 10px;
-    }
-  }
-  svg {
-    margin: 0 auto;
-    *width: auto;
-  }
-}
-
-
-/* Deck */
-#deck {
-  .input-group>span>* {
-    border-top-right-radius: 4px;
-    border-bottom-right-radius: 4px;
-  }
-  div>input {
-    background-color: #fff;
-    border-color: #bdc3c7;
-    color: #34495e;
-    opacity: 1;
-  }
-}
-#deck-container {
-  width: 100%;
-  z-index: 1;
-  background: #fff;
-  padding: 3px 0;
-  &.fitted {
-    position: fixed;
-    top: 0;
-    box-shadow: 0 1px 1px 0 #e7e9ec;
-  }
-  .input-group {
-    margin-top: 15px;
-  }
-  div>dl {
-    margin: 0;
-    padding: 0;
-    * {
-      display: table-cell;
-    }
-    dt {
-      padding: 0 15px 0 0;
-      font-size: 90%;
-      font-weight: 400;
-      line-height: 25px;
-      color: #c0c1c2;
-      width: 1%;
-      white-space: nowrap;
-    }
-    dd {
-      width: 100%;
-    }
-  }
-  .card {
-    padding: 3px;
-    border: 0 solid #1abc9c;
-    &:nth-child(1) {
-      border-width: 2px 0 0 2px;
-      padding: 1px 3px 3px 1px;
-      border-radius: 7px 0 0 0;
-    }
-    &:nth-child(2) {
-      border-width: 2px 0 0 0;
-      padding: 1px 3px 3px 3px;
-      border-radius: 0;
-    }
-    &:nth-child(3) {
-      border-width: 2px 2px 0 0;
-      padding: 1px 1px 3px 3px;
-      border-radius: 0 7px 0 0;
-    }
-    &:nth-child(5) {
-      border-width: 0 0 2px 2px;
-      padding: 3px 3px 1px 1px;
-      border-radius: 0 0 0 7px;
-    }
-    &:nth-child(6) {
-      border-width: 0 0 2px 0;
-      padding: 3px 3px 1px 3px;
-      border-radius: 0;
-    }
-    &:nth-child(7) {
-      border-width: 0 2px 2px 0;
-      padding: 3px 1px 1px 3px;
-      border-radius: 0 0 7px 0;
-    }
-  }
-}
-@media (min-width: 768px) {
-  #deck-container {
-    padding: 15px 0;
-    .card {
-      &:nth-child(1) {
-        border-width: 2px 0 2px 2px;
-        padding: 1px 3px 1px 1px;
-        border-radius: 7px 0 0 7px;
-      }
-      &:nth-child(2),
-      &:nth-child(3),
-      &:nth-child(4),
-      &:nth-child(5) {
-        border-width: 2px 0 2px 0;
-        padding: 1px 3px 1px 3px;
-        border-radius: 0;
-      }
-      &:nth-child(6) {
-        border-width: 2px 2px 2px 0;
-        padding: 1px 1px 1px 3px;
-        border-radius: 0 7px 7px 0;
-      }
-      &:nth-child(7),
-      &:nth-child(8) {
-        border-width: 0;
-        padding: 3px;
-        border-radius: 0;
-      }
-    }
-  }
-}
-#deck-servants {
-  margin-top: 15px;
-}
-#deck-popover-container {
-  position: relative;
-}
-
-/* About */
-#about>pre {
-  font-family: IPAMonaPGothic, 'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif;
-  font-size: 16px;
-  line-height: 18px;
-}
-
-/* Card Class */
-.card {
-  width: 25%;
-  float: left;
-  padding: 3px;
-  position: relative;
-  div {
-    position: relative;
-    &.content {
-      cursor: move;
-      img {
-        border: 2px solid transparent;
-        border-radius: 5px;
-        margin: 0 auto;
-        -webkit-touch-callout: none;
-        -webkit-user-select: none;
-      }
-      span {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        color: #fff;
-        text-align: center;
-        text-shadow: 0 0 3px #000;
-        font-style: italic;
-        font-size: 60%;
-        font-weight: bold;
-      }
-    }
-    &.background {
-      display: block;
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      margin: 3px;
-      img {
-        width: 100%;
-        height: 100%;
-        border-radius: 5px;
-        background-color: lightgray;
-      }
-    }
-  }
-  &.tribe-1>div.content>img {
-    border-color: #a26821;
-    box-shadow: 0 0 1px #a26821;
-  }
-  &.tribe-2>div.content>img {
-    border-color: #9d9075;
-    box-shadow: 0 0 1px #9d9075;
-  }
-  &.tribe-3>div.content>img {
-    border-color: #554e86;
-    box-shadow: 0 0 1px #554e86;
-  }
-  &.tribe-4>div.content>img {
-    border-color: #558c9e;
-    box-shadow: 0 0 1px #558c9e;
-  }
-  &.tribe-5>div.content>img {
-    border-color: #7f4a83;
-    box-shadow: 0 0 1px #7f4a83;
-  }
-}
-@media (min-width: 768px) {
-  .card {
-    width: 12.5%;
-    div.content>span {
-      font-size: 60%;
-    }
-  }
-}
-@media (min-width: 992px) {
-  .card>div.content>span {
-    font-size: 90%;
-  }
-}
-@media (min-width: 1200px) {
-  .card>div.content>span {
-    font-size: 100%;
-  }
-}
-.card.setted>div.content {
-  img {
-    opacity: 0.5;
-  }
-  &:after {
-    *content: 'Setted';
-    display: block;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    padding: 0 7px;
-  }
-}
-
-/* Skill Popover Class */
-.skill-popover-content {
-  display: none;
-}
-.skill-popover>dl {
-  margin: 0;
-  padding: 0;
-  dt {
-    font-size: 90%;
-    font-weight: 400;
-    line-height: 25px;
-    color: #c0c1c2;
-  }
-  dl {
-    margin: 5px 0 0;
-  }
 }

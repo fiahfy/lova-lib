@@ -85,6 +85,7 @@ export default class DetailSection extends Component {
                 </dl>
               </div>
             </div>
+
             <dl className="row">
               <dt className="col-sm-12">Oral Tradition</dt>
               <dd className="col-sm-12">
@@ -93,6 +94,7 @@ export default class DetailSection extends Component {
                 </div>
               </dd>
             </dl>
+
             <div className="row">
               <dl className="col-sm-6 row">
                 <dt className="col-xs-3">Illust</dt>
@@ -111,6 +113,7 @@ export default class DetailSection extends Component {
                 </dd>
               </dl>
             </div>
+            
             <div className="status">
               <dl>
                 <dt><b>Status</b></dt>

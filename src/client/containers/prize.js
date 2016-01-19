@@ -5,16 +5,21 @@ import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 import * as ActionCreators from '../actions'
 import connectData from '../decorators/connect-data'
+import * as PrizeUtils from '../utils/prize-utils'
+import PrizeList from '../components/prize/prize-list'
+import LotResultList from '../components/prize/lot-result-list'
+import LotResultSummaryList from '../components/prize/lot-result-summary-list'
 
 function fetchDataDeferred(getState, dispatch) {
   return ActionCreators.fetchPrizes()(dispatch)
 }
+
 function mapStateToProps(state) {
-  return { prizes: state.prizes }
+  return {prizes: state.prizes}
 }
 
 function mapDispatchToProps(dispatch) {
-  return { actions: bindActionCreators(ActionCreators, dispatch) }
+  return {actions: bindActionCreators(ActionCreators, dispatch)}
 }
 
 @connectData(null, fetchDataDeferred)
@@ -39,46 +44,19 @@ export default class Prize extends Component {
 
     const {prizes} = this.props
 
-    let totalRate = 0
-    const lots = prizes.map((e) => {
-      totalRate += e.rate
-      return {rate: totalRate, prize: e}
-    })
-
-    let results = []
-    for (let i = 0; i < times; i++) {
-      const rate = Math.random() * totalRate
-      for (let j = 0; j < lots.length; j++) {
-        const lot = lots[j]
-        if (rate <= lot.rate) {
-          results.push(lot.prize)
-          break
-        }
-      }
-    }
-
-    const summary = results.reduce((p, c) => {
-      if (!p[c.id]) {
-        p[c.id] = {prize: c, count: 0, rate: 0}
-      }
-      p[c.id].count++
-      p[c.id].rate = p[c.id].count / times
-      return p
-    }, {})
-    const resultsSummary = _.map(summary, (value) => {
-      return {
-        prize: value.prize,
-        count: value.count,
-        rate: value.rate
-      }
-    }).sort((a, b) => {
-      return b.count - a.count
-    })
+    const {results, resultsSummary} = PrizeUtils.drawPrizes(prizes, times)
 
     this.setState({
       lotResults: results,
       lotResultsSummary: resultsSummary
     })
+  }
+  getUpdateDate() {
+    const {prizes} = this.props
+
+    const prize = _.first(prizes)
+
+    return prize ? prize.date : ''
   }
   render() {
     const {prizes} = this.props
@@ -87,77 +65,22 @@ export default class Prize extends Component {
     const viewOptionNodes = [
       {value: 0, iconClassName: 'fui-list-numbered'},
       {value: 1, iconClassName: 'fui-list-thumbnailed'}
-    ].map((option) => {
-      const cls = classNames('btn', 'btn-primary', {active: option.value === view})
+    ].map((option, index) => {
+      const isActive = option.value === view
+      const cls = classNames('btn', 'btn-primary', {active: isActive})
       return (
-        <a key={`view-${option.value}`} className={cls} onClick={this.handleViewClick.bind(this, option.value)}>
+        <a key={index} className={cls}
+           onClick={this.handleViewClick.bind(this, option.value)}>
           <span className={option.iconClassName} />
         </a>
       )
     })
 
-    const prize = _.first(prizes)
-    const updated = prize ? moment(prize.date).format('YYYY-MM-DD') : ''
+    const updated = this.getUpdateDate()
 
-    const prizeNodes = prizes.map((prize, index) => {
-      return (
-        <tr key={index}>
-          <td className="">{prize.name}</td>
-          <td className="">{prize.rate.toFixed(3)}</td>
-        </tr>
-      )
-    })
-
-    const lotResultsNodes = lotResults.map((result, index) => {
-      return (
-        <tr key={index}>
-          <td className="">{index+1}</td>
-          <td className="">{result.name}</td>
-        </tr>
-      )
-    })
-
-    const lotResultsSummaryNodes = lotResultsSummary.map((result, index) => {
-      return (
-        <tr key={index}>
-          <td className="">{result.prize.name}</td>
-          <td className="">{result.count}</td>
-          <td className="">{result.rate.toFixed(3)}</td>
-        </tr>
-      )
-    })
-
-    let lotNodes
-    if (view === 0) {
-      lotNodes = (
-        <table className="table table-hover">
-          <thead>
-          <tr>
-            <th className="">#</th>
-            <th className="">Name</th>
-          </tr>
-          </thead>
-          <tbody>
-          {lotResultsNodes}
-          </tbody>
-        </table>
-      )
-    } else {
-      lotNodes = (
-        <table className="table table-hover">
-          <thead>
-          <tr>
-            <th className="">Name</th>
-            <th className="">Count</th>
-            <th className="">Rate</th>
-          </tr>
-          </thead>
-          <tbody>
-          {lotResultsSummaryNodes}
-          </tbody>
-        </table>
-      )
-    }
+    const lotResultNodes = view === 0
+                         ? <LotResultList lotResults={lotResults} />
+                         : <LotResultSummaryList lotResultsSummary={lotResultsSummary} />
 
     return (
       <div className="container" id="prize">
@@ -172,10 +95,11 @@ export default class Prize extends Component {
             </div>
 
             <div className="input-group pull-left">
-              <input type="text" className="form-control" min="1" max="1000" placeholder="1-1000"
-                     ref="times" defaultValue="10" />
+              <input type="text" className="form-control" min="1" max="1000"
+                     ref="times" defaultValue="10" placeholder="1-1000" />
               <span className="input-group-btn">
-                <button className="btn btn-primary" onClick={this.handleDrawClick.bind(this)}>Draw</button>
+                <button className="btn btn-primary"
+                        onClick={this.handleDrawClick.bind(this)}>Draw</button>
               </span>
             </div>
 
@@ -185,30 +109,20 @@ export default class Prize extends Component {
               </div>
             </div>
 
-            {lotNodes}
+            {lotResultNodes}
           </div>
 
           <div className="col-sm-6">
             <div className="clearfix">
               <h3>Prize List
-                <small>Updated {updated}</small>
+                <small>Updated {moment(updated).format('YYYY-MM-DD')}</small>
                 <small className="pull-right">
                   <a href="http://lova.jp/prizelist/">Official Prize List Page</a>
                 </small>
               </h3>
             </div>
 
-            <table className="table table-hover">
-              <thead>
-              <tr>
-                <th className="">Name</th>
-                <th className="">Rate</th>
-              </tr>
-              </thead>
-              <tbody>
-                {prizeNodes}
-              </tbody>
-            </table>
+            <PrizeList prizes={prizes} />
           </div>
         </div>
       </div>

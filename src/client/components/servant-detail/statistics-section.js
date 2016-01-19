@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react'
-import NVD3Chart from '../react-nvd3'
+import NVD3Chart from '../common/react-nvd3'
 
 export default class StatisticsSection extends Component {
   static propTypes = {

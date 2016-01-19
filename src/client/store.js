@@ -15,23 +15,21 @@ const voidMiddleware = () => next => action => {
 }
 
 const reduxReactRouterFunc = config.target === 'client'
-  ? reduxReactRouter({routes, history})
-  : serverReduxReactRouter({routes, history})
+                           ? reduxReactRouter({routes, history})
+                           : serverReduxReactRouter({routes, history})
 
-let middleware = voidMiddleware
+let loggerMiddleware = voidMiddleware
 if (config.env === 'development' && config.target === 'client') {
-  middleware = createLogger()
+  loggerMiddleware = createLogger()
 }
 
-const funcs = [
+const finalCreateStore = compose(
   applyMiddleware(thunk),
   reduxReactRouterFunc,
   applyMiddleware(transitionMiddleware),
-  applyMiddleware(middleware),
+  applyMiddleware(loggerMiddleware),
   DevTools.instrument()
-]
-
-const finalCreateStore = compose(...funcs)(createStore)
+)(createStore)
 
 export function configureStore(initialState) {
   const store = finalCreateStore(rootReducer, initialState)
