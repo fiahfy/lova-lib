@@ -56,7 +56,7 @@ export function fetchServantStatistics(args) {
       .then(response => response.json())
       .then(json => dispatch({
         type:              RECEIVE_SERVANT_STATISTICS,
-        filter:            params,
+        params:            params,
         servantStatistics: json
       }))
   }
@@ -64,17 +64,20 @@ export function fetchServantStatistics(args) {
 
 export function fetchSpellStatistics(args) {
   return dispatch => {
-    const params = _.pick(args, (value, key) => ['spell_id', 'map', 'queue'].indexOf(key) > -1)
+    const params = _.pick(args, (value, key) => ['spell_id', 'map', 'queue', 'period'].indexOf(key) > -1)
 
-    const url = `${apiBaseURL}/api/spells/statistics/?term=month&`
+    const url = `${apiBaseURL}/api/spells/statistics/?`
               + _.map(params, (value, key) => `${key}=${value}`).join('&')
 
     return fetch(url)
       .then(response => response.json())
       .then(json => dispatch({
         type:            RECEIVE_SPELL_STATISTICS,
-        filter:          params,
-        spellStatistics: json
+        params:          params,
+        spellStatistics: json.map(item => {
+          item.period = args.period
+          return item
+        })
       }))
   }
 }

@@ -10,23 +10,19 @@ import NVD3Chart from '../components/common/react-nvd3'
 function fetchDataDeferred(getState, dispatch) {
   return Promise.all([
     ActionCreators.fetchSpellStatistics({
-      map:   'all',
-      queue: 'all'
+      period: 'daily',
+      map:    'all',
+      queue:  'all'
     })(dispatch)
   ])
 }
 
 function mapStateToProps(state) {
-  return {
-    spellStatistics: _.filter(state.spellStatistics, {
-      map:   'all',
-      queue: 'all'
-    })
-  }
+  return {spellStatistics: state.spellStatistics}
 }
 
 function mapDispatchToProps(dispatch) {
-  return { actions: bindActionCreators(ActionCreators, dispatch) }
+  return {actions: bindActionCreators(ActionCreators, dispatch)}
 }
 
 @connectData(null, fetchDataDeferred)
@@ -36,6 +32,11 @@ export default class Chart extends Component {
     spellStatistics:  PropTypes.arrayOf(PropTypes.object),
     actions:          PropTypes.object
   };
+  state = {
+    period: 'daily',
+    map:    'all',
+    queue:  'all'
+  };
   getSpellChartParams() {
     const {spellStatistics} = this.props
 
@@ -44,7 +45,7 @@ export default class Chart extends Component {
       .map((spell_id) => {
         return {
           key:    SpellUtils.getSpellName(spell_id),
-          values: _.filter(spellStatistics, {spell_id: spell_id})
+          values: _.filter(_.filter(spellStatistics, this.state), {spell_id})
             .map(statistic => ({x: new Date(statistic.date), y: statistic.score}))
         }
       })
@@ -80,6 +81,7 @@ export default class Chart extends Component {
       }
       return previous
     }, {})
+    this.props.actions.fetchSpellStatistics(options)
     this.setState(options)
   }
   componentDidMount() {
@@ -90,6 +92,20 @@ export default class Chart extends Component {
 
     const statistic = _.last(spellStatistics)
     const updated = statistic ? moment(statistic.date).format('YYYY-MM-DD') : ''
+
+    const periodOptionNodes = [
+      {value: 'daily',  name: 'Daily'},
+      {value: 'weekly', name: 'Weekly'}
+    ].map((option, index) => {
+      const active = option.value === 'daily'
+      return (
+        <label key={index} className="radio radio-inline">
+          <input ref={`period-${option.value}`} type="radio" name="period"
+                 value={option.value} defaultChecked={active}
+                 onClick={this.handleOptionClick.bind(this)} />{option.name}
+        </label>
+      )
+    })
 
     const mapOptionNodes = [
       {value: 'all',       name: 'All'},
@@ -122,7 +138,7 @@ export default class Chart extends Component {
     })
 
     return (
-      <div className="container" id="charts">
+      <div className="container" id="chart">
         <div className="page-header">
           <h2>Charts</h2>
         </div>
@@ -130,8 +146,14 @@ export default class Chart extends Component {
         <h3>Spell Statistics
           <small>Updated {updated}</small>
         </h3>
-{/*
+
         <form className="form-horizontal">
+          <div className="form-group">
+            <label className="control-label col-xs-12 col-sm-2">Period</label>
+            <div className="col-xs-12 col-sm-10 text-left">
+              {periodOptionNodes}
+            </div>
+          </div>
           <div className="form-group">
             <label className="control-label col-xs-12 col-sm-2">Map</label>
             <div className="col-xs-12 col-sm-10 text-left">
@@ -145,7 +167,7 @@ export default class Chart extends Component {
             </div>
           </div>
         </form>
-*/}
+
         <NVD3Chart {...this.getSpellChartParams()} />
       </div>
     )
