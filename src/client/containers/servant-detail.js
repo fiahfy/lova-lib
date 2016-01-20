@@ -77,7 +77,7 @@ export default class ServantDetail extends Component {
 
     const sectionNode = section !== 'statistics'
                       ? <DetailSection servant={servant} />
-                      : <StatisticsSection statistics={statistics} handleStatisticsChange={this.handleStatisticsChange.bind(this)} />
+                      : <StatisticsSection statistics={statistics} handleStatisticsChange={::this.handleStatisticsChange} />
 
     return (
       <div className="container" id="servant-detail">

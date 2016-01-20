@@ -78,7 +78,7 @@ export default class StatisticsSection extends Component {
         <label key={index} className="radio radio-inline">
           <input ref={`period-${option.value}`} type="radio" name="period"
                  value={option.value} defaultChecked={active}
-                 onClick={this.handleOptionClick.bind(this)} />{option.name}
+                 onClick={::this.handleOptionClick} />{option.name}
         </label>
       )
     })
@@ -93,7 +93,7 @@ export default class StatisticsSection extends Component {
         <label key={index} className="radio radio-inline">
           <input ref={`map-${option.value}`} type="radio" name="map"
                  value={option.value} defaultChecked={active}
-                 onClick={this.handleOptionClick.bind(this)} />{option.name}
+                 onClick={::this.handleOptionClick} />{option.name}
         </label>
       )
     })
@@ -108,7 +108,7 @@ export default class StatisticsSection extends Component {
         <label key={index} className="radio radio-inline">
           <input ref={`queue-${option.value}`} type="radio" name="queue"
                  value={option.value} defaultChecked={active}
-                 onClick={this.handleOptionClick.bind(this)} />{option.name}
+                 onClick={::this.handleOptionClick} />{option.name}
         </label>
       )
     })

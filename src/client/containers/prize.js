@@ -99,7 +99,7 @@ export default class Prize extends Component {
                      ref="times" defaultValue="10" placeholder="1-1000" />
               <span className="input-group-btn">
                 <button className="btn btn-primary"
-                        onClick={this.handleDrawClick.bind(this)}>Draw</button>
+                        onClick={::this.handleDrawClick}>Draw</button>
               </span>
             </div>
 

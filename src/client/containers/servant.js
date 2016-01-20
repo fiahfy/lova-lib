@@ -118,7 +118,7 @@ export default class Servant extends Component {
   }
   componentDidMount() {
     this.setupTableSorter()
-    $(this.refs.tribeSelect).select2().on('select2-selecting', this.handleTribeChange.bind(this))
+    $(this.refs.tribeSelect).select2().on('select2-selecting', ::this.handleTribeChange)
   }
   render() {
     const {servants} = this.props
@@ -151,16 +151,16 @@ export default class Servant extends Component {
           <div className="pull-left">
             <select className="form-control select select-primary select-block mbl"
                     ref="tribeSelect" value={tribeId}
-                    onChange={this.handleTribeChange.bind(this)}>
+                    onChange={::this.handleTribeChange}>
               {tribeIdOptionNodes}
             </select>
           </div>
         </div>
 
         <div className="form-group">
-          <form onSubmit={this.handleQuerySubmit.bind(this)}>
+          <form onSubmit={::this.handleQuerySubmit}>
             <input type="text" className="form-control" placeholder="Input Keyword..."
-                   ref="q" value={q} onChange={this.handleQueryChange.bind(this)} />
+                   ref="q" value={q} onChange={::this.handleQueryChange} />
           </form>
         </div>
 
