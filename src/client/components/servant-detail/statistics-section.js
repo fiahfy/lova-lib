@@ -3,14 +3,15 @@ import NVD3Chart from '../common/react-nvd3'
 
 export default class StatisticsSection extends Component {
   static propTypes = {
-    statistics: PropTypes.arrayOf(PropTypes.object)
+    statistics:             PropTypes.arrayOf(PropTypes.object),
+    handleStatisticsChange: PropTypes.func
   };
   state = {
-    map:   'all',
-    queue: 'all'
+    period: 'daily',
+    map:    'all',
+    queue:  'all'
   };
   getChartParams(mode) {
-    const {map, queue} = this.state
     const {statistics} = this.props
 
     let datum = []
@@ -18,15 +19,15 @@ export default class StatisticsSection extends Component {
       key: 'This Servant',
       area: true,
       color: mode === 'win' ? '#1f77b4' : '#9467bd',
-      values: _.filter(statistics, {mode: mode, map, queue})
+      values: _.filter(statistics, {mode, ...this.state})
         .map(statistic => ({x: new Date(statistic.date), y: statistic.score}))
     })
     datum.push({
       key: 'All Servants Average',
       area: false,
       color: '#ff7f0e',
-      values: _.filter(statistics, {mode: mode, map, queue})
-        .map(statistic => ({x: new Date(statistic.date), y: mode === 'win' ? 50 : 100 / 230}))
+      values: _.filter(statistics, {mode, ...this.state})
+        .map(statistic => ({x: new Date(statistic.date), y: mode === 'win' ? 50 : 100 / 265}))
     })
 
     return {
@@ -60,6 +61,7 @@ export default class StatisticsSection extends Component {
       }
       return previous
     }, {})
+    this.props.handleStatisticsChange(options)
     this.setState(options)
   }
   componentDidMount() {
@@ -67,6 +69,20 @@ export default class StatisticsSection extends Component {
     $('.statistics :radio').radiocheck()
   }
   render() {
+    const periodOptionNodes = [
+      {value: 'daily',  name: 'Daily'},
+      {value: 'weekly', name: 'Weekly'}
+    ].map((option, index) => {
+      const active = option.value === 'daily'
+      return (
+        <label key={index} className="radio radio-inline">
+          <input ref={`period-${option.value}`} type="radio" name="period"
+                 value={option.value} defaultChecked={active}
+                 onClick={this.handleOptionClick.bind(this)} />{option.name}
+        </label>
+      )
+    })
+
     const mapOptionNodes = [
       {value: 'all',       name: 'All'},
       {value: 'vermilion', name: 'Vermilion'},
@@ -100,6 +116,12 @@ export default class StatisticsSection extends Component {
     return (
       <div className="statistics">
         <form className="form-horizontal">
+          <div className="form-group">
+            <label className="control-label col-xs-12 col-sm-2">Period</label>
+            <div className="col-xs-12 col-sm-10 text-left">
+              {periodOptionNodes}
+            </div>
+          </div>
           <div className="form-group">
             <label className="control-label col-xs-12 col-sm-2">Map</label>
             <div className="col-xs-12 col-sm-10 text-left">

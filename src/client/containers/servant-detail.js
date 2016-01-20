@@ -13,7 +13,12 @@ function fetchDataDeferred(getState, dispatch, location, params) {
   const {id} = params
   return Promise.all([
     ActionCreators.fetchServant(+id)(dispatch),
-    ActionCreators.fetchServantStatistics({servant_id: +id})(dispatch)
+    ActionCreators.fetchServantStatistics({
+      servant_id: +id,
+      period: 'daily',
+      map:    'all',
+      queue:  'all'
+    })(dispatch)
   ])
 }
 
@@ -47,9 +52,13 @@ export default class ServantDetail extends Component {
     return <Helmet title={title}
                    meta={[{name: 'description', content: description}]} />
   }
+  handleStatisticsChange(args) {
+    const servantId = this.props.params.id
+    this.props.actions.fetchServantStatistics({servant_id: +servantId, ...args})
+  }
   render() {
-    const {section} = this.props.params
-    const {servant, statistics} = this.props
+    const {servant, statistics, params} = this.props
+    const {section} = params
 
     const helmet = this.getHelmet()
 
@@ -68,7 +77,7 @@ export default class ServantDetail extends Component {
 
     const sectionNode = section !== 'statistics'
                       ? <DetailSection servant={servant} />
-                      : <StatisticsSection statistics={statistics} />
+                      : <StatisticsSection statistics={statistics} handleStatisticsChange={this.handleStatisticsChange.bind(this)} />
 
     return (
       <div className="container" id="servant-detail">

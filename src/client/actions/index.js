@@ -47,9 +47,9 @@ export function fetchPrizes() {
 
 export function fetchServantStatistics(args) {
   return dispatch => {
-    const params = _.pick(args, (value, key) => ['servant_id', 'map', 'queue'].indexOf(key) > -1)
+    const params = _.pick(args, (value, key) => ['servant_id', 'map', 'queue', 'period'].indexOf(key) > -1)
 
-    const url = `${apiBaseURL}/api/servants/statistics/?term=month&`
+    const url = `${apiBaseURL}/api/servants/statistics/?`
               + _.map(params, (value, key) => `${key}=${value}`).join('&')
 
     return fetch(url)
@@ -57,7 +57,10 @@ export function fetchServantStatistics(args) {
       .then(json => dispatch({
         type:              RECEIVE_SERVANT_STATISTICS,
         params:            params,
-        servantStatistics: json
+        servantStatistics: json.map(item => {
+          item.period = args.period
+          return item
+        })
       }))
   }
 }
