@@ -1,6 +1,7 @@
 #servant {
-  .select2-results {
-    max-height: none;
+  .form-group > .glyphicon-remove {
+    cursor: pointer;
+    pointer-events: auto;
   }
   table tbody tr {
     th {

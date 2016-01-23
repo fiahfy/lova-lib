@@ -39,26 +39,42 @@ export default class ServantList extends Component {
               <div style={style} />
             </td>
             <td className="">
-              <Link to="/servants/" query={{tribe_id: servant.tribe_id}}>{servant.tribe_name}</Link>
+              <Link to="/servants/" query={{tribe_id: servant.tribe_id}}>
+                {servant.tribe_name}
+              </Link>
               {`-${_.padLeft(servant.tribe_code, 3, 0)}`}
             </td>
             <td className="hidden-xs">
-              <Link to="/servants/" query={{q: `cost:${servant.cost}`}}>{servant.cost}</Link>
+              <Link to="/servants/" query={{q: `cost:${servant.cost}`}}>
+                {servant.cost}
+              </Link>
             </td>
             <td className="hidden-xs">
-              <Link to="/servants/" query={{q: `type:${servant.type}`}}>{servant.type}</Link>
+              <Link to="/servants/" query={{q: `type:${servant.type}`}}>
+                {servant.type}
+              </Link>
             </td>
             <td className="">
-              <Link to={`/servants/${servant.id}/`}>{servant.name}</Link>
+              <Link to={`/servants/${servant.id}/`}>
+                {servant.name}
+              </Link>
             </td>
             <td className="hidden-xs hidden-sm">
-              <Link to={`/servants/${servant.id}/statistics/`}>{servant.win_rate.toFixed(2)}</Link>
+              <Link to={`/servants/${servant.id}/statistics/`}>
+                {servant.win_rate.toFixed(2)}
+              </Link>
             </td>
             <td className="hidden-xs hidden-sm">
-              <Link to={`/servants/${servant.id}/statistics/`}>{servant.used_rate.toFixed(2)}</Link>
+              <Link to={`/servants/${servant.id}/statistics/`}>
+                {servant.used_rate.toFixed(2)}
+              </Link>
             </td>
-            <td className="hidden-xs hidden-sm">{moment(servant.release_date).format('YYYY-MM-DD')}</td>
-            <td className="hidden-xs hidden-sm">{moment(servant.update_date).format('YYYY-MM-DD')}</td>
+            <td className="hidden-xs hidden-sm">
+              {moment(servant.release_date).format('YYYY-MM-DD')}
+            </td>
+            <td className="hidden-xs hidden-sm">
+              {moment(servant.update_date).format('YYYY-MM-DD')}
+            </td>
           </tr>
         )
       })
