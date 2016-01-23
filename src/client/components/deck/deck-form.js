@@ -41,7 +41,7 @@ export default class DeckForm extends Component {
             <a href={deckURL} className="visible-xs btn btn-primary"
                onclick="return false">Hold to Copy</a>
             <ReactZeroClipboard text={deckURL}
-                                onAfterCopy={this.onAfterCopy.bind(this)}>
+                                onAfterCopy={::this.onAfterCopy}>
               <button className="hidden-xs btn btn-primary copy-clipboard">Copy</button>
             </ReactZeroClipboard>
           </span>

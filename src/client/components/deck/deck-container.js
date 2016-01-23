@@ -131,7 +131,7 @@ export default class DeckContainer extends Component {
             </div>
           </div>
           <input type="text" placeholder="Input Keyword..." ref="query"
-                 className="form-control" onChange={this.handleQueryChange.bind(this)} />
+                 className="form-control" onChange={::this.handleQueryChange} />
         </div>
       </div>
     )

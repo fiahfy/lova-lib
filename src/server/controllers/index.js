@@ -5,6 +5,7 @@ import {match} from 'redux-router/server'
 import {configureStore} from '../../client/store'
 import Html from '../../client/containers/html'
 import Root from '../../client/containers/root'
+import config from '../../config'
 
 export default (function *() {
   yield new Promise(resolve => {
@@ -38,8 +39,11 @@ export default (function *() {
             <Html markup={markup} initialState={initialState} />
           )
         } catch(e) {
-          console.error(e.stack) // eslint-disable-line no-console
           this.status = 500
+          if (config.env === 'development') {
+            this.body = e.stack
+          }
+          console.error(e.stack) // eslint-disable-line no-console
         }
         resolve()
       })

@@ -83,8 +83,8 @@ export default class Deck extends Component {
       <div>
         <DeckDropContainer servants={servants} cards={cards} filter={filter}
                            deckURL={this.getDeckURL()}
-                           handleCardChange={this.handleCardChange.bind(this)}
-                           handleFilterChange={this.handleFilterChange.bind(this)}
+                           handleCardChange={::this.handleCardChange}
+                           handleFilterChange={::this.handleFilterChange}
                            onDrop={(item) => this.onDrop(null, item)} />
         <CardPreview />
       </div>
