@@ -5,15 +5,13 @@
   }
   table tbody tr {
     th {
-      padding: 9px 8px 10px;
+      padding: 10px 8px 10px;
     }
     td {
       height: 40px;
       box-sizing: border-box;
-      padding: 9px 8px 10px;
-      &:not(:nth-child(6)) {
-        white-space: nowrap;
-      }
+      padding: 10px 8px 10px;
+      white-space: nowrap;
       &.clip {
         padding: 0px;
         width: 40px;
@@ -21,6 +19,22 @@
           width: 40px;
           height: 40px;
           -webkit-clip-path: circle(19px at center);
+        }
+      }
+      &:nth-child(7), &:nth-child(8) {
+        div {
+          display: inline-block;
+          &:first-child {
+            margin-right: 5px;
+            font-size: 90%;
+          }
+        }
+        .progress {
+          width: 100px;
+          margin-bottom: 0;
+          border-radius: 0;
+          background-color: transparent;
+          vertical-align: middle;
         }
       }
     }
