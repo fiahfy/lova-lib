@@ -28,10 +28,17 @@ export default class ServantList extends Component {
     return JSON.stringify(this.props) != JSON.stringify(nextProps)
   }
   render() {
+    const {servants} = this.props
+
+    const maxWinRate = _.max(servants, 'win_rate').win_rate
+    const maxUsedRate = _.max(servants, 'used_rate').used_rate
+
     const servantNodes = this.filteredServants()
       .sort(ServantUtils.compareServant)
       .map((servant, index) => {
         const style = {backgroundPositionX: `${-40*(servant.tribe_code-1)}px`}
+        const winRateRatio = servant.win_rate / maxWinRate * 100
+        const usedRateRatio = servant.used_rate / maxUsedRate * 100
         return (
           <tr key={index} className={`tribe-${servant.tribe_id}`}>
             <th className="" scope="row">{servant.id}</th>
@@ -61,12 +68,22 @@ export default class ServantList extends Component {
             </td>
             <td className="hidden-xs hidden-sm">
               <Link to={`/servants/${servant.id}/statistics/`}>
-                {servant.win_rate.toFixed(2)}
+                <div>
+                  {servant.win_rate.toFixed(2)}%
+                </div>
+                <div className="progress">
+                  <div className="progress-bar" style={{width: `${winRateRatio}%`}} />
+                </div>
               </Link>
             </td>
             <td className="hidden-xs hidden-sm">
               <Link to={`/servants/${servant.id}/statistics/`}>
-                {servant.used_rate.toFixed(2)}
+                <div>
+                    {servant.used_rate.toFixed(2)}%
+                </div>
+                <div className="progress">
+                  <div className="progress-bar" style={{width: `${usedRateRatio}%`}} />
+                </div>
               </Link>
             </td>
             <td className="hidden-xs hidden-sm">
