@@ -11,6 +11,10 @@ export default class DetailSection extends Component {
   wrapQuoteIfNeed(value) {
     return value.indexOf(' ') > -1 ? `"${value}"` : value
   }
+  oralTraditionHTML() {
+    const {oral_tradition} = this.props.servant
+    return oral_tradition.replace(/(。)/gi, '$1<br />')
+  }
   render() {
     const {servant} = this.props
 
@@ -54,13 +58,17 @@ export default class DetailSection extends Component {
                 <dl className="row">
                   <dt className="col-xs-3">Type</dt>
                   <dd className="col-xs-9">
-                    <Link to="/servants/" query={{q: `type:${servant.type}`}}>{servant.type}</Link>
+                    <Link to="/servants/" query={{q: `type:${servant.type}`}}>
+                      {servant.type}
+                    </Link>
                   </dd>
                 </dl>
                 <dl className="row">
                   <dt className="col-xs-3">Cost</dt>
                   <dd className="col-xs-9">
-                    <Link to="/servants/" query={{q: `cost:${servant.cost}`}}>{servant.cost}</Link>
+                    <Link to="/servants/" query={{q: `cost:${servant.cost}`}}>
+                      {servant.cost}
+                    </Link>
                   </dd>
                 </dl>
               </div>
@@ -80,7 +88,9 @@ export default class DetailSection extends Component {
                 <dl className="row">
                   <dt className="col-xs-3">Range</dt>
                   <dd className="col-xs-9">
-                    <Link to="/servants/" query={{q: `range:${servant.range}`}}>{servant.range}</Link>
+                    <Link to="/servants/" query={{q: `range:${servant.range}`}}>
+                      {servant.range}
+                    </Link>
                   </dd>
                 </dl>
               </div>
@@ -90,7 +100,7 @@ export default class DetailSection extends Component {
               <dt className="col-sm-12">Oral Tradition</dt>
               <dd className="col-sm-12">
                 <div className="well well-sm">
-                  <small>{servant.oral_tradition}</small>
+                  <small dangerouslySetInnerHTML={{__html: this.oralTraditionHTML()}} />
                 </div>
               </dd>
             </dl>
@@ -113,7 +123,7 @@ export default class DetailSection extends Component {
                 </dd>
               </dl>
             </div>
-            
+
             <div className="status">
               <dl>
                 <dt><b>Status</b></dt>
