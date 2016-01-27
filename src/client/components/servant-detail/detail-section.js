@@ -13,7 +13,7 @@ export default class DetailSection extends Component {
   }
   oralTraditionHTML() {
     const {oral_tradition} = this.props.servant
-    return oral_tradition.replace(/(。)/gi, '$1<br />')
+    return oral_tradition.replace(/\n/gi, '<br />')
   }
   render() {
     const {servant} = this.props
