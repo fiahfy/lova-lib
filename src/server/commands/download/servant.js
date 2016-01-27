@@ -45,6 +45,8 @@ function save(servant, force) {
 
     const clipUrl = yield getClipImageUrlWithServant(servant)
     const url = yield getImageUrlWithServant(servant)
+    logger.verbose('Clip Image URL: %s', clipUrl)
+    logger.verbose('Image URL: %s', url)
     if (!clipUrl || !url) {
       throw new Error('Image Url is Not Found')
     }
@@ -69,9 +71,12 @@ function getImageUrlWithServant(servant) {
 function getClipImageUrlWithServant(servant) {
   return co(function *() {
     const $ = (yield scraper.fetchAllServantList()).$
+    if (servant.name === 'カイ=キスク') {
+      servant.tribe_code = 51
+    }
     const tribeNameAndCode = `${servant.tribe_name}-${_.padLeft(servant.tribe_code, 3, 0)}`
     return $('#content_1001_1').next().next()
-      .find(`table tbody tr td:contains(${tribeNameAndCode})`).prev().prev()
+      .find(`table tbody tr td:contains(${tribeNameAndCode})`).last().prev().prev()
       .find('a img').attr('src')
   })
 }
