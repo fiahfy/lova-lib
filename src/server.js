@@ -7,7 +7,7 @@ import config from './config'
 
 const app = koa()
 
-app.use(koaTimeout(500));
+app.use(koaTimeout(10000));
 app.use(koaStatic('public'))
 app.use(routes)
 app.listen(config.app.port)
