@@ -46,7 +46,12 @@ export function fetchAllServantList() {
 export function fetchServantRanking(date, mode, map, queue) {
   let d = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()))
   d.setUTCDate(d.getUTCDate() + 1)
-  let dateString = d.getUTCFullYear() + ('00' + (d.getUTCMonth() + 1)).slice(-2) + ('00' + d.getUTCDate()).slice(-2) + '0500'
+  let dateString = d.getUTCFullYear() + ('00' + (d.getUTCMonth() + 1)).slice(-2) + ('00' + d.getUTCDate()).slice(-2)
+  if (d.getTime() > new Date('2016/02/02').getTime()) {
+    dateString += '0300'
+  } else {
+    dateString += '0500'
+  }
   let path
   switch (mode) {
     case 'win':
@@ -86,7 +91,12 @@ export function fetchServantRanking(date, mode, map, queue) {
 export function fetchSpellRanking(date, map, queue) {
   let d = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()))
   d.setUTCDate(d.getUTCDate() + 1)
-  let dateString = d.getUTCFullYear() + ('00' + (d.getUTCMonth() + 1)).slice(-2) + ('00' + d.getUTCDate()).slice(-2) + '0500'
+  let dateString = d.getUTCFullYear() + ('00' + (d.getUTCMonth() + 1)).slice(-2) + ('00' + d.getUTCDate()).slice(-2)
+  if (d.getTime() > new Date('2016/02/02').getTime()) {
+    dateString += '0300'
+  } else {
+    dateString += '0500'
+  }
   let path = 'ultimatespell_weekly'
   switch (map) {
     case 'all':
