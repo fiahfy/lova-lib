@@ -47,7 +47,7 @@ export function fetchServantRanking(date, mode, map, queue) {
   let d = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()))
   d.setUTCDate(d.getUTCDate() + 1)
   let dateString = d.getUTCFullYear() + ('00' + (d.getUTCMonth() + 1)).slice(-2) + ('00' + d.getUTCDate()).slice(-2)
-  if (d.getTime() > new Date('2016/02/02').getTime()) {
+  if (dateString > '20160201') {
     dateString += '0300'
   } else {
     dateString += '0500'
@@ -92,7 +92,7 @@ export function fetchSpellRanking(date, map, queue) {
   let d = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()))
   d.setUTCDate(d.getUTCDate() + 1)
   let dateString = d.getUTCFullYear() + ('00' + (d.getUTCMonth() + 1)).slice(-2) + ('00' + d.getUTCDate()).slice(-2)
-  if (d.getTime() > new Date('2016/02/02').getTime()) {
+  if (dateString > '20160201') {
     dateString += '0300'
   } else {
     dateString += '0500'
