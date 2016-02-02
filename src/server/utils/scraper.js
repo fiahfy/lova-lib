@@ -54,34 +54,34 @@ export function fetchServantRanking(date, mode, map, queue) {
   }
   let path
   switch (mode) {
-    case 'win':
-      path = 'servantWinRate_weekly'
-      break
-    case 'used':
-      path = 'servantUsedRate_weekly'
-      break
+  case 'win':
+    path = 'servantWinRate_weekly'
+    break
+  case 'used':
+    path = 'servantUsedRate_weekly'
+    break
   }
   switch (map) {
-    case 'all':
-      path += '_all'
-      break
-    case 'vermilion':
-      path += '_7vs7'
-      break
-    case 'braze':
-      path += '_5vs5'
-      break
+  case 'all':
+    path += '_all'
+    break
+  case 'vermilion':
+    path += '_7vs7'
+    break
+  case 'braze':
+    path += '_5vs5'
+    break
   }
   switch (queue) {
-    case 'all':
-      path += '_all'
-      break
-    case 'normal':
-      path += '_normal'
-      break
-    case 'solo':
-      path += '_league'
-      break
+  case 'all':
+    path += '_all'
+    break
+  case 'normal':
+    path += '_normal'
+    break
+  case 'solo':
+    path += '_league'
+    break
   }
   path += '_all'
   let url = `${cacheSiteBasePath}ranking/${path}/${dateString}/page1.json`
@@ -99,26 +99,26 @@ export function fetchSpellRanking(date, map, queue) {
   }
   let path = 'ultimatespell_weekly'
   switch (map) {
-    case 'all':
-      path += '_all'
-      break
-    case 'vermilion':
-      path += '_7vs7'
-      break
-    case 'braze':
-      path += '_5vs5'
-      break
+  case 'all':
+    path += '_all'
+    break
+  case 'vermilion':
+    path += '_7vs7'
+    break
+  case 'braze':
+    path += '_5vs5'
+    break
   }
   switch (queue) {
-    case 'all':
-      path += '_all'
-      break
-    case 'normal':
-      path += '_normal'
-      break
-    case 'solo':
-      path += '_league'
-      break
+  case 'all':
+    path += '_all'
+    break
+  case 'normal':
+    path += '_normal'
+    break
+  case 'solo':
+    path += '_league'
+    break
   }
   path += '_all'
   let url = `${cacheSiteBasePath}ranking/${path}/${dateString}/page1.json`

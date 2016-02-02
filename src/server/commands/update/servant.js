@@ -131,7 +131,7 @@ function getServantWithUrl(url) {
     if (section1[0]) {
       skill.active = {}
       skill.active.name         = section1.text().split('：')[1].trim()
-      skill.active.description  = section1.nextAll('p').first().text().replace(/<br\s*\/?>/gi, "\n").trim()
+      skill.active.description  = section1.nextAll('p').first().text().replace(/<br\s*\/?>/gi, '\n').trim()
       skill.active.designation  = table3.find('tr:nth-child(1) td:nth-child(2)').text().replace(/[・･]/ig, ',').trim()
       skill.active.effect       = table3.find('tr:nth-child(1) td:nth-child(4)').text().replace(/[・･]/ig, ',').trim()
       skill.active.ap           = table3.find('tr:nth-child(2) td:nth-child(2)').text().replace(/\s*\/\s*/ig, ',').trim().split(',')
@@ -140,7 +140,7 @@ function getServantWithUrl(url) {
     if (section2[0]) {
       skill.passive = {}
       skill.passive.name        = section2.text().split('：')[1].trim()
-      skill.passive.description = section2.nextAll('p').first().text().replace(/<br\s*\/?>/gi, "\n").trim()
+      skill.passive.description = section2.nextAll('p').first().text().replace(/<br\s*\/?>/gi, '\n').trim()
       skill.passive.designation = table4.find('tr:nth-child(1) td:nth-child(2)').text().replace(/[・･]/ig, ',').trim()
       skill.passive.effect      = table4.find('tr:nth-child(1) td:nth-child(4)').text().replace(/[・･]/ig, ',').trim()
       skill.passive.ap          = []
@@ -160,14 +160,14 @@ function parseDateString(input) {
     return date
   }
   switch (input) {
-    case 'α1':  input = '20141017'; break
-    case 'α2':  input = '20141222'; break
-    case 'CBT': input = '20150421'; break
-    case 'OBT': input = '20150604'; break
-    case '正式': input = '20150617'; break
-    default:
-      logger.warn('Invalid Date: input = %s', input)
-      break
+  case 'α1':  input = '20141017'; break
+  case 'α2':  input = '20141222'; break
+  case 'CBT': input = '20150421'; break
+  case 'OBT': input = '20150604'; break
+  case '正式': input = '20150617'; break
+  default:
+    logger.warn('Invalid Date: input = %s', input)
+    break
   }
   return new Date(Date.UTC(Number(input.slice(0, 4)), Number(input.slice(4, 6)) - 1, Number(input.slice(6, 8))))
 }

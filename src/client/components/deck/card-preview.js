@@ -3,13 +3,13 @@ import {DragLayer} from 'react-dnd'
 import CardContainer from './card-container'
 
 function collect (monitor) {
-    var item = monitor.getItem()
-    return {
-        index: item && item.index,
-        card: item && item.card,
-        currentOffset: monitor.getSourceClientOffset(),
-        isDragging: monitor.isDragging()
-    }
+  const item = monitor.getItem()
+  return {
+    index: item && item.index,
+    card: item && item.card,
+    currentOffset: monitor.getSourceClientOffset(),
+    isDragging: monitor.isDragging()
+  }
 }
 
 const layerStyles = {
@@ -38,7 +38,7 @@ export default class CardPreview extends Component {
 
     if (!currentOffset) {
       return {
-          display: 'none'
+        display: 'none'
       }
     }
 

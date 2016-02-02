@@ -13,7 +13,7 @@ commander
   .alias('ups')
   .description('update servant data')
   .option('-f, --force', 'force update', null, null)
-  .action(function(url, opts) {
+  .action((url, opts) => {
     promise = updateCommands.servant(url, opts.force)
   })
 
@@ -22,7 +22,7 @@ commander
   .alias('upp')
   .description('update prize data')
   .option('-f, --force', 'force update', null, null)
-  .action(function(opts) {
+  .action(opts =>  {
     promise = updateCommands.prize(opts.force)
   })
 
@@ -34,7 +34,7 @@ commander
   .option('--date-from [date]', 'target date from', null, null)
   .option('--date-to [date]', 'target date to', null, null)
   .option('-f, --force', 'force update', null, null)
-  .action(function(opts) {
+  .action(opts => {
     promise = updateCommands.servantRanking(opts.date, opts.dateFrom, opts.dateTo, opts.force)
   })
 
@@ -46,7 +46,7 @@ commander
   .option('--date-from [date]', 'target date from', null, null)
   .option('--date-to [date]', 'target date to', null, null)
   .option('-f, --force', 'force update', null, null)
-  .action(function(opts) {
+  .action(opts => {
     promise = updateCommands.spellRanking(opts.date, opts.dateFrom, opts.dateTo, opts.force)
   })
 
@@ -56,7 +56,7 @@ commander
   .description('download servant images')
   .option('-i, --id [id]', 'target servant id', null, null)
   .option('-f, --force', 'force download', null, null)
-  .action(function(opts) {
+  .action(opts => {
     promise = downloadCommands.servant(opts.id, opts.force)
   })
 
@@ -64,7 +64,7 @@ commander
   .command('sprite-servant')
   .alias('sps')
   .description('create servant sprite image')
-  .action(function() {
+  .action(() => {
     promise = spriteCommands.servant()
   })
 
@@ -77,10 +77,9 @@ if (!promise) {
 }
 
 promise.then(() => {
-    mongoose.disconnect()
-  }, (reason) => {
-    mongoose.disconnect()
-    logger.error(reason.message)
-    logger.error(reason.stack)
-  }
-)
+  mongoose.disconnect()
+}, (reason) => {
+  mongoose.disconnect()
+  logger.error(reason.message)
+  logger.error(reason.stack)
+})

@@ -3,7 +3,7 @@ import xmlify from 'xmlify'
 import config from '../../config'
 import * as models from '../models'
 
-export default (function *() {
+export default function *() {
   const servants = yield models.servant.find({}, 'id update_date').sort({_id: 1}).exec()
 
   let pathes = []
@@ -32,4 +32,4 @@ export default (function *() {
 
   this.type = 'xml'
   this.body = xmlify(urlset, 'urlset')
-})
+}

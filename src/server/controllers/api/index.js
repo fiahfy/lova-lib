@@ -1,6 +1,6 @@
-export default (function *() {
+export default function *() {
   this.body = {node_version: process.version}
-})
+}
 
 export {default as servant} from './servant'
 export {default as prize} from './prize'

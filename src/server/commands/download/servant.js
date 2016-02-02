@@ -99,10 +99,6 @@ function download(url, path) {
 
     request
       .get(url)
-      //.on('response', function(res) {
-      //  console.log('statusCode: ', res.statusCode)
-      //  console.log('content-length: ', res.headers['content-length'])
-      //})
       .pipe(fs.createWriteStream(path).on('close', () => {
         resolve()
       }))
@@ -112,7 +108,7 @@ function download(url, path) {
 function scale(orgPath, distPath, ratio) {
   return new Promise((resolve, reject) => {
     lwip.open(orgPath, (err, image) => {
-      image.batch().scale(ratio, ratio, 'lanczos').writeFile(distPath, 'jpg', {}, function (err) {
+      image.batch().scale(ratio, ratio, 'lanczos').writeFile(distPath, 'jpg', {}, err => {
         if (err) {
           reject(err)
           return

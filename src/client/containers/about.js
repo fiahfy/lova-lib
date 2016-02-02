@@ -12,7 +12,7 @@ export default class About extends Component {
         <div className="page-header">
           <h2>About</h2>
         </div>
-        
+
         <address>
           <strong>Mail</strong><br />
           <a className="mail" ref="mail" /><br />

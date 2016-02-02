@@ -23,7 +23,7 @@ export default function(force) {
       }
     }
 
-    let summary = prizes.reduce((p, c) => { return p + c.rate * 100 }, 0) / 100
+    let summary = prizes.reduce((p, c) => (p + c.rate * 100), 0) / 100
     logger[summary === 1 ? 'info' : 'warn']('Total Rate Summary: summary = %s', summary.toFixed(2))
 
     // clean prizes
@@ -89,7 +89,7 @@ function getPrizes() {
     // }
     let date = new Date(panel.find('div.article_title span.date').text())
     date = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()))
-    const prizes = _.values($('.subsection_frame').find('table>tbody>tr')).reduce(function(previous, current) {
+    const prizes = _.values($('.subsection_frame').find('table>tbody>tr')).reduce((previous, current) => {
       const name = $(current).find('td:first-child').text()
       const rate = $(current).find('td:last-child').text()
       const matches = _.trim(rate).match(/^(\d+)[%％]$/i)

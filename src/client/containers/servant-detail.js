@@ -75,9 +75,10 @@ export default class ServantDetail extends Component {
       )
     })
 
-    const sectionNode = section !== 'statistics'
-                      ? <DetailSection servant={servant} />
-                      : <StatisticsSection statistics={statistics} handleStatisticsChange={::this.handleStatisticsChange} />
+    const sectionNode = section === 'statistics'
+      ? <StatisticsSection statistics={statistics}
+                           handleStatisticsChange={::this.handleStatisticsChange} />
+      : <DetailSection servant={servant} />
 
     return (
       <div className="container" id="servant-detail">

@@ -58,7 +58,9 @@ const ServantSchema = new Schema({
   }
 }, {id: false})
 
-ServantSchema.virtual('id').get(function() { return this._id })
+ServantSchema.virtual('id').get(function() {
+  return this._id
+})
 
 ServantSchema.set('toJSON', {
   virtuals: true
