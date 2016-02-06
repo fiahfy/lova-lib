@@ -56,7 +56,7 @@ export default class Servant extends Component {
     let i = 0
     let map = new Map()
     let filter = (q || '').replace(/"[^"]*"/g, (match) => {
-      map.set(i, match.replace(/^"(.*)"$/, "$1"))
+      map.set(i, match.replace(/^"(.*)"$/, '$1'))
       return `@${i++}@`
     }).split(/\s+/i).map((element) => {
       return element.replace(/@(\d+)@/, (match, i) => {

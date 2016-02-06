@@ -3,14 +3,10 @@ import fs from'fs'
 import logger from '../../utils/logger'
 import * as scraper from '../../utils/scraper'
 import * as models from '../../models'
-let request = null
-let lwip = null
-if (process.env.NODE_ENV === 'development') {
-  lwip = require('lwip')
-  request = require('request')
-}
+import lwip from 'lwip'
+import request from 'request'
 
-const imageDir = './public/assets/img/'
+const imageDir = './public/assets/storage/img/'
 
 export default function(id, force) {
   return co(function *() {
@@ -99,10 +95,6 @@ function download(url, path) {
 
     request
       .get(url)
-      //.on('response', function(res) {
-      //  console.log('statusCode: ', res.statusCode)
-      //  console.log('content-length: ', res.headers['content-length'])
-      //})
       .pipe(fs.createWriteStream(path).on('close', () => {
         resolve()
       }))
@@ -112,7 +104,7 @@ function download(url, path) {
 function scale(orgPath, distPath, ratio) {
   return new Promise((resolve, reject) => {
     lwip.open(orgPath, (err, image) => {
-      image.batch().scale(ratio, ratio, 'lanczos').writeFile(distPath, 'jpg', {}, function (err) {
+      image.batch().scale(ratio, ratio, 'lanczos').writeFile(distPath, 'jpg', {}, err => {
         if (err) {
           reject(err)
           return

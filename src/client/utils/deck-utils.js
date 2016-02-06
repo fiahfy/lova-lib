@@ -21,12 +21,12 @@ export function getBonusMana(cards) {
     return previous
   }, [])
   switch (tribeIds.length) {
-    case 1:
-      return 10
-    case 2:
-      return 5
-    default:
-      return 0
+  case 1:
+    return 10
+  case 2:
+    return 5
+  default:
+    return 0
   }
 }
 
@@ -81,11 +81,11 @@ function btoa(str) {
   if (config.target === 'client') {
     return window.btoa(str)
   }
-  let buffer;
+  let buffer
   if (Buffer.isBuffer(str)) {
-    buffer = str;
+    buffer = str
   } else {
-    buffer = new Buffer(str.toString(), 'binary');
+    buffer = new Buffer(str.toString(), 'binary')
   }
-  return buffer.toString('base64');
+  return buffer.toString('base64')
 }

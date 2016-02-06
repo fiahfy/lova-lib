@@ -47,12 +47,13 @@ export default class CardContainer extends Component {
 
     const tribeCls = card ? `tribe-${card.tribe_id}` : null
     const cls = classNames('card', tribeCls, {'setted': selected})
-    const bgImage = index === null ? 'blank.png' : index <= 5 ? 'deck.png' : 'side-board.png'
+    const bgImage = index === null
+      ? 'card-blank.png' : index <= 5 ? 'card-deck.png' : 'card-side-board.png'
 
     return connectDropTarget(
       <div className={cls}>
         <div className="background">
-          <img src={`/assets/img/m/${bgImage}`}
+          <img src={`/assets/img/${bgImage}`}
                className="img-rounded img-responsive" />
         </div>
         <Card index={index} isLazy={isLazy} card={card} />

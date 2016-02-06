@@ -3,7 +3,7 @@ import * as models from '../../models'
 
 const displayCount = 30
 
-export default (function *() {
+export default function *() {
   const gap = getGap(this.query.period)
   const beginDate = yield findBeginDate(gap)
 
@@ -14,15 +14,15 @@ export default (function *() {
   const rankings = yield findRankings(params)
 
   this.body = getStatistics(rankings, gap)
-})
+}
 
 function getGap(period) {
   switch (period) {
-    case 'weekly':
-      return 7
-    case 'daily':
-    default:
-      return 1
+  case 'weekly':
+    return 7
+  case 'daily':
+  default:
+    return 1
   }
 }
 

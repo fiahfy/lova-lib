@@ -10,7 +10,7 @@ export default class Root extends Component {
   };
   render() {
     const {store} = this.props
-    
+
     const hasDevTools = config.env === 'development' && config.devtools.monitor
     const devTools = hasDevTools ? <DevTools /> : null
 

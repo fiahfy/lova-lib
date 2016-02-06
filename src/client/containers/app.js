@@ -11,22 +11,22 @@ export default class App extends Component {
     const title = _.capitalize(pathes[1])
     let description
     switch (pathes[1]) {
-      case 'deck':
-        description = 'Deck Simulator'
-        break
-      case 'charts':
-        description = 'Charts'
-        break
-      case 'prize':
-        description = 'Prize Simulator'
-        break
-      case 'servants':
-        description = 'Servants'
-        break
-      case 'about':
-      default:
-        description = 'Site'
-        break
+    case 'deck':
+      description = 'Deck Simulator'
+      break
+    case 'charts':
+      description = 'Charts'
+      break
+    case 'prize':
+      description = 'Prize Simulator'
+      break
+    case 'servants':
+      description = 'Servants'
+      break
+    case 'about':
+    default:
+      description = 'Site'
+      break
     }
     description += ' for Lord of Vermilion Arena'
 

@@ -1,12 +1,9 @@
 import co from 'co'
 import logger from '../../utils/logger'
 import * as models from '../../models'
-let lwip = null
-if (process.env.NODE_ENV === 'development') {
-  lwip = require('lwip')
-}
+import lwip from 'lwip'
 
-const imageDir = './public/assets/img/'
+const imageDir = './public/assets/storage/img/'
 
 export default function() {
   return co(function *() {

@@ -1,6 +1,6 @@
 import * as models from '../../models'
 
-export default(function *() {
+export default function *() {
   const fields = (this.query.fields || '').replace(',', ' ')
   const id = this.params.id
 
@@ -28,7 +28,7 @@ export default(function *() {
     servant = mergeStatistics(servant, statistics)
   })
   this.body = servants
-})
+}
 
 function *getLastDate() {
   const statistic = yield models.servantRanking.findOne().sort({date: -1}).exec()

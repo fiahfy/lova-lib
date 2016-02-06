@@ -7,7 +7,7 @@ import Html from '../../client/containers/html'
 import Root from '../../client/containers/root'
 import config from '../../config'
 
-export default (function *() {
+export default function *() {
   yield new Promise(resolve => {
     const store = configureStore()
     store.dispatch(match(this.originalUrl, (error, redirectLocation, renderProps) => {
@@ -38,7 +38,7 @@ export default (function *() {
           this.body = '<!DOCTYPE html>' + ReactDOMServer.renderToStaticMarkup(
             <Html markup={markup} initialState={initialState} />
           )
-        } catch(e) {
+        } catch (e) {
           this.status = 500
           if (config.env === 'development') {
             this.body = e.stack
@@ -49,6 +49,6 @@ export default (function *() {
       })
     }))
   })
-})
+}
 
 export {default as sitemap} from './sitemap'

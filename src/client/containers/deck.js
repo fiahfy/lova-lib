@@ -14,11 +14,11 @@ function fetchDataDeferred(getState, dispatch) {
 }
 
 function mapStateToProps(state) {
-  return { servants: state.servants }
+  return {servants: state.servants}
 }
 
 function mapDispatchToProps(dispatch) {
-  return { actions: bindActionCreators(ActionCreators, dispatch) }
+  return {actions: bindActionCreators(ActionCreators, dispatch)}
 }
 
 @connectData(null, fetchDataDeferred)
