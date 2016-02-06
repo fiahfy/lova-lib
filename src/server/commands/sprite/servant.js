@@ -6,7 +6,7 @@ if (process.env.NODE_ENV === 'development') {
   lwip = require('lwip')
 }
 
-const imageDir = './public/assets/img/'
+const imageDir = './public/assets/storage/img/'
 
 export default function() {
   return co(function *() {

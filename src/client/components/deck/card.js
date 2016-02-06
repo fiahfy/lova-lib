@@ -66,13 +66,15 @@ export default class Card extends Component {
   render() {
     const {connectDragSource, card, isLazy} = this.props
 
-    const orgDeckImage = card ? `${card.id}.jpg` : 'blank.png'
-    const deckImage = !isLazy && card ? `${card.id}.jpg` : 'blank.png'
+    const dataOriginal = card
+      ? `/assets/storage/img/m/${card.id}.jpg` : '/assets/img/card-blank.png'
+    const src = !isLazy && card
+      ? `/assets/storage/img/m/${card.id}.jpg` : '/assets/img/card-blank.png'
 
     return connectDragSource(
       <div className="content">
-        <img data-original={`/assets/img/m/${orgDeckImage}`}
-             src={`/assets/img/m/${deckImage}`}
+        <img data-original={dataOriginal}
+             src={src}
              className="img-rounded img-responsive lazy" />
         <span ref="cardSpan">
           {card ? `Cost ${card.cost}` : ''}

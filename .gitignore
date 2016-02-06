@@ -36,6 +36,7 @@ node_modules
 # Custom
 .idea
 /public/assets/js/bundle.js*
+/public/assets/storage
 /cli.js*
 /server.js*
 /tmp

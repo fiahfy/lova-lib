@@ -10,7 +10,7 @@ if (process.env.NODE_ENV === 'development') {
   request = require('request')
 }
 
-const imageDir = './public/assets/img/'
+const imageDir = './public/assets/storage/img/'
 
 export default function(id, force) {
   return co(function *() {
