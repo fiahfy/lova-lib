@@ -53,7 +53,6 @@ export default class Chart extends Component {
     return {
       type: 'lineChart',
       datum: datum,
-      width: '100%',
       height: 500,
       margin : {
         top: 20,
