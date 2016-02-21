@@ -6,6 +6,9 @@ export default {
   devtools: {
     monitor: false
   },
+  newrelic: {
+    license_key: process.env.DOCKER_NEW_RELIC_LICENSE_KEY
+  },
   app: {
     dns:  process.env.DOCKER_NODE_DNS || 'localhost:3000',
     port: process.env.DOCKER_NODE_PORT || 3000
