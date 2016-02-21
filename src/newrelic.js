@@ -1,4 +1,4 @@
-import config from './src/config'
+import config from './config'
 
 /**
  * New Relic agent configuration.
