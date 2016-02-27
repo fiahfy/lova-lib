@@ -48,9 +48,11 @@ function save(servant, force) {
     }
 
     yield download(clipUrl, clipImagePath)
-
     yield download(url, largeImagePath)
 
+    // resize clip
+    yield resize(clipImagePath, clipImagePath, 40, 40)
+    // create middle image
     yield scale(largeImagePath, middleImagePath, 150 / 640)
 
     // yield compress(middleImagePath, middleImagePath, {quality: 50})
@@ -98,6 +100,20 @@ function download(url, path) {
       .pipe(fs.createWriteStream(path).on('close', () => {
         resolve()
       }))
+  })
+}
+
+function resize(orgPath, distPath, width, height) {
+  return new Promise((resolve, reject) => {
+    lwip.open(orgPath, (err, image) => {
+      image.batch().resize(width, height, 'lanczos').writeFile(distPath, 'jpg', {}, err => {
+        if (err) {
+          reject(err)
+          return
+        }
+        resolve()
+      })
+    })
   })
 }
 
