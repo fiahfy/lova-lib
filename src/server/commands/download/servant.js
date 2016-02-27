@@ -69,9 +69,6 @@ function getImageUrlWithServant(servant) {
 function getClipImageUrlWithServant(servant) {
   return co(function *() {
     const $ = (yield scraper.fetchAllServantList()).$
-    if (servant.name === 'カイ=キスク') {
-      servant.tribe_code = 51
-    }
     const tribeNameAndCode = `${servant.tribe_name}-${_.padLeft(servant.tribe_code, 3, 0)}`
     return $('#content_1001_1').next().next()
       .find(`table tbody tr td:contains(${tribeNameAndCode})`).last().prev().prev()
