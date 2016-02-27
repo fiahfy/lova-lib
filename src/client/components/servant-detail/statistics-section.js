@@ -33,7 +33,6 @@ export default class StatisticsSection extends Component {
     return {
       type: 'lineChart',
       datum: datum,
-      width: '100%',
       height: 350,
       margin: {
         top: 20,
