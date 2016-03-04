@@ -25,7 +25,7 @@
   "main": "server.js",
   "scripts": {
     "install": "npm run build",
-    "start": "node --optimize_for_size --max_old_space_size=920 --gc_interval=100 server.js",
+    "start": "nodemon -V server.js -- --optimize_for_size --max_old_space_size=512 --gc_interval=100",
     "start:dev": "npm run watch & npm run nodemon",
     "start:hot": "npm run hot:client & npm run hot:server",
     "nodemon": "nodemon -V -w server.js server.js",
