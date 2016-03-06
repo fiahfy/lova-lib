@@ -1,43 +1,42 @@
-import {createStore, applyMiddleware, compose} from 'redux'
-import {reduxReactRouter} from 'redux-router'
-import {reduxReactRouter as serverReduxReactRouter} from 'redux-router/server'
+import {createStore, applyMiddleware, compose, combineReducers} from 'redux'
+import {routeReducer, syncHistory} from 'react-router-redux'
+import {reducer as reduxAsyncConnect} from 'redux-async-connect'
 import thunk from 'redux-thunk'
 import createLogger from 'redux-logger'
 import config from '../config'
-import history from './history'
-import routes from './routes'
-import rootReducer from './reducers'
-import transitionMiddleware from './middlewares/transition-middleware'
+import reducers from './reducers'
 import DevTools from './containers/dev-tools'
 
 const voidMiddleware = () => next => action => {
   next(action)
 }
 
-const reduxReactRouterFunc = config.target === 'client'
-                           ? reduxReactRouter({routes, history})
-                           : serverReduxReactRouter({routes, history})
+export function configureStore(history, initialState = {}) {
+  let reduxLoggerMiddleware = voidMiddleware
+  if (config.env === 'development' && config.target === 'client') {
+    reduxLoggerMiddleware = createLogger()
+  }
 
-let loggerMiddleware = voidMiddleware
-if (config.env === 'development' && config.target === 'client') {
-  loggerMiddleware = createLogger()
-}
+  const reduxRouterMiddleware = syncHistory(history)
 
-const finalCreateStore = compose(
-  applyMiddleware(thunk),
-  reduxReactRouterFunc,
-  applyMiddleware(transitionMiddleware),
-  applyMiddleware(loggerMiddleware),
-  DevTools.instrument()
-)(createStore)
+  const finalCreateStore = compose(
+    applyMiddleware(thunk),
+    applyMiddleware(reduxRouterMiddleware),
+    applyMiddleware(reduxLoggerMiddleware),
+    DevTools.instrument()
+  )(createStore)
 
-export function configureStore(initialState) {
-  const store = finalCreateStore(rootReducer, initialState)
+  const store = finalCreateStore(combineReducers({
+    routing: routeReducer,
+    reduxAsyncConnect,
+    ...reducers
+  }), initialState)
+
+  reduxRouterMiddleware.listenForReplays(store)
 
   if (module.hot) {
-    // Enable Webpack hot module replacement for reducers
     module.hot.accept('./reducers', () => {
-      const nextRootReducer = rootReducer
+      const nextRootReducer = require('./reducers').default
       store.replaceReducer(nextRootReducer)
     })
   }

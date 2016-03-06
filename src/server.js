@@ -1,16 +1,19 @@
 import 'babel-polyfill'
-import koa from 'koa'
+import Koa from 'koa'
+import koaConvert from 'koa-convert'
 import koaStatic from 'koa-static'
 import koaTimeout from 'koa-timeout'
 import config from './config'
 if (config.newrelic.license_key) {
-  require('newrelic');
+  require('newrelic')
 }
 import routes from './server/routes'
 
-const app = koa()
+const app = new Koa()
 
-app.use(koaTimeout(10000))
-app.use(koaStatic('public'))
+app.use(koaConvert(koaTimeout(10000)))
+app.use(koaConvert(koaStatic('public')))
 app.use(routes)
-app.listen(config.app.port)
+app.listen(config.app.port, () => {
+  console.log(`Server started: http://localhost:${config.app.port}/`) // eslint-disable-line no-console
+})

@@ -6,7 +6,7 @@ import GoogleAnalytics from 'react-g-analytics'
 export default class App extends Component {
   getHelmet() {
     const pathname = this.props.location.pathname
-    const pathes = pathname.match(/^\/(\w+)\//)
+    const pathes = pathname.match(/^\/?(\w+)\//)
 
     const title = _.capitalize(pathes[1])
     let description

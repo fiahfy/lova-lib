@@ -12,7 +12,7 @@ export default class DetailSection extends Component {
     return value.indexOf(' ') > -1 ? `"${value}"` : value
   }
   oralTraditionHTML() {
-    const {oral_tradition} = this.props.servant
+    const {oral_tradition = ''} = this.props.servant
     return oral_tradition.replace(/\n/gi, '<br />')
   }
   render() {
@@ -50,15 +50,15 @@ export default class DetailSection extends Component {
                 <dl className="row">
                   <dt className="col-xs-3">Tribe</dt>
                   <dd className="col-xs-9">
-                    <Link to="/servants/" query={{tribe_id: servant.tribe_id}}>
+                    <Link to={{pathname: '/servants/', query: {tribe_id: servant.tribe_id}}}>
                       {servant.tribe_name}
-                    </Link>-{_.padLeft(servant.tribe_code, 3, 0)}
+                    </Link>-{_.padStart(servant.tribe_code, 3, 0)}
                   </dd>
                 </dl>
                 <dl className="row">
                   <dt className="col-xs-3">Type</dt>
                   <dd className="col-xs-9">
-                    <Link to="/servants/" query={{q: `type:${servant.type}`}}>
+                    <Link to={{pathname: '/servants/', query: {q: `type:${servant.type}`}}}>
                       {servant.type}
                     </Link>
                   </dd>
@@ -66,7 +66,7 @@ export default class DetailSection extends Component {
                 <dl className="row">
                   <dt className="col-xs-3">Cost</dt>
                   <dd className="col-xs-9">
-                    <Link to="/servants/" query={{q: `cost:${servant.cost}`}}>
+                    <Link to={{pathname: '/servants/', query: {q: `cost:${servant.cost}`}}}>
                       {servant.cost}
                     </Link>
                   </dd>
@@ -88,7 +88,7 @@ export default class DetailSection extends Component {
                 <dl className="row">
                   <dt className="col-xs-3">Range</dt>
                   <dd className="col-xs-9">
-                    <Link to="/servants/" query={{q: `range:${servant.range}`}}>
+                    <Link to={{pathname: '/servants/', query: {q: `range:${servant.range}`}}}>
                       {servant.range}
                     </Link>
                   </dd>
@@ -109,7 +109,7 @@ export default class DetailSection extends Component {
               <dl className="col-sm-6 row">
                 <dt className="col-xs-3">Illust</dt>
                 <dd className="col-xs-9">
-                  <Link to="/servants/" query={{q: `illustrationBy:${this.wrapQuoteIfNeed(servant.illustration_by || '')}`}}>
+                  <Link to={{pathname: '/servants/', query: {q: `illustrationBy:${this.wrapQuoteIfNeed(servant.illustration_by || '')}`}}}>
                     {servant.illustration_by}
                   </Link>
                 </dd>
@@ -117,7 +117,7 @@ export default class DetailSection extends Component {
               <dl className="col-sm-6 row">
                 <dt className="col-xs-3">CV</dt>
                 <dd className="col-xs-9">
-                  <Link to="/servants/" query={{q: `characterVoice:${this.wrapQuoteIfNeed(servant.character_voice || '')}`}}>
+                  <Link to={{pathname: '/servants/', query: {q: `characterVoice:${this.wrapQuoteIfNeed(servant.character_voice || '')}`}}}>
                     {servant.character_voice}
                   </Link>
                 </dd>
