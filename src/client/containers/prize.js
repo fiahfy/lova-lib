@@ -3,16 +3,12 @@ import moment from 'moment'
 import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
+import {asyncConnect} from 'redux-async-connect'
 import * as ActionCreators from '../actions'
-import connectData from '../decorators/connect-data'
 import * as PrizeUtils from '../utils/prize-utils'
 import PrizeList from '../components/prize/prize-list'
 import LotResultList from '../components/prize/lot-result-list'
 import LotResultSummaryList from '../components/prize/lot-result-summary-list'
-
-function fetchDataDeferred(getState, dispatch) {
-  return ActionCreators.fetchPrizes()(dispatch)
-}
 
 function mapStateToProps(state) {
   return {prizes: state.prizes}
@@ -22,7 +18,12 @@ function mapDispatchToProps(dispatch) {
   return {actions: bindActionCreators(ActionCreators, dispatch)}
 }
 
-@connectData(null, fetchDataDeferred)
+@asyncConnect([{
+  deferred: true,
+  promise: ({store: {dispatch}}) => {
+    return ActionCreators.fetchPrizes()(dispatch)
+  }
+}])
 @connect(mapStateToProps, mapDispatchToProps)
 export default class Prize extends Component {
   static propTypes = {

@@ -1,25 +1,44 @@
 import React, {Component, PropTypes} from 'react'
+import {Router} from 'react-router'
 import {Provider} from 'react-redux'
-import {ReduxRouter} from 'redux-router'
+import {ReduxAsyncConnect} from 'redux-async-connect'
 import DevTools from './dev-tools'
 import config from '../../config'
+import history from '../history'
+import routes from '../routes'
 
 export default class Root extends Component {
   static propTypes = {
-    store: PropTypes.object.isRequired
+    store:       PropTypes.object.isRequired,
+    renderProps: PropTypes.object
   };
   render() {
-    const {store} = this.props
+    const {store, renderProps} = this.props
 
     const hasDevTools = config.env === 'development' && config.devtools.monitor
     const devTools = hasDevTools ? <DevTools /> : null
 
-    return (
-      <Provider store={store}>
+    let component = (
+      <div>
+        <Router render={(props) =>
+          <ReduxAsyncConnect {...props} filter={item => !item.deferred} />
+        } history={history}>
+          {routes}
+        </Router>
+        {devTools}
+      </div>
+    )
+    if (renderProps) {
+      component = (
         <div>
-          <ReduxRouter />
-          {devTools}
+          <ReduxAsyncConnect {...renderProps} />
         </div>
+      )
+    }
+
+    return (
+      <Provider store={store} key="provider">
+        {component}
       </Provider>
     )
   }

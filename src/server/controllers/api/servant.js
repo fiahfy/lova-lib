@@ -1,42 +1,42 @@
 import * as models from '../../models'
 
-export default function *() {
-  const fields = (this.query.fields || '').replace(',', ' ')
-  const id = this.params.id
+export default async function (ctx) {
+  const fields = (ctx.query.fields || '').replace(',', ' ')
+  const id = +ctx.params.id
 
   if (id) {
-    let servants = yield models.servant.findOne({_id: id}, fields).exec()
-    if (typeof this.query.with_statistic === 'undefined') {
-      this.body = servants
+    let servants = await models.servant.findOne({_id: id}, fields).exec()
+    if (typeof ctx.query.with_statistic === 'undefined') {
+      ctx.body = servants
       return
     }
     servants = deepCopy(servants)
-    const statistics = yield getStatistics(id)
+    const statistics = await getStatistics(id)
     servants = mergeStatistics(servants, statistics)
-    this.body = servants
+    ctx.body = servants
     return
   }
 
-  let servants = yield models.servant.find({}, fields).sort({_id: 1}).exec()
-  if (typeof this.query.with_statistic === 'undefined') {
-    this.body = servants
+  let servants = await models.servant.find({}, fields).sort({_id: 1}).exec()
+  if (typeof ctx.query.with_statistic === 'undefined') {
+    ctx.body = servants
     return
   }
   servants = deepCopy(servants)
-  const statistics = yield getStatistics()
+  const statistics = await getStatistics()
   servants.forEach(servant => {
     servant = mergeStatistics(servant, statistics)
   })
-  this.body = servants
+  ctx.body = servants
 }
 
-function *getLastDate() {
-  const statistic = yield models.servantRanking.findOne().sort({date: -1}).exec()
+async function getLastDate() {
+  const statistic = await models.servantRanking.findOne().sort({date: -1}).exec()
   return statistic ? statistic.date : new Date()
 }
 
-function *getStatistics(servantId) {
-  const date = yield getLastDate()
+async function getStatistics(servantId) {
+  const date = await getLastDate()
   let params = {
     date: date,
     map: 'all',
@@ -45,7 +45,7 @@ function *getStatistics(servantId) {
   if (servantId) {
     params['servant_id'] = servantId
   }
-  let statistics = yield models.servantRanking.find(params, '-_id servant_id mode score').exec()
+  let statistics = await models.servantRanking.find(params, '-_id servant_id mode score').exec()
   statistics = statistics.reduce((previous, current) => {
     const servantId = current.servant_id
     if (!previous[servantId]) {
