@@ -1,7 +1,9 @@
-import {createHistory, createMemoryHistory, useQueries} from 'history'
+import {browserHistory, createMemoryHistory} from 'react-router'
 import {useSimpleScroll} from 'scroll-behavior'
 import config from '../config'
 
-export default useSimpleScroll(useQueries(
-  config.target === 'client' ? createHistory : createMemoryHistory
-))()
+function createBrowserHistory() {
+  return useSimpleScroll(() => browserHistory)()
+}
+
+export default (config.target === 'client' ? createBrowserHistory() : createMemoryHistory())

@@ -3,15 +3,11 @@ import {DragDropContext} from 'react-dnd'
 import TouchBackend from 'react-dnd-touch-backend'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
+import {asyncConnect} from 'redux-async-connect'
 import * as ActionCreators from '../actions'
 import * as DeckUtils from '../utils/deck-utils'
 import DeckDropContainer from '../components/deck/deck-drop-container'
 import CardPreview from '../components/deck/card-preview'
-import connectData from '../decorators/connect-data'
-
-function fetchDataDeferred(getState, dispatch) {
-  return ActionCreators.fetchServants()(dispatch)
-}
 
 function mapStateToProps(state) {
   return {servants: state.servants}
@@ -21,7 +17,12 @@ function mapDispatchToProps(dispatch) {
   return {actions: bindActionCreators(ActionCreators, dispatch)}
 }
 
-@connectData(null, fetchDataDeferred)
+@asyncConnect([{
+  deferred: true,
+  promise: ({store: {dispatch}}) => {
+    return ActionCreators.fetchServants()(dispatch)
+  }
+}])
 @DragDropContext(TouchBackend({enableMouseEvents: true}))
 @connect(mapStateToProps, mapDispatchToProps)
 export default class Deck extends Component {

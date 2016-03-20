@@ -1,15 +1,11 @@
 import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
+import {asyncConnect} from 'redux-async-connect'
 import {Link} from 'react-router'
 import * as ActionCreators from '../actions'
-import connectData from '../decorators/connect-data'
 import * as ServantUtils from '../utils/servant-utils'
 import ServantList from '../components/servant/servant-list'
-
-function fetchDataDeferred(getState, dispatch) {
-  return ActionCreators.fetchServants()(dispatch)
-}
 
 function mapStateToProps(state) {
   return {servants: state.servants}
@@ -19,9 +15,17 @@ function mapDispatchToProps(dispatch) {
   return {actions: bindActionCreators(ActionCreators, dispatch)}
 }
 
-@connectData(null, fetchDataDeferred)
+@asyncConnect([{
+  deferred: true,
+  promise: ({store: {dispatch}}) => {
+    return ActionCreators.fetchServants()(dispatch)
+  }
+}])
 @connect(mapStateToProps, mapDispatchToProps)
 export default class Servant extends Component {
+  static contextTypes = {
+    router: PropTypes.object.isRequired
+  };
   static propTypes = {
     servants: PropTypes.arrayOf(PropTypes.object),
     actions:  PropTypes.object
@@ -42,13 +46,13 @@ export default class Servant extends Component {
   handleQueryClear() {
     const {query} = this.props.location
     query.q = ''
-    this.props.history.pushState(null, '/servants/', query)
+    this.context.router.push('/servants/', {query})
   }
   handleQuerySubmit(e) {
     e.preventDefault()
     const {query} = this.props.location
     query.q = this.refs.q.value
-    this.props.history.pushState(null, '/servants/', query)
+    this.context.router.push('/servants/', {query})
   }
   getServantFilter() {
     const {tribe_id: tribeId, q} = this.props.location.query
@@ -137,14 +141,14 @@ export default class Servant extends Component {
 
     let currentTribeName = ''
     const tribeIdOptionNodes = [{tribe_id: 0, tribe_name: 'Select Tribe...'}]
-      .concat(_.uniq(servants, value => value.tribe_name))
+      .concat(_.uniqBy(servants, value => value.tribe_name))
       .map((servant, index) => {
         if (servant.tribe_id === tribeId) {
           currentTribeName = servant.tribe_name
         }
         return (
           <li key={index}>
-            <Link to="/servants/" query={{tribe_id: servant.tribe_id, q}}>
+            <Link to={{pathname: '/servants/', query: {tribe_id: servant.tribe_id, q}}}>
               {servant.tribe_name}
             </Link>
           </li>

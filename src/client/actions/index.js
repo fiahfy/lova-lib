@@ -47,7 +47,7 @@ export function fetchPrizes() {
 
 export function fetchServantStatistics(args) {
   return dispatch => {
-    const params = _.pick(args, (value, key) => ['servant_id', 'map', 'queue', 'period'].indexOf(key) > -1)
+    const params = _.pickBy(args, (value, key) => ['servant_id', 'map', 'queue', 'period'].indexOf(key) > -1)
 
     const url = `${apiBaseURL}/api/servants/statistics/?`
               + _.map(params, (value, key) => `${key}=${value}`).join('&')
@@ -67,7 +67,7 @@ export function fetchServantStatistics(args) {
 
 export function fetchSpellStatistics(args) {
   return dispatch => {
-    const params = _.pick(args, (value, key) => ['spell_id', 'map', 'queue', 'period'].indexOf(key) > -1)
+    const params = _.pickBy(args, (value, key) => ['spell_id', 'map', 'queue', 'period'].indexOf(key) > -1)
 
     const url = `${apiBaseURL}/api/spells/statistics/?`
               + _.map(params, (value, key) => `${key}=${value}`).join('&')
