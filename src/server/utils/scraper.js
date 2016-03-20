@@ -1,3 +1,4 @@
+import moment from 'moment'
 import client from 'cheerio-httpcli'
 import logger from './logger'
 
@@ -57,7 +58,7 @@ export function fetchServantRanking(date, mode, map, queue) {
   case 'win':
     path = 'servantWinRate_weekly'
     break
-  case 'used':
+  case 'usage':
     path = 'servantUsedRate_weekly'
     break
   }
@@ -123,4 +124,12 @@ export function fetchSpellRanking(date, map, queue) {
   path += '_all'
   let url = `${cacheSiteBasePath}ranking/${path}/${dateString}/page1.json`
   return fetch(url)
+}
+
+export async function fetchCombinationRanking(date) {
+  const d = moment.utc(date).add(1, 'days')
+  const dateString = d.format('YYYYMMDD') + '0430'
+  const path = 'servantDeck_weekly_bst'
+  const url = `${cacheSiteBasePath}ranking/${path}/${dateString}/page1.json`
+  return await fetch(url)
 }

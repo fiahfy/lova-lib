@@ -63,9 +63,9 @@ function deepCopy(obj) {
 
 function mergeStatistics(servants, statistics) {
   if (!statistics[servants.id]) {
-    statistics[servants.id] = {win: 0, used: 0}
+    statistics[servants.id] = {win: 0, usage: 0}
   }
   servants['win_rate'] = statistics[servants.id]['win'] || 0
-  servants['used_rate'] = statistics[servants.id]['used'] || 0
+  servants['usage_rate'] = statistics[servants.id]['usage'] || 0
   return servants
 }

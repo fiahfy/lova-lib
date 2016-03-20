@@ -31,14 +31,14 @@ export default class ServantList extends Component {
     const {servants} = this.props
 
     const maxWinRate = _.max(servants, 'win_rate').win_rate
-    const maxUsedRate = _.max(servants, 'used_rate').used_rate
+    const maxUsageRate = _.max(servants, 'usage_rate').usage_rate
 
     const servantNodes = this.filteredServants()
       .sort(ServantUtils.compareServant)
       .map((servant, index) => {
         const style = {backgroundPositionX: `${-40*(servant.tribe_code-1)}px`}
         const winRateRatio = servant.win_rate / maxWinRate * 100
-        const usedRateRatio = servant.used_rate / maxUsedRate * 100
+        const usageRateRatio = servant.usage_rate / maxUsageRate * 100
         return (
           <tr key={index} className={`tribe-${servant.tribe_id}`}>
             <th className="" scope="row">{servant.id}</th>
@@ -79,10 +79,10 @@ export default class ServantList extends Component {
             <td className="hidden-xs hidden-sm">
               <Link to={`/servants/${servant.id}/statistics/`}>
                 <div>
-                    {servant.used_rate.toFixed(2)}%
+                    {servant.usage_rate.toFixed(2)}%
                 </div>
                 <div className="progress">
-                  <div className="progress-bar" style={{width: `${usedRateRatio}%`}} />
+                  <div className="progress-bar" style={{width: `${usageRateRatio}%`}} />
                 </div>
               </Link>
             </td>
@@ -107,7 +107,7 @@ export default class ServantList extends Component {
           <th className="hidden-xs">Type</th>
           <th className="">Servant</th>
           <th className="hidden-xs hidden-sm">Win Rate</th>
-          <th className="hidden-xs hidden-sm">Used Rate</th>
+          <th className="hidden-xs hidden-sm">Usage Rate</th>
           <th className="hidden-xs hidden-sm">Released</th>
           <th className="hidden-xs hidden-sm">Updated</th>
         </tr>

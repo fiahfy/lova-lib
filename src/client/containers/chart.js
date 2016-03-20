@@ -67,7 +67,7 @@ export default class Chart extends Component {
         tickFormat: d => d3.time.format('%Y-%m-%d')(new Date(d))
       },
       yAxis: {
-        axisLabel: 'Used Rate (%)',
+        axisLabel: 'Usage Rate (%)',
         tickFormat: d => d3.format('.02f')(d),
         axisLabelDistance: -10
       }

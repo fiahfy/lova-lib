@@ -136,7 +136,7 @@ export default class StatisticsSection extends Component {
         </form>
 
         <NVD3Chart {...this.getChartParams('win')} />
-        <NVD3Chart {...this.getChartParams('used')} />
+        <NVD3Chart {...this.getChartParams('usage')} />
       </div>
     )
   }
