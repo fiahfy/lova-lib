@@ -44,7 +44,7 @@ async function findRankings(args) {
 }
 
 function getStatistics(rankings, gap) {
-  const endDate = _.max(rankings, d => d.date).date
+  const endDate = _.maxBy(rankings, 'date').date
 
   const scoreMap = rankings.reduce((previous, current) => {
     previous.set(getScoreKey(current), current.score)
