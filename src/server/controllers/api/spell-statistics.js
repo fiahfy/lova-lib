@@ -3,17 +3,17 @@ import * as models from '../../models'
 
 const displayCount = 30
 
-export default function *() {
-  const gap = getGap(this.query.period)
-  const beginDate = yield findBeginDate(gap)
+export default async function (ctx) {
+  const gap = getGap(ctx.query.period)
+  const beginDate = await findBeginDate(gap)
 
   const params = {
-    ...this.query,
+    ...ctx.query,
     date: {$gte: beginDate}
   }
-  const rankings = yield findRankings(params)
+  const rankings = await findRankings(params)
 
-  this.body = getStatistics(rankings, gap)
+  ctx.body = getStatistics(rankings, gap)
 }
 
 function getGap(period) {
@@ -26,25 +26,25 @@ function getGap(period) {
   }
 }
 
-function *findBeginDate(gap) {
-  const ranking = yield models.spellRanking.findOne().sort({date: -1}).exec()
+async function findBeginDate(gap) {
+  const ranking = await models.spellRanking.findOne().sort({date: -1}).exec()
   const endDate = ranking ? ranking.date : moment.utc().startOf('day').toDate()
   const beginDate = moment(endDate).utc().startOf('day')
     .subtract(displayCount * gap, 'days').toDate()
   return beginDate
 }
 
-function *findRankings(args) {
-  const params = _.pick(args, (value, key) => {
+async function findRankings(args) {
+  const params = _.pickBy(args, (value, key) => {
     return ['spell_id', 'map', 'queue', 'date'].indexOf(key) > -1
   })
-  return yield models.spellRanking
+  return await models.spellRanking
     .find(params, '-_id spell_id date map queue score')
     .exec()
 }
 
 function getStatistics(rankings, gap) {
-  const endDate = _.max(rankings, d => d.date).date
+  const endDate = _.maxBy(rankings, 'date').date
 
   const scoreMap = rankings.reduce((previous, current) => {
     previous.set(getScoreKey(current), current.score)
@@ -53,9 +53,9 @@ function getStatistics(rankings, gap) {
 
   let results = []
   for (let i = 0; i < displayCount * gap; i += gap) {
-    for (let spellId of _.uniq(_.pluck(rankings, 'spell_id'))) {
-      for (let map of _.uniq(_.pluck(rankings, 'map'))) {
-        for (let queue of _.uniq(_.pluck(rankings, 'queue'))) {
+    for (let spellId of _.uniq(_.map(rankings, 'spell_id'))) {
+      for (let map of _.uniq(_.map(rankings, 'map'))) {
+        for (let queue of _.uniq(_.map(rankings, 'queue'))) {
           const scores = _.range(i, i + gap).map(i => {
             const item = {
               date: moment(endDate).subtract(i, 'days').toDate(),

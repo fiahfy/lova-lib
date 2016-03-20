@@ -51,6 +51,18 @@ commander
   })
 
 commander
+  .command('update-ranking-combination')
+  .alias('uprc')
+  .description('update ranking combination data')
+  .option('-d, --date [date]', 'target date', null, null)
+  .option('--date-from [date]', 'target date from', null, null)
+  .option('--date-to [date]', 'target date to', null, null)
+  .option('-f, --force', 'force update', null, null)
+  .action(opts => {
+    promise = updateCommands.combinationRanking(opts.date, opts.dateFrom, opts.dateTo, opts.force)
+  })
+
+commander
   .command('download-servant')
   .alias('dls')
   .description('download servant images')

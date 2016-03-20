@@ -27,7 +27,7 @@ export default class StatisticsSection extends Component {
       area: false,
       color: '#ff7f0e',
       values: _.filter(statistics, {mode, ...this.state})
-        .map(statistic => ({x: new Date(statistic.date), y: mode === 'win' ? 50 : 100 / 265}))
+        .map(statistic => ({x: new Date(statistic.date), y: mode === 'win' ? 50 : 100 / 281}))
     })
 
     return {
@@ -136,7 +136,7 @@ export default class StatisticsSection extends Component {
         </form>
 
         <NVD3Chart {...this.getChartParams('win')} />
-        <NVD3Chart {...this.getChartParams('used')} />
+        <NVD3Chart {...this.getChartParams('usage')} />
       </div>
     )
   }

@@ -2,20 +2,10 @@ import moment from 'moment'
 import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
+import {asyncConnect} from 'redux-async-connect'
 import * as ActionCreators from '../actions'
 import * as SpellUtils from '../utils/spell-utils'
-import connectData from '../decorators/connect-data'
 import NVD3Chart from '../components/common/react-nvd3'
-
-function fetchDataDeferred(getState, dispatch) {
-  return Promise.all([
-    ActionCreators.fetchSpellStatistics({
-      period: 'daily',
-      map:    'all',
-      queue:  'all'
-    })(dispatch)
-  ])
-}
 
 function mapStateToProps(state) {
   return {spellStatistics: state.spellStatistics}
@@ -25,7 +15,18 @@ function mapDispatchToProps(dispatch) {
   return {actions: bindActionCreators(ActionCreators, dispatch)}
 }
 
-@connectData(null, fetchDataDeferred)
+@asyncConnect([{
+  deferred: true,
+  promise: ({store: {dispatch}}) => {
+    return Promise.all([
+      ActionCreators.fetchSpellStatistics({
+        period: 'daily',
+        map:    'all',
+        queue:  'all'
+      })(dispatch)
+    ])
+  }
+}])
 @connect(mapStateToProps, mapDispatchToProps)
 export default class Chart extends Component {
   static propTypes = {
@@ -40,7 +41,7 @@ export default class Chart extends Component {
   getSpellChartParams() {
     const {spellStatistics} = this.props
 
-    const datum = _.uniq(_.pluck(spellStatistics, 'spell_id'))
+    const datum = _.uniq(_.map(spellStatistics, 'spell_id'))
       .sort((a, b) => a - b)
       .map((spell_id) => {
         return {
@@ -54,7 +55,7 @@ export default class Chart extends Component {
       type: 'lineChart',
       datum: datum,
       height: 500,
-      margin : {
+      margin: {
         top: 20,
         right: 30,
         bottom: 50,
@@ -67,7 +68,7 @@ export default class Chart extends Component {
         tickFormat: d => d3.time.format('%Y-%m-%d')(new Date(d))
       },
       yAxis: {
-        axisLabel: 'Used Rate (%)',
+        axisLabel: 'Usage Rate (%)',
         tickFormat: d => d3.format('.02f')(d),
         axisLabelDistance: -10
       }

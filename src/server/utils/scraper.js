@@ -1,3 +1,4 @@
+import moment from 'moment'
 import client from 'cheerio-httpcli'
 import logger from './logger'
 
@@ -47,7 +48,9 @@ export function fetchServantRanking(date, mode, map, queue) {
   let d = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()))
   d.setUTCDate(d.getUTCDate() + 1)
   let dateString = d.getUTCFullYear() + ('00' + (d.getUTCMonth() + 1)).slice(-2) + ('00' + d.getUTCDate()).slice(-2)
-  if (dateString > '20160201') {
+  if (dateString > '20160316') {
+    dateString += '0430'
+  } else if (dateString > '20160201') {
     dateString += '0300'
   } else {
     dateString += '0500'
@@ -57,7 +60,7 @@ export function fetchServantRanking(date, mode, map, queue) {
   case 'win':
     path = 'servantWinRate_weekly'
     break
-  case 'used':
+  case 'usage':
     path = 'servantUsedRate_weekly'
     break
   }
@@ -92,7 +95,9 @@ export function fetchSpellRanking(date, map, queue) {
   let d = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()))
   d.setUTCDate(d.getUTCDate() + 1)
   let dateString = d.getUTCFullYear() + ('00' + (d.getUTCMonth() + 1)).slice(-2) + ('00' + d.getUTCDate()).slice(-2)
-  if (dateString > '20160201') {
+  if (dateString > '20160317') {
+    dateString += '0430'
+  } else if (dateString > '20160201') {
     dateString += '0300'
   } else {
     dateString += '0500'
@@ -123,4 +128,12 @@ export function fetchSpellRanking(date, map, queue) {
   path += '_all'
   let url = `${cacheSiteBasePath}ranking/${path}/${dateString}/page1.json`
   return fetch(url)
+}
+
+export async function fetchCombinationRanking(date) {
+  const d = moment.utc(date).add(1, 'days')
+  const dateString = d.format('YYYYMMDD') + '0430'
+  const path = 'servantDeck_weekly_bst'
+  const url = `${cacheSiteBasePath}ranking/${path}/${dateString}/page1.json`
+  return await fetch(url)
 }

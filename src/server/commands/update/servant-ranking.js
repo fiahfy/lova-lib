@@ -39,7 +39,7 @@ export default function(date, dateFrom, dateTo, force) {
 
     let d = from
     while (d <= to) {
-      for (let mode of ['win', 'used']) {
+      for (let mode of ['win', 'usage']) {
         for (let map of maps) {
           for (let queue of queues) {
             yield updateRanking(d, mode, map, queue, servantMap, force)
