@@ -4,27 +4,14 @@ import Helmet from 'react-helmet'
 import {Link} from 'react-router'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
+import {asyncConnect} from 'redux-async-connect'
 import * as ActionCreators from '../actions'
-import connectData from '../decorators/connect-data'
 import DetailSection from '../components/servant-detail/detail-section'
 import StatisticsSection from '../components/servant-detail/statistics-section'
 
-function fetchDataDeferred(getState, dispatch, location, params) {
+function mapStateToProps(state, {params}) {
+  const {servants, servantStatistics} = state
   const {id} = params
-  return Promise.all([
-    ActionCreators.fetchServant(+id)(dispatch),
-    ActionCreators.fetchServantStatistics({
-      servant_id: +id,
-      period: 'daily',
-      map:    'all',
-      queue:  'all'
-    })(dispatch)
-  ])
-}
-
-function mapStateToProps(state) {
-  const {servants, servantStatistics, router} = state
-  const {id} = router.params
   return {
     servant:    _.first(_.filter(servants, {id: +id})) || {},
     statistics: _.filter(servantStatistics, {servant_id: +id})
@@ -35,7 +22,21 @@ function mapDispatchToProps(dispatch) {
   return {actions: bindActionCreators(ActionCreators, dispatch)}
 }
 
-@connectData(null, fetchDataDeferred)
+@asyncConnect([{
+  deferred: true,
+  promise: ({params, store: {dispatch}}) => {
+    const {id} = params
+    return Promise.all([
+      ActionCreators.fetchServant(+id)(dispatch),
+      ActionCreators.fetchServantStatistics({
+        servant_id: +id,
+        period: 'daily',
+        map:    'all',
+        queue:  'all'
+      })(dispatch)
+    ])
+  }
+}])
 @connect(mapStateToProps, mapDispatchToProps)
 export default class ServantDetail extends Component {
   static propTypes = {
@@ -46,7 +47,7 @@ export default class ServantDetail extends Component {
   getHelmet() {
     const {servant} = this.props
 
-    const title = `Servant ${servant.tribe_name}-${_.padLeft(servant.tribe_code, 3, 0)} ${servant.name}`
+    const title = `Servant ${servant.tribe_name}-${_.padStart(servant.tribe_code, 3, 0)} ${servant.name}`
     const description = servant.oral_tradition
 
     return <Helmet title={title}

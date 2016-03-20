@@ -1,5 +1,5 @@
 import * as models from '../../models'
 
-export default function *() {
-  this.body = yield models.prize.find({}).exec()
+export default async function (ctx) {
+  ctx.body = await models.prize.find({}).exec()
 }

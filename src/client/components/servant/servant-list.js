@@ -30,8 +30,10 @@ export default class ServantList extends Component {
   render() {
     const {servants} = this.props
 
-    const maxWinRate = _.max(servants, 'win_rate').win_rate
-    const maxUsedRate = _.max(servants, 'used_rate').used_rate
+    let servant = _.maxBy(servants, 'win_rate')
+    const maxWinRate = servant ? servant.win_rate : 0
+    servant = _.maxBy(servants, 'used_rate')
+    const maxUsedRate = servant ? servant.used_rate : 0
 
     const servantNodes = this.filteredServants()
       .sort(ServantUtils.compareServant)
@@ -46,18 +48,18 @@ export default class ServantList extends Component {
               <div style={style} />
             </td>
             <td className="">
-              <Link to="/servants/" query={{tribe_id: servant.tribe_id}}>
+              <Link to={{pathname: '/servants/', query: {tribe_id: servant.tribe_id}}}>
                 {servant.tribe_name}
               </Link>
-              {`-${_.padLeft(servant.tribe_code, 3, 0)}`}
+              {`-${_.padStart(servant.tribe_code, 3, 0)}`}
             </td>
             <td className="hidden-xs">
-              <Link to="/servants/" query={{q: `cost:${servant.cost}`}}>
+              <Link to={{pathname: '/servants/', query: {q: `cost:${servant.cost}`}}}>
                 {servant.cost}
               </Link>
             </td>
             <td className="hidden-xs">
-              <Link to="/servants/" query={{q: `type:${servant.type}`}}>
+              <Link to={{pathname: '/servants/', query: {q: `type:${servant.type}`}}}>
                 {servant.type}
               </Link>
             </td>

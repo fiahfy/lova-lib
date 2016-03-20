@@ -3,17 +3,17 @@ import * as models from '../../models'
 
 const displayCount = 30
 
-export default function *() {
-  const gap = getGap(this.query.period)
-  const beginDate = yield findBeginDate(gap)
+export default async function (ctx) {
+  const gap = getGap(ctx.query.period)
+  const beginDate = await findBeginDate(gap)
 
   const params = {
-    ...this.query,
+    ...ctx.query,
     date: {$gte: beginDate}
   }
-  const rankings = yield findRankings(params)
+  const rankings = await findRankings(params)
 
-  this.body = getStatistics(rankings, gap)
+  ctx.body = getStatistics(rankings, gap)
 }
 
 function getGap(period) {
@@ -26,19 +26,19 @@ function getGap(period) {
   }
 }
 
-function *findBeginDate(gap) {
-  const ranking = yield models.servantRanking.findOne().sort({date: -1}).exec()
+async function findBeginDate(gap) {
+  const ranking = await models.servantRanking.findOne().sort({date: -1}).exec()
   const endDate = ranking ? ranking.date : moment.utc().startOf('day').toDate()
   const beginDate = moment(endDate).utc().startOf('day')
     .subtract(displayCount * gap, 'days').toDate()
   return beginDate
 }
 
-function *findRankings(args) {
-  const params = _.pick(args, (value, key) => {
+async function findRankings(args) {
+  const params = _.pickBy(args, (value, key) => {
     return ['servant_id', 'mode', 'map', 'queue', 'date'].indexOf(key) > -1
   })
-  return yield models.servantRanking
+  return await models.servantRanking
     .find(params, '-_id servant_id mode date map queue score')
     .exec()
 }
@@ -53,10 +53,10 @@ function getStatistics(rankings, gap) {
 
   let results = []
   for (let i = 0; i < displayCount * gap; i += gap) {
-    for (let servantId of _.uniq(_.pluck(rankings, 'servant_id'))) {
-      for (let mode of _.uniq(_.pluck(rankings, 'mode'))) {
-        for (let map of _.uniq(_.pluck(rankings, 'map'))) {
-          for (let queue of _.uniq(_.pluck(rankings, 'queue'))) {
+    for (let servantId of _.uniq(_.map(rankings, 'servant_id'))) {
+      for (let mode of _.uniq(_.map(rankings, 'mode'))) {
+        for (let map of _.uniq(_.map(rankings, 'map'))) {
+          for (let queue of _.uniq(_.map(rankings, 'queue'))) {
             const scores = _.range(i, i + gap).map(i => {
               const item = {
                 date: moment(endDate).subtract(i, 'days').toDate(),

@@ -68,7 +68,7 @@ export default class DeckContainer extends Component {
     const cardNodesForXS = createCardNodes([0, 1, 2, 6, 3, 4, 5, 7])
 
     const tribeIdOptionNodes = [{tribe_name: 'Select Tribe...'}]
-      .concat(_.uniq(servants, value => value.tribe_name))
+      .concat(_.uniqBy(servants, value => value.tribe_name))
       .map((servant, index) => {
         const tribeName = servant.id ? servant.tribe_name : null
         return (
@@ -79,7 +79,7 @@ export default class DeckContainer extends Component {
       })
 
     const typeOptionNodes = [{type: 'Select Type...'}]
-      .concat(_.uniq(servants, value => value.type))
+      .concat(_.uniqBy(servants, value => value.type))
       .map((servant, index) => {
         const type = servant.id ? servant.type : null
         return (
@@ -94,7 +94,7 @@ export default class DeckContainer extends Component {
         <div className="container">
           <dl className="row col-xs-6 col-sm-2">
             <dt className="">Mana</dt>
-            <dd className="">{mana}<span>{bonusMana ? ` + ${bonusMana}` : ``}</span></dd>
+            <dd className="">{mana}<span>{bonusMana ? ` + ${bonusMana}` : ''}</span></dd>
           </dl>
           <dl className="row col-xs-6 col-sm-10">
             <dt className="">Total Mana</dt>
@@ -114,7 +114,7 @@ export default class DeckContainer extends Component {
             <div className="btn-group">
               <button type="button" className="btn btn-primary dropdown-toggle"
                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                {filter.tribe_name ? filter.tribe_name : `Select Tribe...`} <span className="caret" />
+                {filter.tribe_name ? filter.tribe_name : 'Select Tribe...'} <span className="caret" />
               </button>
               <ul className="dropdown-menu">
                 {tribeIdOptionNodes}
@@ -123,7 +123,7 @@ export default class DeckContainer extends Component {
             <div className="btn-group">
               <button type="button" className="btn btn-primary dropdown-toggle"
                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                {filter.type ? filter.type : `Select Type...`} <span className="caret" />
+                {filter.type ? filter.type : 'Select Type...'} <span className="caret" />
               </button>
               <ul className="dropdown-menu">
                 {typeOptionNodes}
