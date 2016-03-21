@@ -10,7 +10,7 @@ const CombinationRankingShema = new Schema({
   seq:            {type: Number},
   rank:           {type: Number},
   score:          {type: Number},
-  score_count:    {type: Number}
+  count:          {type: Number}
 }, {id: false, collection: 'combinationRankings'})
 
 CombinationRankingShema.virtual('id').get(function() {

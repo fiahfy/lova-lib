@@ -15,6 +15,17 @@ function servants(state = [], action) {
   }
 }
 
+function combinations(state = [], action) {
+  switch (action.type) {
+  case ActionTypes.RECEIVE_COMBINATIONS: {
+    const {combinations} = action
+    return state = combinations
+  }
+  default:
+    return state
+  }
+}
+
 function prizes(state = [], action) {
   switch (action.type) {
   case ActionTypes.RECEIVE_PRIZES: {
@@ -50,6 +61,7 @@ function spellStatistics(state = [], action) {
 
 export default {
   servants,
+  combinations,
   prizes,
   servantStatistics,
   spellStatistics

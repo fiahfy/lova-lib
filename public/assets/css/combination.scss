@@ -1,0 +1,57 @@
+#combination {
+  .form-group > .glyphicon-remove {
+    cursor: pointer;
+    pointer-events: auto;
+  }
+  table tbody tr {
+    th {
+      padding: 10px 8px 10px;
+    }
+    td {
+      height: 40px;
+      box-sizing: border-box;
+      padding: 10px 8px 10px;
+      white-space: nowrap;
+      &.clip {
+        padding: 0px;
+        width: 40px;
+        div {
+          width: 40px;
+          height: 40px;
+          -webkit-clip-path: circle(19px at center);
+        }
+      }
+      &:nth-child(5), &:nth-child(6) {
+        div {
+          display: inline-block;
+          &:first-child {
+            margin-right: 5px;
+            font-size: 90%;
+          }
+        }
+        .progress {
+          width: 100px;
+          margin-bottom: 0;
+          border-radius: 0;
+          background-color: transparent;
+          vertical-align: middle;
+        }
+      }
+    }
+    &.tribe-1 td.clip div {
+      background-image: url(/assets/storage/img/clip/spr-1.jpg);
+    }
+    &.tribe-2 td.clip div {
+      background-image: url(/assets/storage/img/clip/spr-2.jpg);
+    }
+    &.tribe-3 td.clip div {
+      background-image: url(/assets/storage/img/clip/spr-3.jpg);
+    }
+    &.tribe-4 td.clip div {
+      background-image: url(/assets/storage/img/clip/spr-4.jpg);
+    }
+    &.tribe-5 td.clip div {
+      background-image: url(/assets/storage/img/clip/spr-5.jpg);
+    }
+  }
+}

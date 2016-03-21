@@ -10,6 +10,8 @@ router.get('/api/servants/', apiControllers.servant)
 router.get('/api/servants/statistics/', apiControllers.servantStatistics)
 router.get('/api/servants/:id/', apiControllers.servant)
 router.get('/api/prizes/', apiControllers.prize)
+router.get('/api/combinations/', apiControllers.combination)
+router.get('/api/combinations/:id/', apiControllers.combination)
 router.get('/api/spells/statistics/', apiControllers.spellStatistics)
 router.get('/assets/*', ctx => {
   ctx.status = 404

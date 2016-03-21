@@ -3,44 +3,47 @@ import logger from '../../utils/logger'
 import * as scraper from '../../utils/scraper'
 import * as models from '../../models'
 
-const maps = ['all', 'vermilion', 'braze']
-const queues = ['all', 'normal', 'solo']
+const tribes = ['bst', 'hly', 'dvl', 'sea', 'und']
 
 export default function(date, dateFrom, dateTo, force) {
-  return new Promise(async function(resolve) {
-    let from, to
-    if (date) {
-      const d = moment.utc(date)
-      if (!d.isValid()) {
-        throw new Error('Invalid Date: ' + date)
+  return new Promise(async function(resolve, reject) {
+    try {
+      let d, from, to
+      if (date) {
+        d = moment.utc(date)
+        if (!d.isValid()) {
+          throw new Error('Invalid Date: ' + date)
+        }
+        from = to = d.startOf('day').toDate()
+      } else if (dateFrom && dateTo) {
+        d = moment.utc(dateFrom)
+        if (!d.isValid()) {
+          throw new Error('Invalid Date: ' + dateFrom)
+        }
+        from = d.startOf('day').toDate()
+        d = moment.utc(dateTo)
+        if (!d.isValid()) {
+          throw new Error('Invalid Date: ' + dateTo)
+        }
+        to = d.startOf('day').toDate()
+      } else {
+        // yesterday if empty
+        d = moment.utc().subtract(1, 'days')
+        from = to = d.startOf('day').toDate()
       }
-      from = to = d.toDate().startOf('day')
-    } else if (dateFrom && dateTo) {
-      from = moment.utc(dateFrom)
-      if (!from.isValid()) {
-        throw new Error('Invalid Date: ' + dateFrom)
-      }
-      to = moment.utc(dateTo)
-      if (!to.isValid()) {
-        throw new Error('Invalid Date: ' + dateTo)
-      }
-      from = from.toDate().startOf('day')
-      to = to.toDate().startOf('day')
-    } else {
-      // yesterday if empty
-      const d = moment.utc().subtract(1, 'days').startOf('day')
-      from = to = d.toDate()
-    }
 
-    // get servant map to convert servant id
-    let servantMap = await getServantMap()
+      // get servant map to convert servant id
+      let servantMap = await getServantMap()
 
-    let d = from
-    while (d <= to) {
-      await updateRanking(d, servantMap, force)
-      d = moment.utc(d).add(1, 'days').toDate()
+      let now = from
+      while (now <= to) {
+        await updateRanking(now, servantMap, force)
+        now = moment.utc(now).add(1, 'days').toDate()
+      }
+      resolve()
+    } catch (e) {
+      reject(e)
     }
-    resolve()
   })
 }
 
@@ -60,65 +63,48 @@ async function updateRanking(date, servantMap, force) {
     await deleteRanking({date})
   }
 
-  // get ranking
-  const rankings = await getRanking(date)
-  if (!rankings) {
-    logger.warn('Combination Ranking Data is Nothing')
-    return
+  for (let tribe of tribes) {
+    // get ranking
+    const rankings = await getRanking(date, tribe)
+    if (!rankings) {
+      logger.warn('Combination Ranking Data is Nothing: tribe = %s', tribe)
+      continue
+    }
+
+    logger.info('Insert Combination Ranking: tribe = %s', tribe)
+
+    for (let ranking of rankings) {
+      const servantIds = _.range(1, 5).map(i => {
+        return servantMap[ranking[i].tribe][Number(ranking[i].id)]
+      }).sort((a, b) => a > b)
+
+      const combination = await findCombination({servant_ids: servantIds})
+      let combinationId = (combination || {})._id
+      if (!combinationId) {
+        logger.info('Insert Combination: servant_ids = %j', servantIds)
+        const result = await insertCombination({servant_ids: servantIds})
+        combinationId = result.upserted[0]._id
+      }
+      // usage
+      const usageRateData = {
+        date:           date,
+        mode:           'usage',
+        combination_id: combinationId,
+        seq:            ranking.seq,
+        rank:           ranking.rank,
+        count:          ranking.usage_count
+      }
+      await insertRanking(usageRateData)
+      // win
+      const winRateData = {
+        date:           date,
+        mode:           'win',
+        combination_id: combinationId,
+        score:          ranking.win_rate
+      }
+      await insertRanking(winRateData)
+    }
   }
-
-  logger.info('Insert Combination Ranking')
-
-  for (let ranking of rankings) {
-    const servantIds = _.range(1, 5).map(i => {
-      return servantMap[ranking[i].tribe][Number(ranking[i].id)]
-    }).sort((a, b) => a > b)
-
-    const combination = await findCombination({servant_ids: servantIds})
-    let combinationId = (combination || {})._id
-    if (!combinationId) {
-      logger.info('Insert Combination: servant_ids = %j', servantIds)
-      const result = await insertCombination({servant_ids: servantIds})
-      combinationId = result.upserted[0]._id
-    }
-    const usageRateData = {
-      date:           date,
-      mode:           'usage',
-      combination_id: combinationId,
-      seq:            ranking.seq,
-      rank:           ranking.rank,
-      score_value:    ranking.usage_count
-    }
-    await insertRanking(usageRateData)
-    const winRateData = {
-      date:           date,
-      mode:           'win',
-      combination_id: combinationId,
-      score:          ranking.win_rate
-    }
-    await insertRanking(winRateData)
-  }
-
-  // console.log(rankings);
-return
-    // const data = rankings.map(ranking => {
-    //   return {
-    //     date:       date,
-    //     mode:       mode,
-    //     map:        map,
-    //     queue:      queue,
-    //     servant_id: servantMap[ranking.tribe][Number(ranking.id)],
-    //     seq:        ranking.seq,
-    //     rank:       ranking.rank,
-    //     score:      ranking.score
-    //   }
-    // })
-    //
-    // // insert
-    // logger.info('Insert Servant Ranking')
-    // for (let d of data) {
-    //   await insertRanking(d)
-    // }
 }
 
 async function findCombination(args) {
@@ -145,9 +131,13 @@ async function insertRanking(args) {
   await models.combinationRanking.update({_id: _id}, args, {upsert: true}).exec()
 }
 
-async function getRanking(date) {
-  const body = (await scraper.fetchCombinationRanking(date)).body
-  return JSON.parse(body.match(/^\w+\((.*)\);$/i)[1])
+async function getRanking(date, tribe) {
+  try {
+    const body = (await scraper.fetchCombinationRanking(date, tribe)).body
+    return JSON.parse(body.match(/^\w+\((.*)\);$/i)[1])
+  } catch (e) {
+    return null
+  }
 }
 
 async function getServantMap() {
