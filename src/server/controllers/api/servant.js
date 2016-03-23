@@ -1,71 +1,57 @@
 import * as models from '../../models'
 
 export default async function (ctx) {
-  const fields = (ctx.query.fields || '').replace(',', ' ')
   const id = +ctx.params.id
 
-  if (id) {
-    let servants = await models.servant.findOne({_id: id}, fields).exec()
-    if (typeof ctx.query.with_statistic === 'undefined') {
-      ctx.body = servants
-      return
-    }
-    servants = deepCopy(servants)
-    const statistics = await getStatistics(id)
-    servants = mergeStatistics(servants, statistics)
-    ctx.body = servants
-    return
+  const params = id ? {_id: id} : {}
+  const fields = (ctx.query.fields || '').replace(',', ' ')
+
+  let servants = await models.servant.find(params, fields).exec()
+  if (typeof ctx.query.with_statistic !== 'undefined') {
+    servants = await attachStatistcs(servants)
   }
 
-  let servants = await models.servant.find({}, fields).sort({_id: 1}).exec()
-  if (typeof ctx.query.with_statistic === 'undefined') {
-    ctx.body = servants
-    return
+  const body = id ? servants[0] : servants
+  if (body) {
+    ctx.body = body
   }
-  servants = deepCopy(servants)
-  const statistics = await getStatistics()
-  servants.forEach(servant => {
-    servant = mergeStatistics(servant, statistics)
-  })
-  ctx.body = servants
 }
 
-async function getLastDate() {
+async function attachStatistcs(servants) {
   const statistic = await models.servantRanking.findOne().sort({date: -1}).exec()
-  return statistic ? statistic.date : new Date()
-}
+  const date = statistic ? statistic.date : new Date()
+  const servantIds = _.map(servants, 'id')
 
-async function getStatistics(servantId) {
-  const date = await getLastDate()
-  let params = {
-    date: date,
-    map: 'all',
-    queue: 'all'
+  const params = {
+    date,
+    servant_id: {$in: servantIds}
   }
-  if (servantId) {
-    params['servant_id'] = servantId
-  }
-  let statistics = await models.servantRanking.find(params, '-_id servant_id mode score').exec()
-  statistics = statistics.reduce((previous, current) => {
+  const statistics = await models.servantRanking.find(params, '-_id servant_id mode score').exec()
+
+  const statisticsWithId = statistics.reduce((previous, current) => {
     const servantId = current.servant_id
     if (!previous[servantId]) {
-      previous[servantId] = {}
+      previous[servantId] = []
     }
-    previous[servantId][current.mode] = current.score
+    previous[servantId].push(current)
     return previous
   }, {})
-  return statistics
-}
 
-function deepCopy(obj) {
-  return JSON.parse(JSON.stringify(obj))
-}
-
-function mergeStatistics(servants, statistics) {
-  if (!statistics[servants.id]) {
-    statistics[servants.id] = {win: 0, usage: 0}
-  }
-  servants['win_rate'] = statistics[servants.id]['win'] || 0
-  servants['usage_rate'] = statistics[servants.id]['usage'] || 0
-  return servants
+  return servants.map(servant => {
+    let newObject = servant.toObject()
+    newObject['win_rate']   = 0
+    newObject['usage_rate'] = 0
+    const statistics = statisticsWithId[servant.id] || []
+    return statistics.reduce((previous, current) => {
+      switch (current.mode) {
+      case 'win':
+        previous['win_rate'] = current.score
+        break
+      case 'usage':
+        previous['usage_rate'] = current.score
+        break
+      }
+      return previous
+    }, newObject)
+  })
 }

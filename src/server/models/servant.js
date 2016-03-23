@@ -66,4 +66,8 @@ ServantSchema.set('toJSON', {
   virtuals: true
 })
 
+ServantSchema.set('toObject', {
+  virtuals: true
+})
+
 export default mongoose.model('servant', ServantSchema)
