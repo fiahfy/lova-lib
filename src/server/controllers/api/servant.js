@@ -1,3 +1,4 @@
+import moment from 'moment'
 import * as models from '../../models'
 
 export default async function (ctx) {
@@ -19,14 +20,15 @@ export default async function (ctx) {
 
 async function attachStatistcs(servants) {
   const statistic = await models.servantRanking.findOne().sort({date: -1}).exec()
-  const date = statistic ? statistic.date : new Date()
+  const date = statistic ? statistic.date : moment.utc().startOf('day').toDate()
   const servantIds = _.map(servants, 'id')
 
   const params = {
     date,
     servant_id: {$in: servantIds}
   }
-  const statistics = await models.servantRanking.find(params, '-_id servant_id mode score').exec()
+  const fields = '-_id servant_id mode score'
+  const statistics = await models.servantRanking.find(params, fields).exec()
 
   const statisticsWithId = statistics.reduce((previous, current) => {
     const servantId = current.servant_id
