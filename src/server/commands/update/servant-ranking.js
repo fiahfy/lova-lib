@@ -84,7 +84,7 @@ function updateRanking(date, mode, map, queue, servantMap, force) {
         servant_id: servantMap[ranking.tribe][Number(ranking.id)],
         seq:        ranking.seq,
         rank:       ranking.rank,
-        score:      ranking.score
+        score:      ranking.score / 100
       }
     })
 

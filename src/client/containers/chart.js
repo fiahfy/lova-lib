@@ -47,7 +47,7 @@ export default class Chart extends Component {
         return {
           key:    SpellUtils.getSpellName(spell_id),
           values: _.filter(spellStatistics, {spell_id, ...this.state})
-            .map(statistic => ({x: new Date(statistic.date), y: statistic.score}))
+            .map(statistic => ({x: new Date(statistic.date), y: statistic.score * 100}))
         }
       })
 

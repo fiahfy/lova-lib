@@ -78,7 +78,7 @@ function updateRanking(date, map, queue, force) {
         spell_id: getSpellIdWithName(ranking.name),
         seq:      ranking.seq,
         rank:     ranking.rank,
-        score:    ranking.score
+        score:    ranking.score / 100
       }
     })
 
