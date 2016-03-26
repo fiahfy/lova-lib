@@ -17,7 +17,7 @@ export default (
     <Route path="servants/" component={Servant} />
     <Route path="servants/:id/" component={ServantDetail} />
     <Route path="servants/:id/:section/" component={ServantDetail} />
-    <Route path="combinations/" component={Combination} />
+    {/*<Route path="combinations/" component={Combination} />*/}
     <Route path="charts/" component={Chart} />
     <Route path="prize/" component={Prize} />
     <Route path="about/" component={About} />
