@@ -1,10 +1,8 @@
 import 'babel-polyfill'
 import mongoose from 'mongoose'
 import commander from 'commander'
-import * as updateCommands from './server/commands/update'
-import * as downloadCommands from './server/commands/download'
-import * as spriteCommands from './server/commands/sprite'
 import logger from './server/utils/logger'
+import * as commands from './server/commands'
 
 let promise = null
 
@@ -14,7 +12,7 @@ commander
   .description('update servant data')
   .option('-f, --force', 'force update', null, null)
   .action((url, opts) => {
-    promise = updateCommands.servant(url, opts.force)
+    promise = commands.update.servant(url, opts.force)
   })
 
 commander
@@ -23,7 +21,7 @@ commander
   .description('update prize data')
   .option('-f, --force', 'force update', null, null)
   .action(opts =>  {
-    promise = updateCommands.prize(opts.force)
+    promise = commands.update.prize(opts.force)
   })
 
 commander
@@ -35,7 +33,7 @@ commander
   .option('--date-to [date]', 'target date to', null, null)
   .option('-f, --force', 'force update', null, null)
   .action(opts => {
-    promise = updateCommands.servantRanking(opts.date, opts.dateFrom, opts.dateTo, opts.force)
+    promise = commands.update.servantRanking(opts.date, opts.dateFrom, opts.dateTo, opts.force)
   })
 
 commander
@@ -47,7 +45,7 @@ commander
   .option('--date-to [date]', 'target date to', null, null)
   .option('-f, --force', 'force update', null, null)
   .action(opts => {
-    promise = updateCommands.spellRanking(opts.date, opts.dateFrom, opts.dateTo, opts.force)
+    promise = commands.update.spellRanking(opts.date, opts.dateFrom, opts.dateTo, opts.force)
   })
 
 commander
@@ -59,7 +57,7 @@ commander
   .option('--date-to [date]', 'target date to', null, null)
   .option('-f, --force', 'force update', null, null)
   .action(opts => {
-    promise = updateCommands.combinationRanking(opts.date, opts.dateFrom, opts.dateTo, opts.force)
+    promise = commands.update.combinationRanking(opts.date, opts.dateFrom, opts.dateTo, opts.force)
   })
 
 commander
@@ -69,7 +67,7 @@ commander
   .option('-i, --id [id]', 'target servant id', null, null)
   .option('-f, --force', 'force download', null, null)
   .action(opts => {
-    promise = downloadCommands.servant(opts.id, opts.force)
+    promise = commands.download.servant(opts.id, opts.force)
   })
 
 commander
@@ -77,7 +75,14 @@ commander
   .alias('sps')
   .description('create servant sprite image')
   .action(() => {
-    promise = spriteCommands.servant()
+    promise = commands.sprite.servant()
+  })
+
+commander
+  .command('setup')
+  .description('setup dummy data')
+  .action(() => {
+    promise = commands.setup()
   })
 
 commander
