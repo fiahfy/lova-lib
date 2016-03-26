@@ -130,10 +130,15 @@ export function fetchSpellRanking(date, map, queue) {
   return fetch(url)
 }
 
-export async function fetchCombinationRanking(date) {
+export async function fetchCombinationRanking(date, tribe) {
   const d = moment.utc(date).add(1, 'days')
-  const dateString = d.format('YYYYMMDD') + '0430'
-  const path = 'servantDeck_weekly_bst'
+  let dateString = d.format('YYYYMMDD')
+  if (dateString > '20160317') {
+    dateString += '0430'
+  } else {
+    dateString += '0300'
+  }
+  const path = 'servantDeck_weekly_' + tribe
   const url = `${cacheSiteBasePath}ranking/${path}/${dateString}/page1.json`
   return await fetch(url)
 }

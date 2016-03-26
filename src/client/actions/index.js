@@ -3,6 +3,7 @@ import config from '../../config'
 
 export const RECEIVE_SERVANT = 'RECEIVE_SERVANT'
 export const RECEIVE_SERVANTS = 'RECEIVE_SERVANTS'
+export const RECEIVE_COMBINATIONS = 'RECEIVE_COMBINATIONS'
 export const RECEIVE_PRIZES = 'RECEIVE_PRIZES'
 export const RECEIVE_SERVANT_STATISTICS = 'RECEIVE_SERVANT_STATISTICS'
 export const RECEIVE_SPELL_STATISTICS = 'RECEIVE_SPELL_STATISTICS'
@@ -30,6 +31,17 @@ export function fetchServants() {
       .then(json => dispatch({
         type:     RECEIVE_SERVANTS,
         servants: json
+      }))
+  }
+}
+
+export function fetchCombinations() {
+  return dispatch => {
+    return fetch(`${apiBaseURL}/api/combinations/?with_statistic`)
+      .then(response => response.json())
+      .then(json => dispatch({
+        type:         RECEIVE_COMBINATIONS,
+        combinations: json
       }))
   }
 }

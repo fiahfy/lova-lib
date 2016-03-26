@@ -71,7 +71,7 @@ export default class ServantList extends Component {
             <td className="hidden-xs hidden-sm">
               <Link to={`/servants/${servant.id}/statistics/`}>
                 <div>
-                  {servant.win_rate.toFixed(2)}%
+                  {(servant.win_rate * 100).toFixed(2)}%
                 </div>
                 <div className="progress">
                   <div className="progress-bar" style={{width: `${winRateRatio}%`}} />
@@ -81,7 +81,7 @@ export default class ServantList extends Component {
             <td className="hidden-xs hidden-sm">
               <Link to={`/servants/${servant.id}/statistics/`}>
                 <div>
-                    {servant.usage_rate.toFixed(2)}%
+                    {(servant.usage_rate * 100).toFixed(2)}%
                 </div>
                 <div className="progress">
                   <div className="progress-bar" style={{width: `${usageRateRatio}%`}} />

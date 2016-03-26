@@ -20,7 +20,7 @@ export default class StatisticsSection extends Component {
       area: true,
       color: mode === 'win' ? '#1f77b4' : '#9467bd',
       values: _.filter(statistics, {mode, ...this.state})
-        .map(statistic => ({x: new Date(statistic.date), y: statistic.score}))
+        .map(statistic => ({x: new Date(statistic.date), y: statistic.score * 100}))
     })
     datum.push({
       key: 'All Servants Average',
