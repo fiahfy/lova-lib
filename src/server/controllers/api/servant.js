@@ -25,6 +25,8 @@ async function attachStatistcs(servants) {
 
   const params = {
     date,
+    map: 'all',
+    queue: 'all',
     servant_id: {$in: servantIds}
   }
   const fields = '-_id servant_id mode score'
