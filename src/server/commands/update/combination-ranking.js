@@ -2,6 +2,7 @@ import moment from 'moment'
 import logger from '../../utils/logger'
 import * as scraper from '../../utils/scraper'
 import * as models from '../../models'
+import * as ServantUtils from '../../../client/utils/servant-utils'
 
 const tribes = ['bst', 'hly', 'dvl', 'sea', 'und']
 
@@ -48,9 +49,10 @@ export default function(date, dateFrom, dateTo, force) {
 }
 
 async function updateRanking(date, servantMap, force) {
-  logger.verbose('Update Combination Ranking Begin: date = %s', date.toUTCString())
+  logger.verbose('Update Combination Ranking Begin: date = %s',
+    moment.utc(date).format('YYYY-MM-DD'))
 
-  const results = await findRanking({date})
+  const results = await findRankings({date})
   if (results.length) {
     // check exists if not force update
     if (!force) {
@@ -60,12 +62,12 @@ async function updateRanking(date, servantMap, force) {
 
     // delete
     logger.info('Delete Combination Ranking')
-    await deleteRanking({date})
+    await deleteRankings({date})
   }
 
   for (let tribe of tribes) {
     // get ranking
-    const rankings = await getRanking(date, tribe)
+    const rankings = await fetchRankings(date, tribe)
     if (!rankings) {
       logger.warn('Combination Ranking Data is Nothing: tribe = %s', tribe)
       continue
@@ -100,7 +102,7 @@ async function updateRanking(date, servantMap, force) {
         date:           date,
         mode:           'win',
         combination_id: combinationId,
-        score:          ranking.win_rate
+        score:          ranking.win_rate / 100
       }
       await insertRanking(winRateData)
     }
@@ -117,21 +119,21 @@ async function insertCombination(args) {
   return await models.combination.update({_id: _id}, args, {upsert: true}).exec()
 }
 
-async function findRanking(args) {
+async function findRankings(args) {
   return await models.combinationRanking.find(args).exec()
 }
 
-async function deleteRanking(args) {
+async function deleteRankings(args) {
   await models.combinationRanking.remove(args).exec()
 }
 
 async function insertRanking(args) {
   const result = (await models.counter.getNewId('combinationRanking')).result
   const _id = result.value.seq
-  await models.combinationRanking.update({_id: _id}, args, {upsert: true}).exec()
+  return await models.combinationRanking.update({_id: _id}, args, {upsert: true}).exec()
 }
 
-async function getRanking(date, tribe) {
+async function fetchRankings(date, tribe) {
   try {
     const body = (await scraper.fetchCombinationRanking(date, tribe)).body
     return JSON.parse(body.match(/^\w+\((.*)\);$/i)[1])
@@ -142,24 +144,12 @@ async function getRanking(date, tribe) {
 
 async function getServantMap() {
   const servants = await models.servant.find({}).exec()
-  let map = {}
-  for (let servant of servants) {
-    const tribeName = getTribeName(servant.tribe_id)
-    if (!map[tribeName]) {
-      map[tribeName] = {}
-    }
-    map[tribeName][servant.tribe_code] = servant._id
-  }
   return servants.reduce((previous, current) => {
-    const tribeName = getTribeName(current.tribe_id)
+    const tribeName = ServantUtils.getTribeString(current.tribe_id)
     if (!previous[tribeName]) {
       previous[tribeName] = {}
     }
     previous[tribeName][current.tribe_code] = current._id
     return previous
   }, {})
-}
-
-function getTribeName(tribeId) {
-  return [null, 'bst', 'hly', 'dvl', 'sea', 'und'][tribeId]
 }

@@ -6,9 +6,9 @@ import logger from './logger'
 client.setBrowser('chrome')
 client.headers['User-Agent'] += ' Lova Scraper Client/1.0.0'
 
-const lovaSiteBasePath = 'http://lova.jp/'
+const lovaSiteBasePath  = 'http://lova.jp/'
 const cacheSiteBasePath = 'http://cache.lova.jp/'
-const wikiSiteBasePath = 'http://wiki.4gamer.net/lova/'
+const wikiSiteBasePath  = 'http://wiki.4gamer.net/lova/'
 
 export function fetch(url) {
   logger.verbose('Fetch Url: url = %s', url)
@@ -35,19 +35,18 @@ export function fetchServant(tribe_name, name) {
   if (['ミミララ・レイア', 'ジャンヌ・ダルク'].indexOf(name) > -1) {
     name = name.replace('・', '')
   }
-  let url = `${wikiSiteBasePath}%E4%BD%BF%E3%81%84%E9%AD%94/${encodeURIComponent(tribe_name)}/${encodeURIComponent(name)}`
+  const url = `${wikiSiteBasePath}%E4%BD%BF%E3%81%84%E9%AD%94/${encodeURIComponent(tribe_name)}/${encodeURIComponent(name)}`
   return fetch(url)
 }
 
 export function fetchAllServantList() {
-  let url = `${wikiSiteBasePath}%E4%BD%BF%E3%81%84%E9%AD%94`
+  const url = `${wikiSiteBasePath}%E4%BD%BF%E3%81%84%E9%AD%94`
   return fetch(url)
 }
 
 export function fetchServantRanking(date, mode, map, queue) {
-  let d = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()))
-  d.setUTCDate(d.getUTCDate() + 1)
-  let dateString = d.getUTCFullYear() + ('00' + (d.getUTCMonth() + 1)).slice(-2) + ('00' + d.getUTCDate()).slice(-2)
+  const d = moment.utc(date).add(1, 'days')
+  let dateString = d.format('YYYYMMDD')
   if (dateString > '20160316') {
     dateString += '0430'
   } else if (dateString > '20160201') {
@@ -87,14 +86,13 @@ export function fetchServantRanking(date, mode, map, queue) {
     break
   }
   path += '_all'
-  let url = `${cacheSiteBasePath}ranking/${path}/${dateString}/page1.json`
+  const url = `${cacheSiteBasePath}ranking/${path}/${dateString}/page1.json`
   return fetch(url)
 }
 
 export function fetchSpellRanking(date, map, queue) {
-  let d = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()))
-  d.setUTCDate(d.getUTCDate() + 1)
-  let dateString = d.getUTCFullYear() + ('00' + (d.getUTCMonth() + 1)).slice(-2) + ('00' + d.getUTCDate()).slice(-2)
+  const d = moment.utc(date).add(1, 'days')
+  let dateString = d.format('YYYYMMDD')
   if (dateString > '20160317') {
     dateString += '0430'
   } else if (dateString > '20160201') {
@@ -126,7 +124,7 @@ export function fetchSpellRanking(date, map, queue) {
     break
   }
   path += '_all'
-  let url = `${cacheSiteBasePath}ranking/${path}/${dateString}/page1.json`
+  const url = `${cacheSiteBasePath}ranking/${path}/${dateString}/page1.json`
   return fetch(url)
 }
 

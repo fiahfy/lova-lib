@@ -1,69 +1,61 @@
+import moment from 'moment'
 import * as models from '../../models'
 
 export default async function (ctx) {
-  const fields = (ctx.query.fields || '').replace(',', ' ')
   const id = +ctx.params.id
 
-  if (id) {
-    let combination = await models.combination.findOne({_id: id}, fields).exec()
-    if (typeof ctx.query.with_statistic === 'undefined') {
-      ctx.body = combination
-      return
-    }
-    combination = deepCopy(combination)
-    const statistics = await getStatistics(id)
-    combination = mergeStatistics(combination, statistics)
-    ctx.body = combination
-    return
+  const params = id ? {_id: id} : {}
+  const fields = (ctx.query.fields || '').replace(',', ' ')
+
+  let combinations = await models.combination.find(params, fields).exec()
+  if (typeof ctx.query.with_statistic !== 'undefined') {
+    combinations = await attachStatistcs(combinations)
   }
 
-  let combinations = await models.combination.find({}, fields).sort({_id: 1}).exec()
-  if (typeof ctx.query.with_statistic === 'undefined') {
-    ctx.body = combinations
-    return
+  const body = id ? combinations[0] : combinations
+  if (body) {
+    ctx.body = body
   }
-  combinations = deepCopy(combinations)
-  const statistics = await getStatistics()
-  combinations.forEach(combination => {
-    combination = mergeStatistics(combination, statistics)
-  })
-  ctx.body = combinations
 }
 
-async function getLastDate() {
+async function attachStatistcs(combinations) {
   const statistic = await models.combinationRanking.findOne().sort({date: -1}).exec()
-  return statistic ? statistic.date : new Date()
-}
+  const date = statistic ? statistic.date : moment.utc().startOf('day').toDate()
+  const combinationIds = _.map(combinations, 'id')
 
-async function getStatistics(combinationId) {
-  const date = await getLastDate()
-  let params = {
-    date: date
+  const params = {
+    date,
+    map: 'all',
+    queue: 'all',
+    combination_id: {$in: combinationIds}
   }
-  if (combinationId) {
-    params['combination_id'] = combinationId
-  }
-  let statistics = await models.combinationRanking.find(params, '-_id combination_id mode score count').exec()
-  statistics = statistics.reduce((previous, current) => {
+  const fields = '-_id combination_id mode score count'
+  const statistics = await models.combinationRanking.find(params, fields).exec()
+
+  const statisticsWithId = statistics.reduce((previous, current) => {
     const combinationId = current.combination_id
     if (!previous[combinationId]) {
-      previous[combinationId] = {}
+      previous[combinationId] = []
     }
-    previous[combinationId][current.mode] = current
+    previous[combinationId].push(current)
     return previous
   }, {})
-  return statistics
-}
 
-function deepCopy(obj) {
-  return JSON.parse(JSON.stringify(obj))
-}
-
-function mergeStatistics(combination, statistics) {
-  if (!statistics[combination.id]) {
-    statistics[combination.id] = {win: {score: 0, count: 0}, usage: {score: 0, count: 0}}
-  }
-  combination['win_rate']    = statistics[combination.id]['win']['score'] || 0
-  combination['usage_count'] = statistics[combination.id]['usage']['count'] || 0
-  return combination
+  return combinations.map(combination => {
+    let newObject = combination.toObject()
+    newObject['win_rate']   = 0
+    newObject['usage_count'] = 0
+    const statistics = statisticsWithId[combination.id] || []
+    return statistics.reduce((previous, current) => {
+      switch (current.mode) {
+      case 'win':
+        previous['win_rate'] = current.score
+        break
+      case 'usage':
+        previous['usage_count'] = current.count
+        break
+      }
+      return previous
+    }, newObject)
+  })
 }

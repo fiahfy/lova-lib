@@ -1,4 +1,4 @@
-const tribes = [
+const tribeNames = [
   null,
   '人獣',
   '神族',
@@ -7,12 +7,30 @@ const tribes = [
   '不死'
 ]
 
+const tribeStrings = [null, 'bst', 'hly', 'dvl', 'sea', 'und']
+
 export function getTribeName(id) {
-  return tribes[id] || 'Unknown'
+  return tribeNames[id] || 'Unknown'
 }
 
 export function getTribeIdWithName(name) {
-  return tribes.indexOf(name)
+  return tribeNames.indexOf(name) || 0
+}
+
+export function getTribeString(id) {
+  return tribeStrings[id]
+}
+
+export function compareTribeString(a, b) {
+  const aNumber = getServantSortIdWithTribeString(a)
+  const bNumber = getServantSortIdWithTribeString(b)
+  return ((aNumber < bNumber) ? -1 : ((aNumber > bNumber) ? 1 : 0))
+}
+
+export function compareServant(a, b) {
+  const aNumber = getServantSortIdWithServant(a)
+  const bNumber = getServantSortIdWithServant(b)
+  return ((aNumber < bNumber) ? -1 : ((aNumber > bNumber) ? 1 : 0))
 }
 
 function getServantSortId(tribeId, tribeCode) {
@@ -28,16 +46,4 @@ function getServantSortIdWithTribeString(str) {
 
 function getServantSortIdWithServant(servant) {
   return getServantSortId(servant.tribe_id, servant.tribe_code)
-}
-
-export function compareTribeString(a, b) {
-  const aNumber = getServantSortIdWithTribeString(a)
-  const bNumber = getServantSortIdWithTribeString(b)
-  return ((aNumber < bNumber) ? -1 : ((aNumber > bNumber) ? 1 : 0))
-}
-
-export function compareServant(a, b) {
-  const aNumber = getServantSortIdWithServant(a)
-  const bNumber = getServantSortIdWithServant(b)
-  return ((aNumber < bNumber) ? -1 : ((aNumber > bNumber) ? 1 : 0))
 }

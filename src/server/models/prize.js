@@ -17,4 +17,8 @@ PrizeSchema.set('toJSON', {
   virtuals: true
 })
 
+PrizeSchema.set('toObject', {
+  virtuals: true
+})
+
 export default mongoose.model('prize', PrizeSchema)

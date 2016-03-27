@@ -1,4 +1,4 @@
-const spells = [
+const spellNames = [
   null,
   'キュアオール',
   'リターンゲート',
@@ -12,5 +12,9 @@ const spells = [
 ]
 
 export function getSpellName(id) {
-  return spells[id] || 'Unknown'
+  return spellNames[id] || 'Unknown'
+}
+
+export function getSpellIdWithName(name) {
+  return spellNames.indexOf(name) || 0
 }

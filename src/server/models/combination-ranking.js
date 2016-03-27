@@ -21,4 +21,8 @@ CombinationRankingShema.set('toJSON', {
   virtuals: true
 })
 
+CombinationRankingShema.set('toObject', {
+  virtuals: true
+})
+
 export default mongoose.model('combinationRanking', CombinationRankingShema)
