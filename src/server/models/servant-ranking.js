@@ -22,4 +22,8 @@ ServantRankingShema.set('toJSON', {
   virtuals: true
 })
 
+ServantRankingShema.set('toObject', {
+  virtuals: true
+})
+
 export default mongoose.model('servantRanking', ServantRankingShema)

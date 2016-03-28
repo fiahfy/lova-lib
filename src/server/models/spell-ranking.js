@@ -21,4 +21,8 @@ SpellRankingShema.set('toJSON', {
   virtuals: true
 })
 
+SpellRankingShema.set('toObject', {
+  virtuals: true
+})
+
 export default mongoose.model('spellRanking', SpellRankingShema)
