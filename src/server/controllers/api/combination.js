@@ -25,8 +25,6 @@ async function attachStatistcs(combinations) {
 
   const params = {
     date,
-    map: 'all',
-    queue: 'all',
     combination_id: {$in: combinationIds}
   }
   const fields = '-_id combination_id mode score count'

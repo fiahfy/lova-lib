@@ -69,29 +69,23 @@ export default class Combination extends Component {
   setupTableSorter() {
     $(this.refs.combinationList.getCombinationsTable()).trigger('destroy')
     $(this.refs.combinationList.getCombinationsTable()).tablesorter({
-      // sortRestart: true,
-      // // textSorter: {
-      // //   2: (a, b) => {
-      // //     return 1//ServantUtils.compareTribeString(a, b)
-      // //   }
-      // // },
-      // headers: {
-      //   1: {
-      //     sorter: false
-      //   },
-      //   // 6: {
-      //   //   sortInitialOrder: 'desc'
-      //   // },
-      //   // 7: {
-      //   //   sortInitialOrder: 'desc'
-      //   // },
-      //   // 8: {
-      //   //   sortInitialOrder: 'desc'
-      //   // },
-      //   // 9: {
-      //   //   sortInitialOrder: 'desc'
-      //   // }
-      // }
+      sortRestart: true,
+      textSorter: {
+        2: (a, b) => {
+          return ServantUtils.compareTribeName(a, b)
+        }
+      },
+      headers: {
+        1: {
+          sorter: false
+        },
+        4: {
+          sortInitialOrder: 'desc'
+        },
+        5: {
+          sortInitialOrder: 'desc'
+        }
+      }
     })
   }
   componentWillReceiveProps(nextProps) {

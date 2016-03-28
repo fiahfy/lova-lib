@@ -10,41 +10,41 @@ const lovaSiteBasePath  = 'http://lova.jp/'
 const cacheSiteBasePath = 'http://cache.lova.jp/'
 const wikiSiteBasePath  = 'http://wiki.4gamer.net/lova/'
 
-export function fetch(url) {
+export async function fetch(url) {
   logger.verbose('Fetch Url: url = %s', url)
-  return client.fetch(url)
+  return await client.fetch(url)
 }
 
-export function fetchArticle(id) {
+export async function fetchArticle(id) {
   let url = `${lovaSiteBasePath}member/article.php`
   if (id) {
     url += `?no=${id}`
   }
-  return fetch(url)
+  return await fetch(url)
 }
 
-export function fetchNotice(page) {
+export async function fetchNotice(page) {
   let url = `${lovaSiteBasePath}member/notice.php`
   if (page) {
     url += `?p=${page}`
   }
-  return fetch(url)
+  return await fetch(url)
 }
 
-export function fetchServant(tribe_name, name) {
+export async function fetchServant(tribe_name, name) {
   if (['ミミララ・レイア', 'ジャンヌ・ダルク'].indexOf(name) > -1) {
     name = name.replace('・', '')
   }
   const url = `${wikiSiteBasePath}%E4%BD%BF%E3%81%84%E9%AD%94/${encodeURIComponent(tribe_name)}/${encodeURIComponent(name)}`
-  return fetch(url)
+  return await fetch(url)
 }
 
-export function fetchAllServantList() {
+export async function fetchAllServantList() {
   const url = `${wikiSiteBasePath}%E4%BD%BF%E3%81%84%E9%AD%94`
-  return fetch(url)
+  return await fetch(url)
 }
 
-export function fetchServantRanking(date, mode, map, queue) {
+export async function fetchServantRanking(date, mode, map, queue) {
   const d = moment.utc(date).add(1, 'days')
   let dateString = d.format('YYYYMMDD')
   if (dateString > '20160316') {
@@ -87,10 +87,10 @@ export function fetchServantRanking(date, mode, map, queue) {
   }
   path += '_all'
   const url = `${cacheSiteBasePath}ranking/${path}/${dateString}/page1.json`
-  return fetch(url)
+  return await fetch(url)
 }
 
-export function fetchSpellRanking(date, map, queue) {
+export async function fetchSpellRanking(date, map, queue) {
   const d = moment.utc(date).add(1, 'days')
   let dateString = d.format('YYYYMMDD')
   if (dateString > '20160317') {
@@ -125,7 +125,7 @@ export function fetchSpellRanking(date, map, queue) {
   }
   path += '_all'
   const url = `${cacheSiteBasePath}ranking/${path}/${dateString}/page1.json`
-  return fetch(url)
+  return await fetch(url)
 }
 
 export async function fetchCombinationRanking(date, tribe) {

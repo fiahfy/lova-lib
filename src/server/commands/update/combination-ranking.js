@@ -4,7 +4,7 @@ import * as scraper from '../../utils/scraper'
 import * as models from '../../models'
 import * as ServantUtils from '../../../client/utils/servant-utils'
 
-const tribes = ['bst', 'hly', 'dvl', 'sea', 'und']
+const tribes = ['bst', 'hly', 'dvl', 'sea', 'und', 'multi']
 
 export default function(date, dateFrom, dateTo, force) {
   return new Promise(async function(resolve, reject) {

@@ -140,20 +140,19 @@ export default class Servant extends Component {
     const clearButton = this.getClearButton()
 
     let currentTribeName = ''
-    const tribeIdOptionNodes = [{tribe_id: 0, tribe_name: 'Select Tribe...'}]
-      .concat(_.uniqBy(servants, value => value.tribe_name))
-      .map((servant, index) => {
-        if (servant.tribe_id === tribeId) {
-          currentTribeName = servant.tribe_name
-        }
-        return (
-          <li key={index}>
-            <Link to={{pathname: '/servants/', query: {tribe_id: servant.tribe_id, q}}}>
-              {servant.tribe_name}
-            </Link>
-          </li>
-        )
-      })
+    const tribeIdOptionNodes = ServantUtils.tribeNames.map((tribeName, index) => {
+      tribeName = tribeName ? tribeName : 'Select Tribe...'
+      if (index === tribeId) {
+        currentTribeName = tribeName
+      }
+      return (
+        <li key={index}>
+          <Link to={{pathname: '/servants/', query: {tribe_id: index, q}}}>
+            {tribeName}
+          </Link>
+        </li>
+      )
+    })
 
     return (
       <div className="container" id="servant">
