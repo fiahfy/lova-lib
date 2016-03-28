@@ -8,10 +8,12 @@ export default async function (ctx) {
 
   let pathes = []
   pathes.push({path: '/'})
-  pathes.push({path: '/about/'})
-  pathes.push({path: '/charts/'})
   pathes.push({path: '/deck/'})
+  pathes.push({path: '/servants/'})
+  pathes.push({path: '/combinations/'})
+  pathes.push({path: '/charts/'})
   pathes.push({path: '/prize/'})
+  pathes.push({path: '/about/'})
   servants.forEach(servant => {
     pathes.push({path: `/servants/${servant.id}/`, update_date: servant.update_date})
   })
