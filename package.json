@@ -3,10 +3,8 @@
   "version": "1.0.0",
   "description": "Site for Lord of Vermilion Arena",
   "keywords": [
-    "OpenShift",
     "Node.js",
-    "application",
-    "openshift"
+    "application"
   ],
   "author": {
     "name": "fiahfy",
