@@ -165,6 +165,7 @@ function parseDateString(str) {
   case 'CBT': str = '20150421'; break
   case 'OBT': str = '20150604'; break
   case '正式': str = '20150617'; break
+  case '2016316': str = '20160316'; break
   default: break
   }
   const date = moment.utc(str.slice(0, 4) + '-' + str.slice(4, 6) + '-' + str.slice(6, 8))
@@ -203,13 +204,13 @@ function fixServant(servant) {
     servant.name = '豆腐小僧'
   }
 
-  // adjust illustration_by
-  if (servant.illustration_by === '―') {
-    servant.illustration_by = null
-  }
   // fix illustration_by
+  // adjust illustration_by
   if (servant.illustration_by.indexOf('キャラクター原案') > -1) {
     servant.illustration_by = servant.illustration_by.split('キャラクター原案')[0].trim()
+  }
+  if (servant.illustration_by === '―') {
+    servant.illustration_by = null
   }
   // adjust character_voice
   if (servant.character_voice === '―') {
