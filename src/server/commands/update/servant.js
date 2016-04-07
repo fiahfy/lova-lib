@@ -166,6 +166,7 @@ function parseDateString(str) {
   case 'OBT': str = '20150604'; break
   case '正式': str = '20150617'; break
   case '2016316': str = '20160316'; break
+  case '2016404': str = '20160404'; break
   default: break
   }
   const date = moment.utc(str.slice(0, 4) + '-' + str.slice(4, 6) + '-' + str.slice(6, 8))
