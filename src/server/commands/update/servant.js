@@ -165,9 +165,10 @@ function parseDateString(str) {
   case 'CBT': str = '20150421'; break
   case 'OBT': str = '20150604'; break
   case '正式': str = '20150617'; break
-  case '2016316': str = '20160316'; break
-  case '2016404': str = '20160404'; break
   default: break
+  }
+  if (str.length === 7) {
+    str = str.slice(0, 4) + '0' + str.slice(4, 7)
   }
   const date = moment.utc(str.slice(0, 4) + '-' + str.slice(4, 6) + '-' + str.slice(6, 8))
   if (!date.isValid()) {
