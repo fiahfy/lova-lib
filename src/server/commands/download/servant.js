@@ -71,15 +71,14 @@ function getClipImageUrlWithServant(servant) {
     const $ = (yield scraper.fetchAllServantList()).$
     let tribeNameAndCode = `${servant.tribe_name}-${_.padStart(servant.tribe_code, 3, 0)}`
     let url = $('#content_1001_1').next().next()
-      .find(`table tbody tr td:contains(${tribeNameAndCode})`).last().prev().prev()
+      .find(`table tbody tr td:nth-child(3):contains(${tribeNameAndCode})`).prev().prev()
       .find('a img').attr('src')
     if (url) {
       return url
     }
-    // Fix "海種-60"
-    tribeNameAndCode = `${servant.tribe_name}-${_.padStart(servant.tribe_code, 2, 0)}`
+    // Fix "海種-060", "不死-066"
     return $('#content_1001_1').next().next()
-      .find(`table tbody tr td:contains(${tribeNameAndCode})`).last().prev().prev()
+      .find(`table tbody tr td:nth-child(2):contains(${servant.name})`).prev()
       .find('a img').attr('src')
   })
 }
