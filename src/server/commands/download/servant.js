@@ -69,7 +69,15 @@ function getImageUrlWithServant(servant) {
 function getClipImageUrlWithServant(servant) {
   return co(function *() {
     const $ = (yield scraper.fetchAllServantList()).$
-    const tribeNameAndCode = `${servant.tribe_name}-${_.padStart(servant.tribe_code, 3, 0)}`
+    let tribeNameAndCode = `${servant.tribe_name}-${_.padStart(servant.tribe_code, 3, 0)}`
+    let url = $('#content_1001_1').next().next()
+      .find(`table tbody tr td:contains(${tribeNameAndCode})`).last().prev().prev()
+      .find('a img').attr('src')
+    if (url) {
+      return url
+    }
+    // Fix "海種-60"
+    tribeNameAndCode = `${servant.tribe_name}-${_.padStart(servant.tribe_code, 2, 0)}`
     return $('#content_1001_1').next().next()
       .find(`table tbody tr td:contains(${tribeNameAndCode})`).last().prev().prev()
       .find('a img').attr('src')
